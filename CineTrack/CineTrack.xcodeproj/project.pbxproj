@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		63827DBF2FD3530600DE3E16 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 63827DBE2FD3530600DE3E16 /* FirebaseAuth */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		63827D882FD34B7F00DE3E16 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -65,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63827DBF2FD3530600DE3E16 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +130,7 @@
 			);
 			name = CineTrack;
 			packageProductDependencies = (
+				63827DBE2FD3530600DE3E16 /* FirebaseAuth */,
 			);
 			productName = CineTrack;
 			productReference = 63827D712FD34B7C00DE3E16 /* CineTrack.app */;
@@ -208,6 +214,9 @@
 			);
 			mainGroup = 63827D682FD34B7C00DE3E16;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				63827DBD2FD3530600DE3E16 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 63827D722FD34B7C00DE3E16 /* Products */;
 			projectDirPath = "";
@@ -585,6 +594,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		63827DBD2FD3530600DE3E16 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.14.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		63827DBE2FD3530600DE3E16 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 63827DBD2FD3530600DE3E16 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 63827D692FD34B7C00DE3E16 /* Project object */;
 }
