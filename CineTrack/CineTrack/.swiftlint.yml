@@ -1,0 +1,13 @@
+disabled_rules:
+  - trailing_whitespace
+  - line_length
+  - force_cast
+  - vertical_whitespace
+  - trailing_newline
+  - trailing_comma
+  - implicit_optional_initialization
+  - static_over_final_class
+
+excluded:
+  - CineTrackTests
+  - CineTrackUITests

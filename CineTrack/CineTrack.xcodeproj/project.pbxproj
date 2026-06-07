@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		63827DBF2FD3530600DE3E16 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 63827DBE2FD3530600DE3E16 /* FirebaseAuth */; };
 		63827DC32FD35B7500DE3E16 /* SharedKit in Frameworks */ = {isa = PBXBuildFile; productRef = 63827DC22FD35B7500DE3E16 /* SharedKit */; };
+		63F40D8D2FD5F1BB00189862 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 63F40D8C2FD5F1BB00189862 /* Kingfisher */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63F40D8D2FD5F1BB00189862 /* Kingfisher in Frameworks */,
 				63827DC32FD35B7500DE3E16 /* SharedKit in Frameworks */,
 				63827DBF2FD3530600DE3E16 /* FirebaseAuth in Frameworks */,
 			);
@@ -131,6 +133,7 @@
 				63827D6D2FD34B7C00DE3E16 /* Sources */,
 				63827D6E2FD34B7C00DE3E16 /* Frameworks */,
 				63827D6F2FD34B7C00DE3E16 /* Resources */,
+				63F40D902FD5F4E600189862 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -143,6 +146,7 @@
 			packageProductDependencies = (
 				63827DBE2FD3530600DE3E16 /* FirebaseAuth */,
 				63827DC22FD35B7500DE3E16 /* SharedKit */,
+				63F40D8C2FD5F1BB00189862 /* Kingfisher */,
 			);
 			productName = CineTrack;
 			productReference = 63827D712FD34B7C00DE3E16 /* CineTrack.app */;
@@ -228,6 +232,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				63827DBD2FD3530600DE3E16 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				63F40D8B2FD5F1BB00189862 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 63827D722FD34B7C00DE3E16 /* Products */;
@@ -264,6 +269,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		63F40D902FD5F4E600189862 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ -d \"/opt/homebrew/bin/\" ]; then\n    PATH=\"/opt/homebrew/bin/:${PATH}\"\nfi\nexport PATH\nif which swiftlint >/dev/null; then\n    swiftlint --config \"${SRCROOT}/CineTrack/.swiftlint.yml\"\nelse\n    echo \"warning: SwiftLint not installed\"\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		63827D6D2FD34B7C00DE3E16 /* Sources */ = {
@@ -310,6 +337,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CineTrack/App/Config/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -341,6 +369,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CineTrack/App/Config/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -614,6 +643,14 @@
 				minimumVersion = 12.14.0;
 			};
 		};
+		63F40D8B2FD5F1BB00189862 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.9.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -625,6 +662,11 @@
 		63827DC22FD35B7500DE3E16 /* SharedKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SharedKit;
+		};
+		63F40D8C2FD5F1BB00189862 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 63F40D8B2FD5F1BB00189862 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
