@@ -21,6 +21,7 @@ project.xcworkspace/
 /Pods/
 .swiftpm/xcode/package.xcworkspace/
 .swiftpm/xcode/xcuserdata/
+.swiftpm/xcode/package.resolved
 
 # macOS ხარვეზები
 # ========================
