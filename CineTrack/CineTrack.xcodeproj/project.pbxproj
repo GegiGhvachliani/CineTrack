@@ -10,6 +10,13 @@
 		63827DBF2FD3530600DE3E16 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 63827DBE2FD3530600DE3E16 /* FirebaseAuth */; };
 		63827DC32FD35B7500DE3E16 /* SharedKit in Frameworks */ = {isa = PBXBuildFile; productRef = 63827DC22FD35B7500DE3E16 /* SharedKit */; };
 		63F40D8D2FD5F1BB00189862 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 63F40D8C2FD5F1BB00189862 /* Kingfisher */; };
+		63F40DF12FD609C200189862 /* DesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = 63F40DF02FD609C200189862 /* DesignSystem */; };
+		63F40DF32FD609C200189862 /* Home in Frameworks */ = {isa = PBXBuildFile; productRef = 63F40DF22FD609C200189862 /* Home */; };
+		63F40DF52FD609C200189862 /* MovieDetail in Frameworks */ = {isa = PBXBuildFile; productRef = 63F40DF42FD609C200189862 /* MovieDetail */; };
+		63F40DF72FD609C200189862 /* Onboarding in Frameworks */ = {isa = PBXBuildFile; productRef = 63F40DF62FD609C200189862 /* Onboarding */; };
+		63F40DF92FD609C200189862 /* Profile in Frameworks */ = {isa = PBXBuildFile; productRef = 63F40DF82FD609C200189862 /* Profile */; };
+		63F40DFB2FD609C200189862 /* Search in Frameworks */ = {isa = PBXBuildFile; productRef = 63F40DFA2FD609C200189862 /* Search */; };
+		63F40DFD2FD609C200189862 /* Watchlist in Frameworks */ = {isa = PBXBuildFile; productRef = 63F40DFC2FD609C200189862 /* Watchlist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,7 +47,14 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				App/Config/Info.plist,
-				SharedKit,
+				Packages/DesignSystem,
+				Packages/Features/Home,
+				Packages/Features/MovieDetail,
+				Packages/Features/Onboarding,
+				Packages/Features/Profile,
+				Packages/Features/Search,
+				Packages/Features/Watchlist,
+				Packages/SharedKit,
 			);
 			target = 63827D702FD34B7C00DE3E16 /* CineTrack */;
 		};
@@ -72,9 +86,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63F40DF92FD609C200189862 /* Profile in Frameworks */,
 				63F40D8D2FD5F1BB00189862 /* Kingfisher in Frameworks */,
 				63827DC32FD35B7500DE3E16 /* SharedKit in Frameworks */,
+				63F40DF52FD609C200189862 /* MovieDetail in Frameworks */,
+				63F40DFD2FD609C200189862 /* Watchlist in Frameworks */,
 				63827DBF2FD3530600DE3E16 /* FirebaseAuth in Frameworks */,
+				63F40DFB2FD609C200189862 /* Search in Frameworks */,
+				63F40DF72FD609C200189862 /* Onboarding in Frameworks */,
+				63F40DF32FD609C200189862 /* Home in Frameworks */,
+				63F40DF12FD609C200189862 /* DesignSystem in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,6 +168,13 @@
 				63827DBE2FD3530600DE3E16 /* FirebaseAuth */,
 				63827DC22FD35B7500DE3E16 /* SharedKit */,
 				63F40D8C2FD5F1BB00189862 /* Kingfisher */,
+				63F40DF02FD609C200189862 /* DesignSystem */,
+				63F40DF22FD609C200189862 /* Home */,
+				63F40DF42FD609C200189862 /* MovieDetail */,
+				63F40DF62FD609C200189862 /* Onboarding */,
+				63F40DF82FD609C200189862 /* Profile */,
+				63F40DFA2FD609C200189862 /* Search */,
+				63F40DFC2FD609C200189862 /* Watchlist */,
 			);
 			productName = CineTrack;
 			productReference = 63827D712FD34B7C00DE3E16 /* CineTrack.app */;
@@ -667,6 +695,34 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 63F40D8B2FD5F1BB00189862 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		63F40DF02FD609C200189862 /* DesignSystem */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DesignSystem;
+		};
+		63F40DF22FD609C200189862 /* Home */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Home;
+		};
+		63F40DF42FD609C200189862 /* MovieDetail */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MovieDetail;
+		};
+		63F40DF62FD609C200189862 /* Onboarding */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Onboarding;
+		};
+		63F40DF82FD609C200189862 /* Profile */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Profile;
+		};
+		63F40DFA2FD609C200189862 /* Search */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Search;
+		};
+		63F40DFC2FD609C200189862 /* Watchlist */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Watchlist;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
