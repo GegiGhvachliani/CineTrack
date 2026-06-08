@@ -12,6 +12,7 @@ DerivedData/
 xcuserdata/
 *.xcuserdatad
 *.xcuserstate
+*.xcschememanagement.plist
 project.xcworkspace/
 !project.xcworkspace/contents.xcworkspacedata
 
