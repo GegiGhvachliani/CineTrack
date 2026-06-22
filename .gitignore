@@ -7,28 +7,22 @@ DerivedData/
 *.dSYM.zip
 *.dSYM
 
-# Xcode User Data (ეს ბლოკავს წეღანდელ ერორს და იუზერის სეთინგებს)
+# Xcode User Data
 # ========================
 xcuserdata/
-*.xcuserdatad
-*.xcuserstate
-*.xcschememanagement.plist
 project.xcworkspace/
 !project.xcworkspace/contents.xcworkspacedata
 
-# CocoaPods & Swift Package Manager (ლოკალური ქეშები)
+# Swift Package Manager
 # ========================
-.Pods/
-/Pods/
 .swiftpm/xcode/package.xcworkspace/
 .swiftpm/xcode/xcuserdata/
 .swiftpm/xcode/package.resolved
 
-# macOS ხარვეზები
+# macOS
 # ========================
 .DS_Store
-Files.dat
 
-# Firebase & Crashlytics (დროებითი ფაილები)
+# Firebase & Crashlytics
 # ========================
 crashlytics_build_sender_secret.json
