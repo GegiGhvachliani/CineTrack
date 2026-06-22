@@ -15,8 +15,7 @@ project.xcworkspace/
 
 # Swift Package Manager
 # ========================
-.swiftpm/xcode/package.xcworkspace/
-.swiftpm/xcode/xcuserdata/
+**/.swiftpm/
 .swiftpm/xcode/package.resolved
 
 # macOS
