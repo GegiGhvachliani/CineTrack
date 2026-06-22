@@ -5,26 +5,35 @@ import PackageDescription
 
 let package = Package(
     name: "DesignSystem",
-    platforms: [
-        .iOS(.v16)
-    ],
+    platforms: [.iOS(.v16)],
     products: [
-        .library(
-            name: "DesignSystem",
-            targets: ["DesignSystem"]
-        ),
+        .library(name: "DesignSystemComponents", targets: ["DesignSystemComponents"]),
+        .library(name: "DesignSystemTokens", targets: ["DesignSystemTokens"])
     ],
     dependencies: [
+        // SharedKit გვჭირდება მხოლოდ იმ შემთხვევაში, თუ კომპონენტები იყენებენ SharedCore-ის იუტილიტებს
         .package(path: "../SharedKit")
     ],
     targets: [
         .target(
-            name: "DesignSystem",
-            dependencies: ["SharedKit"]
+            name: "DesignSystemTokens",
+            dependencies: [],
+            path: "Sources/DesignSystemTokens"
         ),
+        
+        .target(
+            name: "DesignSystemComponents",
+            dependencies: [
+                "DesignSystemTokens",
+                .product(name: "SharedCore", package: "SharedKit")  // თუ Layout/UI Helpers გჭირდება SharedCore-დან
+            ],
+            path: "Sources/DesignSystemComponents"
+        ),
+        
         .testTarget(
             name: "DesignSystemTests",
-            dependencies: ["DesignSystem"]
+            dependencies: ["DesignSystemComponents", "DesignSystemTokens"],
+            path: "Tests"
         ),
     ],
     swiftLanguageModes: [.v6]

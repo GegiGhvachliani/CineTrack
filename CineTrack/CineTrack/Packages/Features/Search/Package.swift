@@ -5,27 +5,62 @@ import PackageDescription
 
 let package = Package(
     name: "Search",
+    platforms: [.iOS(.v16)],
     products: [
-        .library(
-            name: "Search",
-            targets: ["Search"]
-        ),
+        .library(name: "SearchAssembly", targets: ["SearchAssembly"])
     ],
     dependencies: [
         .package(path: "../../SharedKit"),
-        .package(path: "../../DesignSystem")
+        .package(path: "../../DesignSystem"),
     ],
     targets: [
+
         .target(
-            name: "Search",
+            name: "SearchDomain",
             dependencies: [
-                "SharedKit",
-                "DesignSystem"
-            ]
+                .product(name: "SharedCore", package: "SharedKit")
+            ],
+            path: "Sources/SearchDomain"
         ),
+
+        .target(
+            name: "SearchData",
+            dependencies: [
+                "SearchDomain",
+                .product(name: "SharedNetworking", package: "SharedKit"),
+                .product(name: "SharedStorage", package: "SharedKit"),
+            ],
+            path: "Sources/SearchData"
+        ),
+
+        .target(
+            name: "SearchPresentation",
+            dependencies: [
+                "SearchDomain",
+                .product(name: "SharedCore", package: "SharedKit"),
+                .product(name: "DesignSystemComponents", package: "DesignSystem"),
+            ],
+            path: "Sources/SearchPresentation"
+        ),
+
+        .target(
+            name: "SearchAssembly",
+            dependencies: [
+                "SearchDomain",
+                "SearchData",
+                "SearchPresentation",
+            ],
+            path: "Sources/SearchAssembly"
+        ),
+
         .testTarget(
             name: "SearchTests",
-            dependencies: ["Search"]
+            dependencies: [
+                "SearchDomain",
+                "SearchData",
+                "SearchPresentation",
+            ],
+            path: "Tests"
         ),
     ],
     swiftLanguageModes: [.v6]

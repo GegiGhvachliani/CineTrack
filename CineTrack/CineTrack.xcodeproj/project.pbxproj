@@ -8,15 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		63827DBF2FD3530600DE3E16 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 63827DBE2FD3530600DE3E16 /* FirebaseAuth */; };
-		63827DC32FD35B7500DE3E16 /* SharedKit in Frameworks */ = {isa = PBXBuildFile; productRef = 63827DC22FD35B7500DE3E16 /* SharedKit */; };
 		63F40D8D2FD5F1BB00189862 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 63F40D8C2FD5F1BB00189862 /* Kingfisher */; };
-		63F40DF12FD609C200189862 /* DesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = 63F40DF02FD609C200189862 /* DesignSystem */; };
-		63F40DF32FD609C200189862 /* Home in Frameworks */ = {isa = PBXBuildFile; productRef = 63F40DF22FD609C200189862 /* Home */; };
-		63F40DF52FD609C200189862 /* MovieDetail in Frameworks */ = {isa = PBXBuildFile; productRef = 63F40DF42FD609C200189862 /* MovieDetail */; };
-		63F40DF72FD609C200189862 /* Onboarding in Frameworks */ = {isa = PBXBuildFile; productRef = 63F40DF62FD609C200189862 /* Onboarding */; };
-		63F40DF92FD609C200189862 /* Profile in Frameworks */ = {isa = PBXBuildFile; productRef = 63F40DF82FD609C200189862 /* Profile */; };
-		63F40DFB2FD609C200189862 /* Search in Frameworks */ = {isa = PBXBuildFile; productRef = 63F40DFA2FD609C200189862 /* Search */; };
-		63F40DFD2FD609C200189862 /* Watchlist in Frameworks */ = {isa = PBXBuildFile; productRef = 63F40DFC2FD609C200189862 /* Watchlist */; };
+		63F86A392FE96EC000D43A5F /* DesignSystemComponents in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A382FE96EC000D43A5F /* DesignSystemComponents */; };
+		63F86A3B2FE96EC000D43A5F /* DesignSystemTokens in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A3A2FE96EC000D43A5F /* DesignSystemTokens */; };
+		63F86A3D2FE96EC000D43A5F /* HomeAssembly in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A3C2FE96EC000D43A5F /* HomeAssembly */; };
+		63F86A3F2FE96EC000D43A5F /* MovieDetailAssemby in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A3E2FE96EC000D43A5F /* MovieDetailAssemby */; };
+		63F86A412FE96EC000D43A5F /* OnboardingAssembly in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A402FE96EC000D43A5F /* OnboardingAssembly */; };
+		63F86A432FE96EC000D43A5F /* ProfileAssembly in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A422FE96EC000D43A5F /* ProfileAssembly */; };
+		63F86A452FE96EC000D43A5F /* SearchAssembly in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A442FE96EC000D43A5F /* SearchAssembly */; };
+		63F86A472FE96EC000D43A5F /* SharedCore in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A462FE96EC000D43A5F /* SharedCore */; };
+		63F86A492FE96EC000D43A5F /* SharedNetworking in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A482FE96EC000D43A5F /* SharedNetworking */; };
+		63F86A4B2FE96EC000D43A5F /* SharedStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A4A2FE96EC000D43A5F /* SharedStorage */; };
+		63F86A4D2FE96EC000D43A5F /* WatchlistAssembly in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A4C2FE96EC000D43A5F /* WatchlistAssembly */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,16 +89,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63F40DF92FD609C200189862 /* Profile in Frameworks */,
+				63F86A452FE96EC000D43A5F /* SearchAssembly in Frameworks */,
+				63F86A4B2FE96EC000D43A5F /* SharedStorage in Frameworks */,
+				63F86A432FE96EC000D43A5F /* ProfileAssembly in Frameworks */,
 				63F40D8D2FD5F1BB00189862 /* Kingfisher in Frameworks */,
-				63827DC32FD35B7500DE3E16 /* SharedKit in Frameworks */,
-				63F40DF52FD609C200189862 /* MovieDetail in Frameworks */,
-				63F40DFD2FD609C200189862 /* Watchlist in Frameworks */,
+				63F86A3B2FE96EC000D43A5F /* DesignSystemTokens in Frameworks */,
+				63F86A492FE96EC000D43A5F /* SharedNetworking in Frameworks */,
+				63F86A472FE96EC000D43A5F /* SharedCore in Frameworks */,
+				63F86A392FE96EC000D43A5F /* DesignSystemComponents in Frameworks */,
+				63F86A412FE96EC000D43A5F /* OnboardingAssembly in Frameworks */,
+				63F86A4D2FE96EC000D43A5F /* WatchlistAssembly in Frameworks */,
+				63F86A3F2FE96EC000D43A5F /* MovieDetailAssemby in Frameworks */,
 				63827DBF2FD3530600DE3E16 /* FirebaseAuth in Frameworks */,
-				63F40DFB2FD609C200189862 /* Search in Frameworks */,
-				63F40DF72FD609C200189862 /* Onboarding in Frameworks */,
-				63F40DF32FD609C200189862 /* Home in Frameworks */,
-				63F40DF12FD609C200189862 /* DesignSystem in Frameworks */,
+				63F86A3D2FE96EC000D43A5F /* HomeAssembly in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -166,15 +172,18 @@
 			name = CineTrack;
 			packageProductDependencies = (
 				63827DBE2FD3530600DE3E16 /* FirebaseAuth */,
-				63827DC22FD35B7500DE3E16 /* SharedKit */,
 				63F40D8C2FD5F1BB00189862 /* Kingfisher */,
-				63F40DF02FD609C200189862 /* DesignSystem */,
-				63F40DF22FD609C200189862 /* Home */,
-				63F40DF42FD609C200189862 /* MovieDetail */,
-				63F40DF62FD609C200189862 /* Onboarding */,
-				63F40DF82FD609C200189862 /* Profile */,
-				63F40DFA2FD609C200189862 /* Search */,
-				63F40DFC2FD609C200189862 /* Watchlist */,
+				63F86A382FE96EC000D43A5F /* DesignSystemComponents */,
+				63F86A3A2FE96EC000D43A5F /* DesignSystemTokens */,
+				63F86A3C2FE96EC000D43A5F /* HomeAssembly */,
+				63F86A3E2FE96EC000D43A5F /* MovieDetailAssemby */,
+				63F86A402FE96EC000D43A5F /* OnboardingAssembly */,
+				63F86A422FE96EC000D43A5F /* ProfileAssembly */,
+				63F86A442FE96EC000D43A5F /* SearchAssembly */,
+				63F86A462FE96EC000D43A5F /* SharedCore */,
+				63F86A482FE96EC000D43A5F /* SharedNetworking */,
+				63F86A4A2FE96EC000D43A5F /* SharedStorage */,
+				63F86A4C2FE96EC000D43A5F /* WatchlistAssembly */,
 			);
 			productName = CineTrack;
 			productReference = 63827D712FD34B7C00DE3E16 /* CineTrack.app */;
@@ -548,7 +557,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gegi.CineTrackTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -569,7 +578,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gegi.CineTrackTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -589,6 +598,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gegi.CineTrackUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -608,6 +618,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gegi.CineTrackUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -687,42 +698,54 @@
 			package = 63827DBD2FD3530600DE3E16 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
 		};
-		63827DC22FD35B7500DE3E16 /* SharedKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = SharedKit;
-		};
 		63F40D8C2FD5F1BB00189862 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 63F40D8B2FD5F1BB00189862 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
 		};
-		63F40DF02FD609C200189862 /* DesignSystem */ = {
+		63F86A382FE96EC000D43A5F /* DesignSystemComponents */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = DesignSystem;
+			productName = DesignSystemComponents;
 		};
-		63F40DF22FD609C200189862 /* Home */ = {
+		63F86A3A2FE96EC000D43A5F /* DesignSystemTokens */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Home;
+			productName = DesignSystemTokens;
 		};
-		63F40DF42FD609C200189862 /* MovieDetail */ = {
+		63F86A3C2FE96EC000D43A5F /* HomeAssembly */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = MovieDetail;
+			productName = HomeAssembly;
 		};
-		63F40DF62FD609C200189862 /* Onboarding */ = {
+		63F86A3E2FE96EC000D43A5F /* MovieDetailAssemby */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Onboarding;
+			productName = MovieDetailAssemby;
 		};
-		63F40DF82FD609C200189862 /* Profile */ = {
+		63F86A402FE96EC000D43A5F /* OnboardingAssembly */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Profile;
+			productName = OnboardingAssembly;
 		};
-		63F40DFA2FD609C200189862 /* Search */ = {
+		63F86A422FE96EC000D43A5F /* ProfileAssembly */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Search;
+			productName = ProfileAssembly;
 		};
-		63F40DFC2FD609C200189862 /* Watchlist */ = {
+		63F86A442FE96EC000D43A5F /* SearchAssembly */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Watchlist;
+			productName = SearchAssembly;
+		};
+		63F86A462FE96EC000D43A5F /* SharedCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SharedCore;
+		};
+		63F86A482FE96EC000D43A5F /* SharedNetworking */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SharedNetworking;
+		};
+		63F86A4A2FE96EC000D43A5F /* SharedStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SharedStorage;
+		};
+		63F86A4C2FE96EC000D43A5F /* WatchlistAssembly */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WatchlistAssembly;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

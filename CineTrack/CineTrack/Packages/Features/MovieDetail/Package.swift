@@ -5,11 +5,12 @@ import PackageDescription
 
 let package = Package(
     name: "MovieDetail",
+    platforms: [.iOS(.v16)],
     products: [
         .library(
-            name: "MovieDetail",
-            targets: ["MovieDetail"]
-        ),
+            name: "MovieDetailAssemby",
+            targets: ["MovieDetailAssembly"]
+        )
     ],
     dependencies: [
         .package(path: "../../SharedKit"),
@@ -17,15 +18,51 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "MovieDetail",
+            name: "MovieDetailDomain",
             dependencies: [
-                "SharedKit",
-                "DesignSystem"
-            ]
+                .product(name: "SharedCore", package: "SharedKit")
+            ],
+            path: "Sources/MovieDetailDomain"
         ),
+
+        .target(
+            name: "MovieDetailData",
+            dependencies: [
+                "MovieDetailDomain",
+                .product(name: "SharedNetworking", package: "SharedKit"),
+                .product(name: "SharedStorage", package: "SharedKit"),
+            ],
+            path: "Sources/MovieDetailData"
+        ),
+
+        .target(
+            name: "MovieDetailPresentation",
+            dependencies: [
+                "MovieDetailDomain",
+                .product(name: "SharedCore", package: "SharedKit"),
+                .product(name: "DesignSystemComponents", package: "DesignSystem"),
+            ],
+            path: "Sources/MovieDetailPresentation"
+        ),
+
+        .target(
+            name: "MovieDetailAssembly",
+            dependencies: [
+                "MovieDetailDomain",
+                "MovieDetailData",
+                "MovieDetailPresentation",
+            ],
+            path: "Sources/MovieDetailAssembly"
+        ),
+
         .testTarget(
             name: "MovieDetailTests",
-            dependencies: ["MovieDetail"]
+            dependencies: [
+                "MovieDetailDomain",
+                "MovieDetailData",
+                "MovieDetailPresentation"
+            ],
+            path: "Tests"
         ),
     ],
     swiftLanguageModes: [.v6]
