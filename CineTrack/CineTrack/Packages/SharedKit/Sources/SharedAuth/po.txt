@@ -1,0 +1,5 @@
+
+📂 Sources/SharedAuth/
+Protocols/ (AuthServiceProtocol)
+
+AuthSession.swift, AuthError.swift

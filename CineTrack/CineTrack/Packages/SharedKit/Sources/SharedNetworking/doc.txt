@@ -6,3 +6,9 @@ SharedNetworking ტარგეტი
 რა შედის: APIClient, TMDBEndpoint (TMDB-ის ლინკები), NetworkError (ქსელის ერორების მოდელები).
 
 რატომ: ქსელთან კომუნიკაცია იზოლირებული უნდა იყოს. დამოკიდებული იქნება მხოლოდ SharedCore-ზე.
+
+
+
+Protocols/ (APIClientProtocol, EndpointProtocol, RequestBuilderProtocol)
+
+APIClient.swift, RequestBuilder.swift, HTTPMethod.swift, APIError.swift, NetworkMonitor.swift

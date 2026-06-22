@@ -49,6 +49,7 @@ let package = Package(
                 "ProfileDomain",
                 "ProfileData",
                 "ProfilePresentation",
+                .product(name: "SharedCore", package: "SharedKit")
             ],
             path: "Sources/ProfileAssembly"
         ),

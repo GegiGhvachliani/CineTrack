@@ -5,3 +5,13 @@ SharedCore (ან SharedUtils) ტარგეტი
 რა შედის: BaseViewModel, CoordinatorProtocol, Debouncer, DateFormatterHelper. გარდა ამისა, შეიძლება შეიცავდეს გარე სერვისების საბაზისო ლოგიკას, როგორიცაა Firebase-ის ინიციალიზაცია.
 
 რატომ: წარმოადგენს ფუნდამენტს სხვა ტარგეტებისთვის. Feature მოდულებს შეუძლიათ დააიმპორტონ მხოლოდ ეს ტარგეტი პროტოკოლებისა და უტილიტებისთვის, ზედმეტი ქსელური ან ლოკალური შენახვის დამოკიდებულებების გარეშე.
+
+
+
+Coordinator/ (CoordinatorProtocol, BaseCoordinator)
+
+ViewModel/ (BaseViewModel — შენი დოკუმენტაციის @MainActor ვერსია)
+
+Extensions/ (String, Date, URL, Collection, Task)
+
+Utilities/ (Debouncer, PaginationState, Logger)
