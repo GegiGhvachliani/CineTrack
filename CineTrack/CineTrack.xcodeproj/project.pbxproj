@@ -1,0 +1,753 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		63827DBF2FD3530600DE3E16 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 63827DBE2FD3530600DE3E16 /* FirebaseAuth */; };
+		63F40D8D2FD5F1BB00189862 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 63F40D8C2FD5F1BB00189862 /* Kingfisher */; };
+		63F86A392FE96EC000D43A5F /* DesignSystemComponents in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A382FE96EC000D43A5F /* DesignSystemComponents */; };
+		63F86A3B2FE96EC000D43A5F /* DesignSystemTokens in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A3A2FE96EC000D43A5F /* DesignSystemTokens */; };
+		63F86A3D2FE96EC000D43A5F /* HomeAssembly in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A3C2FE96EC000D43A5F /* HomeAssembly */; };
+		63F86A3F2FE96EC000D43A5F /* MovieDetailAssemby in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A3E2FE96EC000D43A5F /* MovieDetailAssemby */; };
+		63F86A412FE96EC000D43A5F /* OnboardingAssembly in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A402FE96EC000D43A5F /* OnboardingAssembly */; };
+		63F86A432FE96EC000D43A5F /* ProfileAssembly in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A422FE96EC000D43A5F /* ProfileAssembly */; };
+		63F86A452FE96EC000D43A5F /* SearchAssembly in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A442FE96EC000D43A5F /* SearchAssembly */; };
+		63F86A472FE96EC000D43A5F /* SharedCore in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A462FE96EC000D43A5F /* SharedCore */; };
+		63F86A492FE96EC000D43A5F /* SharedNetworking in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A482FE96EC000D43A5F /* SharedNetworking */; };
+		63F86A4B2FE96EC000D43A5F /* SharedStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A4A2FE96EC000D43A5F /* SharedStorage */; };
+		63F86A4D2FE96EC000D43A5F /* WatchlistAssembly in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A4C2FE96EC000D43A5F /* WatchlistAssembly */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		63827D882FD34B7F00DE3E16 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63827D692FD34B7C00DE3E16 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 63827D702FD34B7C00DE3E16;
+			remoteInfo = CineTrack;
+		};
+		63827D922FD34B7F00DE3E16 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63827D692FD34B7C00DE3E16 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 63827D702FD34B7C00DE3E16;
+			remoteInfo = CineTrack;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		63827D712FD34B7C00DE3E16 /* CineTrack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CineTrack.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		63827D872FD34B7F00DE3E16 /* CineTrackTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CineTrackTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		63827D912FD34B7F00DE3E16 /* CineTrackUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CineTrackUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		63827D992FD34B7F00DE3E16 /* Exceptions for "CineTrack" folder in "CineTrack" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				App/Config/Info.plist,
+				Packages/DesignSystem,
+				Packages/Features/Home,
+				Packages/Features/MovieDetail,
+				Packages/Features/Onboarding,
+				Packages/Features/Profile,
+				Packages/Features/Search,
+				Packages/Features/Watchlist,
+				Packages/SharedKit,
+			);
+			target = 63827D702FD34B7C00DE3E16 /* CineTrack */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		63827D732FD34B7C00DE3E16 /* CineTrack */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				63827D992FD34B7F00DE3E16 /* Exceptions for "CineTrack" folder in "CineTrack" target */,
+			);
+			path = CineTrack;
+			sourceTree = "<group>";
+		};
+		63827D8A2FD34B7F00DE3E16 /* CineTrackTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CineTrackTests;
+			sourceTree = "<group>";
+		};
+		63827D942FD34B7F00DE3E16 /* CineTrackUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CineTrackUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		63827D6E2FD34B7C00DE3E16 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				63F86A452FE96EC000D43A5F /* SearchAssembly in Frameworks */,
+				63F86A4B2FE96EC000D43A5F /* SharedStorage in Frameworks */,
+				63F86A432FE96EC000D43A5F /* ProfileAssembly in Frameworks */,
+				63F40D8D2FD5F1BB00189862 /* Kingfisher in Frameworks */,
+				63F86A3B2FE96EC000D43A5F /* DesignSystemTokens in Frameworks */,
+				63F86A492FE96EC000D43A5F /* SharedNetworking in Frameworks */,
+				63F86A472FE96EC000D43A5F /* SharedCore in Frameworks */,
+				63F86A392FE96EC000D43A5F /* DesignSystemComponents in Frameworks */,
+				63F86A412FE96EC000D43A5F /* OnboardingAssembly in Frameworks */,
+				63F86A4D2FE96EC000D43A5F /* WatchlistAssembly in Frameworks */,
+				63F86A3F2FE96EC000D43A5F /* MovieDetailAssemby in Frameworks */,
+				63827DBF2FD3530600DE3E16 /* FirebaseAuth in Frameworks */,
+				63F86A3D2FE96EC000D43A5F /* HomeAssembly in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63827D842FD34B7F00DE3E16 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63827D8E2FD34B7F00DE3E16 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		63827D682FD34B7C00DE3E16 = {
+			isa = PBXGroup;
+			children = (
+				63827D732FD34B7C00DE3E16 /* CineTrack */,
+				63827D8A2FD34B7F00DE3E16 /* CineTrackTests */,
+				63827D942FD34B7F00DE3E16 /* CineTrackUITests */,
+				63827DC12FD35B7500DE3E16 /* Frameworks */,
+				63827D722FD34B7C00DE3E16 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		63827D722FD34B7C00DE3E16 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				63827D712FD34B7C00DE3E16 /* CineTrack.app */,
+				63827D872FD34B7F00DE3E16 /* CineTrackTests.xctest */,
+				63827D912FD34B7F00DE3E16 /* CineTrackUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		63827DC12FD35B7500DE3E16 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		63827D702FD34B7C00DE3E16 /* CineTrack */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 63827D9A2FD34B7F00DE3E16 /* Build configuration list for PBXNativeTarget "CineTrack" */;
+			buildPhases = (
+				63827D6D2FD34B7C00DE3E16 /* Sources */,
+				63827D6E2FD34B7C00DE3E16 /* Frameworks */,
+				63827D6F2FD34B7C00DE3E16 /* Resources */,
+				63F40D902FD5F4E600189862 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				63827D732FD34B7C00DE3E16 /* CineTrack */,
+			);
+			name = CineTrack;
+			packageProductDependencies = (
+				63827DBE2FD3530600DE3E16 /* FirebaseAuth */,
+				63F40D8C2FD5F1BB00189862 /* Kingfisher */,
+				63F86A382FE96EC000D43A5F /* DesignSystemComponents */,
+				63F86A3A2FE96EC000D43A5F /* DesignSystemTokens */,
+				63F86A3C2FE96EC000D43A5F /* HomeAssembly */,
+				63F86A3E2FE96EC000D43A5F /* MovieDetailAssemby */,
+				63F86A402FE96EC000D43A5F /* OnboardingAssembly */,
+				63F86A422FE96EC000D43A5F /* ProfileAssembly */,
+				63F86A442FE96EC000D43A5F /* SearchAssembly */,
+				63F86A462FE96EC000D43A5F /* SharedCore */,
+				63F86A482FE96EC000D43A5F /* SharedNetworking */,
+				63F86A4A2FE96EC000D43A5F /* SharedStorage */,
+				63F86A4C2FE96EC000D43A5F /* WatchlistAssembly */,
+			);
+			productName = CineTrack;
+			productReference = 63827D712FD34B7C00DE3E16 /* CineTrack.app */;
+			productType = "com.apple.product-type.application";
+		};
+		63827D862FD34B7F00DE3E16 /* CineTrackTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 63827D9F2FD34B7F00DE3E16 /* Build configuration list for PBXNativeTarget "CineTrackTests" */;
+			buildPhases = (
+				63827D832FD34B7F00DE3E16 /* Sources */,
+				63827D842FD34B7F00DE3E16 /* Frameworks */,
+				63827D852FD34B7F00DE3E16 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				63827D892FD34B7F00DE3E16 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				63827D8A2FD34B7F00DE3E16 /* CineTrackTests */,
+			);
+			name = CineTrackTests;
+			packageProductDependencies = (
+			);
+			productName = CineTrackTests;
+			productReference = 63827D872FD34B7F00DE3E16 /* CineTrackTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		63827D902FD34B7F00DE3E16 /* CineTrackUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 63827DA22FD34B7F00DE3E16 /* Build configuration list for PBXNativeTarget "CineTrackUITests" */;
+			buildPhases = (
+				63827D8D2FD34B7F00DE3E16 /* Sources */,
+				63827D8E2FD34B7F00DE3E16 /* Frameworks */,
+				63827D8F2FD34B7F00DE3E16 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				63827D932FD34B7F00DE3E16 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				63827D942FD34B7F00DE3E16 /* CineTrackUITests */,
+			);
+			name = CineTrackUITests;
+			packageProductDependencies = (
+			);
+			productName = CineTrackUITests;
+			productReference = 63827D912FD34B7F00DE3E16 /* CineTrackUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		63827D692FD34B7C00DE3E16 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2650;
+				LastUpgradeCheck = 2650;
+				TargetAttributes = {
+					63827D702FD34B7C00DE3E16 = {
+						CreatedOnToolsVersion = 26.5;
+					};
+					63827D862FD34B7F00DE3E16 = {
+						CreatedOnToolsVersion = 26.5;
+						TestTargetID = 63827D702FD34B7C00DE3E16;
+					};
+					63827D902FD34B7F00DE3E16 = {
+						CreatedOnToolsVersion = 26.5;
+						TestTargetID = 63827D702FD34B7C00DE3E16;
+					};
+				};
+			};
+			buildConfigurationList = 63827D6C2FD34B7C00DE3E16 /* Build configuration list for PBXProject "CineTrack" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 63827D682FD34B7C00DE3E16;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				63827DBD2FD3530600DE3E16 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				63F40D8B2FD5F1BB00189862 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 63827D722FD34B7C00DE3E16 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				63827D702FD34B7C00DE3E16 /* CineTrack */,
+				63827D862FD34B7F00DE3E16 /* CineTrackTests */,
+				63827D902FD34B7F00DE3E16 /* CineTrackUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		63827D6F2FD34B7C00DE3E16 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63827D852FD34B7F00DE3E16 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63827D8F2FD34B7F00DE3E16 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		63F40D902FD5F4E600189862 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ -d \"/opt/homebrew/bin/\" ]; then\n    PATH=\"/opt/homebrew/bin/:${PATH}\"\nfi\nexport PATH\nif which swiftlint >/dev/null; then\n    swiftlint --config \"${SRCROOT}/CineTrack/.swiftlint.yml\"\nelse\n    echo \"warning: SwiftLint not installed\"\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		63827D6D2FD34B7C00DE3E16 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63827D832FD34B7F00DE3E16 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63827D8D2FD34B7F00DE3E16 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		63827D892FD34B7F00DE3E16 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 63827D702FD34B7C00DE3E16 /* CineTrack */;
+			targetProxy = 63827D882FD34B7F00DE3E16 /* PBXContainerItemProxy */;
+		};
+		63827D932FD34B7F00DE3E16 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 63827D702FD34B7C00DE3E16 /* CineTrack */;
+			targetProxy = 63827D922FD34B7F00DE3E16 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		63827D9B2FD34B7F00DE3E16 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CineTrack/App/Config/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gegi.CineTrack;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		63827D9C2FD34B7F00DE3E16 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CineTrack/App/Config/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gegi.CineTrack;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		63827D9D2FD34B7F00DE3E16 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		63827D9E2FD34B7F00DE3E16 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		63827DA02FD34B7F00DE3E16 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gegi.CineTrackTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CineTrack.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CineTrack";
+			};
+			name = Debug;
+		};
+		63827DA12FD34B7F00DE3E16 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gegi.CineTrackTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CineTrack.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CineTrack";
+			};
+			name = Release;
+		};
+		63827DA32FD34B7F00DE3E16 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gegi.CineTrackUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = CineTrack;
+			};
+			name = Debug;
+		};
+		63827DA42FD34B7F00DE3E16 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gegi.CineTrackUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = CineTrack;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		63827D6C2FD34B7C00DE3E16 /* Build configuration list for PBXProject "CineTrack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				63827D9D2FD34B7F00DE3E16 /* Debug */,
+				63827D9E2FD34B7F00DE3E16 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		63827D9A2FD34B7F00DE3E16 /* Build configuration list for PBXNativeTarget "CineTrack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				63827D9B2FD34B7F00DE3E16 /* Debug */,
+				63827D9C2FD34B7F00DE3E16 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		63827D9F2FD34B7F00DE3E16 /* Build configuration list for PBXNativeTarget "CineTrackTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				63827DA02FD34B7F00DE3E16 /* Debug */,
+				63827DA12FD34B7F00DE3E16 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		63827DA22FD34B7F00DE3E16 /* Build configuration list for PBXNativeTarget "CineTrackUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				63827DA32FD34B7F00DE3E16 /* Debug */,
+				63827DA42FD34B7F00DE3E16 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		63827DBD2FD3530600DE3E16 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.14.0;
+			};
+		};
+		63F40D8B2FD5F1BB00189862 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.9.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		63827DBE2FD3530600DE3E16 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 63827DBD2FD3530600DE3E16 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		63F40D8C2FD5F1BB00189862 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 63F40D8B2FD5F1BB00189862 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		63F86A382FE96EC000D43A5F /* DesignSystemComponents */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DesignSystemComponents;
+		};
+		63F86A3A2FE96EC000D43A5F /* DesignSystemTokens */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DesignSystemTokens;
+		};
+		63F86A3C2FE96EC000D43A5F /* HomeAssembly */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = HomeAssembly;
+		};
+		63F86A3E2FE96EC000D43A5F /* MovieDetailAssemby */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MovieDetailAssemby;
+		};
+		63F86A402FE96EC000D43A5F /* OnboardingAssembly */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OnboardingAssembly;
+		};
+		63F86A422FE96EC000D43A5F /* ProfileAssembly */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ProfileAssembly;
+		};
+		63F86A442FE96EC000D43A5F /* SearchAssembly */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SearchAssembly;
+		};
+		63F86A462FE96EC000D43A5F /* SharedCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SharedCore;
+		};
+		63F86A482FE96EC000D43A5F /* SharedNetworking */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SharedNetworking;
+		};
+		63F86A4A2FE96EC000D43A5F /* SharedStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SharedStorage;
+		};
+		63F86A4C2FE96EC000D43A5F /* WatchlistAssembly */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WatchlistAssembly;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 63827D692FD34B7C00DE3E16 /* Project object */;
+}

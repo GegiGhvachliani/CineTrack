@@ -1,0 +1,27 @@
+# Xcode
+# ========================
+build/
+DerivedData/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Xcode User Data
+# ========================
+xcuserdata/
+project.xcworkspace/
+!project.xcworkspace/contents.xcworkspacedata
+
+# Swift Package Manager
+# ========================
+**/.swiftpm/
+.swiftpm/xcode/package.resolved
+
+# macOS
+# ========================
+.DS_Store
+
+# Firebase & Crashlytics
+# ========================
+crashlytics_build_sender_secret.json
