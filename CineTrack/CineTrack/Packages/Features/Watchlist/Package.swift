@@ -7,6 +7,7 @@ let package = Package(
     name: "Watchlist",
     platforms: [.iOS(.v16)],
     products: [
+        .library(name: "WatchlistPresentationAPI", targets: ["WatchlistPresentationAPI"]),
         .library(name: "WatchlistAssembly", targets: ["WatchlistAssembly"])
     ],
     dependencies: [
@@ -38,9 +39,20 @@ let package = Package(
             dependencies: [
                 "WatchlistDomain",
                 .product(name: "SharedCore", package: "SharedKit"),
-                .product(name: "DesignSystemComponents", package: "DesignSystem"),
+                .product(
+                    name: "DesignSystemComponents",
+                    package: "DesignSystem"
+                ),
             ],
             path: "Sources/WatchlistPresentation"
+        ),
+
+        .target(
+            name: "WatchlistPresentationAPI",
+            dependencies: [
+                .product(name: "SharedCore", package: "SharedKit")
+            ],
+            path: "Sources/WatchlistPresentationAPI"
         ),
 
         .target(
@@ -49,6 +61,7 @@ let package = Package(
                 "WatchlistDomain",
                 "WatchlistData",
                 "WatchlistPresentation",
+                "WatchlistPresentationAPI"
             ],
             path: "Sources/WatchlistAssembly"
         ),

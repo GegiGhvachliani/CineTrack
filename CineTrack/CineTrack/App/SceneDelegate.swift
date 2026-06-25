@@ -11,6 +11,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     var appCoordinator: AppCoordinator?
+    var appDIContainer: AppDIContainerProtocol?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
@@ -18,8 +19,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         self.window = window
         
+        let container = AppDIContainer()
+        self.appDIContainer = container
+        
         // ვაინიციალიზებთ მთავარ კოორდინატორს
-        appCoordinator = AppCoordinator(window: window)
+        appCoordinator = AppCoordinator(window: window, container: container)
         appCoordinator?.start()
         
         window.makeKeyAndVisible()

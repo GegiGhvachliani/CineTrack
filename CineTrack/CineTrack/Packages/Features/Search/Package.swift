@@ -7,6 +7,7 @@ let package = Package(
     name: "Search",
     platforms: [.iOS(.v16)],
     products: [
+        .library(name: "SearchPresentationAPI", targets: ["SearchPresentationAPI"]),
         .library(name: "SearchAssembly", targets: ["SearchAssembly"])
     ],
     dependencies: [
@@ -37,10 +38,22 @@ let package = Package(
             name: "SearchPresentation",
             dependencies: [
                 "SearchDomain",
+                "SearchPresentationAPI",
                 .product(name: "SharedCore", package: "SharedKit"),
-                .product(name: "DesignSystemComponents", package: "DesignSystem"),
+                .product(
+                    name: "DesignSystemComponents",
+                    package: "DesignSystem"
+                ),
             ],
             path: "Sources/SearchPresentation"
+        ),
+
+        .target(
+            name: "SearchPresentationAPI",
+            dependencies: [
+                .product(name: "SharedCore", package: "SharedKit")
+            ],
+            path: "Sources/SearchPresentationAPI"
         ),
 
         .target(
@@ -49,6 +62,7 @@ let package = Package(
                 "SearchDomain",
                 "SearchData",
                 "SearchPresentation",
+                "SearchPresentationAPI"
             ],
             path: "Sources/SearchAssembly"
         ),

@@ -6,15 +6,8 @@
 //
 
 import UIKit
-import ProfileDomain
-import ProfileData
 import ProfilePresentation
-import SharedCore
-
-@MainActor
-public protocol ProfileFactoryProtocol {
-    func makeProfileViewController() -> UIViewController
-}
+import ProfilePresentationAPI
 
 public struct ProfileFactory: ProfileFactoryProtocol {
     
@@ -39,5 +32,9 @@ public struct ProfileFactory: ProfileFactoryProtocol {
         ])
         
         return vc
+    }
+    
+    public func makeProfileCoordinator(navigationController: UINavigationController) -> ProfileCoordinatorProtocol {
+        return ProfileCoordinator(navigationController: navigationController, factory: self)
     }
 }

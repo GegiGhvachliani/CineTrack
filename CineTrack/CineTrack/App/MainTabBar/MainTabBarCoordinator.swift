@@ -1,8 +1,8 @@
 import UIKit
 import SharedCore
-import HomeAssembly
-import SearchAssembly
-import ProfileAssembly
+import HomePresentationAPI
+import SearchPresentationAPI
+import ProfilePresentationAPI
 
 final class MainTabBarCoordinator: Coordinator {
     // childCoordinators ინახავს შვილ კოორდინატორებს, რომ მეხსიერებიდან არ ამოვარდნენ (სამომავლოდ დაგვჭირდება)
@@ -10,11 +10,17 @@ final class MainTabBarCoordinator: Coordinator {
     
     private let navigationController: UINavigationController
     private let tabBarController: MainTabBarController
+    private let container: AppDIContainerProtocol
     
     // ინიციალიზატორში გარედან შემოგვაქვს მთავარი ნავიგაცია
-    init(navigationController: UINavigationController, tabBarController: MainTabBarController = MainTabBarController()) {
+    init(
+        navigationController: UINavigationController,
+        tabBarController: MainTabBarController = MainTabBarController(),
+        container: AppDIContainerProtocol
+    ) {
         self.navigationController = navigationController
         self.tabBarController = tabBarController
+        self.container = container
     }
     
     func start() {
@@ -24,14 +30,18 @@ final class MainTabBarCoordinator: Coordinator {
         let profileNav = UINavigationController()
         
         // 2. ფექთორების დახმარებით ვიღებთ გამზადებულ ფერად ეკრანებს
-        let homeVC = HomeFactory().makeHomeViewController()
-        let searchVC = SearchFactory().makeSearchViewController()
-        let profileVC = ProfileFactory().makeProfileViewController()
+        let homeCoordinator = container.homeFactory.makeHomeCoordinator(navigationController: homeNav)
+        let searchCoordinator = container.searchFactory.makeSearchCoordinator(navigationController: searchNav)
+        let profileCoordinator = container.profileFactory.makeProfileCoordinator(navigationController: profileNav)
         
         // 3. თითოეულ ნავიგაციაში ძირძველ (პირველ) ეკრანად ვსვამთ ჩვენს ფერად ვიუებს
-        homeNav.viewControllers = [homeVC]
-        searchNav.viewControllers = [searchVC]
-        profileNav.viewControllers = [profileVC]
+        childCoordinators.append(homeCoordinator)
+        childCoordinators.append(searchCoordinator)
+        childCoordinators.append(profileCoordinator)
+        
+        homeCoordinator.start()
+        searchCoordinator.start()
+        profileCoordinator.start()
         
         // 4. ვანიჭებთ ტაბბარ აითემებს (როგორც წინა ნაბიჯში ვქენით)
         homeNav.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), tag: 0)

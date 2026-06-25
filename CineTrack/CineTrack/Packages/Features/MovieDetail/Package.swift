@@ -7,6 +7,7 @@ let package = Package(
     name: "MovieDetail",
     platforms: [.iOS(.v16)],
     products: [
+        .library(name: "MovieDetailPresentationAPI", targets: ["MovieDetailPresentationAPI"]),
         .library(
             name: "MovieDetailAssemby",
             targets: ["MovieDetailAssembly"]
@@ -40,9 +41,20 @@ let package = Package(
             dependencies: [
                 "MovieDetailDomain",
                 .product(name: "SharedCore", package: "SharedKit"),
-                .product(name: "DesignSystemComponents", package: "DesignSystem"),
+                .product(
+                    name: "DesignSystemComponents",
+                    package: "DesignSystem"
+                ),
             ],
             path: "Sources/MovieDetailPresentation"
+        ),
+
+        .target(
+            name: "MovieDetailPresentationAPI",
+            dependencies: [
+                .product(name: "SharedCore", package: "SharedKit")
+            ],
+            path: "Sources/MovieDetailPresentationAPI"
         ),
 
         .target(
@@ -51,6 +63,7 @@ let package = Package(
                 "MovieDetailDomain",
                 "MovieDetailData",
                 "MovieDetailPresentation",
+                .product(name: "SharedCore", package: "SharedKit")
             ],
             path: "Sources/MovieDetailAssembly"
         ),
@@ -60,7 +73,8 @@ let package = Package(
             dependencies: [
                 "MovieDetailDomain",
                 "MovieDetailData",
-                "MovieDetailPresentation"
+                "MovieDetailPresentation",
+                "MovieDetailPresentationAPI"
             ],
             path: "Tests"
         ),

@@ -5,6 +5,7 @@
 //  Created by Gegi Ghvachliani on 06/06/2026.
 //
 
+@MainActor
 public protocol Coordinator: AnyObject {
     var childCoordinators: [Coordinator] { get set }
     func start()

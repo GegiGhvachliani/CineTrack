@@ -1,20 +1,13 @@
 //
-//  SearchAssembly.swift
+//  SearchFactory.swift
 //  Search
 //
-//  Created by Gegi Ghvachliani on 22/06/2026.
+//  Created by Gegi Ghvachliani on 25/06/2026.
 //
 
 import UIKit
-import SearchDomain
-import SearchData
 import SearchPresentation
-import SharedCore
-
-@MainActor
-public protocol SearchFactoryProtocol {
-    func makeSearchViewController() -> UIViewController
-}
+import SearchPresentationAPI
 
 public struct SearchFactory: SearchFactoryProtocol {
     
@@ -39,5 +32,9 @@ public struct SearchFactory: SearchFactoryProtocol {
         ])
         
         return vc
+    }
+    
+    public func makeSearchCoordinator(navigationController: UINavigationController) -> SearchCoordinatorProtocol {
+        return SearchCoordinator(navigationController: navigationController, factory: self)
     }
 }

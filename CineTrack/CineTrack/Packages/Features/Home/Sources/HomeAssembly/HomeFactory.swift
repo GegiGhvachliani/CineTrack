@@ -6,15 +6,8 @@
 //
 
 import UIKit
-import HomeDomain
-import HomeData
 import HomePresentation
-import SharedCore
-
-@MainActor
-public protocol HomeFactoryProtocol {
-    func makeHomeViewController() -> UIViewController
-}
+import HomePresentationAPI
 
 public struct HomeFactory: HomeFactoryProtocol {
     
@@ -39,5 +32,9 @@ public struct HomeFactory: HomeFactoryProtocol {
         ])
         
         return vc
+    }
+    
+    public func makeHomeCoordinator(navigationController: UINavigationController) -> HomeCoordinatorProtocol {
+        return HomeCoordinator(navigationController: navigationController, factory: self)
     }
 }
