@@ -6,3 +6,9 @@ SharedStorage ტარგეტი
 რა შედის: CoreDataStack და UserDefaultsManager.
 
 რატომ: ბაზის მენეჯმენტი ცალკეული პასუხისმგებლობაა, რომელიც არ უნდა ერეოდეს ნეტვორკინგში ან უტილიტებში.
+
+
+
+Protocols/ (PersistenceControllerProtocol, CacheProtocol)
+
+PersistenceController.swift, ImageCache.swift

@@ -7,6 +7,7 @@ let package = Package(
     name: "Profile",
     platforms: [.iOS(.v16)],
     products: [
+        .library(name: "ProfilePresentationAPI", targets: ["ProfilePresentationAPI"]),
         .library(name: "ProfileAssembly", targets: ["ProfileAssembly"])
     ],
     dependencies: [
@@ -37,10 +38,22 @@ let package = Package(
             name: "ProfilePresentation",
             dependencies: [
                 "ProfileDomain",
+                "ProfilePresentationAPI",
                 .product(name: "SharedCore", package: "SharedKit"),
-                .product(name: "DesignSystemComponents", package: "DesignSystem"),
+                .product(
+                    name: "DesignSystemComponents",
+                    package: "DesignSystem"
+                ),
             ],
             path: "Sources/ProfilePresentation"
+        ),
+
+        .target(
+            name: "ProfilePresentationAPI",
+            dependencies: [
+                .product(name: "SharedCore", package: "SharedKit")
+            ],
+            path: "Sources/ProfilePresentationAPI"
         ),
 
         .target(
@@ -49,6 +62,8 @@ let package = Package(
                 "ProfileDomain",
                 "ProfileData",
                 "ProfilePresentation",
+                "ProfilePresentationAPI",
+                .product(name: "SharedCore", package: "SharedKit"),
             ],
             path: "Sources/ProfileAssembly"
         ),
@@ -59,6 +74,8 @@ let package = Package(
                 "ProfileDomain",
                 "ProfileData",
                 "ProfilePresentation",
+                "ProfilePresentationAPI",
+                "ProfileAssembly"
             ],
             path: "Tests"
         ),

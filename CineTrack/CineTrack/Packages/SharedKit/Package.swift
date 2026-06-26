@@ -10,7 +10,8 @@ let package = Package(
     products: [
         .library(name: "SharedCore", targets: ["SharedCore"]),
         .library(name: "SharedNetworking", targets: ["SharedNetworking"]),
-        .library(name: "SharedStorage", targets: ["SharedStorage"])
+        .library(name: "SharedStorage", targets: ["SharedStorage"]),
+        .library(name: "SharedAuth", targets: ["SharedAuth"]),
     ],
     dependencies: [],
     targets: [
@@ -19,7 +20,7 @@ let package = Package(
             dependencies: [],
             path: "Sources/SharedCore"
         ),
-        
+
         .target(
             name: "SharedNetworking",
             dependencies: [
@@ -27,21 +28,30 @@ let package = Package(
             ],
             path: "Sources/SharedNetworking"
         ),
-        
+
         .target(
             name: "SharedStorage",
             dependencies: [
-                "SharedCore" 
+                "SharedCore"
             ],
             path: "Sources/SharedStorage"
         ),
-        
+
+        .target(
+            name: "SharedAuth",
+            dependencies: [
+                "SharedCore",
+                "SharedStorage",
+            ],
+            path: "Sources/SharedAuth"
+        ),
+
         // 4. TEST TARGET
         .testTarget(
             name: "SharedKitTests",
-            dependencies: ["SharedCore", "SharedNetworking", "SharedStorage"],
+            dependencies: ["SharedCore", "SharedNetworking", "SharedStorage", "SharedAuth"],
             path: "Tests"
-        )
+        ),
     ],
-   swiftLanguageModes: [.v6]
+    swiftLanguageModes: [.v6]
 )

@@ -15,7 +15,8 @@ let package = Package(
     name: "Home",
     platforms: [.iOS(.v16)],
     products: [
-        .library(name: "HomeAssembly", targets: ["HomeAssembly"])
+        .library(name: "HomePresentationAPI", targets: ["HomePresentationAPI"]),
+        .library(name: "HomeAssembly", targets: ["HomeAssembly"]),
     ],
     dependencies: [
         .package(path: "../../SharedKit"),
@@ -45,10 +46,22 @@ let package = Package(
             name: "HomePresentation",
             dependencies: [
                 "HomeDomain",
+                "HomePresentationAPI",
                 .product(name: "SharedCore", package: "SharedKit"),
-                .product(name: "DesignSystemComponents", package: "DesignSystem"),
+                .product(
+                    name: "DesignSystemComponents",
+                    package: "DesignSystem"
+                ),
             ],
             path: "Sources/HomePresentation"
+        ),
+
+        .target(
+            name: "HomePresentationAPI",
+            dependencies: [
+                .product(name: "SharedCore", package: "SharedKit")
+            ],
+            path: "Sources/HomePresentationAPI"
         ),
 
         .target(
@@ -57,6 +70,7 @@ let package = Package(
                 "HomeDomain",
                 "HomeData",
                 "HomePresentation",
+                "HomePresentationAPI",
             ],
             path: "Sources/HomeAssembly"
         ),

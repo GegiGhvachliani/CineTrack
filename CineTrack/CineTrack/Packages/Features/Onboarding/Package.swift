@@ -7,7 +7,11 @@ let package = Package(
     name: "Onboarding",
     platforms: [.iOS(.v16)],
     products: [
-        .library(name: "OnboardingAssembly", targets: ["OnboardingAssembly"])
+        .library(
+            name: "OnboardingPresentationAPI",
+            targets: ["OnboardingPresentationAPI"]
+        ),
+        .library(name: "OnboardingAssembly", targets: ["OnboardingAssembly"]),
     ],
     dependencies: [
         .package(path: "../SharedKit"),
@@ -18,15 +22,27 @@ let package = Package(
             name: "OnboardingPresentation",
             dependencies: [
                 .product(name: "SharedCore", package: "SharedKit"),  // კოორდინატორის პროტოკოლებისთვის
-                .product(name: "DesignSystemComponents", package: "DesignSystem"),  // ღილაკებისთვის და ფონტებისთვის
+                .product(
+                    name: "DesignSystemComponents",
+                    package: "DesignSystem"
+                ),  // ღილაკებისთვის და ფონტებისთვის
             ],
             path: "Sources/OnboardingPresentation"
         ),
 
         .target(
+            name: "OnboardingPresentationAPI",
+            dependencies: [
+                .product(name: "SharedCore", package: "SharedKit")
+            ],
+            path: "Sources/OnboardingPresentationAPI"
+        ),
+
+        .target(
             name: "OnboardingAssembly",
             dependencies: [
-                "OnboardingPresentation"
+                "OnboardingPresentation",
+                "OnboardingPresentationAPI"
             ],
             path: "Sources/OnboardingAssembly"
         ),
