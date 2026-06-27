@@ -18,9 +18,23 @@ let package = Package(
         .package(path: "../DesignSystem"),
     ],
     targets: [
+        .target(name: "OnboardingDomain",
+                dependencies: [],
+                path: "Sources/OnboardingDomain"
+               ),
+        
+        .target(name: "OnboardingData",
+                dependencies: [
+                    "OnboardingDomain"
+                ],
+                path: "Sources/OnboardingData"
+               ),
+        
         .target(
             name: "OnboardingPresentation",
             dependencies: [
+                "OnboardingDomain",
+                "OnboardingPresentationAPI",
                 .product(name: "SharedCore", package: "SharedKit"),  // კოორდინატორის პროტოკოლებისთვის
                 .product(
                     name: "DesignSystemComponents",

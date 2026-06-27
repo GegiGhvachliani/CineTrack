@@ -18,7 +18,10 @@ let package = Package(
         .target(
             name: "DesignSystemTokens",
             dependencies: [],
-            path: "Sources/DesignSystemTokens"
+            path: "Sources/DesignSystemTokens",
+            resources: [
+                .process("Assets.xcassets")
+            ]
         ),
         
         .target(

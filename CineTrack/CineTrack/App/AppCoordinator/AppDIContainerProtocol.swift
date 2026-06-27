@@ -9,10 +9,12 @@ import Foundation
 import HomePresentationAPI
 import ProfilePresentationAPI
 import SearchPresentationAPI
+import OnboardingPresentationAPI
 
 @MainActor
 protocol AppDIContainerProtocol {
     var homeFactory: HomeFactoryProtocol { get }
     var profileFactory: ProfileFactoryProtocol { get }
     var searchFactory: SearchFactoryProtocol { get }
+    var onboardingFactory: OnboardingFactoryProtocol { get }
 }
