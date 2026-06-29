@@ -13,6 +13,8 @@
 		630B69DC2FEFFA44006DF3CD /* ProfilePresentationAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 630B69DB2FEFFA44006DF3CD /* ProfilePresentationAPI */; };
 		630B69DE2FEFFA44006DF3CD /* SearchPresentationAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 630B69DD2FEFFA44006DF3CD /* SearchPresentationAPI */; };
 		630B69E02FEFFA44006DF3CD /* WatchlistPresentationAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 630B69DF2FEFFA44006DF3CD /* WatchlistPresentationAPI */; };
+		630B6A1E2FF2AB33006DF3CD /* AuthenticationAssembly in Frameworks */ = {isa = PBXBuildFile; productRef = 630B6A1D2FF2AB33006DF3CD /* AuthenticationAssembly */; };
+		630B6A202FF2AB33006DF3CD /* AuthenticationPresentationAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 630B6A1F2FF2AB33006DF3CD /* AuthenticationPresentationAPI */; };
 		63827DBF2FD3530600DE3E16 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 63827DBE2FD3530600DE3E16 /* FirebaseAuth */; };
 		63F40D8D2FD5F1BB00189862 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 63F40D8C2FD5F1BB00189862 /* Kingfisher */; };
 		63F86A392FE96EC000D43A5F /* DesignSystemComponents in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A382FE96EC000D43A5F /* DesignSystemComponents */; };
@@ -57,6 +59,7 @@
 			membershipExceptions = (
 				App/Config/Info.plist,
 				Packages/DesignSystem,
+				Packages/Features/Authentication,
 				Packages/Features/Home,
 				Packages/Features/MovieDetail,
 				Packages/Features/Onboarding,
@@ -109,11 +112,13 @@
 				63F86A392FE96EC000D43A5F /* DesignSystemComponents in Frameworks */,
 				63F86A412FE96EC000D43A5F /* OnboardingAssembly in Frameworks */,
 				63F86A4D2FE96EC000D43A5F /* WatchlistAssembly in Frameworks */,
+				630B6A1E2FF2AB33006DF3CD /* AuthenticationAssembly in Frameworks */,
 				63F86A3F2FE96EC000D43A5F /* MovieDetailAssemby in Frameworks */,
 				63827DBF2FD3530600DE3E16 /* FirebaseAuth in Frameworks */,
 				630B69DE2FEFFA44006DF3CD /* SearchPresentationAPI in Frameworks */,
 				630B69DC2FEFFA44006DF3CD /* ProfilePresentationAPI in Frameworks */,
 				63F86A3D2FE96EC000D43A5F /* HomeAssembly in Frameworks */,
+				630B6A202FF2AB33006DF3CD /* AuthenticationPresentationAPI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,6 +207,8 @@
 				630B69DB2FEFFA44006DF3CD /* ProfilePresentationAPI */,
 				630B69DD2FEFFA44006DF3CD /* SearchPresentationAPI */,
 				630B69DF2FEFFA44006DF3CD /* WatchlistPresentationAPI */,
+				630B6A1D2FF2AB33006DF3CD /* AuthenticationAssembly */,
+				630B6A1F2FF2AB33006DF3CD /* AuthenticationPresentationAPI */,
 			);
 			productName = CineTrack;
 			productReference = 63827D712FD34B7C00DE3E16 /* CineTrack.app */;
@@ -734,6 +741,14 @@
 		630B69DF2FEFFA44006DF3CD /* WatchlistPresentationAPI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = WatchlistPresentationAPI;
+		};
+		630B6A1D2FF2AB33006DF3CD /* AuthenticationAssembly */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AuthenticationAssembly;
+		};
+		630B6A1F2FF2AB33006DF3CD /* AuthenticationPresentationAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AuthenticationPresentationAPI;
 		};
 		63827DBE2FD3530600DE3E16 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
