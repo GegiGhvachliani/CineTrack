@@ -12,12 +12,15 @@ public enum ColorTokens {
     public enum Background {
         public static let primary = Color("backgroundPrimary", bundle: .module)
         public static let secondary = Color("backgroundSecondary", bundle: .module)
+        public static let main = Color("mainBackground", bundle: .module)
+
     }
     
     public enum Text {
         public static let primary = Color("textPrimary", bundle: .module)
         public static let secondary = Color("textSecondary", bundle: .module)
         public static let inverse = Color("textInverse", bundle: .module)
+        public static let main = Color("mainText", bundle: .module)
     }
     
     public enum Brand {

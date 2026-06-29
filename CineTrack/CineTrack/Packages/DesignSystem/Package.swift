@@ -20,7 +20,7 @@ let package = Package(
             dependencies: [],
             path: "Sources/DesignSystemTokens",
             resources: [
-                .process("Assets.xcassets")
+                .process("Resources/DesignSystemAssets.xcassets")
             ]
         ),
         

@@ -17,41 +17,46 @@ import SwiftUI
 //თუ პატარა ინფორმაციას წერ (რეიტინგი, წელი, დრო): გამოიყენე caption ან footnote.
 
 
-public enum Typography {
+public enum TypographyTokens {
 
     /// **ონბორდინგის და მთავარი ეკრანების მთავარი სათაური**
     /// - *გამოყენება:* ონბორდინგის ეკრანების პირველი დიდი ტექსტი (მაგ: "Discover New Movies").
-    public static let largeTitle = Font.system(size: 34, weight: .bold)
+    public static let largeTitle = Font.system(size: 34, weight: .bold, design: .rounded)
     
     /// **დიდი სექციების სათაური**
     /// - *გამოყენება:* ფილმის დეტალების გვერდზე ფილმის სახელი, ან ეკრანის ზედა სათაური (Navigation Title), თუ Large Title არ გინდა.
-    public static let title1 = Font.system(size: 28, weight: .bold)
+    public static let title1 = Font.system(size: 28, weight: .bold, design: .rounded)
     
     /// **საშუალო ზომის სათაური**
     /// - *გამოყენება:* ჰორიზონტალური ფილმების სიის (Carousels) სათაურები (მაგ: "Trending Now", "Top Rated").
-    public static let title2 = Font.system(size: 22, weight: .bold)
+    public static let title2 = Font.system(size: 23, weight: .bold, design: .rounded)
     
     /// **პატარა სექციების ან ბარათების (Cards) სათაური**
     /// - *გამოყენება:* ფილმის პატარა ბარათზე ფილმის სახელის დასაწერად, ან Preference გვერდზე ჟანრების ბლოკის სათაურად.
-    public static let title3 = Font.system(size: 20, weight: .semibold)
+    public static let title3 = Font.system(size: 20, weight: .semibold, design: .rounded)
     
     /// **მნიშვნელოვანი/გამოკვეთილი ტექსტები და ღილაკები**
     /// - *გამოყენება:* დიდ "Continue" ან "Get Started" ღილაკებში არსებული ტექსტი, ან მომხმარებლის სახელი პროფილში.
-    public static let headline = Font.system(size: 17, weight: .semibold)
+    public static let headline = Font.system(size: 17, weight: .semibold, design: .rounded)
     
     /// **ძირითადი კითხხვადი ტექსტი (Standard Text)**
     /// - *გამოყენება:* ფილმის აღწერა (Overview/Plot), ონბორდინგის სათაურის ქვედა განმარტებითი ტექსტები. ყველაზე ხშირად გამოყენებადი ფონტია.
-    public static let body = Font.system(size: 17, weight: .regular)
+    public static let body = Font.system(size: 17, weight: .regular, design: .rounded)
     
     /// **შედარებით მცირე ზომის ძირითადი ტექსტი**
     /// - *გამოყენება:* ჟანრების თეგების (Chips) შიგნით არსებული ტექსტისთვის ("Action", "Comedy") ან შედარებით გრძელი და მეორეხარისხოვანი აღწერებისთვის.
-    public static let bodySmall = Font.system(size: 15, weight: .regular)
+    public static let bodySmall = Font.system(size: 15, weight: .regular, design: .rounded)
     
     /// **დამხმარე ან მეტა-მონაცემების ტექსტი**
     /// - *გამოყენება:* ფილმის გამოშვების წელი, ხანგრძლივობა, ჟანრი ფილმის ბარათზე (მაგ: "2024 • 2h 10m").
-    public static let caption = Font.system(size: 13, weight: .regular)
+    public static let caption = Font.system(size: 13, weight: .regular, design: .rounded)
     
     /// **ყველაზე პატარა, დამატებითი ინფორმაციის ტექსტი**
     /// - *გამოყენება:* IMDb რეიტინგის ციფრი ვარსკვლავის გვერდით (მაგ: "8.5"), მსახიობის როლის სახელი ფილმში, ან Terms & Conditions ლინკი ონბორდინგის ბოლოში.
-    public static let footnote = Font.system(size: 12, weight: .regular)
+    public static let footnote = Font.system(size: 12, weight: .regular, design: .rounded)
+    
+    public static let logo = Font.custom(
+        "Impact",
+        size: 36
+    )
 }

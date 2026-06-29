@@ -16,7 +16,7 @@ public struct OnboardingFactory: OnboardingFactoryProtocol {
     
     public func makeOnboardingViewController(didComplete: @escaping () -> Void) -> UIViewController {
         // ჯერჯერობით მარტივი ეკრანი სანამ ვიზუალს ავაწყობ
-        let viewModel = OnboardingViewModel(didComplete: didComplete)
+        let viewModel = OnboardingViewModel()
         let onboardingView = OnboardingView(viewModel: viewModel)
         
         let hostingController = UIHostingController(rootView: onboardingView)

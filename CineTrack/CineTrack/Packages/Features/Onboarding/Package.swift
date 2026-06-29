@@ -41,7 +41,8 @@ let package = Package(
                     package: "DesignSystem"
                 ),  // ღილაკებისთვის და ფონტებისთვის
             ],
-            path: "Sources/OnboardingPresentation"
+            path: "Sources/OnboardingPresentation",
+            resources: [.process("Resources/OnboardingAssets.xcassets")]
         ),
 
         .target(
