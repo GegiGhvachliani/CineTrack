@@ -9,16 +9,13 @@ let package = Package(
     products: [
         .library(name: "AuthenticationAssembly", targets: ["AuthenticationAssembly"]),
         .library(name: "AuthenticationPresentationAPI", targets: ["AuthenticationPresentationAPI"]),
-        
-        
     ],
-    
     dependencies: [
         .package(path: "../../SharedKit"),
         .package(path: "../../DesignSystem"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "12.1.0")
     ],
     targets: [
-
         .target(
             name: "AuthenticationDomain",
             dependencies: [
@@ -33,6 +30,7 @@ let package = Package(
                 "AuthenticationDomain",
                 .product(name: "SharedNetworking", package: "SharedKit"),
                 .product(name: "SharedStorage", package: "SharedKit"),
+                .product(name: "FirebaseAuth", package: "firebase-ios-sdk")
             ],
             path: "Sources/AuthenticationData"
         ),
