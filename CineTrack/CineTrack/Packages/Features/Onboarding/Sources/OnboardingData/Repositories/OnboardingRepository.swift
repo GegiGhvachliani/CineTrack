@@ -9,9 +9,14 @@ import OnboardingDomain
 import Foundation
 
 public final class OnboardingRepository: OnboardingRepositoryProtocol {
+    // MARK: - Properties
     private let userDefaultsKey = "hasCompletedOnboarding"
     
+    // MARK: - Initializations
+    
     public init() {}
+    
+    // MARK: - Methods
     
     public func saveOnboardingCompleted() {
         UserDefaults.standard.set(true, forKey: userDefaultsKey)

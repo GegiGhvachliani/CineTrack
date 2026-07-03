@@ -9,5 +9,5 @@ import UIKit
 import SharedCore
 
 public protocol OnboardingCoordinatorProtocol: Coordinator {
-    var navigationController: UINavigationController { get }
+    var onFinish: (() -> Void)? { get set }
 }

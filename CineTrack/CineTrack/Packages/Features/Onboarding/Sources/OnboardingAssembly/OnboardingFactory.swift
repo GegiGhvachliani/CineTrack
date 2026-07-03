@@ -7,21 +7,37 @@
 
 import UIKit
 import SwiftUI
+import OnboardingDomain
+import OnboardingData
 import OnboardingPresentation
 import OnboardingPresentationAPI
 
 public struct OnboardingFactory: OnboardingFactoryProtocol {
+
+    // MARK: - Initializations
     
     public init() {}
     
+    public func isOnboardingCompleted() -> Bool {
+        let repository = OnboardingRepository()
+        let useCase = CheckOnboardingStatusUseCase(repository: repository)
+        return useCase.execute()
+    }
+    
+    // MARK: - Methods
+    
     public func makeOnboardingViewController(didComplete: @escaping () -> Void) -> UIViewController {
-        // ჯერჯერობით მარტივი ეკრანი სანამ ვიზუალს ავაწყობ
-        let viewModel = OnboardingViewModel()
+        let repository: OnboardingRepositoryProtocol = OnboardingRepository()
+        let finishUseCase: FinishOnboardingUseCaseProtocol = FinishOnboardingUseCase(repository: repository)
+        
+        let viewModel = OnboardingViewModel(
+            finishOnboardingUseCase: finishUseCase,
+            didComplete: didComplete
+        )
+        
         let onboardingView = OnboardingView(viewModel: viewModel)
         
-        let hostingController = UIHostingController(rootView: onboardingView)
-        
-        return hostingController
+        return UIHostingController(rootView: onboardingView)
     }
     
     public func makeOnboardingCoordinator(navigationController: UINavigationController) -> OnboardingCoordinatorProtocol {

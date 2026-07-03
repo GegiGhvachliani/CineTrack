@@ -63,7 +63,7 @@ public struct OnboardingPageView: View {
     private var appTitleView: some View {
         Text(page.appTitle)
             .font(TypographyTokens.logo)
-            .foregroundStyle(ColorTokens.Text.main)
+            .foregroundStyle(ColorTokens.Brand.primary)
             .frame(alignment: .center)
     }
     

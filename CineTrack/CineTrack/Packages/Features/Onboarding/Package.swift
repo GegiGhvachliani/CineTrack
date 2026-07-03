@@ -48,6 +48,7 @@ let package = Package(
         .target(
             name: "OnboardingPresentationAPI",
             dependencies: [
+                "OnboardingDomain",
                 .product(name: "SharedCore", package: "SharedKit")
             ],
             path: "Sources/OnboardingPresentationAPI"
@@ -56,6 +57,8 @@ let package = Package(
         .target(
             name: "OnboardingAssembly",
             dependencies: [
+                "OnboardingDomain",
+                "OnboardingData",
                 "OnboardingPresentation",
                 "OnboardingPresentationAPI"
             ],

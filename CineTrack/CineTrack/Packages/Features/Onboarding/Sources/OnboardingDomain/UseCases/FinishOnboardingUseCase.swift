@@ -9,7 +9,7 @@ public protocol FinishOnboardingUseCaseProtocol {
     func execute()
 }
 
-public final class FinishOnboardingUseCase {
+public final class FinishOnboardingUseCase: FinishOnboardingUseCaseProtocol {
     private let repository: OnboardingRepositoryProtocol
     
     public init(repository: OnboardingRepositoryProtocol) {

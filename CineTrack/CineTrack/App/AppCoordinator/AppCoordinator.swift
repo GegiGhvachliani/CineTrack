@@ -1,5 +1,6 @@
 import UIKit
 import SharedCore
+import OnboardingPresentationAPI
 
 final class AppCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []
@@ -15,14 +16,35 @@ final class AppCoordinator: Coordinator {
     }
     
     func start() {
-        // დროებითი ცვლადი სიმულაციისთვის (თითქოს მომხმარებელი უკვე შესულია)
-        let isUserLoggedIn = true
         
-        if isUserLoggedIn {
-            showMainFlow()
+        let isOnboardingCompleted = container.onboardingFactory.isOnboardingCompleted()
+        
+        if isOnboardingCompleted {
+            
+            let isUserLoggedIn = false
+            
+            if isUserLoggedIn {
+                showMainFlow()
+            } else {
+                showAuthFlow()
+            }
         } else {
-            showAuthFlow()
+            showOnboardingFlow()
         }
+    }
+    
+    private func showOnboardingFlow() {
+        let onboardingCoordinator = container.onboardingFactory.makeOnboardingCoordinator(navigationController: rootNavigationController)
+        
+        onboardingCoordinator.onFinish = { [weak self] in
+            guard let self = self else { return }
+            self.childCoordinators.removeAll { $0 is OnboardingCoordinatorProtocol }
+            
+            self.showAuthFlow()
+        }
+        
+        childCoordinators.append(onboardingCoordinator)
+        onboardingCoordinator.start()
     }
     
     private func showMainFlow() {
@@ -47,7 +69,7 @@ final class AppCoordinator: Coordinator {
 //            // let loginViewController = AuthFactory().makeLoginViewController()
 //            
 //            // 2. ჩვენს უხილავ rootNavigationController-ს ვეტყვით, რომ ჩაანაცვლოს ეკრანები
-//            // rootNavigationController.setViewControllers([loginViewController], animated: true)
+//// rootNavigationController.setViewControllers([loginViewController], animated: true)
 //        }
     }
 }
