@@ -8,7 +8,6 @@
 import Foundation
 
 // MARK: ინახავს ყველა ტექსტს, რომელიც ეკრანებზე გამოჩნდება
-
 public enum TextStrings {
     public enum Tabs {
         public static let home = "Home"

@@ -42,7 +42,7 @@ let package = Package(
                 ),  // ღილაკებისთვის და ფონტებისთვის
             ],
             path: "Sources/OnboardingPresentation",
-            resources: [.process("Resources/OnboardingAssets.xcassets")]
+            resources: [.process("OnboardingResources/OnboardingAssets.xcassets")]
         ),
 
         .target(

@@ -14,13 +14,17 @@ import HomePresentationAPI
 import ProfilePresentationAPI
 import SearchPresentationAPI
 import OnboardingPresentationAPI
+import AuthenticationPresentationAPI
+import AuthenticationAssembly
 import UIKit
+
 
 final class AppDIContainer: AppDIContainerProtocol {
     lazy var homeFactory: HomeFactoryProtocol = HomeFactory()
     lazy var profileFactory: ProfileFactoryProtocol = ProfileFactory()
     lazy var searchFactory: SearchFactoryProtocol = SearchFactory()
     lazy var onboardingFactory: OnboardingFactoryProtocol = OnboardingFactory()
+    lazy var authenticationFactory: AuthenticationFactoryProtocol = AuthenticationFactory()
 
     init() {}
 }

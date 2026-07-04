@@ -7,7 +7,7 @@
 
 
 public protocol SignInWithGoogleUseCaseProtocol: Sendable {
-    func execute(email: String, password: String) async throws -> User
+    func execute() async throws -> User
 }
 
 public final class SignInWithGoogleUseCase: SignInWithGoogleUseCaseProtocol {
@@ -17,7 +17,7 @@ public final class SignInWithGoogleUseCase: SignInWithGoogleUseCaseProtocol {
         self.repository = repository
     }
     
-    public func execute(email: String, password: String) async throws -> User {
+    public func execute() async throws -> User {
         return try await repository.signInWithGoogle()
     }
 }

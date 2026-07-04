@@ -10,6 +10,7 @@ import HomePresentationAPI
 import ProfilePresentationAPI
 import SearchPresentationAPI
 import OnboardingPresentationAPI
+import AuthenticationPresentationAPI
 
 @MainActor
 protocol AppDIContainerProtocol {
@@ -17,4 +18,5 @@ protocol AppDIContainerProtocol {
     var profileFactory: ProfileFactoryProtocol { get }
     var searchFactory: SearchFactoryProtocol { get }
     var onboardingFactory: OnboardingFactoryProtocol { get }
+    var authenticationFactory: AuthenticationFactoryProtocol { get }
 }

@@ -12,7 +12,6 @@ import UIKit
 public final class OnboardingCoordinator: OnboardingCoordinatorProtocol {
 
     // MARK: - Properties
-
     public var childCoordinators: [Coordinator] = []
     public var navigationController: UINavigationController
     public let factory: OnboardingFactoryProtocol
@@ -20,7 +19,6 @@ public final class OnboardingCoordinator: OnboardingCoordinatorProtocol {
     public var onFinish: (() -> Void)?
 
     // MARK: - Initializations
-
     public init(
         navigationController: UINavigationController,
         factory: OnboardingFactoryProtocol
@@ -30,7 +28,6 @@ public final class OnboardingCoordinator: OnboardingCoordinatorProtocol {
     }
     
     // MARK: - Methods
-
     public func start() {
         let onboardingVC = factory.makeOnboardingViewController { [weak self] in
             self?.finishOnboarding()

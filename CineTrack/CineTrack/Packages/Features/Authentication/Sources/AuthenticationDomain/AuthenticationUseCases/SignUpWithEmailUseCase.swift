@@ -7,17 +7,17 @@
 
 
 public protocol SignUpWithEmailUseCaseProtocol: Sendable {
-    func execute(email: String, password: String) async throws -> User
+    func execute(email: String, username: String, password: String) async throws -> User
 }
 
-public final class SignUpWithEmailUseCase: SignInWithGoogleUseCaseProtocol {
+public final class SignUpWithEmailUseCase: SignUpWithEmailUseCaseProtocol {
     private let repository: AuthenticationRepositoryProtocol
     
     public init(repository: AuthenticationRepositoryProtocol) {
         self.repository = repository
     }
     
-    public func execute(email: String, password: String) async throws -> User {
-        return try await repository.signUpWithEmail(email: email, password: password)
+    public func execute(email: String, username: String, password: String) async throws -> User {
+        try await repository.signUpWithEmail(email: email,username: username, password: password)
     }
 }

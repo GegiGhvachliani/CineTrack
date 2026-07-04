@@ -15,7 +15,6 @@ import OnboardingPresentationAPI
 public struct OnboardingFactory: OnboardingFactoryProtocol {
 
     // MARK: - Initializations
-    
     public init() {}
     
     public func isOnboardingCompleted() -> Bool {
@@ -25,7 +24,6 @@ public struct OnboardingFactory: OnboardingFactoryProtocol {
     }
     
     // MARK: - Methods
-    
     public func makeOnboardingViewController(didComplete: @escaping () -> Void) -> UIViewController {
         let repository: OnboardingRepositoryProtocol = OnboardingRepository()
         let finishUseCase: FinishOnboardingUseCaseProtocol = FinishOnboardingUseCase(repository: repository)

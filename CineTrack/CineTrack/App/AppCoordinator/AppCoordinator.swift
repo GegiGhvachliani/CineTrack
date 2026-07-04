@@ -1,6 +1,7 @@
 import UIKit
 import SharedCore
 import OnboardingPresentationAPI
+import AuthenticationPresentationAPI
 
 final class AppCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []
@@ -21,7 +22,7 @@ final class AppCoordinator: Coordinator {
         
         if isOnboardingCompleted {
             
-            let isUserLoggedIn = false
+            let isUserLoggedIn = container.authenticationFactory.isUserAuthenticated()
             
             if isUserLoggedIn {
                 showMainFlow()
@@ -62,14 +63,15 @@ final class AppCoordinator: Coordinator {
     }
     
     private func showAuthFlow() {
-        // აქ სამომავლოდ ჩაიწერება Auth-ის (ავტორიზაციის) ჩართვის ლოგიკა
-        print("აქ გამოჩნდება შესვლის ეკრანი")
-//        
-//        / 1. ფექიჯიდან (მაგალითად, AuthFactory-დან) ამოვიღებთ გამზადებულ კონტროლერს
-//            // let loginViewController = AuthFactory().makeLoginViewController()
-//            
-//            // 2. ჩვენს უხილავ rootNavigationController-ს ვეტყვით, რომ ჩაანაცვლოს ეკრანები
-//// rootNavigationController.setViewControllers([loginViewController], animated: true)
-//        }
+        let authCoordinator = container.authenticationFactory.makeAuthenticationCoordinator(navigationController: rootNavigationController)
+        
+        authCoordinator.onFinish = { [weak self] in
+            guard let self = self else { return }
+            self.childCoordinators.removeAll { $0 is AuthenticationCoordinatorProtocol }
+            self.showAuthFlow()
+        }
+        
+        childCoordinators.append(authCoordinator)
+        authCoordinator.start()
     }
 }
