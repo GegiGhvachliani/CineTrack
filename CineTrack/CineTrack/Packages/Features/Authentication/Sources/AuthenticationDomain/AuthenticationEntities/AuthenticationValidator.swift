@@ -23,6 +23,8 @@ public final class AuthenticationValidator: AuthenticationValidating {
     }
     
     public func validatePasswordStrength(_ password: String) -> Bool {
-        return password.count >= 6
+        let passwordRegex = "^(?=.*[A-Z])(?=.*[0-9]).{6,}$"
+        let passwordPredicate = NSPredicate(format: "SELF MATCHES %@", passwordRegex)
+        return passwordPredicate.evaluate(with: password)
     }
 }

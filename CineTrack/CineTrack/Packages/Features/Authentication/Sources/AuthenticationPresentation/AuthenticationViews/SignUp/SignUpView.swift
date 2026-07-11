@@ -6,114 +6,127 @@
 //
 
 import SwiftUI
+import DesignSystemTokens
 
 public struct SignUpView<ViewModel: SignUpViewModelProtocol>: View {
-    
-    // MARK: - Properties
-    @StateObject private var viewModel: ViewModel
+    @ObservedObject var viewModel: ViewModel
     private let onSignInTap: () -> Void
-    
-    // MARK: - Initializer
-    public init(viewModel: ViewModel, onSignInTap: @escaping () -> Void) {
-        _viewModel = StateObject(wrappedValue: viewModel)
+
+    public init(
+        viewModel: ViewModel,
+        onSignInTap: @escaping () -> Void
+    ) {
+        self.viewModel = viewModel
         self.onSignInTap = onSignInTap
     }
-    
-    // MARK: - Body
+
     public var body: some View {
         ZStack {
-            Color(.systemBackground)
+            ColorTokens.Background.primary
                 .ignoresSafeArea()
-            
+
             ScrollView {
-                VStack(spacing: 24) {
-                    // Header სექცია
-                    VStack(spacing: 8) {
-                        Text(AuthenticationStrings.SignUp.title)
-                            .font(.largeTitle)
-                            .bold()
-                        
-                        Text(AuthenticationStrings.SignUp.subtitle)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal, 16)
-                    }
-                    .padding(.top, 40)
-                    
-                    // Input ველები (მათ შორის Confirm Password)
-                    VStack(spacing: 16) {
-                        TextField(AuthenticationStrings.SignUp.usernamePlaceholder, text: $viewModel.username)
-                            .textFieldStyle(.roundedBorder)
-                            .textContentType(.username)
-                            .autocapitalization(.none)
-                        
-                        TextField(AuthenticationStrings.SignUp.emailPlaceholder, text: $viewModel.email)
-                            .textFieldStyle(.roundedBorder)
-                            .textContentType(.emailAddress)
-                            .autocapitalization(.none)
-                            .keyboardType(.emailAddress)
-                        
-                        SecureField(AuthenticationStrings.SignUp.passwordPlaceholder, text: $viewModel.password)
-                            .textFieldStyle(.roundedBorder)
-                            .textContentType(.newPassword)
-                        
-                        SecureField(AuthenticationStrings.SignUp.confirmPasswordPlaceholder, text: $viewModel.confirmPassword)
-                            .textFieldStyle(.roundedBorder)
-                            .textContentType(.newPassword)
-                    }
-                    .padding(.horizontal, 24)
-                    
-                    // ერორ მესიჯი (ვალიდაციის ან Firebase-ის ერორები)
-                    if let errorMessage = viewModel.errorMessage {
-                        Text(errorMessage)
-                            .font(.caption)
-                            .foregroundColor(.red)
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal, 24)
-                    }
-                    
-                    // რეგისტრაციის ღილაკი
-                    Button(action: {
-                        Task {
-                            await viewModel.signUpWithEmail()
-                        }
-                    }) {
-                        HStack {
-                            Spacer()
-                            if viewModel.isLoading {
-                                ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                            } else {
-                                Text(AuthenticationStrings.SignUp.signUpButton)
-                                    .bold()
-                                    .foregroundColor(.white)
-                            }
-                            Spacer()
-                        }
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(8)
-                    }
-                    .padding(.horizontal, 24)
-                    .disabled(viewModel.isLoading)
-                    
+                VStack(spacing: 10) {
                     Spacer()
-                    
-                    // უკან დაბრუნება SignIn-ზე
-                    HStack {
-                        Text(AuthenticationStrings.SignUp.alreadyHaveAccount)
-                            .foregroundColor(.secondary)
-                        Button(action: onSignInTap) {
-                            Text(AuthenticationStrings.SignUp.signInLink)
-                                .bold()
-                                .foregroundColor(.blue)
-                        }
-                    }
-                    .font(.footnote)
-                    .padding(.bottom, 20)
+
+                    headerSection
+
+                    middleSection
+
+                    belowSection
+
+                    Spacer()
                 }
+                .padding()
+            }
+        }
+        .errorModal(message: $viewModel.errorMessage)
+    }
+
+    private var headerSection: some View {
+        VStack(spacing: 10) {
+            Text(AuthenticationStrings.SignUp.title)
+                .font(TypographyTokens.largeTitle)
+            Text(AuthenticationStrings.SignUp.subtitle)
+                .font(TypographyTokens.body)
+                .foregroundStyle(ColorTokens.Text.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .padding(.top, 20)
+        .padding(.bottom, 40)
+    }
+
+    private var middleSection: some View {
+        VStack {
+            TextFieldView(
+                title: AuthenticationStrings.SignUp.usernamePlaceholder,
+                icon: "person.fill",
+                text: $viewModel.username
+            )
+            .padding(.bottom, 20)
+
+            EmailFieldView(
+                email: $viewModel.email,
+                text: AuthenticationStrings.SignUp.emailPlaceholder
+            )
+            .padding(.bottom, 20)
+
+            PasswordFieldView(
+                password: $viewModel.password,
+                title: AuthenticationStrings.SignUp.passwordPlaceholder
+            )
+            .padding(.bottom, 20)
+
+            PasswordFieldView(
+                password: $viewModel.confirmPassword,
+                title: AuthenticationStrings.SignUp.confirmPasswordPlaceholder
+            )
+
+            HStack {
+                Spacer()
+
+                Text(AuthenticationStrings.SignUp.alreadyHaveAccount)
+                    .font(TypographyTokens.bodySmall)
+                Button {
+                    onSignInTap()
+                } label: {
+                    Text(AuthenticationStrings.SignUp.signInLink)
+                        .font(TypographyTokens.bodySmall)
+                        .foregroundStyle(ColorTokens.Brand.primary)
+                        .offset(x: -7)
+                }
+                .frame(alignment: .trailing)
+            }
+        }
+        .padding(.bottom, 40)
+    }
+
+    private var belowSection: some View {
+        ButtonView(
+            title: AuthenticationStrings.SignUp.signUpButton,
+            isLoading: viewModel.isLoading
+        ) {
+            Task {
+                await viewModel.signUpWithEmail()
             }
         }
     }
+}
+
+final class MockSignUpViewModel: SignUpViewModelProtocol {
+    @Published var username = ""
+    @Published var email = ""
+    @Published var password = ""
+    @Published var confirmPassword = ""
+    @Published var isLoading = false
+    @Published var errorMessage: String?
+
+    func signUpWithEmail() async { print("Mock Sign Up") }
+}
+
+#Preview {
+    SignUpView(
+        viewModel: MockSignUpViewModel(),
+        onSignInTap: { print("SignInTapped") }
+    )
 }

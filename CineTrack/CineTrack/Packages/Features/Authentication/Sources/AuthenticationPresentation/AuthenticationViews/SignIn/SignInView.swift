@@ -2,216 +2,160 @@
 //  SignInView.swift
 //  Authentication
 //
-//  Created by Gegi Ghvachliani on 03/07/2026.
+//  Created by Gegi Ghvachliani on 05/07/2026.
 //
 
 import SwiftUI
+import DesignSystemTokens
 
 public struct SignInView<ViewModel: SignInViewModelProtocol>: View {
-    
-    // MARK: - Properties
-    @StateObject private var viewModel: ViewModel
-    private let onSignUpTap: () -> Void
-    
-    // MARK: - Initializer
-    public init(viewModel: ViewModel, onSignUpTap: @escaping () -> Void) {
-        _viewModel = StateObject(wrappedValue: viewModel)
-        self.onSignUpTap = onSignUpTap
+    @ObservedObject var viewModel: ViewModel
+    private let onSignUpTapped: () -> Void
+
+    public init(
+        viewModel: ViewModel,
+        onSignUpTapped: @escaping () -> Void
+    ) {
+        self.viewModel = viewModel
+        self.onSignUpTapped = onSignUpTapped
     }
-    
-    // MARK: - Body
+
     public var body: some View {
         ZStack {
-            // ფონი (აქ შენი დიზაინსისტემის ფერი ან ძირითადი ფონი ჩაჯდება)
-            Color(.systemBackground)
+            ColorTokens.Background.primary
                 .ignoresSafeArea()
-            
-            ScrollView {
-                VStack(spacing: 24) {
-                    // Header სექცია
-                    VStack(spacing: 8) {
-                        Text(AuthenticationStrings.SignIn.title)
-                            .font(.largeTitle)
-                            .bold()
-                        
-                        Text(AuthenticationStrings.SignIn.subtitle)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal, 16)
-                    }
-                    .padding(.top, 40)
-                    
-                    // Input ველები
-                    VStack(spacing: 16) {
-                        TextField(AuthenticationStrings.SignIn.emailPlaceholder, text: $viewModel.email)
-                            .textFieldStyle(.roundedBorder)
-                            .textContentType(.emailAddress)
-                            .autocapitalization(.none)
-                            .keyboardType(.emailAddress)
-                        
-                        SecureField(AuthenticationStrings.SignIn.passwordPlaceholder, text: $viewModel.password)
-                            .textFieldStyle(.roundedBorder)
-                            .textContentType(.password)
-                    }
-                    .padding(.horizontal, 24)
-                    
-                    // Forgot Password ბმული
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            viewModel.isForgotPasswordPresented = true
-                        }) {
-                            Text(AuthenticationStrings.SignIn.forgotPasswordLink)
-                                .font(.footnote)
-                                .bold()
-                                .foregroundColor(.blue)
-                        }
-                    }
-                    .padding(.horizontal, 24)
-                    
-                    // ერორ მესიჯი (თუ არსებობს)
-                    if let errorMessage = viewModel.errorMessage {
-                        Text(errorMessage)
-                            .font(.caption)
-                            .foregroundColor(.red)
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal, 24)
-                    }
-                    
-                    // მთავარი ქმედების ღილაკები
-                    VStack(spacing: 12) {
-                        Button(action: {
-                            Task {
-                                await viewModel.signInWithEmail()
-                            }
-                        }) {
-                            HStack {
-                                Spacer()
-                                if viewModel.isLoading && !viewModel.isForgotPasswordPresented {
-                                    ProgressView()
-                                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                                } else {
-                                    Text(AuthenticationStrings.SignIn.signInButton)
-                                        .bold()
-                                        .foregroundColor(.white)
-                                }
-                                Spacer()
-                            }
-                            .padding()
-                            .background(Color.blue)
-                            .cornerRadius(8)
-                        }
-                        .disabled(viewModel.isLoading)
-                        
-                        // Google Sign-In ღილაკი
-                        Button(action: {
-                            Task {
-                                await viewModel.signInWithGoogle()
-                            }
-                        }) {
-                            HStack {
-                                Image(systemName: "g.circle.fill") // დროებითი იკონკა, მერე asset-ით ჩაანაცვლებ
-                                Text(AuthenticationStrings.SignIn.googleButton)
-                                    .bold()
-                            }
-                            .foregroundColor(.primary)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color(.systemGray6))
-                            .cornerRadius(8)
-                        }
-                    }
-                    .padding(.horizontal, 24)
-                    
-                    Spacer()
-                    
-                    // გადასვლა SignUp-ზე
-                    HStack {
-                        Text(AuthenticationStrings.SignIn.dontHaveAccount)
-                            .foregroundColor(.secondary)
-                        Button(action: onSignUpTap) {
-                            Text(AuthenticationStrings.SignIn.signUpLink)
-                                .bold()
-                                .foregroundColor(.blue)
-                        }
-                    }
-                    .font(.footnote)
-                    .padding(.bottom, 20)
+            VStack(spacing: 10) {
+                Spacer()
+
+                headerSection
+
+                middleSection
+
+                belowSection
+
+                Spacer()
+            }
+            .padding()
+        }
+        .errorModal(message: $viewModel.errorMessage)
+    }
+
+
+
+    private var headerSection: some View {
+        VStack(spacing: 10) {
+            Text(AuthenticationStrings.SignIn.title)
+                .font(TypographyTokens.largeTitle)
+            Text(AuthenticationStrings.SignIn.subtitle)
+                .font(TypographyTokens.body)
+                .foregroundStyle(ColorTokens.Text.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .padding(.bottom, 40)
+    }
+
+    private var middleSection: some View {
+        VStack {
+            EmailFieldView(email: $viewModel.email, text: AuthenticationStrings.SignIn.emailPlaceholder)
+                .padding(.bottom, 30)
+
+            PasswordFieldView(
+                password: $viewModel.password,
+                title: AuthenticationStrings.SignIn.passwordPlaceholder
+            )
+
+            HStack {
+                Spacer()
+
+                Text(AuthenticationStrings.SignIn.dontHaveAccount)
+                    .font(TypographyTokens.bodySmall)
+                Button {
+                    onSignUpTapped()
+                } label: {
+                    Text(AuthenticationStrings.SignIn.signUpLink)
+                        .font(TypographyTokens.bodySmall)
+                        .foregroundStyle(ColorTokens.Brand.primary)
+                        .offset(x: -7)
                 }
+
             }
         }
-        // ქვემოდან ამომხტარი ფანჯარა პაროლის აღდგენისთვის
-        .sheet(isPresented: $viewModel.isForgotPasswordPresented) {
-            ForgotPasswordSheet(viewModel: viewModel)
-                .presentationDetents([.medium]) // ზომა: ეკრანის ნახევარი
+        .padding(.bottom, 40)
+    }
+
+    private var belowSection: some View {
+        VStack {
+            ButtonView(
+                title: AuthenticationStrings.SignIn.signInButton,
+                isLoading: viewModel.isLoading
+            ) {
+                Task {
+                    await viewModel.signInWithEmail()
+                }
+            }
+
+            HStack(spacing: 15) {
+                Rectangle()
+                    .fill(DesignSystemTokens.ColorTokens.Brand.primary.opacity(0.5))
+                    .frame(width: 150, height: 1)
+                Text("OR")
+                    .font(DesignSystemTokens.TypographyTokens.footnote)
+                Rectangle()
+                    .fill(DesignSystemTokens.ColorTokens.Brand.primary.opacity(0.8))
+                    .frame(width: 150, height: 1)
+            }
+
+            Button {
+                Task {
+                    await viewModel.signInWithGoogle()
+                }
+            } label: {
+                HStack {
+                    if viewModel.isLoading {
+                        ProgressView()
+                            .progressViewStyle(
+                                CircularProgressViewStyle(tint: DesignSystemTokens.ColorTokens.Text.inverse)
+                            )
+                    } else {
+                        Text(AuthenticationStrings.SignIn.googleButton)
+                            .font(TypographyTokens.body)
+                            .foregroundStyle(DesignSystemTokens.ColorTokens.Text.inverse)
+                        Image(AuthenticationStrings.SignIn.googleButtonIcon, bundle: .module)
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                            .padding(.leading, 5)
+                    }
+                }
+                .frame(height: 55)
+                .frame(maxWidth: .infinity)
+                .background(DesignSystemTokens.ColorTokens.Brand.primary)
+                .cornerRadius(15)
+            }
+            .disabled(viewModel.isLoading)
         }
     }
 }
 
-// MARK: - Forgot Password BottomSheet
-struct ForgotPasswordSheet<ViewModel: SignInViewModelProtocol>: View {
-    @ObservedObject var viewModel: ViewModel
-    
-    var body: some View {
-        VStack(spacing: 20) {
-            Text(AuthenticationStrings.ForgotPassword.title)
-                .font(.title2)
-                .bold()
-                .padding(.top, 24)
-            
-            Text(AuthenticationStrings.ForgotPassword.subtitle)
-                .font(.footnote)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 24)
-            
-            TextField(AuthenticationStrings.ForgotPassword.emailPlaceholder, text: $viewModel.forgotPasswordEmail)
-                .textFieldStyle(.roundedBorder)
-                .autocapitalization(.none)
-                .keyboardType(.emailAddress)
-                .padding(.horizontal, 24)
-            
-            if let successMessage = viewModel.forgotPasswordSuccessMessage {
-                Text(successMessage)
-                    .font(.caption)
-                    .foregroundColor(.green)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 24)
-            }
-            
-            if let errorMessage = viewModel.forgotPasswordErrorMessage {
-                Text(errorMessage)
-                    .font(.caption)
-                    .foregroundColor(.red)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 24)
-            }
-            
-            Button(action: {
-                Task {
-                    await viewModel.sendResetPasswordLink()
-                }
-            }) {
-                HStack {
-                    Spacer()
-                    if viewModel.isLoading {
-                        ProgressView()
-                    } else {
-                        Text(AuthenticationStrings.ForgotPassword.sendButton)
-                            .bold()
-                            .foregroundColor(.white)
-                    }
-                    Spacer()
-                }
-                .padding()
-                .background(Color.blue)
-                .cornerRadius(8)
-            }
-            .padding(.horizontal, 24)
-            .disabled(viewModel.isLoading)
-            
-            Spacer()
-        }
-    }
+final class MockSignInViewModel: SignInViewModelProtocol {
+   @Published var email = ""
+   @Published var password = ""
+   @Published var isLoading = false
+   @Published var errorMessage: String?
+
+   @Published var forgotPasswordEmail = ""
+   @Published var isForgotPasswordPresented = false
+   @Published var forgotPasswordSuccessMessage: String?
+   @Published var forgotPasswordErrorMessage: String?
+
+   func signInWithEmail() async { print("Mock Sign In") }
+   func signInWithGoogle() async { print("Mock Google Sign In") }
+   func sendResetPasswordLink() async { print("Mock Reset") }
+}
+
+
+#Preview {
+   SignInView(
+       viewModel: MockSignInViewModel(),
+       onSignUpTapped: { print("SignUpTapped") }
+   )
 }

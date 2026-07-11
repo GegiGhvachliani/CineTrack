@@ -17,6 +17,10 @@ public final class AuthenticationRepository: AuthenticationRepositoryProtocol {
     public init() {}
     
     // MARK: - Methods
+    public func isUserAuthenticated() -> Bool {
+        return Auth.auth().currentUser != nil
+    }
+    
     public func signInWithEmail(email: String, password: String) async throws -> AuthenticationDomain.User {
         let authResult = try await Auth.auth().signIn(withEmail: email, password: password)
         
@@ -74,10 +78,6 @@ public final class AuthenticationRepository: AuthenticationRepositoryProtocol {
                 email: authResult.user.email ?? "",
                 username: authResult.user.displayName ?? ""
             )
-    }
-    
-    public func isUserAuthenticated() -> Bool {
-        return Auth.auth().currentUser != nil
     }
     
     public func resetPassword(email: String) async throws {

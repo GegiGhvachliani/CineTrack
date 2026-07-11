@@ -68,7 +68,7 @@ final class AppCoordinator: Coordinator {
         authCoordinator.onFinish = { [weak self] in
             guard let self = self else { return }
             self.childCoordinators.removeAll { $0 is AuthenticationCoordinatorProtocol }
-            self.showAuthFlow()
+            self.showMainFlow()
         }
         
         childCoordinators.append(authCoordinator)

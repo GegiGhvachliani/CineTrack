@@ -55,8 +55,5 @@ public enum TypographyTokens {
     /// - *გამოყენება:* IMDb რეიტინგის ციფრი ვარსკვლავის გვერდით (მაგ: "8.5"), მსახიობის როლის სახელი ფილმში, ან Terms & Conditions ლინკი ონბორდინგის ბოლოში.
     public static let footnote = Font.system(size: 12, weight: .regular, design: .rounded)
     
-    public static let logo = Font.custom(
-        "Impact",
-        size: 36
-    )
+    public static let logo = Font.custom("Impact",size: 36)
 }

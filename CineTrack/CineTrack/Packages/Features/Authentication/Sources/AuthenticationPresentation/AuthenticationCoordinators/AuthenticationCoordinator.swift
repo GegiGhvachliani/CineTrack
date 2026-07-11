@@ -56,7 +56,7 @@ public final class AuthenticationCoordinator: AuthenticationCoordinatorProtocol 
                 coordinator: self
             )
             
-            let signInView = SignInView(viewModel: viewModel, onSignUpTap: { [weak self] in
+        let signInView = SignInView(viewModel: viewModel, onSignUpTapped: { [weak self] in
                 self?.showSignUp()
             })
             

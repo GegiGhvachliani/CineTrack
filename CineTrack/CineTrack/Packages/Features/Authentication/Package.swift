@@ -44,10 +44,8 @@ let package = Package(
                 "AuthenticationData",
                 "AuthenticationPresentationAPI",
                 .product(name: "SharedCore", package: "SharedKit"),
-                .product(
-                    name: "DesignSystemComponents",
-                    package: "DesignSystem"
-                ),
+                .product(name: "DesignSystemComponents", package: "DesignSystem"),
+                .product(name: "DesignSystemTokens", package: "DesignSystem")
             ],
             path: "Sources/AuthenticationPresentation"
         ),

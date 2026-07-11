@@ -13,18 +13,19 @@ import AuthenticationPresentation
 
 public final class AuthenticationFactory: AuthenticationFactoryProtocol {
     
+    // MARK: - Properties
+    private let repository = AuthenticationRepository()
+    
     // MARK: - Initialization
     public init() {}
     
     // MARK: - Methods
     public func isUserAuthenticated() -> Bool {
-        let repository = AuthenticationRepository()
         return repository.isUserAuthenticated()
     }
     
     public func makeAuthenticationCoordinator(navigationController: UINavigationController) -> AuthenticationCoordinatorProtocol {
         
-        let repository = AuthenticationRepository()
         let validator = AuthenticationValidator()
         
         let signInWithEmailUseCase = SignInWithEmailUseCase(repository: repository)
