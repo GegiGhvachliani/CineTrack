@@ -25,7 +25,6 @@ public struct SignUpView<ViewModel: SignUpViewModelProtocol>: View {
             ColorTokens.Background.primary
                 .ignoresSafeArea()
 
-            ScrollView {
                 VStack(spacing: 10) {
                     Spacer()
 
@@ -38,7 +37,6 @@ public struct SignUpView<ViewModel: SignUpViewModelProtocol>: View {
                     Spacer()
                 }
                 .padding()
-            }
         }
         .errorModal(message: $viewModel.errorMessage)
     }

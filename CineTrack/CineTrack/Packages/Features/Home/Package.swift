@@ -21,6 +21,8 @@ let package = Package(
     dependencies: [
         .package(path: "../../SharedKit"),
         .package(path: "../../DesignSystem"),
+        // 1. აქ ვამატებთ Firebase-ის ძირითად პაკეტს
+        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "12.1.0")
     ],
     targets: [
 
@@ -71,6 +73,8 @@ let package = Package(
                 "HomeData",
                 "HomePresentation",
                 "HomePresentationAPI",
+                // 2. აქ ვამატებთ FirebaseAuth-ს, რადგან HomeFactory (სადაც ლოგაუტი დავწერეთ) წესით აქ არის
+                .product(name: "FirebaseAuth", package: "firebase-ios-sdk")
             ],
             path: "Sources/HomeAssembly"
         ),
