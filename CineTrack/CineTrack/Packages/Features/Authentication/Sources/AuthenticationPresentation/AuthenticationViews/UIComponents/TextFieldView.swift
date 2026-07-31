@@ -47,8 +47,9 @@ public struct TextFieldView: View {
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
                 }
-                .padding()
+                .padding(.horizontal)
             }
+            .frame(height: 56)
             .background(
                 RoundedRectangle(cornerRadius: 16)
                     .fill(ColorTokens.Background.primary)
@@ -62,7 +63,6 @@ public struct TextFieldView: View {
         .animation(.easeOut(duration: 0.2), value: isFocused)
     }
 }
-
 
 struct TextFieldViewPreviewContainer: View {
     @State private var text = ""

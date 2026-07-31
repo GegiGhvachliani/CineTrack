@@ -14,14 +14,11 @@ struct ErrorModalView: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            Capsule()
-                .fill(ColorTokens.Text.secondary.opacity(0.3))
-                .frame(width: 40, height: 5)
-                .padding(.top, 10)
 
             Image(systemName: "exclamationmark.triangle.fill")
                 .font(.system(size: 32))
                 .foregroundStyle(.red)
+                .padding(.top, 10)
 
             Text(message)
                 .font(TypographyTokens.body)

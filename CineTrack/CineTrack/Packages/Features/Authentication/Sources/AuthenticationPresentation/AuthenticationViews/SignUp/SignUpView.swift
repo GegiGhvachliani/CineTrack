@@ -33,6 +33,7 @@ public struct SignUpView<ViewModel: SignUpViewModelProtocol>: View {
             }
             .padding()
         }
+        .navigationBarBackButtonHidden()
         .errorModal(message: $viewModel.errorMessage)
     }
 

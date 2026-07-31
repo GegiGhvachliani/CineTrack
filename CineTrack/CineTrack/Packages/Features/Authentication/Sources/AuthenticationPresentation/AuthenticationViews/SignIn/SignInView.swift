@@ -50,7 +50,7 @@ public struct SignInView<ViewModel: SignInViewModelProtocol>: View {
     private var middleSection: some View {
         VStack {
             EmailFieldView(email: $viewModel.email, text: AuthenticationStrings.SignIn.emailPlaceholder)
-                .padding(.bottom, 30)
+                .padding(.bottom, 20)
 
             PasswordFieldView(
                 password: $viewModel.password,

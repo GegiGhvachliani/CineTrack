@@ -45,8 +45,9 @@ public struct EmailFieldView: View {
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
                 }
-                .padding()
+                .padding(.horizontal)
             }
+            .frame(height: 56)
             .background(
                 RoundedRectangle(cornerRadius: 16)
                     .fill(ColorTokens.Background.primary)

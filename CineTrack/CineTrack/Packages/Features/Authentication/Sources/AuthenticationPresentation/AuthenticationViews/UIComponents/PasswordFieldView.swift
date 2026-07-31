@@ -57,8 +57,9 @@ public struct PasswordFieldView: View {
                             .foregroundColor(ColorTokens.Text.secondary)
                     }
                 }
-                .padding(SpacingTokens.regular)
+                .padding(.horizontal, SpacingTokens.regular)
             }
+            .frame(height: 56)
             .background(
                 RoundedRectangle(cornerRadius: 16)
                     .fill(ColorTokens.Background.primary)
