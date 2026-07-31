@@ -6,80 +6,45 @@
 //
 
 import UIKit
-import SwiftUI
 import SharedCore
-import AuthenticationDomain
 import AuthenticationPresentationAPI
 
-public final class AuthenticationCoordinator: AuthenticationCoordinatorProtocol {
+public final class AuthenticationCoordinator: AuthenticationCoordinatorProtocol, AuthenticationNavigationProtocol {
     
-    // MARK: - Protocol Properties
-    public var navigationController: UINavigationController
     public var childCoordinators: [Coordinator] = []
+    public var navigationController: UINavigationController
     public var onFinish: (() -> Void)?
     
-    // MARK: - Dependencies
-    private let signInWithEmailUseCase: SignInWithEmailUseCaseProtocol
-    private let signInWithGoogleUseCase: SignInWithGoogleUseCaseProtocol
-    private let signUpWithEmailUseCase: SignUpWithEmailUseCaseProtocol
-    private let resetPasswordUseCase: ResetPasswordUseCaseProtocol
-    private let validator: AuthenticationValidating
+    private let factory: AuthenticationPresentationFactoryProtocol
 
-    
-    // MARK: - Initialization
     public init(
         navigationController: UINavigationController,
-        signInWithEmailUseCase: SignInWithEmailUseCaseProtocol,
-        signInWithGoogleUseCase: SignInWithGoogleUseCaseProtocol,
-        signUpWithEmailUseCase: SignUpWithEmailUseCaseProtocol,
-        resetPasswordUseCase: ResetPasswordUseCaseProtocol,
-        validator: AuthenticationValidating
+        factory: AuthenticationPresentationFactoryProtocol
     ) {
         self.navigationController = navigationController
-        self.signInWithEmailUseCase = signInWithEmailUseCase
-        self.signInWithGoogleUseCase = signInWithGoogleUseCase
-        self.signUpWithEmailUseCase = signUpWithEmailUseCase
-        self.resetPasswordUseCase = resetPasswordUseCase
-        self.validator = validator
+        self.factory = factory
     }
     
-    //MARK: - Methods
     public func start() {
         showSignIn()
     }
     
-    private func showSignIn() {
-            let viewModel = SignInViewModel(
-                signInWithEmailUseCase: signInWithEmailUseCase,
-                signInWithGoogleUseCase: signInWithGoogleUseCase,
-                resetPasswordUseCase: resetPasswordUseCase,
-                coordinator: self
-            )
-            
-        let signInView = SignInView(viewModel: viewModel, onSignUpTapped: { [weak self] in
-                self?.showSignUp()
-            })
-            
-            let hostingController = UIHostingController(rootView: signInView)
-            if navigationController.viewControllers.isEmpty {
-                navigationController.setViewControllers([hostingController], animated: true)
-            } else {
-                navigationController.pushViewController(hostingController, animated: true)
-            }
-        }
+    public func showSignIn() {
+        let viewController = factory.makeSignInViewController(coordinator: self)
         
-        private func showSignUp() {
-            let viewModel = SignUpViewModel(
-                signUpWithEmailUseCase: signUpWithEmailUseCase,
-                validator: validator,
-                coordinator: self
-            )
-            
-            let signUpView = SignUpView(viewModel: viewModel, onSignInTap: { [weak self] in
-                self?.navigationController.popViewController(animated: true)
-            })
-            
-            let hostingController = UIHostingController(rootView: signUpView)
-            navigationController.pushViewController(hostingController, animated: true)
+        if navigationController.viewControllers.isEmpty {
+            navigationController.setViewControllers([viewController], animated: true)
+        } else {
+            navigationController.pushViewController(viewController, animated: true)
         }
+    }
+        
+    public func showSignUp() {
+        let viewController = factory.makeSignUpViewController(coordinator: self)
+        navigationController.pushViewController(viewController, animated: true)
+    }
+    
+    public func navigateBack() {
+        navigationController.popViewController(animated: true)
+    }
 }

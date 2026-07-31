@@ -10,14 +10,9 @@ import DesignSystemTokens
 
 public struct SignInView<ViewModel: SignInViewModelProtocol>: View {
     @ObservedObject var viewModel: ViewModel
-    private let onSignUpTapped: () -> Void
 
-    public init(
-        viewModel: ViewModel,
-        onSignUpTapped: @escaping () -> Void
-    ) {
+    public init(viewModel: ViewModel) {
         self.viewModel = viewModel
-        self.onSignUpTapped = onSignUpTapped
     }
 
     public var body: some View {
@@ -39,8 +34,6 @@ public struct SignInView<ViewModel: SignInViewModelProtocol>: View {
         }
         .errorModal(message: $viewModel.errorMessage)
     }
-
-
 
     private var headerSection: some View {
         VStack(spacing: 10) {
@@ -70,14 +63,13 @@ public struct SignInView<ViewModel: SignInViewModelProtocol>: View {
                 Text(AuthenticationStrings.SignIn.dontHaveAccount)
                     .font(TypographyTokens.bodySmall)
                 Button {
-                    onSignUpTapped()
+                    viewModel.navigateToSignUp()
                 } label: {
                     Text(AuthenticationStrings.SignIn.signUpLink)
                         .font(TypographyTokens.bodySmall)
                         .foregroundStyle(ColorTokens.Brand.primary)
                         .offset(x: -7)
                 }
-
             }
         }
         .padding(.bottom, 40)
@@ -150,12 +142,9 @@ final class MockSignInViewModel: SignInViewModelProtocol {
    func signInWithEmail() async { print("Mock Sign In") }
    func signInWithGoogle() async { print("Mock Google Sign In") }
    func sendResetPasswordLink() async { print("Mock Reset") }
+   func navigateToSignUp() { print("Navigate to Sign Up") }
 }
 
-
 #Preview {
-   SignInView(
-       viewModel: MockSignInViewModel(),
-       onSignUpTapped: { print("SignUpTapped") }
-   )
+   SignInView(viewModel: MockSignInViewModel())
 }

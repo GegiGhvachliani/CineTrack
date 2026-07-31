@@ -11,5 +11,6 @@ import UIKit
 public protocol AuthenticationFactoryProtocol {
     func makeAuthenticationCoordinator(navigationController: UINavigationController) -> AuthenticationCoordinatorProtocol
     
+    
     func isUserAuthenticated() -> Bool
 }

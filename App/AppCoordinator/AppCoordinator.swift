@@ -48,6 +48,20 @@ final class AppCoordinator: Coordinator {
         onboardingCoordinator.start()
     }
     
+    private func showMainFlow() {
+        // ვქმნით ტაბბარის კოორდინატორს და ვატანთ ჩვენს root ნავიგაციას
+        let tabBarCoordinator = MainTabBarCoordinator(
+            navigationController: rootNavigationController,
+            container: container
+        )
+        
+        // ვინახავთ მას მასივში, რომ მეხსიერებამ არ წაშალოს
+        childCoordinators.append(tabBarCoordinator)
+        
+        // ვრთავთ ტაბბარის ნაკადს
+        tabBarCoordinator.start()
+    }
+    
     private func showAuthFlow() {
         let authCoordinator = container.authenticationFactory.makeAuthenticationCoordinator(navigationController: rootNavigationController)
         
@@ -59,16 +73,5 @@ final class AppCoordinator: Coordinator {
         
         childCoordinators.append(authCoordinator)
         authCoordinator.start()
-    }
-    
-    private func showMainFlow() {
-        let tabBarCoordinator = MainTabBarCoordinator(
-            navigationController: rootNavigationController,
-            container: container
-        )
-        
-        childCoordinators.append(tabBarCoordinator)
-        
-        tabBarCoordinator.start()
     }
 }

@@ -19,6 +19,8 @@ public protocol SignUpViewModelProtocol: ObservableObject {
     var isLoading: Bool { get set }
     var errorMessage: String? { get set }
     
+    func navigateToSignIn()
+    
     func signUpWithEmail() async
 }
 
@@ -35,13 +37,13 @@ public final class SignUpViewModel: SignUpViewModelProtocol {
     // MARK: - Dependencies
     private let signUpWithEmailUseCase: SignUpWithEmailUseCaseProtocol
     private let validator: AuthenticationValidating
-    private let coordinator: AuthenticationCoordinatorProtocol
+    private let coordinator: AuthenticationNavigationProtocol
     
     // MARK: - Initialization
     public init(
         signUpWithEmailUseCase: SignUpWithEmailUseCaseProtocol,
         validator: AuthenticationValidating,
-        coordinator: AuthenticationCoordinatorProtocol
+        coordinator: AuthenticationNavigationProtocol
     ) {
         self.signUpWithEmailUseCase = signUpWithEmailUseCase
         self.validator = validator
@@ -49,6 +51,10 @@ public final class SignUpViewModel: SignUpViewModelProtocol {
     }
     
     // MARK: - Public Methods
+    public func navigateToSignIn() {
+        coordinator.navigateBack()
+    }
+    
     public func signUpWithEmail() async {
         guard validateSignUpFields() else { return }
         

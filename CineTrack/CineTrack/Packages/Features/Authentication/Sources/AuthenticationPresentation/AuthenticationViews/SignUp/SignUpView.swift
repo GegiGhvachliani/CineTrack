@@ -10,14 +10,9 @@ import DesignSystemTokens
 
 public struct SignUpView<ViewModel: SignUpViewModelProtocol>: View {
     @ObservedObject var viewModel: ViewModel
-    private let onSignInTap: () -> Void
 
-    public init(
-        viewModel: ViewModel,
-        onSignInTap: @escaping () -> Void
-    ) {
+    public init(viewModel: ViewModel) {
         self.viewModel = viewModel
-        self.onSignInTap = onSignInTap
     }
 
     public var body: some View {
@@ -25,18 +20,18 @@ public struct SignUpView<ViewModel: SignUpViewModelProtocol>: View {
             ColorTokens.Background.primary
                 .ignoresSafeArea()
 
-                VStack(spacing: 10) {
-                    Spacer()
+            VStack(spacing: 10) {
+                Spacer()
 
-                    headerSection
+                headerSection
 
-                    middleSection
+                middleSection
 
-                    belowSection
+                belowSection
 
-                    Spacer()
-                }
-                .padding()
+                Spacer()
+            }
+            .padding()
         }
         .errorModal(message: $viewModel.errorMessage)
     }
@@ -86,7 +81,7 @@ public struct SignUpView<ViewModel: SignUpViewModelProtocol>: View {
                 Text(AuthenticationStrings.SignUp.alreadyHaveAccount)
                     .font(TypographyTokens.bodySmall)
                 Button {
-                    onSignInTap()
+                    viewModel.navigateToSignIn()
                 } label: {
                     Text(AuthenticationStrings.SignUp.signInLink)
                         .font(TypographyTokens.bodySmall)
@@ -120,11 +115,9 @@ final class MockSignUpViewModel: SignUpViewModelProtocol {
     @Published var errorMessage: String?
 
     func signUpWithEmail() async { print("Mock Sign Up") }
+    func navigateToSignIn() { print("Navigate to Sign In") }
 }
 
 #Preview {
-    SignUpView(
-        viewModel: MockSignUpViewModel(),
-        onSignInTap: { print("SignInTapped") }
-    )
+    SignUpView(viewModel: MockSignUpViewModel())
 }

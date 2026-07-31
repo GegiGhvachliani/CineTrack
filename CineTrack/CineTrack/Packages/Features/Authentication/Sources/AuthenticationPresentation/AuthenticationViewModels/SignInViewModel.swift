@@ -21,9 +21,12 @@ public protocol SignInViewModelProtocol: ObservableObject {
     var forgotPasswordSuccessMessage: String? { get set }
     var forgotPasswordErrorMessage: String? { get set }
 
+    func navigateToSignUp()
+    
     func signInWithEmail() async
     func signInWithGoogle() async
     func sendResetPasswordLink() async
+    
 }
 
 public final class SignInViewModel: SignInViewModelProtocol {
@@ -43,14 +46,14 @@ public final class SignInViewModel: SignInViewModelProtocol {
     private let signInWithEmailUseCase: SignInWithEmailUseCaseProtocol
     private let signInWithGoogleUseCase: SignInWithGoogleUseCaseProtocol
     private let resetPasswordUseCase: ResetPasswordUseCaseProtocol
-    private let coordinator: AuthenticationCoordinatorProtocol
+    private let coordinator: AuthenticationNavigationProtocol
 
     // MARK: - Initializer
     public init(
         signInWithEmailUseCase: SignInWithEmailUseCaseProtocol,
         signInWithGoogleUseCase: SignInWithGoogleUseCaseProtocol,
         resetPasswordUseCase: ResetPasswordUseCaseProtocol,
-        coordinator: AuthenticationCoordinatorProtocol
+        coordinator: AuthenticationNavigationProtocol
     ) {
         self.signInWithEmailUseCase = signInWithEmailUseCase
         self.signInWithGoogleUseCase = signInWithGoogleUseCase
@@ -59,6 +62,10 @@ public final class SignInViewModel: SignInViewModelProtocol {
     }
 
     // MARK: - Public Methods
+    public func navigateToSignUp() {
+        coordinator.showSignUp()
+    }
+    
     public func signInWithEmail() async {
         guard validateSignInFields() else { return }
         
