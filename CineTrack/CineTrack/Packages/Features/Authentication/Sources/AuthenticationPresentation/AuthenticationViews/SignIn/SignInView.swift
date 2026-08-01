@@ -10,31 +10,36 @@ import DesignSystemTokens
 
 public struct SignInView<ViewModel: SignInViewModelProtocol>: View {
     @ObservedObject var viewModel: ViewModel
-
+    
     public init(viewModel: ViewModel) {
         self.viewModel = viewModel
     }
-
+    
     public var body: some View {
         ZStack {
             ColorTokens.Background.primary
                 .ignoresSafeArea()
             VStack(spacing: 10) {
                 Spacer()
-
+                
                 headerSection
-
+                
                 middleSection
-
+                
                 belowSection
-
+                
                 Spacer()
             }
             .padding()
         }
         .errorModal(message: $viewModel.errorMessage)
+        .sheet(isPresented: $viewModel.isForgotPasswordPresented) {
+            ForgotPasswordView(viewModel: viewModel)
+                .presentationDetents([.height(350)])
+                .presentationDragIndicator(.visible)
+        }
     }
-
+    
     private var headerSection: some View {
         VStack(spacing: 10) {
             Text(AuthenticationStrings.SignIn.title)
@@ -46,35 +51,31 @@ public struct SignInView<ViewModel: SignInViewModelProtocol>: View {
         }
         .padding(.bottom, 40)
     }
-
+    
     private var middleSection: some View {
         VStack {
             EmailFieldView(email: $viewModel.email, text: AuthenticationStrings.SignIn.emailPlaceholder)
                 .padding(.bottom, 20)
-
+            
             PasswordFieldView(
                 password: $viewModel.password,
                 title: AuthenticationStrings.SignIn.passwordPlaceholder
             )
-
-            HStack {
+            
+            Button {
+                viewModel.isForgotPasswordPresented = true
+            } label: {
                 Spacer()
-
-                Text(AuthenticationStrings.SignIn.dontHaveAccount)
+                Text(AuthenticationStrings.ForgotPassword.navigationButtonText)
                     .font(TypographyTokens.bodySmall)
-                Button {
-                    viewModel.navigateToSignUp()
-                } label: {
-                    Text(AuthenticationStrings.SignIn.signUpLink)
-                        .font(TypographyTokens.bodySmall)
-                        .foregroundStyle(ColorTokens.Brand.primary)
-                        .offset(x: -7)
-                }
+                    .foregroundStyle(ColorTokens.Brand.primary)
+                    .offset(x: -7)
             }
+            
         }
         .padding(.bottom, 40)
     }
-
+    
     private var belowSection: some View {
         VStack {
             ButtonView(
@@ -85,7 +86,7 @@ public struct SignInView<ViewModel: SignInViewModelProtocol>: View {
                     await viewModel.signInWithEmail()
                 }
             }
-
+            
             HStack(spacing: 15) {
                 Rectangle()
                     .fill(DesignSystemTokens.ColorTokens.Brand.primary.opacity(0.5))
@@ -96,7 +97,7 @@ public struct SignInView<ViewModel: SignInViewModelProtocol>: View {
                     .fill(DesignSystemTokens.ColorTokens.Brand.primary.opacity(0.8))
                     .frame(width: 150, height: 1)
             }
-
+            
             Button {
                 Task {
                     await viewModel.signInWithGoogle()
@@ -124,27 +125,41 @@ public struct SignInView<ViewModel: SignInViewModelProtocol>: View {
                 .cornerRadius(15)
             }
             .disabled(viewModel.isLoading)
+            
+            HStack {
+                
+                Text(AuthenticationStrings.SignIn.dontHaveAccount)
+                    .font(TypographyTokens.bodySmall)
+                Button {
+                    viewModel.navigateToSignUp()
+                } label: {
+                    Text(AuthenticationStrings.SignIn.signUpLink)
+                        .font(TypographyTokens.bodySmall)
+                        .foregroundStyle(ColorTokens.Brand.primary)
+                        .offset(x: -7)
+                }
+            }
         }
     }
 }
 
 final class MockSignInViewModel: SignInViewModelProtocol {
-   @Published var email = ""
-   @Published var password = ""
-   @Published var isLoading = false
-   @Published var errorMessage: String?
-
-   @Published var forgotPasswordEmail = ""
-   @Published var isForgotPasswordPresented = false
-   @Published var forgotPasswordSuccessMessage: String?
-   @Published var forgotPasswordErrorMessage: String?
-
-   func signInWithEmail() async { print("Mock Sign In") }
-   func signInWithGoogle() async { print("Mock Google Sign In") }
-   func sendResetPasswordLink() async { print("Mock Reset") }
-   func navigateToSignUp() { print("Navigate to Sign Up") }
+    @Published var email = ""
+    @Published var password = ""
+    @Published var isLoading = false
+    @Published var errorMessage: String?
+    
+    @Published var forgotPasswordEmail = ""
+    @Published var isForgotPasswordPresented = false
+    @Published var forgotPasswordSuccessMessage: String?
+    @Published var forgotPasswordErrorMessage: String?
+    
+    func signInWithEmail() async { print("Mock Sign In") }
+    func signInWithGoogle() async { print("Mock Google Sign In") }
+    func sendResetPasswordLink() async { print("Mock Reset") }
+    func navigateToSignUp() { print("Navigate to Sign Up") }
 }
 
 #Preview {
-   SignInView(viewModel: MockSignInViewModel())
+    SignInView(viewModel: MockSignInViewModel())
 }

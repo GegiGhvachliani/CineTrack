@@ -39,6 +39,7 @@ public enum AuthenticationStrings {
     
     // MARK: - Forgot Password
     public enum ForgotPassword {
+        public static let navigationButtonText = "Forgot Password?"
         public static let title = "Reset Password"
         public static let subtitle = "Enter your email address below and we will send you a link to reset your password."
         public static let emailPlaceholder = "Email Address"

@@ -13,31 +13,27 @@ struct ErrorModalView: View {
     let onDismiss: () -> Void
 
     var body: some View {
-        VStack(spacing: 16) {
-
+        VStack(spacing: 15) {
+            
             Image(systemName: "exclamationmark.triangle.fill")
                 .font(.system(size: 32))
                 .foregroundStyle(.red)
-                .padding(.top, 10)
 
             Text(message)
                 .font(TypographyTokens.body)
                 .foregroundStyle(ColorTokens.Text.primary)
                 .multilineTextAlignment(.center)
-                .padding(.horizontal, 20)
 
             ButtonView(title: "OK") {
                 onDismiss()
             }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 20)
         }
+        .padding(24)
         .frame(maxWidth: .infinity)
         .background(
             RoundedRectangle(cornerRadius: 24)
                 .fill(ColorTokens.Background.primary)
         )
-        .ignoresSafeArea(edges: .bottom)
     }
 }
 
@@ -60,11 +56,13 @@ private struct ErrorModalModifier: ViewModifier {
 
                 VStack {
                     Spacer()
+                    
                     ErrorModalView(message: message) {
                         withAnimation(.easeOut(duration: 0.25)) {
                             errorMessage = nil
                         }
                     }
+                    .padding(15)
                 }
                 .transition(.move(edge: .bottom))
                 .zIndex(1)
