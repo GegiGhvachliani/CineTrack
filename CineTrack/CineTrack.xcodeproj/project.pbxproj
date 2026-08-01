@@ -60,6 +60,7 @@
 				App/Config/Info.plist,
 				Packages/DesignSystem,
 				Packages/Features/Authentication,
+				Packages/Features/Discover,
 				Packages/Features/Home,
 				Packages/Features/MovieDetail,
 				Packages/Features/Onboarding,
@@ -67,6 +68,7 @@
 				Packages/Features/Search,
 				Packages/Features/Watchlist,
 				Packages/SharedKit,
+				Packages/TMDBData,
 			);
 			target = 63827D702FD34B7C00DE3E16 /* CineTrack */;
 		};
