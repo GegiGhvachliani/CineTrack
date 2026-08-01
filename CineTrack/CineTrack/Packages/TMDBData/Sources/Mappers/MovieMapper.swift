@@ -8,7 +8,7 @@
 import Foundation
 import SharedCore
 
-public struct MovieMapper {
+public struct MovieMapper: Sendable {
 
     public init() {}
 

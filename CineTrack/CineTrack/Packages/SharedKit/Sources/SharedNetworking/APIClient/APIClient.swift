@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol APIClient {
+public protocol APIClient: Sendable {
     func sendRequest<T: Decodable>(
         _ request: APIRequest
     ) async throws -> T

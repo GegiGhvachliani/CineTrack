@@ -6,9 +6,9 @@
 //
 
 import Foundation
-import SharedKit
+import SharedNetworking
 
-public struct TMDBRequestBuilder {
+public struct TMDBRequestBuilder: Sendable {
 
     private let configuration: TMDBConfiguration
 
@@ -17,7 +17,22 @@ public struct TMDBRequestBuilder {
     }
 
     public func build(for endpoint: TMDBEndpoint) -> APIRequest {
-        let url = configuration.baseURL.appendingPathComponent(endpoint.path)
+        var components = URLComponents(
+            url: configuration.baseURL
+                .appendingPathComponent(endpoint.path),
+            resolvingAgainstBaseURL: false
+        )
+
+        components?.queryItems = [
+            URLQueryItem(
+                name: "page",
+                value: String(endpoint.page)
+            )
+        ]
+
+        guard let url = components?.url else {
+            fatalError("Failed to build URL for endpoint: \(endpoint)")
+        }
 
         return APIRequest(
             url: url,

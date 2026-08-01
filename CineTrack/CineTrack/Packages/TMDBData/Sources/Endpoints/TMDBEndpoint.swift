@@ -6,14 +6,17 @@
 //
 
 import Foundation
-import SharedKit
+import SharedNetworking
 
 public enum TMDBEndpoint {
-    case trending(timeWindow: TrendingTimeWindow)
-    case popular
-    case topRated
-    case nowPlaying
-    case upcoming
+    case trending(
+        timeWindow: TrendingTimeWindow,
+        page: Int
+    )
+    case popular(page: Int)
+    case topRated(page: Int)
+    case nowPlaying(page: Int)
+    case upcoming(page: Int)
 }
 
 public enum TrendingTimeWindow: String {
@@ -24,12 +27,15 @@ public enum TrendingTimeWindow: String {
 public extension TMDBEndpoint {
 
     static var defaultTrending: TMDBEndpoint {
-        .trending(timeWindow: .week)
+        .trending(
+            timeWindow: .week,
+            page: 1
+        )
     }
 
     var path: String {
         switch self {
-        case .trending(let timeWindow):
+        case .trending(let timeWindow, _):
             return "/3/trending/movie/\(timeWindow.rawValue)"
 
         case .popular:
@@ -43,6 +49,25 @@ public extension TMDBEndpoint {
 
         case .upcoming:
             return "/3/movie/upcoming"
+        }
+    }
+
+    var page: Int {
+        switch self {
+        case .trending(_, let page):
+            return page
+
+        case .popular(let page):
+            return page
+
+        case .topRated(let page):
+            return page
+
+        case .nowPlaying(let page):
+            return page
+
+        case .upcoming(let page):
+            return page
         }
     }
 

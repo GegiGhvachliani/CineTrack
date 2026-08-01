@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct TMDBConfiguration {
+public struct TMDBConfiguration: Sendable {
 
     public let baseURL: URL
     public let accessToken: String
