@@ -9,7 +9,7 @@ import Foundation
 
 public struct Movie: Identifiable, Equatable, Sendable {
 
-    public let id: Int
+    public let id = UUID()
     public let title: String
     public let overview: String
     public let posterPath: String?
@@ -19,7 +19,6 @@ public struct Movie: Identifiable, Equatable, Sendable {
     public let voteCount: Int
 
     public init(
-        id: Int,
         title: String,
         overview: String,
         posterPath: String?,
@@ -28,7 +27,6 @@ public struct Movie: Identifiable, Equatable, Sendable {
         voteAverage: Double,
         voteCount: Int
     ) {
-        self.id = id
         self.title = title
         self.overview = overview
         self.posterPath = posterPath

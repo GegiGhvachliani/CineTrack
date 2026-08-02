@@ -14,7 +14,6 @@ public struct MovieMapper: Sendable {
 
     public func map(_ dto: MovieDTO) -> Movie {
         Movie(
-            id: dto.id,
             title: dto.title,
             overview: dto.overview ?? "",
             posterPath: dto.posterPath,

@@ -12,7 +12,7 @@ public enum ColorTokens {
     public enum Background {
         public static let primary = Color("backgroundPrimary", bundle: .module)
         public static let secondary = Color("backgroundSecondary", bundle: .module)
-        public static let main = Color("mainBackground", bundle: .module)
+        public static let main = Color("backgroundMain", bundle: .module)
 
     }
     

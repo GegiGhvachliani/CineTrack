@@ -25,7 +25,9 @@ public final class URLSessionAPIClient: APIClient {
     ) async throws -> T {
 
         let urlRequest = request.asURLRequest()
-
+        print("🔍 [URL]:", urlRequest.url?.absoluteString ?? "No URL")
+            print("🔑 [Auth Header]:", urlRequest.value(forHTTPHeaderField: "Authorization") ?? "No Auth Header")
+        
         do {
             let (data, response) = try await session.data(
                 for: urlRequest

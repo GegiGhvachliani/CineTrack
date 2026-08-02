@@ -50,6 +50,8 @@ public protocol HomeViewModelProtocol: ObservableObject {
     func loadNextTopRatedPage() async
     func loadNextNowPlayingPage() async
     func loadNextUpcomingPage() async
+
+    func clearError()
 }
 
 @MainActor
@@ -144,37 +146,22 @@ public final class HomeViewModel: HomeViewModelProtocol {
     // MARK: - Initial Loading
 
     public func loadHome() async {
+            error = nil
 
-        error = nil
-
-        await withTaskGroup(of: Void.self) { group in
-
-            group.addTask { [weak self] in
-                await self?.loadNextTrendingPage()
-            }
-
-            group.addTask { [weak self] in
-                await self?.loadNextPopularPage()
-            }
-
-            group.addTask { [weak self] in
-                await self?.loadNextTopRatedPage()
-            }
-
-            group.addTask { [weak self] in
-                await self?.loadNextNowPlayingPage()
-            }
-
-            group.addTask { [weak self] in
-                await self?.loadNextUpcomingPage()
-            }
+            // იწყებს ხუთივე რექვესთს ერთდროულად პარალელურ რეჟიმში
+            async let trending = loadNextTrendingPage()
+            async let popular = loadNextPopularPage()
+            async let topRated = loadNextTopRatedPage()
+            async let nowPlaying = loadNextNowPlayingPage()
+            async let upcoming = loadNextUpcomingPage()
+            
+            // ელოდება ხუთივეს დასრულებას
+            await (trending, popular, topRated, nowPlaying, upcoming)
         }
-    }
 
     // MARK: - Trending
 
     public func loadNextTrendingPage() async {
-
         guard !isTrendingLoading, hasMoreTrending else {
             return
         }
@@ -199,13 +186,13 @@ public final class HomeViewModel: HomeViewModelProtocol {
         } catch {
             isTrendingLoading = false
             self.error = error
+            print("❌ Treding Movies Error: \(error.localizedDescription)") // დაამატე ეს ხაზი
         }
     }
 
     // MARK: - Popular
 
     public func loadNextPopularPage() async {
-
         guard !isPopularLoading, hasMorePopular else {
             return
         }
@@ -236,7 +223,6 @@ public final class HomeViewModel: HomeViewModelProtocol {
     // MARK: - Top Rated
 
     public func loadNextTopRatedPage() async {
-
         guard !isTopRatedLoading, hasMoreTopRated else {
             return
         }
@@ -267,7 +253,6 @@ public final class HomeViewModel: HomeViewModelProtocol {
     // MARK: - Now Playing
 
     public func loadNextNowPlayingPage() async {
-
         guard !isNowPlayingLoading, hasMoreNowPlaying else {
             return
         }
@@ -298,7 +283,6 @@ public final class HomeViewModel: HomeViewModelProtocol {
     // MARK: - Upcoming
 
     public func loadNextUpcomingPage() async {
-
         guard !isUpcomingLoading, hasMoreUpcoming else {
             return
         }
@@ -324,5 +308,11 @@ public final class HomeViewModel: HomeViewModelProtocol {
             isUpcomingLoading = false
             self.error = error
         }
+    }
+
+    // MARK: - Error Handling
+
+    public func clearError() {
+        error = nil
     }
 }
