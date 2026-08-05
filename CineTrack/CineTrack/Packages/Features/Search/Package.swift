@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "Search",
-    platforms: [.iOS(.v16)],
+    platforms: [.iOS(.v17)],
     products: [
         .library(name: "SearchPresentationAPI", targets: ["SearchPresentationAPI"]),
         .library(name: "SearchAssembly", targets: ["SearchAssembly"])

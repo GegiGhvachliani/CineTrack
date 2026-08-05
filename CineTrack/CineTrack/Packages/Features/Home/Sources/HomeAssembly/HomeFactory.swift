@@ -64,6 +64,8 @@ public struct HomeFactory: HomeFactoryProtocol {
         let fetchUpcomingUseCase = FetchUpcomingUseCase(
             repository: repository
         )
+        
+        let fetchMovieVideosUseCase = FetchMovieVideosUseCase(repository: repository)
 
         // MARK: - ViewModel
 
@@ -72,7 +74,8 @@ public struct HomeFactory: HomeFactoryProtocol {
             fetchPopularUseCase: fetchPopularUseCase,
             fetchTopRatedUseCase: fetchTopRatedUseCase,
             fetchNowPlayingUseCase: fetchNowPlayingUseCase,
-            fetchUpcomingUseCase: fetchUpcomingUseCase
+            fetchUpcomingUseCase: fetchUpcomingUseCase,
+            fetchMovieVideosUseCase: fetchMovieVideosUseCase
         )
 
         // MARK: - SwiftUI View

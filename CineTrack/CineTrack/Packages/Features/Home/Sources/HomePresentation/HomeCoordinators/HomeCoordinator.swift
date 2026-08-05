@@ -8,6 +8,7 @@
 import UIKit
 import SharedCore
 import HomePresentationAPI
+import HomeDomain
 
 public final class HomeCoordinator: HomeCoordinatorProtocol {
     public var childCoordinators: [Coordinator] = []
@@ -25,5 +26,15 @@ public final class HomeCoordinator: HomeCoordinatorProtocol {
     public func start() {
         let homeVC = factory.makeHomeViewController()
         navigationController.setViewControllers(([homeVC]), animated: false)
+    }
+    
+    func showSearch() {
+        print("Navigate To Search 🔍")
+    }
+    func showMovieDetails(movie: Movie) {
+        print("Navigate To Movie Details 🍿")
+    }
+    func showVideos(item: FeaturedItem) {
+        print("Navigate To Video Playlist 📀")
     }
 }

@@ -17,6 +17,7 @@ public enum TMDBEndpoint {
     case topRated(page: Int)
     case nowPlaying(page: Int)
     case upcoming(page: Int)
+    case movieVideos(movieID: Int)
 }
 
 public enum TrendingTimeWindow: String {
@@ -27,10 +28,7 @@ public enum TrendingTimeWindow: String {
 public extension TMDBEndpoint {
 
     static var defaultTrending: TMDBEndpoint {
-        .trending(
-            timeWindow: .week,
-            page: 1
-        )
+        .trending(timeWindow: .week,page: 1)
     }
 
     var path: String {
@@ -49,10 +47,13 @@ public extension TMDBEndpoint {
 
         case .upcoming:
             return "/3/movie/upcoming"
+            
+        case .movieVideos(let movieID):
+                return "/3/movie/\(movieID)/videos"
+            }
         }
-    }
 
-    var page: Int {
+    var page: Int? {
         switch self {
         case .trending(_, let page):
             return page
@@ -68,6 +69,9 @@ public extension TMDBEndpoint {
 
         case .upcoming(let page):
             return page
+            
+        case .movieVideos:
+            return nil
         }
     }
 

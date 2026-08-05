@@ -6,7 +6,7 @@ import PackageDescription
 
 let package = Package(
     name: "SharedKit",
-    platforms: [.iOS(.v16)],
+    platforms: [.iOS(.v17)],
     products: [
         .library(name: "SharedCore", targets: ["SharedCore"]),
         .library(name: "SharedNetworking", targets: ["SharedNetworking"]),

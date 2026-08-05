@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import SharedCore
+// TODO: შეამოწმე არქიტექტურა რამდენად ირღვევა როცა ამას ვაიმპორტებთ
 
 public protocol HomeRepositoryProtocol: Sendable {
 
@@ -18,4 +20,6 @@ public protocol HomeRepositoryProtocol: Sendable {
     func fetchNowPlaying(page: Int) async throws -> MoviePage
 
     func fetchUpcoming(page: Int) async throws -> MoviePage
+    
+    func fetchVideos(movieId: Int) async throws -> [MovieVideo]
 }

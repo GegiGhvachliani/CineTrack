@@ -1,0 +1,25 @@
+//
+//  FeaturedItem.swift
+//  Home
+//
+//  Created by Gegi Ghvachliani on 05/08/2026.
+//
+
+import Foundation
+import SharedCore
+
+public struct FeaturedItem: Identifiable, Equatable, Sendable {
+
+    public let id: Int
+    public let movie: Movie
+    public let video: MovieVideo
+
+    public init(
+        movie: Movie,
+        video: MovieVideo
+    ) {
+        self.id = movie.id
+        self.movie = movie
+        self.video = video
+    }
+}

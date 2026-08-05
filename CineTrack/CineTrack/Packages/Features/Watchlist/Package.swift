@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "Watchlist",
-    platforms: [.iOS(.v16)],
+    platforms: [.iOS(.v17)],
     products: [
         .library(name: "WatchlistPresentationAPI", targets: ["WatchlistPresentationAPI"]),
         .library(name: "WatchlistAssembly", targets: ["WatchlistAssembly"])

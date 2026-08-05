@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "Authentication",
-    platforms: [.iOS(.v16)],
+    platforms: [.iOS(.v17)],
     products: [
         .library(name: "AuthenticationAssembly", targets: ["AuthenticationAssembly"]),
         .library(name: "AuthenticationPresentationAPI", targets: ["AuthenticationPresentationAPI"]),
