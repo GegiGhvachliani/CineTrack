@@ -1,28 +1,29 @@
 //
-//  Top10MovieCell.swift
+//  ComingSoonMoviesCell.swift
 //  Home
 //
-//  Created by Gegi Ghvachliani on 06/08/2026.
+//  Created by Gegi Ghvachliani on 08/08/2026.
 //
 
 import SwiftUI
 import SharedCore
 import DesignSystemTokens
 
-struct Top10MovieCell: View {
+struct ComingSoonMoviesCell: View {
         
     let movie: Movie
     let isWatchlisted: Bool
     let cellHeight: CGFloat
-    
-    let ratingNumber: Int
+    let releaseDate: String
     
     let onMovieTap: () -> Void
     let onWatchlistTap: () -> Void
     
     var body: some View {
         VStack(spacing: 0) {
-
+            
+            top
+            
             MoviePoster(
                 isWatchlisted: isWatchlisted,
                 photoURL: movie.posterPath,
@@ -32,7 +33,7 @@ struct Top10MovieCell: View {
             .frame(height: (cellHeight - 25) * 0.8)
 
             footer
-                .frame(height: ((cellHeight - 25) * 0.2) + 20)
+                .frame(height: (cellHeight - 25) * 0.2)
 
             Spacer()
         }
@@ -53,6 +54,19 @@ struct Top10MovieCell: View {
         )
     }
     
+    // MARK: - Release Date
+    
+    private var top: some View {
+        Text(releaseDate)
+            .font(TypographyTokens.footnote)
+            .fontWeight(.bold)
+            .foregroundColor(ColorTokens.Brand.primary)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.bottom, 5)
+            .background(ColorTokens.Background.secondary)
+
+    }
+    
     // MARK: - Footer
     
     private var footer: some View {
@@ -68,27 +82,19 @@ struct Top10MovieCell: View {
     // MARK: - Rating
     
     private var rating: some View {
-        VStack(spacing: 3) {
+        HStack(spacing: 4) {
             
-            Text(String(ratingNumber))
-                .font(TypographyTokens.title3)
-                .foregroundStyle(.gray)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            Image(systemName: "star.fill")
+                .resizable()
+                .scaledToFit()
+                .frame(height: 14)
+                .offset(y: -1)
+                .foregroundStyle(ColorTokens.Brand.primary)
             
-            HStack(spacing: 4) {
-                
-                Image(systemName: "star.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 14)
-                    .offset(y: -1)
-                    .foregroundStyle(ColorTokens.Brand.primary)
-                
-                Text(String(format: "%.1f",movie.voteAverage))
-                    .font(Font.system(size: 15,weight: .none,design: .rounded))
-                
-                Spacer()
-            }
+            Text(String(format: "%.1f",movie.voteAverage))
+            .font(Font.system(size: 15,weight: .none,design: .rounded))
+            
+            Spacer()
         }
     }
     
@@ -121,6 +127,12 @@ struct Top10MovieCell: View {
 #Preview {
     let movie: Movie = Movie(id: 3, title: "SpiderMan: No Way Home", overview: "", posterPath: "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg", backdropPath: nil, releaseDate: "2004-07-04", voteAverage: 8.9, voteCount: 12)
     
-    Top10MovieCell(movie: movie, isWatchlisted: false,
-                   cellHeight: 265, ratingNumber: 3, onMovieTap: {}, onWatchlistTap: {})
+    ComingSoonMoviesCell(
+        movie: movie,
+        isWatchlisted: true,
+        cellHeight: 265,
+        releaseDate: "AUGUST 10",
+        onMovieTap: {},
+        onWatchlistTap: {}
+    )
 }

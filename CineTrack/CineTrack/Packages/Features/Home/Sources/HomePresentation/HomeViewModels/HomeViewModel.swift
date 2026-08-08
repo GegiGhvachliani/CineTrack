@@ -7,11 +7,12 @@
 
 import Foundation
 import Combine
+import Observation // დამატებულია Observation ფრეიმვორკი
 import HomeDomain
 import SharedCore
 
 @MainActor
-public protocol HomeViewModelProtocol: ObservableObject {
+public protocol HomeViewModelProtocol { // ამოღებულია ObservableObject
 
     // MARK: - Movies
 
@@ -25,6 +26,9 @@ public protocol HomeViewModelProtocol: ObservableObject {
 
     var movieVideos: [Int: [MovieVideo]] { get }
     var featuredItems: [FeaturedItem] { get }
+
+    // MARK: - Watchlist
+    var watchlistedMovieIDs: Set<Int> { get }
 
     // MARK: - Loading State
 
@@ -57,79 +61,65 @@ public protocol HomeViewModelProtocol: ObservableObject {
     func loadNextUpcomingPage() async
 
     func loadVideos(for movie: Movie) async
+    func toggleWatchlist(for movie: Movie)
 
     func clearError()
 }
 
+@Observable
 @MainActor
 public final class HomeViewModel: HomeViewModelProtocol {
 
-    // MARK: - Published Properties
+    // MARK: - Properties
 
-    @Published public private(set) var trendingMovies: [Movie] = []
-
-    @Published public private(set) var popularMovies: [Movie] = []
-
-    @Published public private(set) var topRatedMovies: [Movie] = []
-
-    @Published public private(set) var nowPlayingMovies: [Movie] = []
-
-    @Published public private(set) var upcomingMovies: [Movie] = []
-
-    @Published public private(set) var movieVideos: [Int: [MovieVideo]] = [:]
-
-    @Published public private(set) var featuredItems: [FeaturedItem] = []
+    public private(set) var trendingMovies: [Movie] = []
+    public private(set) var popularMovies: [Movie] = []
+    public private(set) var topRatedMovies: [Movie] = []
+    public private(set) var nowPlayingMovies: [Movie] = []
+    public private(set) var upcomingMovies: [Movie] = []
+    
+    public private(set) var favouritedActorIDs: Set<Int> = []
+    
+    public private(set) var movieVideos: [Int: [MovieVideo]] = [:]
+    public private(set) var featuredItems: [FeaturedItem] = []
+    
+    // MARK: - Watchlist
+    
+    public private(set) var watchlistedMovieIDs: Set<Int> = []
 
     // MARK: - Loading State
 
-    @Published public private(set) var isTrendingLoading = false
-
-    @Published public private(set) var isPopularLoading = false
-
-    @Published public private(set) var isTopRatedLoading = false
-
-    @Published public private(set) var isNowPlayingLoading = false
-
-    @Published public private(set) var isUpcomingLoading = false
+    public private(set) var isTrendingLoading = false
+    public private(set) var isPopularLoading = false
+    public private(set) var isTopRatedLoading = false
+    public private(set) var isNowPlayingLoading = false
+    public private(set) var isUpcomingLoading = false
 
     // MARK: - Pagination State
 
     private var trendingPage = 1
-
     private var popularPage = 1
-
     private var topRatedPage = 1
-
     private var nowPlayingPage = 1
-
     private var upcomingPage = 1
 
-    @Published public private(set) var hasMoreTrending = true
-
-    @Published public private(set) var hasMorePopular = true
-
-    @Published public private(set) var hasMoreTopRated = true
-
-    @Published public private(set) var hasMoreNowPlaying = true
-
-    @Published public private(set) var hasMoreUpcoming = true
+    public private(set) var hasMoreTrending = true
+    public private(set) var hasMorePopular = true
+    public private(set) var hasMoreTopRated = true
+    public private(set) var hasMoreNowPlaying = true
+    public private(set) var hasMoreUpcoming = true
 
     // MARK: - Error
 
-    @Published public private(set) var error: Error?
+    public private(set) var error: Error?
 
     // MARK: - Dependencies
 
     private let fetchTrendingUseCase: FetchTrendingUseCaseProtocol
-
     private let fetchPopularUseCase: FetchPopularUseCaseProtocol
-
     private let fetchTopRatedUseCase: FetchTopRatedUseCaseProtocol
-
     private let fetchNowPlayingUseCase: FetchNowPlayingUseCaseProtocol
-
     private let fetchUpcomingUseCase: FetchUpcomingUseCaseProtocol
-
     private let fetchMovieVideosUseCase: FetchMovieVideosUseCaseProtocol
 
     // MARK: - Initialization
@@ -153,7 +143,6 @@ public final class HomeViewModel: HomeViewModelProtocol {
     // MARK: - Initial Loading
 
     public func loadHome() async {
-
         error = nil
 
         async let trending = loadNextTrendingPage()
@@ -176,30 +165,18 @@ public final class HomeViewModel: HomeViewModelProtocol {
     // MARK: - Trending
 
     public func loadNextTrendingPage() async {
-
-        guard !isTrendingLoading, hasMoreTrending else {
-            return
-        }
+        guard !isTrendingLoading, hasMoreTrending else { return }
 
         isTrendingLoading = true
         error = nil
 
-        defer {
-            isTrendingLoading = false
-        }
+        defer { isTrendingLoading = false }
 
         do {
-            let page = try await fetchTrendingUseCase.execute(
-                page: trendingPage
-            )
-
-            trendingMovies.append(
-                contentsOf: page.movies
-            )
-
+            let page = try await fetchTrendingUseCase.execute(page: trendingPage)
+            trendingMovies.append(contentsOf: page.movies)
             trendingPage = page.page + 1
             hasMoreTrending = page.hasNextPage
-
         } catch {
             self.error = error
         }
@@ -208,30 +185,18 @@ public final class HomeViewModel: HomeViewModelProtocol {
     // MARK: - Popular
 
     public func loadNextPopularPage() async {
-
-        guard !isPopularLoading, hasMorePopular else {
-            return
-        }
+        guard !isPopularLoading, hasMorePopular else { return }
 
         isPopularLoading = true
         error = nil
 
-        defer {
-            isPopularLoading = false
-        }
+        defer { isPopularLoading = false }
 
         do {
-            let page = try await fetchPopularUseCase.execute(
-                page: popularPage
-            )
-
-            popularMovies.append(
-                contentsOf: page.movies
-            )
-
+            let page = try await fetchPopularUseCase.execute(page: popularPage)
+            popularMovies.append(contentsOf: page.movies)
             popularPage = page.page + 1
             hasMorePopular = page.hasNextPage
-
         } catch {
             self.error = error
         }
@@ -240,30 +205,18 @@ public final class HomeViewModel: HomeViewModelProtocol {
     // MARK: - Top Rated
 
     public func loadNextTopRatedPage() async {
-
-        guard !isTopRatedLoading, hasMoreTopRated else {
-            return
-        }
+        guard !isTopRatedLoading, hasMoreTopRated else { return }
 
         isTopRatedLoading = true
         error = nil
 
-        defer {
-            isTopRatedLoading = false
-        }
+        defer { isTopRatedLoading = false }
 
         do {
-            let page = try await fetchTopRatedUseCase.execute(
-                page: topRatedPage
-            )
-
-            topRatedMovies.append(
-                contentsOf: page.movies
-            )
-
+            let page = try await fetchTopRatedUseCase.execute(page: topRatedPage)
+            topRatedMovies.append(contentsOf: page.movies)
             topRatedPage = page.page + 1
             hasMoreTopRated = page.hasNextPage
-
         } catch {
             self.error = error
         }
@@ -272,30 +225,18 @@ public final class HomeViewModel: HomeViewModelProtocol {
     // MARK: - Now Playing
 
     public func loadNextNowPlayingPage() async {
-
-        guard !isNowPlayingLoading, hasMoreNowPlaying else {
-            return
-        }
+        guard !isNowPlayingLoading, hasMoreNowPlaying else { return }
 
         isNowPlayingLoading = true
         error = nil
 
-        defer {
-            isNowPlayingLoading = false
-        }
+        defer { isNowPlayingLoading = false }
 
         do {
-            let page = try await fetchNowPlayingUseCase.execute(
-                page: nowPlayingPage
-            )
-
-            nowPlayingMovies.append(
-                contentsOf: page.movies
-            )
-
+            let page = try await fetchNowPlayingUseCase.execute(page: nowPlayingPage)
+            nowPlayingMovies.append(contentsOf: page.movies)
             nowPlayingPage = page.page + 1
             hasMoreNowPlaying = page.hasNextPage
-
         } catch {
             self.error = error
         }
@@ -304,30 +245,18 @@ public final class HomeViewModel: HomeViewModelProtocol {
     // MARK: - Upcoming
 
     public func loadNextUpcomingPage() async {
-
-        guard !isUpcomingLoading, hasMoreUpcoming else {
-            return
-        }
+        guard !isUpcomingLoading, hasMoreUpcoming else { return }
 
         isUpcomingLoading = true
         error = nil
 
-        defer {
-            isUpcomingLoading = false
-        }
+        defer { isUpcomingLoading = false }
 
         do {
-            let page = try await fetchUpcomingUseCase.execute(
-                page: upcomingPage
-            )
-
-            upcomingMovies.append(
-                contentsOf: page.movies
-            )
-
+            let page = try await fetchUpcomingUseCase.execute(page: upcomingPage)
+            upcomingMovies.append(contentsOf: page.movies)
             upcomingPage = page.page + 1
             hasMoreUpcoming = page.hasNextPage
-
         } catch {
             self.error = error
         }
@@ -336,16 +265,11 @@ public final class HomeViewModel: HomeViewModelProtocol {
     // MARK: - Videos
 
     public func loadVideos(for movie: Movie) async {
-
         error = nil
 
         do {
-            let videos = try await fetchMovieVideosUseCase.execute(
-                movieID: movie.id
-            )
-
+            let videos = try await fetchMovieVideosUseCase.execute(movieID: movie.id)
             movieVideos[movie.id] = videos
-
         } catch {
             self.error = error
         }
@@ -354,41 +278,23 @@ public final class HomeViewModel: HomeViewModelProtocol {
     // MARK: - Featured
 
     public func loadFeaturedItems() async {
-
-        let movies = Array(
-            nowPlayingMovies.prefix(5)
-        )
+        let movies = Array(nowPlayingMovies.prefix(5))
 
         guard !movies.isEmpty else {
             featuredItems = []
             return
         }
 
-        let items = await withTaskGroup(
-            of: (Int, FeaturedItem?).self
-        ) { group in
-
+        let items = await withTaskGroup(of: (Int, FeaturedItem?).self) { group in
             for (index, movie) in movies.enumerated() {
-
                 group.addTask {
-
                     do {
-                        let videos = try await self.fetchMovieVideosUseCase
-                            .execute(movieID: movie.id)
-
-                        guard let video = await self.selectFeaturedVideo(
-                            from: videos
-                        ) else {
+                        let videos = try await self.fetchMovieVideosUseCase.execute(movieID: movie.id)
+                        guard let video = await self.selectFeaturedVideo(from: videos) else {
                             return (index, nil)
                         }
-
-                        let item = FeaturedItem(
-                            movie: movie,
-                            video: video
-                        )
-
+                        let item = FeaturedItem(movie: movie, video: video)
                         return (index, item)
-
                     } catch {
                         return (index, nil)
                     }
@@ -396,13 +302,9 @@ public final class HomeViewModel: HomeViewModelProtocol {
             }
 
             var results: [(Int, FeaturedItem)] = []
-
             for await (index, item) in group {
-
                 if let item {
-                    results.append(
-                        (index, item)
-                    )
+                    results.append((index, item))
                 }
             }
 
@@ -416,10 +318,7 @@ public final class HomeViewModel: HomeViewModelProtocol {
 
     // MARK: - Video Selection
 
-    private func selectFeaturedVideo(
-        from videos: [MovieVideo]
-    ) -> MovieVideo? {
-
+    private func selectFeaturedVideo(from videos: [MovieVideo]) -> MovieVideo? {
         let priority: [VideoType] = [
             .behindTheScenes,
             .trailer,
@@ -428,30 +327,40 @@ public final class HomeViewModel: HomeViewModelProtocol {
         ]
 
         for type in priority {
-
-            if let officialVideo = videos.first(
-                where: {
-                    $0.type == type &&
-                    $0.site == .youtube &&
-                    $0.official
-                }
-            ) {
+            if let officialVideo = videos.first(where: {
+                $0.type == type && $0.site == .youtube && $0.official
+            }) {
                 return officialVideo
             }
 
-            if let video = videos.first(
-                where: {
-                    $0.type == type &&
-                    $0.site == .youtube
-                }
-            ) {
+            if let video = videos.first(where: {
+                $0.type == type && $0.site == .youtube
+            }) {
                 return video
             }
         }
-
         return nil
     }
 
+    // MARK: - Watchlist Management
+    
+    public func toggleWatchlist(for movie: Movie) {
+        if watchlistedMovieIDs.contains(movie.id) {
+            watchlistedMovieIDs.remove(movie.id)
+        } else {
+            watchlistedMovieIDs.insert(movie.id)
+        }
+    }
+    
+    // MARK: - Favourite Management
+
+    public func toggleFavourite(for actor: MovieActor) {
+        if favouritedActorIDs.contains(actor.id) {
+            favouritedActorIDs.remove(actor.id)
+        } else {
+            favouritedActorIDs.insert(actor.id)
+        }
+    }
     // MARK: - Error Handling
 
     public func clearError() {

@@ -67,7 +67,9 @@ let package = Package(
                         package: "DesignSystem"
                     )
                 ],
-                path: "Sources/HomePresentation"
+                path: "Sources/HomePresentation",
+                resources: [                                    .process("Resources")
+                    ]
             ),
         
             .target(

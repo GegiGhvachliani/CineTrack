@@ -1,63 +1,61 @@
 //
-//  MovieHorizontalScrollView.swift
+//  HorizontalScrollView.swift
 //  Home
 //
 //  Created by Gegi Ghvachliani on 06/08/2026.
 //
 
 import SwiftUI
-import SharedCore
 import DesignSystemTokens
 
-struct MovieHorizontalScrollView<Cell: View>: View {
-    
+struct HorizontalScrollView<Item: Identifiable, Cell: View>: View {
+
     private let headerText: String
-    private let movies: [Movie]
+    private let items: [Item]
 
     private let onSeeAllTap: () -> Void
-    private let cell: (Movie, Int) -> Cell
-    
+    private let cell: (Item, Int) -> Cell
+
     init(
         headerText: String,
-        movies: [Movie],
+        items: [Item],
         onSeeAllTap: @escaping () -> Void,
-        cell: @escaping (Movie, Int) -> Cell
+        cell: @escaping (Item, Int) -> Cell
     ) {
         self.headerText = headerText
-        self.movies = movies
+        self.items = items
         self.onSeeAllTap = onSeeAllTap
         self.cell = cell
     }
 
     var body: some View {
         VStack(spacing: 12) {
-            
+
             header
-            
-            ScrollView(.horizontal) {
+
+            ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: 15) {
-                    ForEach(Array(movies.enumerated()), id: \.element.id) { index, movie in
-                        cell(movie, index)
+                    ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
+                        cell(item, index)
                     }
                 }
-                .padding(.leading, 16)
-                .padding(.trailing, 16)
+                .padding(.horizontal, 16)
                 .padding(.bottom, 10)
             }
         }
+        .padding(.top, 15)
+        .padding(.bottom, 5)
+        .background(ColorTokens.Background.secondary)
     }
-    
-    // MARK: - header
-    
+
+    // MARK: - Header
 
     private var header: some View {
         HStack(spacing: 8) {
 
             Capsule()
                 .frame(width: 4, height: 25)
-                .foregroundStyle(
-                    ColorTokens.Brand.primary
-                )
+                .foregroundStyle(ColorTokens.Brand.primary)
 
             Text(headerText)
                 .font(TypographyTokens.headline)

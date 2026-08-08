@@ -47,6 +47,8 @@ public enum TypographyTokens {
     /// - *გამოყენება:* ჟანრების თეგების (Chips) შიგნით არსებული ტექსტისთვის ("Action", "Comedy") ან შედარებით გრძელი და მეორეხარისხოვანი აღწერებისთვის.
     public static let bodySmall = Font.system(size: 15, weight: .regular, design: .rounded)
     
+    public static let bodySmallSmall =  Font.system(size: 15, weight: .regular, design: .rounded)
+    
     /// **დამხმარე ან მეტა-მონაცემების ტექსტი**
     /// - *გამოყენება:* ფილმის გამოშვების წელი, ხანგრძლივობა, ჟანრი ფილმის ბარათზე (მაგ: "2024 • 2h 10m").
     public static let caption = Font.system(size: 13, weight: .regular, design: .rounded)
