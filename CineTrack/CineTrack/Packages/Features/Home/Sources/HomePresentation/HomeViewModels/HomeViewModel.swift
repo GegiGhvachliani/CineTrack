@@ -164,13 +164,19 @@ public final class HomeViewModel: HomeViewModelProtocol {
     // MARK: - Initial Loading
 
     public func loadHome() async {
+
         error = nil
 
         async let trending = loadNextTrendingPage()
+
         async let popular = loadNextPopularPage()
+
         async let topRated = loadNextTopRatedPage()
+
         async let nowPlaying = loadNextNowPlayingPage()
+
         async let upcoming = loadNextUpcomingPage()
+
         async let bornToday = loadNextBornTodayActorsPage()
 
         await (
@@ -351,7 +357,6 @@ public final class HomeViewModel: HomeViewModelProtocol {
         }
 
         isBornTodayActorsLoading = true
-        error = nil
 
         defer {
             isBornTodayActorsLoading = false
@@ -362,10 +367,14 @@ public final class HomeViewModel: HomeViewModelProtocol {
                 page: bornTodayActorsPage
             )
 
-            bornTodayActors.append(contentsOf: page.actors)
+            bornTodayActors.append(
+                contentsOf: page.actors
+            )
 
-            bornTodayActorsPage = page.page + 1
-            hasMoreBornTodayActors = page.hasNextPage
+            bornTodayActorsPage += 1
+
+            hasMoreBornTodayActors =
+                page.hasNextPage
 
         } catch {
             self.error = error
@@ -415,8 +424,11 @@ public final class HomeViewModel: HomeViewModelProtocol {
 
     public func toggleFavourite(for actor: Actor) {
         if favouritedActorIDs.contains(actor.id) {
+
             favouritedActorIDs.remove(actor.id)
+
         } else {
+
             favouritedActorIDs.insert(actor.id)
         }
     }

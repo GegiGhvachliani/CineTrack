@@ -19,8 +19,11 @@ public struct MovieActorCell: View {
     let onFavouriteTap: () -> Void
 
     public var body: some View {
+
         VStack(spacing: 0) {
+
             header
+
             footer
         }
         .frame(
@@ -38,9 +41,8 @@ public struct MovieActorCell: View {
         )
     }
 
-    // MARK: - Header
-
     private var header: some View {
+
         MovieActorPoster(
             isFavourited: isFavourited,
             photoURL: actor.profilePath,
@@ -49,21 +51,25 @@ public struct MovieActorCell: View {
         )
     }
 
-    // MARK: - Footer
-
     private var footer: some View {
+
         VStack(alignment: .leading) {
 
             Text(actor.name)
                 .font(
-                    DesignSystemTokens.TypographyTokens.caption
+                    DesignSystemTokens
+                        .TypographyTokens
+                        .caption
                 )
                 .lineLimit(2)
 
             if let age = actor.age {
+
                 Text(String(age))
                     .font(
-                        DesignSystemTokens.TypographyTokens.caption
+                        DesignSystemTokens
+                            .TypographyTokens
+                            .caption
                     )
                     .foregroundStyle(.gray)
             }

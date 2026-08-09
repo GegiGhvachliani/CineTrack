@@ -12,19 +12,15 @@ public struct ActorPage: Sendable, Equatable {
 
     public let actors: [Actor]
     public let page: Int
-    public let totalPages: Int
+    public let hasNextPage: Bool
 
     public init(
         actors: [Actor],
         page: Int,
-        totalPages: Int
+        hasNextPage: Bool
     ) {
         self.actors = actors
         self.page = page
-        self.totalPages = totalPages
-    }
-
-    public var hasNextPage: Bool {
-        page < totalPages
+        self.hasNextPage = hasNextPage
     }
 }

@@ -84,6 +84,7 @@ public struct HomeView: View {
     // MARK: - Born Today
     
     private var bornTodaySection: some View {
+
         HorizontalScrollView(
             headerText: "Born Today",
             items: viewModel.bornTodayActors,
@@ -92,19 +93,28 @@ public struct HomeView: View {
             },
             onLoadMore: {
                 Task {
-                    await viewModel.loadNextBornTodayActorsPage()
+                    await viewModel
+                        .loadNextBornTodayActorsPage()
                 }
             }
         ) { actor, _ in
+
             MovieActorCell(
                 actor: actor,
                 cellHeight: 240,
-                isFavourited: viewModel.favouritedActorIDs.contains(actor.id),
+                isFavourited:
+                    viewModel.favouritedActorIDs
+                        .contains(actor.id),
                 onActorTap: {
-                    print("Navigate to actor:", actor.name)
+                    print(
+                        "Navigate to actor:",
+                        actor.name
+                    )
                 },
                 onFavouriteTap: {
-                    viewModel.toggleFavourite(for: actor)
+                    viewModel.toggleFavourite(
+                        for: actor
+                    )
                 }
             )
         }
