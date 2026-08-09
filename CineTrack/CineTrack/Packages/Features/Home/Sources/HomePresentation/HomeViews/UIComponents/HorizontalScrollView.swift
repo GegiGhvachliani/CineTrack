@@ -14,17 +14,20 @@ struct HorizontalScrollView<Item: Identifiable, Cell: View>: View {
     private let items: [Item]
 
     private let onSeeAllTap: () -> Void
+    private let onLoadMore: (() -> Void)?
     private let cell: (Item, Int) -> Cell
 
     init(
         headerText: String,
         items: [Item],
         onSeeAllTap: @escaping () -> Void,
+        onLoadMore: (() -> Void)? = nil,
         cell: @escaping (Item, Int) -> Cell
     ) {
         self.headerText = headerText
         self.items = items
         self.onSeeAllTap = onSeeAllTap
+        self.onLoadMore = onLoadMore
         self.cell = cell
     }
 
@@ -35,8 +38,18 @@ struct HorizontalScrollView<Item: Identifiable, Cell: View>: View {
 
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: 15) {
+
                     ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
+
                         cell(item, index)
+                            .onAppear {
+
+                                guard index == items.count - 1 else {
+                                    return
+                                }
+
+                                onLoadMore?()
+                            }
                     }
                 }
                 .padding(.horizontal, 16)
@@ -47,8 +60,6 @@ struct HorizontalScrollView<Item: Identifiable, Cell: View>: View {
         .padding(.bottom, 5)
         .background(ColorTokens.Background.secondary)
     }
-
-    // MARK: - Header
 
     private var header: some View {
         HStack(spacing: 8) {

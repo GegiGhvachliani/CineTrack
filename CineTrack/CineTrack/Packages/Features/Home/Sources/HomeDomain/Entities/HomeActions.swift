@@ -7,13 +7,12 @@
 
 import SharedCore
 
-struct MovieActor {}
 
 enum HomeAction {
     case search
     case movieDetails(Movie)
-    case actorDetails(MovieActor)
+    case actorDetails(Actor)
     case videos(FeaturedItem)
     case watchlist(Movie)
-    case favouriteActor(MovieActor)
+    case favouriteActor(Actor)
 }

@@ -12,7 +12,11 @@ import HomeDomain
 import SharedCore
 
 @MainActor
-public protocol HomeViewModelProtocol { // ამოღებულია ObservableObject
+public protocol HomeViewModelProtocol {
+    
+    // MARK: - Born Today Actors
+
+    var bornTodayActors: [Actor] { get }
 
     // MARK: - Movies
 
@@ -37,6 +41,8 @@ public protocol HomeViewModelProtocol { // ამოღებულია Observ
     var isTopRatedLoading: Bool { get }
     var isNowPlayingLoading: Bool { get }
     var isUpcomingLoading: Bool { get }
+    var isBornTodayActorsLoading: Bool { get }
+
 
     // MARK: - Pagination State
 
@@ -45,6 +51,8 @@ public protocol HomeViewModelProtocol { // ამოღებულია Observ
     var hasMoreTopRated: Bool { get }
     var hasMoreNowPlaying: Bool { get }
     var hasMoreUpcoming: Bool { get }
+    var hasMoreBornTodayActors: Bool { get }
+
 
     // MARK: - Error
 
@@ -59,6 +67,8 @@ public protocol HomeViewModelProtocol { // ამოღებულია Observ
     func loadNextTopRatedPage() async
     func loadNextNowPlayingPage() async
     func loadNextUpcomingPage() async
+    func loadNextBornTodayActorsPage() async
+
 
     func loadVideos(for movie: Movie) async
     func toggleWatchlist(for movie: Movie)
@@ -77,6 +87,8 @@ public final class HomeViewModel: HomeViewModelProtocol {
     public private(set) var topRatedMovies: [Movie] = []
     public private(set) var nowPlayingMovies: [Movie] = []
     public private(set) var upcomingMovies: [Movie] = []
+    public private(set) var bornTodayActors: [Actor] = []
+
     
     public private(set) var favouritedActorIDs: Set<Int> = []
     
@@ -94,6 +106,8 @@ public final class HomeViewModel: HomeViewModelProtocol {
     public private(set) var isTopRatedLoading = false
     public private(set) var isNowPlayingLoading = false
     public private(set) var isUpcomingLoading = false
+    public private(set) var isBornTodayActorsLoading = false
+
 
     // MARK: - Pagination State
 
@@ -102,6 +116,9 @@ public final class HomeViewModel: HomeViewModelProtocol {
     private var topRatedPage = 1
     private var nowPlayingPage = 1
     private var upcomingPage = 1
+    private var bornTodayActorsPage = 1
+    public private(set) var hasMoreBornTodayActors = true
+
 
     public private(set) var hasMoreTrending = true
     public private(set) var hasMorePopular = true
@@ -121,6 +138,8 @@ public final class HomeViewModel: HomeViewModelProtocol {
     private let fetchNowPlayingUseCase: FetchNowPlayingUseCaseProtocol
     private let fetchUpcomingUseCase: FetchUpcomingUseCaseProtocol
     private let fetchMovieVideosUseCase: FetchMovieVideosUseCaseProtocol
+    private let fetchBornTodayActorsUseCase:
+        FetchBornTodayActorsUseCaseProtocol
 
     // MARK: - Initialization
 
@@ -130,7 +149,8 @@ public final class HomeViewModel: HomeViewModelProtocol {
         fetchTopRatedUseCase: FetchTopRatedUseCaseProtocol,
         fetchNowPlayingUseCase: FetchNowPlayingUseCaseProtocol,
         fetchUpcomingUseCase: FetchUpcomingUseCaseProtocol,
-        fetchMovieVideosUseCase: FetchMovieVideosUseCaseProtocol
+        fetchMovieVideosUseCase: FetchMovieVideosUseCaseProtocol,
+        fetchBornTodayActorsUseCase: FetchBornTodayActorsUseCaseProtocol
     ) {
         self.fetchTrendingUseCase = fetchTrendingUseCase
         self.fetchPopularUseCase = fetchPopularUseCase
@@ -138,6 +158,7 @@ public final class HomeViewModel: HomeViewModelProtocol {
         self.fetchNowPlayingUseCase = fetchNowPlayingUseCase
         self.fetchUpcomingUseCase = fetchUpcomingUseCase
         self.fetchMovieVideosUseCase = fetchMovieVideosUseCase
+        self.fetchBornTodayActorsUseCase = fetchBornTodayActorsUseCase
     }
 
     // MARK: - Initial Loading
@@ -150,13 +171,15 @@ public final class HomeViewModel: HomeViewModelProtocol {
         async let topRated = loadNextTopRatedPage()
         async let nowPlaying = loadNextNowPlayingPage()
         async let upcoming = loadNextUpcomingPage()
+        async let bornToday = loadNextBornTodayActorsPage()
 
         await (
             trending,
             popular,
             topRated,
             nowPlaying,
-            upcoming
+            upcoming,
+            bornToday
         )
 
         await loadFeaturedItems()
@@ -315,6 +338,42 @@ public final class HomeViewModel: HomeViewModelProtocol {
 
         featuredItems = items
     }
+    
+    // MARK: - Born Today Actors
+
+    public func loadNextBornTodayActorsPage() async {
+
+        guard
+            !isBornTodayActorsLoading,
+            hasMoreBornTodayActors
+        else {
+            return
+        }
+
+        isBornTodayActorsLoading = true
+        error = nil
+
+        defer {
+            isBornTodayActorsLoading = false
+        }
+
+        do {
+            let page = try await fetchBornTodayActorsUseCase.execute(
+                page: bornTodayActorsPage
+            )
+
+            bornTodayActors.append(contentsOf: page.actors)
+
+            bornTodayActorsPage = page.page + 1
+            hasMoreBornTodayActors = page.hasNextPage
+
+        } catch {
+            self.error = error
+        }
+    }
+    
+    
+    
 
     // MARK: - Video Selection
 
@@ -354,13 +413,14 @@ public final class HomeViewModel: HomeViewModelProtocol {
     
     // MARK: - Favourite Management
 
-    public func toggleFavourite(for actor: MovieActor) {
+    public func toggleFavourite(for actor: Actor) {
         if favouritedActorIDs.contains(actor.id) {
             favouritedActorIDs.remove(actor.id)
         } else {
             favouritedActorIDs.insert(actor.id)
         }
     }
+    
     // MARK: - Error Handling
 
     public func clearError() {

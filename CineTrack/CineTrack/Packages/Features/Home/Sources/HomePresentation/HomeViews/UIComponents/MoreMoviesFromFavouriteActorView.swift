@@ -12,7 +12,7 @@ import SharedCore
 struct MoreMoviesFromFavouriteActorView: View {
     
     // ეს იქნება ამოღებული FavouritedActor-დან რენდომად
-    let actor: MovieActor
+    let actor: Actor
 
     private let items: [Movie]
 
@@ -24,7 +24,7 @@ struct MoreMoviesFromFavouriteActorView: View {
     
 
     init(
-        actor: MovieActor,
+        actor: Actor,
         items: [Movie],
         onSeeAllTap: @escaping () -> Void,
         onActorTapped: @escaping () -> Void,
@@ -173,55 +173,55 @@ struct MoreMoviesFromFavouriteActorView: View {
 }
 
 
-#Preview {
-    // ვიყენებთ სატესტო მსახიობს
-    let mockActor = MovieActor(
-        id: 1,
-        name: "Simon Baker", age: 30,
-        profilePath: "https://image.tmdb.org/t/p/w200/profile.jpg"
-    )
-    
-    // ვქმნით სატესტო ფილმებს Movie სტრუქტურის ზუსტი ინიციალიზატორით
-    let mockMovies: [Movie] = [
-        Movie(
-            id: 1,
-            title: "The Mentalist: Pilot",
-            overview: "A famous psychic reveals himself to be a fake...",
-            posterPath: "https://image.tmdb.org/t/p/w500/mentalist_poster.jpg",
-            backdropPath: nil,
-            releaseDate: "2008-09-23",
-            voteAverage: 8.9,
-            voteCount: 1500
-        ),
-        Movie(
-            id: 2,
-            title: "Margin Call",
-            overview: "Follows the key people at an investment bank...",
-            posterPath: nil,
-            backdropPath: nil,
-            releaseDate: "2011-10-21",
-            voteAverage: 7.1,
-            voteCount: 850
-        )
-    ]
-    
-    // ვიძახებთ მთავარ View-ს
-    MoreMoviesFromFavouriteActorView(
-        actor: mockActor,
-        items: mockMovies,
-        onSeeAllTap: {},
-        onActorTapped: {},
-        onSeeYourFavouritePeopleTapped: {},
-        cell: { movie, _ in
-            // ვიყენებთ შენს MovieCell-ს მისი ზუსტი პარამეტრებით
-            MovieCell(
-                movie: movie,
-                isWatchlisted: false,
-                cellHeight: 240,
-                onMovieTap: {},
-                onWatchlistTap: {}
-            )
-        }
-    )
-    .frame(height: 420)
-}
+//#Preview {
+//    // ვიყენებთ სატესტო მსახიობს
+//    let mockActor = Actor(
+//        id: 1,
+//        name: "Simon Baker", age: 30,
+//        profilePath: "https://image.tmdb.org/t/p/w200/profile.jpg"
+//    )
+//    
+//    // ვქმნით სატესტო ფილმებს Movie სტრუქტურის ზუსტი ინიციალიზატორით
+//    let mockMovies: [Movie] = [
+//        Movie(
+//            id: 1,
+//            title: "The Mentalist: Pilot",
+//            overview: "A famous psychic reveals himself to be a fake...",
+//            posterPath: "https://image.tmdb.org/t/p/w500/mentalist_poster.jpg",
+//            backdropPath: nil,
+//            releaseDate: "2008-09-23",
+//            voteAverage: 8.9,
+//            voteCount: 1500
+//        ),
+//        Movie(
+//            id: 2,
+//            title: "Margin Call",
+//            overview: "Follows the key people at an investment bank...",
+//            posterPath: nil,
+//            backdropPath: nil,
+//            releaseDate: "2011-10-21",
+//            voteAverage: 7.1,
+//            voteCount: 850
+//        )
+//    ]
+//    
+//    // ვიძახებთ მთავარ View-ს
+//    MoreMoviesFromFavouriteActorView(
+//        actor: mockActor,
+//        items: mockMovies,
+//        onSeeAllTap: {},
+//        onActorTapped: {},
+//        onSeeYourFavouritePeopleTapped: {},
+//        cell: { movie, _ in
+//            // ვიყენებთ შენს MovieCell-ს მისი ზუსტი პარამეტრებით
+//            MovieCell(
+//                movie: movie,
+//                isWatchlisted: false,
+//                cellHeight: 240,
+//                onMovieTap: {},
+//                onWatchlistTap: {}
+//            )
+//        }
+//    )
+//    .frame(height: 420)
+//}

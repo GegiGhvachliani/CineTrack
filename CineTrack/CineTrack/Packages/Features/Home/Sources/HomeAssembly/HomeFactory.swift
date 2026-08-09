@@ -67,6 +67,8 @@ public struct HomeFactory: HomeFactoryProtocol {
         
         let fetchMovieVideosUseCase = FetchMovieVideosUseCase(repository: repository)
 
+        let fetchBornTodayActorsUseCase = FetchBornTodayActorsUseCase(repository: repository)
+        
         // MARK: - ViewModel
 
         let viewModel = HomeViewModel(
@@ -75,9 +77,9 @@ public struct HomeFactory: HomeFactoryProtocol {
             fetchTopRatedUseCase: fetchTopRatedUseCase,
             fetchNowPlayingUseCase: fetchNowPlayingUseCase,
             fetchUpcomingUseCase: fetchUpcomingUseCase,
-            fetchMovieVideosUseCase: fetchMovieVideosUseCase
+            fetchMovieVideosUseCase: fetchMovieVideosUseCase,
+            fetchBornTodayActorsUseCase: fetchBornTodayActorsUseCase
         )
-
         // MARK: - SwiftUI View
 
         let homeView = HomeView(

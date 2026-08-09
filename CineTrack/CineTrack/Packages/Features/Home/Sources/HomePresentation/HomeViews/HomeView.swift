@@ -84,15 +84,18 @@ public struct HomeView: View {
     // MARK: - Born Today
     
     private var bornTodaySection: some View {
-        
         HorizontalScrollView(
             headerText: "Born Today",
-            items: sampleActors,
+            items: viewModel.bornTodayActors,
             onSeeAllTap: {
                 print("Navigate to Actors See All")
+            },
+            onLoadMore: {
+                Task {
+                    await viewModel.loadNextBornTodayActorsPage()
+                }
             }
         ) { actor, _ in
-
             MovieActorCell(
                 actor: actor,
                 cellHeight: 240,
@@ -105,7 +108,6 @@ public struct HomeView: View {
                 }
             )
         }
-
     }
     
     // MARK: - Top 10 on CineTrack this week
@@ -124,6 +126,11 @@ public struct HomeView: View {
                 items: viewModel.topRatedMovies,
                 onSeeAllTap: {
                     print("Navigate to top 10 See All")
+                },
+                onLoadMore: {
+                    Task {
+                        await viewModel.loadNextTopRatedPage()
+                    }
                 }
             ) { movie, _ in
                 
@@ -151,6 +158,11 @@ public struct HomeView: View {
                 items: viewModel.nowPlayingMovies,
                 onSeeAllTap: {
                     print("Navigate to now streaming See All")
+                },
+                onLoadMore: {
+                    Task {
+                        await viewModel.loadNextNowPlayingPage()
+                    }
                 }
             ) { movie, _ in
                 
@@ -180,6 +192,11 @@ public struct HomeView: View {
             items: viewModel.upcomingMovies,
             onSeeAllTap: {
                 print("Navigate Coming Soon To Theaters (GEO) movies See All")
+            },
+            onLoadMore: {
+                Task {
+                    await viewModel.loadNextUpcomingPage()
+                }
             }
         ) { movie, _ in
 
@@ -207,6 +224,11 @@ public struct HomeView: View {
             items: viewModel.trendingMovies,
             onSeeAllTap: {
                 print("Navigate to Trending See All")
+            },
+            onLoadMore: {
+                Task {
+                    await viewModel.loadNextTrendingPage()
+                }
             }
         ) { movie, _ in
 
@@ -235,13 +257,13 @@ public struct HomeView: View {
                 .fontWeight(.bold)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
-        HorizontalScrollView(
-            headerText: "Top News",
-            items: sampleNews,
-            onSeeAllTap: {
-                print("Navigate to News See All")
-            }
-        ) { news, _ in
+            HorizontalScrollView(
+                headerText: "Top News",
+                items: sampleNews,
+                onSeeAllTap: {
+                    print("Navigate to News See All")
+                }
+            ) { news, _ in
             
             NewsCell(
                 news: news,
@@ -331,21 +353,6 @@ public struct HomeView: View {
             )
         ]
     }
-    
-    private let sampleActors: [MovieActor] = [
-        MovieActor(
-            id: 1,
-            name: "Tom Cruise",
-            age: 64,
-            profilePath: "https://picsum.photos/300/450"
-        ),
-        MovieActor(
-            id: 2,
-            name: "Emma Watson",
-            age: 36,
-            profilePath: "https://picsum.photos/301/450"
-        )
-    ]
     
     private let sampleNews: [News] = [
         
