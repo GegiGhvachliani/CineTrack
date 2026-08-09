@@ -146,6 +146,30 @@ public final class HomeRepository: HomeRepositoryProtocol {
             hasNextPage: hasNextPage
         )
     }
+    
+    // MARK: - Most Popular Celebrities
+
+    public func fetchMostPopularActors(
+        page: Int
+    ) async throws -> ActorPage {
+
+        let request = try requestBuilder.build(
+            for: .popularPeople(page: page)
+        )
+
+        let response: PopularPeopleResponseDTO =
+            try await apiClient.sendRequest(request)
+
+        let actors = response.results.compactMap {
+            personMapper.map($0)
+        }
+
+        return ActorPage(
+            actors: actors,
+            page: response.page,
+            hasNextPage: response.page < response.totalPages
+        )
+    }
 
     // MARK: - Private Movies
 
@@ -232,7 +256,7 @@ public final class HomeRepository: HomeRepositoryProtocol {
 
                         let actor = personMapper.map(details)
 
-                        guard let birthday = actor.birthday else {
+                        guard let birthday = actor?.birthday else {
                             return nil
                         }
 

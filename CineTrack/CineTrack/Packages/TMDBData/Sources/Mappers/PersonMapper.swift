@@ -12,8 +12,13 @@ public struct PersonMapper: Sendable {
 
     public init() {}
 
-    public func map(_ dto: PersonDTO) -> Actor {
-        Actor(
+    public func map(_ dto: PersonDTO) -> Actor? {
+
+        guard dto.knownForDepartment == "Acting" else {
+            return nil
+        }
+
+        return Actor(
             id: dto.id,
             name: dto.name,
             birthday: parseBirthday(dto.birthday),

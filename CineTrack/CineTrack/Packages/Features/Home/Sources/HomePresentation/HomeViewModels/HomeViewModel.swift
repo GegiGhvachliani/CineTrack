@@ -25,6 +25,7 @@ public protocol HomeViewModelProtocol {
     var topRatedMovies: [Movie] { get }
     var nowPlayingMovies: [Movie] { get }
     var upcomingMovies: [Movie] { get }
+    var mostPopularActors: [Actor] { get }
 
     // MARK: - Videos
 
@@ -42,6 +43,7 @@ public protocol HomeViewModelProtocol {
     var isNowPlayingLoading: Bool { get }
     var isUpcomingLoading: Bool { get }
     var isBornTodayActorsLoading: Bool { get }
+    var isMostPopularCelebritiesLoading: Bool { get }
 
 
     // MARK: - Pagination State
@@ -52,6 +54,7 @@ public protocol HomeViewModelProtocol {
     var hasMoreNowPlaying: Bool { get }
     var hasMoreUpcoming: Bool { get }
     var hasMoreBornTodayActors: Bool { get }
+    var hasMoreMostPopularCelebrities: Bool { get }
 
 
     // MARK: - Error
@@ -88,6 +91,8 @@ public final class HomeViewModel: HomeViewModelProtocol {
     public private(set) var nowPlayingMovies: [Movie] = []
     public private(set) var upcomingMovies: [Movie] = []
     public private(set) var bornTodayActors: [Actor] = []
+    public private(set) var mostPopularActors: [Actor] = []
+
 
     
     public private(set) var favouritedActorIDs: Set<Int> = []
@@ -107,6 +112,8 @@ public final class HomeViewModel: HomeViewModelProtocol {
     public private(set) var isNowPlayingLoading = false
     public private(set) var isUpcomingLoading = false
     public private(set) var isBornTodayActorsLoading = false
+    public private(set) var isMostPopularCelebritiesLoading = false
+
 
 
     // MARK: - Pagination State
@@ -117,14 +124,16 @@ public final class HomeViewModel: HomeViewModelProtocol {
     private var nowPlayingPage = 1
     private var upcomingPage = 1
     private var bornTodayActorsPage = 1
-    public private(set) var hasMoreBornTodayActors = true
-
+    private var mostPopularCelebritiesPage = 1
 
     public private(set) var hasMoreTrending = true
     public private(set) var hasMorePopular = true
     public private(set) var hasMoreTopRated = true
     public private(set) var hasMoreNowPlaying = true
     public private(set) var hasMoreUpcoming = true
+    public private(set) var hasMoreBornTodayActors = true
+    public private(set) var hasMoreMostPopularCelebrities = true
+
 
     // MARK: - Error
 
@@ -140,6 +149,8 @@ public final class HomeViewModel: HomeViewModelProtocol {
     private let fetchMovieVideosUseCase: FetchMovieVideosUseCaseProtocol
     private let fetchBornTodayActorsUseCase:
         FetchBornTodayActorsUseCaseProtocol
+    private let fetchMostPopularActorsUseCase: FetchMostPopularActorsUseCaseProtocol
+    
 
     // MARK: - Initialization
 
@@ -150,7 +161,9 @@ public final class HomeViewModel: HomeViewModelProtocol {
         fetchNowPlayingUseCase: FetchNowPlayingUseCaseProtocol,
         fetchUpcomingUseCase: FetchUpcomingUseCaseProtocol,
         fetchMovieVideosUseCase: FetchMovieVideosUseCaseProtocol,
-        fetchBornTodayActorsUseCase: FetchBornTodayActorsUseCaseProtocol
+        fetchBornTodayActorsUseCase: FetchBornTodayActorsUseCaseProtocol,
+        fetchMostPopularActorsUseCase:
+            FetchMostPopularActorsUseCaseProtocol
     ) {
         self.fetchTrendingUseCase = fetchTrendingUseCase
         self.fetchPopularUseCase = fetchPopularUseCase
@@ -159,6 +172,8 @@ public final class HomeViewModel: HomeViewModelProtocol {
         self.fetchUpcomingUseCase = fetchUpcomingUseCase
         self.fetchMovieVideosUseCase = fetchMovieVideosUseCase
         self.fetchBornTodayActorsUseCase = fetchBornTodayActorsUseCase
+        self.fetchMostPopularActorsUseCase =
+            fetchMostPopularActorsUseCase
     }
 
     // MARK: - Initial Loading
@@ -178,6 +193,8 @@ public final class HomeViewModel: HomeViewModelProtocol {
         async let upcoming = loadNextUpcomingPage()
 
         async let bornToday = loadNextBornTodayActorsPage()
+        
+        async let mostPopularActors = loadNextMostPopularCelebritiesPage()
 
         await (
             trending,
@@ -185,7 +202,8 @@ public final class HomeViewModel: HomeViewModelProtocol {
             topRated,
             nowPlaying,
             upcoming,
-            bornToday
+            bornToday,
+            mostPopularActors
         )
 
         await loadFeaturedItems()
@@ -381,6 +399,45 @@ public final class HomeViewModel: HomeViewModelProtocol {
         }
     }
     
+    
+    // MARK: - Most popular celebrities
+    
+    public func loadNextMostPopularCelebritiesPage() async {
+
+        guard
+            !isMostPopularCelebritiesLoading,
+            hasMoreMostPopularCelebrities
+        else {
+            return
+        }
+
+        isMostPopularCelebritiesLoading = true
+
+        defer {
+            isMostPopularCelebritiesLoading = false
+        }
+
+        do {
+
+            let page =
+                try await fetchMostPopularActorsUseCase.execute(
+                    page: mostPopularCelebritiesPage
+                )
+
+            mostPopularActors.append(
+                contentsOf: page.actors
+            )
+
+            mostPopularCelebritiesPage += 1
+
+            hasMoreMostPopularCelebrities =
+                page.hasNextPage
+
+        } catch {
+
+            self.error = error
+        }
+    }
     
     
 

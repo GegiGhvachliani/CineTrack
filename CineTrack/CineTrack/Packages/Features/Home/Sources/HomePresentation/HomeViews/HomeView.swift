@@ -35,6 +35,7 @@ public struct HomeView: View {
                 trendingNow
                 
                 newsSection
+                mostPopularActorsSection
                 recentlyViewed
                 
                 FollowCinetrackWithLinksView()
@@ -281,6 +282,45 @@ public struct HomeView: View {
             )
         }
     }
+    }
+    
+    // MARK: - Most Popular Celebrities
+    
+    private var mostPopularActorsSection: some View {
+
+        HorizontalScrollView(
+            headerText: "Most Popular Actors",
+            items: viewModel.mostPopularActors,
+            onSeeAllTap: {
+                print("Navigate to Actors See All")
+            },
+            onLoadMore: {
+                Task {
+                    await viewModel
+                        .loadNextMostPopularCelebritiesPage()
+                }
+            }
+        ) { actor, _ in
+
+            MovieActorCell(
+                actor: actor,
+                cellHeight: 240,
+                isFavourited:
+                    viewModel.favouritedActorIDs
+                        .contains(actor.id),
+                onActorTap: {
+                    print(
+                        "Navigate to actor:",
+                        actor.name
+                    )
+                },
+                onFavouriteTap: {
+                    viewModel.toggleFavourite(
+                        for: actor
+                    )
+                }
+            )
+        }
     }
     
     // MARK: - Recently viewed

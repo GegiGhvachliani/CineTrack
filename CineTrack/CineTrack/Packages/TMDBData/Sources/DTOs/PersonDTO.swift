@@ -14,17 +14,20 @@ public struct PersonDTO: Decodable, Sendable {
     public let name: String
     public let birthday: String?
     public let profilePath: String?
+    public let knownForDepartment: String?
 
     public init(
         id: Int,
         name: String,
         birthday: String?,
-        profilePath: String?
+        profilePath: String?,
+        knownForDepartment: String?
     ) {
         self.id = id
         self.name = name
         self.birthday = birthday
         self.profilePath = profilePath
+        self.knownForDepartment = knownForDepartment
     }
 
     enum CodingKeys: String, CodingKey {
@@ -32,5 +35,6 @@ public struct PersonDTO: Decodable, Sendable {
         case name
         case birthday
         case profilePath = "profile_path"
+        case knownForDepartment = "known_for_department"
     }
 }
