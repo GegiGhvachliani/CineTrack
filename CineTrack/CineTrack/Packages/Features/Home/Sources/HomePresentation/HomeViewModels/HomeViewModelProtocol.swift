@@ -132,16 +132,19 @@ public protocol HomeViewModelProtocol {
 
     // MARK: - Watchlist
 
+    func loadWatchlist() async
+
     func toggleWatchlist(
         for movie: Movie
-    )
+    ) async
 
     // MARK: - Favourites
 
+    func loadFavourites() async
+
     func toggleFavourite(
         for actor: Actor
-    )
-
+    ) async
     // MARK: - Error
 
     func clearError()

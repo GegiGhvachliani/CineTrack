@@ -161,6 +161,24 @@ public final class HomeViewModel: HomeViewModelProtocol {
 
     internal let addRecentlyViewedActorUseCase:
         AddRecentlyViewedActorUseCaseProtocol
+    
+    internal let fetchWatchlistedMovieIDsUseCase:
+        FetchWatchlistedMovieIDsUseCaseProtocol
+
+    internal let addWatchlistedMovieUseCase:
+        AddWatchlistedMovieUseCaseProtocol
+
+    internal let removeWatchlistedMovieUseCase:
+        RemoveWatchlistedMovieUseCaseProtocol
+
+    internal let fetchFavouritedActorIDsUseCase:
+        FetchFavouritedActorIDsUseCaseProtocol
+
+    internal let addFavouritedActorUseCase:
+        AddFavouritedActorUseCaseProtocol
+
+    internal let removeFavouritedActorUseCase:
+        RemoveFavouritedActorUseCaseProtocol
 
     // MARK: - Initialization
 
@@ -192,7 +210,24 @@ public final class HomeViewModel: HomeViewModelProtocol {
         addRecentlyViewedMovieUseCase:
             AddRecentlyViewedMovieUseCaseProtocol,
         addRecentlyViewedActorUseCase:
-            AddRecentlyViewedActorUseCaseProtocol
+            AddRecentlyViewedActorUseCaseProtocol,
+        fetchWatchlistedMovieIDsUseCase:
+            FetchWatchlistedMovieIDsUseCaseProtocol,
+
+        addWatchlistedMovieUseCase:
+            AddWatchlistedMovieUseCaseProtocol,
+
+        removeWatchlistedMovieUseCase:
+            RemoveWatchlistedMovieUseCaseProtocol,
+
+        fetchFavouritedActorIDsUseCase:
+            FetchFavouritedActorIDsUseCaseProtocol,
+
+        addFavouritedActorUseCase:
+            AddFavouritedActorUseCaseProtocol,
+
+        removeFavouritedActorUseCase:
+            RemoveFavouritedActorUseCaseProtocol
     ) {
         self.fetchTrendingUseCase =
             fetchTrendingUseCase
@@ -235,5 +270,23 @@ public final class HomeViewModel: HomeViewModelProtocol {
 
         self.addRecentlyViewedActorUseCase =
             addRecentlyViewedActorUseCase
+        
+        self.fetchWatchlistedMovieIDsUseCase =
+            fetchWatchlistedMovieIDsUseCase
+
+        self.addWatchlistedMovieUseCase =
+            addWatchlistedMovieUseCase
+
+        self.removeWatchlistedMovieUseCase =
+            removeWatchlistedMovieUseCase
+
+        self.fetchFavouritedActorIDsUseCase =
+            fetchFavouritedActorIDsUseCase
+
+        self.addFavouritedActorUseCase =
+            addFavouritedActorUseCase
+
+        self.removeFavouritedActorUseCase =
+            removeFavouritedActorUseCase
     }
 }

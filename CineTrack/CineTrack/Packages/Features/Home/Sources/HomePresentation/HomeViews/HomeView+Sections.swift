@@ -46,7 +46,9 @@ extension HomeView {
                         )
                     },
                     onWatchlistTap: { movie in
-                        viewModel.toggleWatchlist(for: movie)
+                        Task {
+                            await viewModel.toggleWatchlist(for: movie)
+                        }
                     }
                 )
             }
@@ -96,9 +98,11 @@ extension HomeView {
                     )
                 },
                 onFavouriteTap: {
-                    viewModel.toggleFavourite(
-                        for: actor
-                    )
+                    Task {
+                       await viewModel.toggleFavourite(
+                            for: actor
+                        )
+                    }
                 }
             )
         }
@@ -153,9 +157,11 @@ extension HomeView {
                         )
                     },
                     onWatchlistTap: {
-                        viewModel.toggleWatchlist(
-                            for: movie
-                        )
+                        Task {
+                           await viewModel.toggleWatchlist(
+                                for: movie
+                            )
+                        }
                     }
                 )
             }
@@ -202,9 +208,11 @@ extension HomeView {
                     )
                 },
                 onWatchlistTap: {
-                    viewModel.toggleWatchlist(
-                        for: movie
-                    )
+                    Task {
+                        await viewModel.toggleWatchlist(
+                            for: movie
+                        )
+                    }
                 }
             )
         }
@@ -252,9 +260,11 @@ extension HomeView {
                         )
                     },
                     onWatchlistTap: {
-                        viewModel.toggleWatchlist(
-                            for: movie
-                        )
+                        Task {
+                           await viewModel.toggleWatchlist(
+                                for: movie
+                            )
+                        }
                     }
                 )
             }
@@ -303,9 +313,11 @@ extension HomeView {
                     )
                 },
                 onWatchlistTap: {
-                    viewModel.toggleWatchlist(
-                        for: movie
-                    )
+                    Task {
+                       await viewModel.toggleWatchlist(
+                            for: movie
+                        )
+                    }
                 }
             )
         }
@@ -351,29 +363,32 @@ extension HomeView {
                     )
                 },
                 onWatchlistTap: {
-                    viewModel.toggleWatchlist(
-                        for: movie
-                    )
+                    Task {
+                       await viewModel.toggleWatchlist(
+                            for: movie
+                        )
+                    }
                 }
             )
         }
     }
 
     // MARK: - News
-
+    
     var newsSection: some View {
-
-        HorizontalScrollView(
+        
+        PagingHorizontalScrollView(
             headerText: "News",
             items: viewModel.news,
+            cellWidth: 330,
+            cellHeight: 220,
+            spacing: 15,
             onSeeAllTap: {
-                print(
-                    "Navigate to News See All"
-                )
+                // არსებული See All action
             },
             onLoadMore: {
                 Task {
-                    await viewModel.loadNextNewsPage()
+                   await viewModel.loadNextNewsPage()
                 }
             }
         ) { news, _ in
@@ -426,9 +441,11 @@ extension HomeView {
                     )
                 },
                 onFavouriteTap: {
-                    viewModel.toggleFavourite(
-                        for: actor
-                    )
+                    Task {
+                       await viewModel.toggleFavourite(
+                            for: actor
+                        )
+                    }
                 }
             )
         }
@@ -505,10 +522,11 @@ extension HomeView {
                     )
                 },
                 onWatchlistTap: {
-
-                    viewModel.toggleWatchlist(
-                        for: movie
-                    )
+                    Task {
+                       await viewModel.toggleWatchlist(
+                            for: movie
+                        )
+                    }
                 }
             )
 
@@ -542,10 +560,11 @@ extension HomeView {
                     )
                 },
                 onFavouriteTap: {
-
-                    viewModel.toggleFavourite(
-                        for: actor
-                    )
+                    Task {
+                      await viewModel.toggleFavourite(
+                            for: actor
+                        )
+                    }
                 }
             )
         }

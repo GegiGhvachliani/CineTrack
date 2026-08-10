@@ -74,6 +74,21 @@ public struct HomeFactory: HomeFactoryProtocol {
                 userSession: userSession
             )
         
+        // MARK: - Watchlist Repository
+
+        let watchlistRepository =
+            WatchlistRepository(
+                firestore: firestore,
+                userSession: userSession
+            )
+
+        // MARK: - Favourite Repository
+
+        let favouriteRepository =
+            FavouriteRepository(
+                firestore: firestore,
+                userSession: userSession
+            )
         // MARK: - Use Cases
 
         let fetchTrendingUseCase = FetchTrendingUseCase(
@@ -136,6 +151,46 @@ public struct HomeFactory: HomeFactoryProtocol {
                     recentlyViewedRepository
             )
         
+        // MARK: - Watchlist Use Cases
+
+        let fetchWatchlistedMovieIDsUseCase =
+            FetchWatchlistedMovieIDsUseCase(
+                repository:
+                    watchlistRepository
+            )
+
+        let addWatchlistedMovieUseCase =
+            AddWatchlistedMovieUseCase(
+                repository:
+                    watchlistRepository
+            )
+
+        let removeWatchlistedMovieUseCase =
+            RemoveWatchlistedMovieUseCase(
+                repository:
+                    watchlistRepository
+            )
+
+        // MARK: - Favourite Use Cases
+
+        let fetchFavouritedActorIDsUseCase =
+            FetchFavouritedActorIDsUseCase(
+                repository:
+                    favouriteRepository
+            )
+
+        let addFavouritedActorUseCase =
+            AddFavouritedActorUseCase(
+                repository:
+                    favouriteRepository
+            )
+
+        let removeFavouritedActorUseCase =
+            RemoveFavouritedActorUseCase(
+                repository:
+                    favouriteRepository
+            )
+        
         // MARK: - ViewModel
 
         let viewModel = HomeViewModel(
@@ -179,7 +234,25 @@ public struct HomeFactory: HomeFactoryProtocol {
                 addRecentlyViewedMovieUseCase,
 
             addRecentlyViewedActorUseCase:
-                addRecentlyViewedActorUseCase
+                addRecentlyViewedActorUseCase,
+            
+            fetchWatchlistedMovieIDsUseCase:
+                fetchWatchlistedMovieIDsUseCase,
+
+            addWatchlistedMovieUseCase:
+                addWatchlistedMovieUseCase,
+
+            removeWatchlistedMovieUseCase:
+                removeWatchlistedMovieUseCase,
+
+            fetchFavouritedActorIDsUseCase:
+                fetchFavouritedActorIDsUseCase,
+
+            addFavouritedActorUseCase:
+                addFavouritedActorUseCase,
+
+            removeFavouritedActorUseCase:
+                removeFavouritedActorUseCase
         )
         // MARK: - SwiftUI View
 

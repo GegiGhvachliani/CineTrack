@@ -49,6 +49,12 @@ extension HomeViewModel {
         
         async let recentlyViewedTask =
             loadRecentlyViewed()
+        
+        async let watchlistTask =
+            loadWatchlist()
+
+        async let favouritesTask =
+            loadFavourites()
 
         await (
             trendingTask,
@@ -60,7 +66,9 @@ extension HomeViewModel {
             bornTodayTask,
             popularActorsTask,
             newsTask,
-            recentlyViewedTask
+            recentlyViewedTask,
+            watchlistTask,
+            favouritesTask
         )
         print("🔥 trending:", trendingMovies.count)
         print("🔥 popular:", popularMovies.count)
@@ -425,49 +433,165 @@ extension HomeViewModel {
 
     // MARK: - Videos
 
-    public func loadVideos(
-        for movie: Movie
-    ) async {
+    public func loadVideos(for movie: Movie) async {
 
-        error = nil
+    error = nil
+
+    do {
+        let videos =
+            try await fetchMovieVideosUseCase.execute(
+                movieID: movie.id
+            )
+
+        movieVideos[movie.id] = videos
+
+    } catch {
+        print("❌ Videos Error:", error)
+        self.error = error
+    }
+}
+
+    // MARK: - Watchlist
+
+    public func loadWatchlist() async {
 
         do {
-            let videos =
-                try await fetchMovieVideosUseCase.execute(
-                    movieID: movie.id
-                )
-
-            movieVideos[movie.id] = videos
+            watchlistedMovieIDs =
+                try await fetchWatchlistedMovieIDsUseCase
+                    .execute()
 
         } catch {
-            print("❌ Videos Error:", error)
+            print(
+                "❌ Watchlist Load Error:",
+                error
+            )
+
             self.error = error
         }
     }
 
-    // MARK: - Watchlist
-
     public func toggleWatchlist(
         for movie: Movie
-    ) {
+    ) async {
 
-        if watchlistedMovieIDs.contains(movie.id) {
-            watchlistedMovieIDs.remove(movie.id)
+        let movieID = movie.id
+
+        let wasWatchlisted =
+            watchlistedMovieIDs.contains(movieID)
+
+        // Optimistic UI update
+
+        if wasWatchlisted {
+            watchlistedMovieIDs.remove(movieID)
         } else {
-            watchlistedMovieIDs.insert(movie.id)
+            watchlistedMovieIDs.insert(movieID)
+        }
+
+        do {
+
+            if wasWatchlisted {
+
+                try await removeWatchlistedMovieUseCase
+                    .execute(
+                        movieID: movieID
+                    )
+
+            } else {
+
+                try await addWatchlistedMovieUseCase
+                    .execute(
+                        movieID: movieID
+                    )
+            }
+
+        } catch {
+
+            // Rollback
+
+            if wasWatchlisted {
+                watchlistedMovieIDs.insert(movieID)
+            } else {
+                watchlistedMovieIDs.remove(movieID)
+            }
+
+            print(
+                "❌ Watchlist Toggle Error:",
+                error
+            )
+
+            self.error = error
         }
     }
 
     // MARK: - Favourites
 
+    public func loadFavourites() async {
+
+        do {
+            favouritedActorIDs =
+                try await fetchFavouritedActorIDsUseCase
+                    .execute()
+
+        } catch {
+            print(
+                "❌ Favourites Load Error:",
+                error
+            )
+
+            self.error = error
+        }
+    }
+
     public func toggleFavourite(
         for actor: Actor
-    ) {
+    ) async {
 
-        if favouritedActorIDs.contains(actor.id) {
-            favouritedActorIDs.remove(actor.id)
+        let actorID = actor.id
+
+        let wasFavourited =
+            favouritedActorIDs.contains(actorID)
+
+        // Optimistic UI update
+
+        if wasFavourited {
+            favouritedActorIDs.remove(actorID)
         } else {
-            favouritedActorIDs.insert(actor.id)
+            favouritedActorIDs.insert(actorID)
+        }
+
+        do {
+
+            if wasFavourited {
+
+                try await removeFavouritedActorUseCase
+                    .execute(
+                        actorID: actorID
+                    )
+
+            } else {
+
+                try await addFavouritedActorUseCase
+                    .execute(
+                        actorID: actorID
+                    )
+            }
+
+        } catch {
+
+            // Rollback
+
+            if wasFavourited {
+                favouritedActorIDs.insert(actorID)
+            } else {
+                favouritedActorIDs.remove(actorID)
+            }
+
+            print(
+                "❌ Favourite Toggle Error:",
+                error
+            )
+
+            self.error = error
         }
     }
 
