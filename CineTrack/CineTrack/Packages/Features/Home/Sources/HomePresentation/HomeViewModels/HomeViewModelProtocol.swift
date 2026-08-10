@@ -21,6 +21,14 @@ public protocol HomeViewModelProtocol {
     var nowPlayingMovies: [Movie] { get }
     var upcomingMovies: [Movie] { get }
 
+    // MARK: - Recently Viewed
+
+    var recentlyViewedMovies: [RecentlyViewedMovie] { get }
+    var recentlyViewedActors: [RecentlyViewedActor] { get }
+    var recentlyViewedItems: [RecentlyViewedItem] { get }
+
+    var isRecentlyViewedLoading: Bool { get }
+
     // MARK: - Top 10
 
     var top10Movies: [Movie] { get }
@@ -90,6 +98,18 @@ public protocol HomeViewModelProtocol {
     func loadNextFanFavouritePage() async
     func loadNextNowPlayingPage() async
     func loadNextUpcomingPage() async
+
+    // MARK: - Recently Viewed
+
+    func loadRecentlyViewed() async
+
+    func addRecentlyViewed(
+        movie: Movie
+    ) async
+
+    func addRecentlyViewed(
+        actor: Actor
+    ) async
 
     // MARK: - Top 10
 

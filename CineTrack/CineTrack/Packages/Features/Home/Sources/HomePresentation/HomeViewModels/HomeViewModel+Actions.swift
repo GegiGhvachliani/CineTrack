@@ -46,6 +46,9 @@ extension HomeViewModel {
 
         async let newsTask =
             loadNextNewsPage()
+        
+        async let recentlyViewedTask =
+            loadRecentlyViewed()
 
         await (
             trendingTask,
@@ -56,9 +59,9 @@ extension HomeViewModel {
             upcomingTask,
             bornTodayTask,
             popularActorsTask,
-            newsTask
+            newsTask,
+            recentlyViewedTask
         )
-
         print("🔥 trending:", trendingMovies.count)
         print("🔥 popular:", popularMovies.count)
         print("🔥 fan favourites:", fanFavouriteMovies.count)

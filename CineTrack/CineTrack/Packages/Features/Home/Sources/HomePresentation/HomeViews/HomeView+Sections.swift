@@ -6,11 +6,59 @@
 //
 
 import SwiftUI
+
 import HomeDomain
 import SharedCore
 import DesignSystemTokens
 
 extension HomeView {
+    
+    // MARK: - Header
+
+    var header: some View {
+
+        VStack(spacing: 0) {
+
+            if !viewModel.featuredItems.isEmpty {
+
+                FeaturedHorizontalScrollView(
+                    featuredItems: viewModel.featuredItems,
+                    isWatchlisted: {
+                        viewModel.watchlistedMovieIDs.contains($0)
+                    },
+                    onVideoTap: { item in
+                        print(
+                            "Navigate to videos for movie:",
+                            item.movie.id
+                        )
+                    },
+                    onMovieTap: { movie in
+                        
+                        Task {
+                            await viewModel.addRecentlyViewed(
+                                movie: movie
+                            )
+                        }
+                        
+                        print(
+                            "Navigate to movie:",
+                            movie.id
+                        )
+                    },
+                    onWatchlistTap: { movie in
+                        viewModel.toggleWatchlist(for: movie)
+                    }
+                )
+            }
+
+            SearchButtonView {
+                print("Navigate to Search")
+            }
+        }
+        .background(
+            ColorTokens.Background.primary
+        )
+    }
 
     // MARK: - Born Today
 
@@ -35,10 +83,22 @@ extension HomeView {
                 isFavourited:
                     viewModel.favouritedActorIDs.contains(actor.id),
                 onActorTap: {
-                    print("Navigate to actor:", actor.name)
+
+                    Task {
+                        await viewModel.addRecentlyViewed(
+                            actor: actor
+                        )
+                    }
+
+                    print(
+                        "Navigate to actor:",
+                        actor.name
+                    )
                 },
                 onFavouriteTap: {
-                    viewModel.toggleFavourite(for: actor)
+                    viewModel.toggleFavourite(
+                        for: actor
+                    )
                 }
             )
         }
@@ -47,11 +107,14 @@ extension HomeView {
     // MARK: - Top 10
 
     var top10SectionSection: some View {
+
         VStack {
 
             Text("What to watch")
                 .font(TypographyTokens.title3)
-                .foregroundColor(ColorTokens.Brand.primary)
+                .foregroundColor(
+                    ColorTokens.Brand.primary
+                )
                 .fontWeight(.bold)
                 .frame(
                     maxWidth: .infinity,
@@ -62,21 +125,37 @@ extension HomeView {
                 headerText: "Top 10 on CineTrack this week",
                 items: viewModel.top10Movies,
                 onSeeAllTap: {
-                    print("Navigate to top 10 See All")
+                    print(
+                        "Navigate to top 10 See All"
+                    )
                 }
             ) { movie, index in
 
                 Top10MovieCell(
                     movie: movie,
                     isWatchlisted:
-                        viewModel.watchlistedMovieIDs.contains(movie.id),
+                        viewModel.watchlistedMovieIDs.contains(
+                            movie.id
+                        ),
                     cellHeight: 265,
                     ratingNumber: index + 1,
                     onMovieTap: {
-                        print("Navigate to movie:", movie.id)
+
+                        Task {
+                            await viewModel.addRecentlyViewed(
+                                movie: movie
+                            )
+                        }
+
+                        print(
+                            "Navigate to movie:",
+                            movie.id
+                        )
                     },
                     onWatchlistTap: {
-                        viewModel.toggleWatchlist(for: movie)
+                        viewModel.toggleWatchlist(
+                            for: movie
+                        )
                     }
                 )
             }
@@ -91,7 +170,9 @@ extension HomeView {
             headerText: "Fan Favourites",
             items: viewModel.fanFavouriteMovies,
             onSeeAllTap: {
-                print("Navigate to Fan Favourites See All")
+                print(
+                    "Navigate to Fan Favourites See All"
+                )
             },
             onLoadMore: {
                 Task {
@@ -103,13 +184,27 @@ extension HomeView {
             MovieCell(
                 movie: movie,
                 isWatchlisted:
-                    viewModel.watchlistedMovieIDs.contains(movie.id),
+                    viewModel.watchlistedMovieIDs.contains(
+                        movie.id
+                    ),
                 cellHeight: 240,
                 onMovieTap: {
-                    print("Navigate to movie:", movie.id)
+
+                    Task {
+                        await viewModel.addRecentlyViewed(
+                            movie: movie
+                        )
+                    }
+
+                    print(
+                        "Navigate to movie:",
+                        movie.id
+                    )
                 },
                 onWatchlistTap: {
-                    viewModel.toggleWatchlist(for: movie)
+                    viewModel.toggleWatchlist(
+                        for: movie
+                    )
                 }
             )
         }
@@ -125,7 +220,9 @@ extension HomeView {
                 headerText: "Now streaming",
                 items: viewModel.nowPlayingMovies,
                 onSeeAllTap: {
-                    print("Navigate to now streaming See All")
+                    print(
+                        "Navigate to now streaming See All"
+                    )
                 },
                 onLoadMore: {
                     Task {
@@ -137,13 +234,27 @@ extension HomeView {
                 MovieCell(
                     movie: movie,
                     isWatchlisted:
-                        viewModel.watchlistedMovieIDs.contains(movie.id),
+                        viewModel.watchlistedMovieIDs.contains(
+                            movie.id
+                        ),
                     cellHeight: 240,
                     onMovieTap: {
-                        print("Navigate to movie:", movie.id)
+
+                        Task {
+                            await viewModel.addRecentlyViewed(
+                                movie: movie
+                            )
+                        }
+
+                        print(
+                            "Navigate to movie:",
+                            movie.id
+                        )
                     },
                     onWatchlistTap: {
-                        viewModel.toggleWatchlist(for: movie)
+                        viewModel.toggleWatchlist(
+                            for: movie
+                        )
                     }
                 )
             }
@@ -179,6 +290,13 @@ extension HomeView {
                     ),
                 cellHeight: 265,
                 onMovieTap: {
+
+                    Task {
+                        await viewModel.addRecentlyViewed(
+                            movie: movie
+                        )
+                    }
+
                     print(
                         "Navigate to movie:",
                         movie.id
@@ -201,7 +319,9 @@ extension HomeView {
             headerText: "Trending Now",
             items: viewModel.trendingMovies,
             onSeeAllTap: {
-                print("Navigate to Trending See All")
+                print(
+                    "Navigate to Trending See All"
+                )
             },
             onLoadMore: {
                 Task {
@@ -213,13 +333,27 @@ extension HomeView {
             MovieCell(
                 movie: movie,
                 isWatchlisted:
-                    viewModel.watchlistedMovieIDs.contains(movie.id),
+                    viewModel.watchlistedMovieIDs.contains(
+                        movie.id
+                    ),
                 cellHeight: 240,
                 onMovieTap: {
-                    print("Navigate to movie:", movie.id)
+
+                    Task {
+                        await viewModel.addRecentlyViewed(
+                            movie: movie
+                        )
+                    }
+
+                    print(
+                        "Navigate to movie:",
+                        movie.id
+                    )
                 },
                 onWatchlistTap: {
-                    viewModel.toggleWatchlist(for: movie)
+                    viewModel.toggleWatchlist(
+                        for: movie
+                    )
                 }
             )
         }
@@ -233,7 +367,9 @@ extension HomeView {
             headerText: "News",
             items: viewModel.news,
             onSeeAllTap: {
-                print("Navigate to News See All")
+                print(
+                    "Navigate to News See All"
+                )
             },
             onLoadMore: {
                 Task {
@@ -257,7 +393,9 @@ extension HomeView {
             headerText: "Most Popular Actors",
             items: viewModel.mostPopularActors,
             onSeeAllTap: {
-                print("Navigate to Actors See All")
+                print(
+                    "Navigate to Actors See All"
+                )
             },
             onLoadMore: {
                 Task {
@@ -271,100 +409,206 @@ extension HomeView {
                 actor: actor,
                 cellHeight: 240,
                 isFavourited:
-                    viewModel.favouritedActorIDs.contains(actor.id),
+                    viewModel.favouritedActorIDs.contains(
+                        actor.id
+                    ),
                 onActorTap: {
+
+                    Task {
+                        await viewModel.addRecentlyViewed(
+                            actor: actor
+                        )
+                    }
+
                     print(
                         "Navigate to actor:",
                         actor.name
                     )
                 },
                 onFavouriteTap: {
-                    viewModel.toggleFavourite(for: actor)
+                    viewModel.toggleFavourite(
+                        for: actor
+                    )
                 }
             )
         }
     }
-
+    
     // MARK: - Recently Viewed
 
     @ViewBuilder
     var recentlyViewed: some View {
 
-        let recentlyViewedArray: [Movie] = []
+        if viewModel.recentlyViewedItems.isEmpty {
 
-        if recentlyViewedArray.isEmpty {
-
-            VStack(spacing: 20) {
-
-                HStack(spacing: 8) {
-
-                    Capsule()
-                        .frame(width: 4, height: 25)
-                        .foregroundStyle(
-                            ColorTokens.Brand.primary
-                        )
-
-                    Text("Recently viewed")
-                        .font(TypographyTokens.headline)
-
-                    Spacer()
-                }
-                .padding(.horizontal)
-
-                VStack(spacing: 10) {
-
-                    Text("No recently viewed yet")
-                        .font(TypographyTokens.bodySmall)
-                        .frame(
-                            maxWidth: .infinity,
-                            alignment: .center
-                        )
-                        .padding(.horizontal, 40)
-
-                    Text(
-                        "Once you start browsing, come back here to see your history."
-                    )
-                    .font(TypographyTokens.caption)
-                    .multilineTextAlignment(.center)
-                    .frame(
-                        maxWidth: .infinity,
-                        alignment: .center
-                    )
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal, 20)
-                }
-            }
-            .padding(.vertical, 15)
-            .padding(.bottom, 15)
-            .background(
-                ColorTokens.Background.secondary
-            )
+            recentlyViewedEmptyState
 
         } else {
 
             HorizontalScrollView(
                 headerText: "Recently viewed",
-                items: recentlyViewedArray,
+                items: viewModel.recentlyViewedItems,
                 onSeeAllTap: {
                     print(
                         "Navigate to Recently Viewed See All"
                     )
                 }
-            ) { movie, _ in
+            ) { item, _ in
 
-                MovieCell(
-                    movie: movie,
-                    isWatchlisted:
-                        viewModel.watchlistedMovieIDs.contains(movie.id),
-                    cellHeight: 240,
-                    onMovieTap: {
-                        print("Navigate to movie:", movie.id)
-                    },
-                    onWatchlistTap: {
-                        viewModel.toggleWatchlist(for: movie)
-                    }
+                recentlyViewedCell(
+                    for: item
                 )
             }
         }
     }
+
+    // MARK: - Recently Viewed Cell
+
+    @ViewBuilder
+    private func recentlyViewedCell(
+        for item: RecentlyViewedItem
+    ) -> some View {
+
+        switch item {
+
+        case .movie(let recentlyViewedMovie):
+
+            let movie = Movie(
+                id: recentlyViewedMovie.id,
+                title: recentlyViewedMovie.title,
+                overview: "",
+                posterPath: recentlyViewedMovie.posterPath,
+                backdropPath: nil,
+                releaseDate: recentlyViewedMovie.releaseDate,
+                voteAverage: recentlyViewedMovie.voteAverage,
+                voteCount: 0
+            )
+
+            MovieCell(
+                movie: movie,
+                isWatchlisted:
+                    viewModel.watchlistedMovieIDs.contains(
+                        movie.id
+                    ),
+                cellHeight: 240,
+                onMovieTap: {
+
+                    Task {
+                        await viewModel.addRecentlyViewed(
+                            movie: movie
+                        )
+                    }
+
+                    print(
+                        "Navigate to movie:",
+                        movie.id
+                    )
+                },
+                onWatchlistTap: {
+
+                    viewModel.toggleWatchlist(
+                        for: movie
+                    )
+                }
+            )
+
+        case .actor(let recentlyViewedActor):
+
+            let actor = Actor(
+                id: recentlyViewedActor.id,
+                name: recentlyViewedActor.name,
+                birthday: recentlyViewedActor.birthday,
+                profilePath: recentlyViewedActor.profilePath
+            )
+
+            MovieActorCell(
+                actor: actor,
+                cellHeight: 240,
+                isFavourited:
+                    viewModel.favouritedActorIDs.contains(
+                        actor.id
+                    ),
+                onActorTap: {
+
+                    Task {
+                        await viewModel.addRecentlyViewed(
+                            actor: actor
+                        )
+                    }
+
+                    print(
+                        "Navigate to actor:",
+                        actor.name
+                    )
+                },
+                onFavouriteTap: {
+
+                    viewModel.toggleFavourite(
+                        for: actor
+                    )
+                }
+            )
+        }
+    }
+
+    // MARK: - Recently Viewed Empty State
+
+    private var recentlyViewedEmptyState: some View {
+
+        VStack(spacing: 20) {
+
+            HStack(spacing: 8) {
+
+                Capsule()
+                    .frame(
+                        width: 4,
+                        height: 25
+                    )
+                    .foregroundStyle(
+                        ColorTokens.Brand.primary
+                    )
+
+                Text("Recently viewed")
+                    .font(
+                        TypographyTokens.headline
+                    )
+
+                Spacer()
+            }
+            .padding(.horizontal)
+
+            VStack(spacing: 10) {
+
+                Text("No recently viewed yet")
+                    .font(
+                        TypographyTokens.bodySmall
+                    )
+                    .frame(
+                        maxWidth: .infinity,
+                        alignment: .center
+                    )
+                    .padding(.horizontal, 40)
+
+                Text(
+                    "Once you start browsing, come back here to see your history."
+                )
+                .font(
+                    TypographyTokens.caption
+                )
+                .multilineTextAlignment(.center)
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .center
+                )
+                .foregroundStyle(.secondary)
+                .padding(.horizontal, 20)
+            }
+        }
+        .padding(.vertical, 15)
+        .padding(.bottom, 15)
+        .background(
+            ColorTokens.Background.secondary
+        )
+    }
 }
+

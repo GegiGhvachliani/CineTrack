@@ -13,8 +13,12 @@ import HomeData
 import HomePresentation
 import HomePresentationAPI
 
+import SharedAuth
 import SharedNetworking
+import SharedStorage
+
 import TMDBData
+
 import NewsData
 
 @MainActor
@@ -56,6 +60,20 @@ public struct HomeFactory: HomeFactoryProtocol {
             newsConfiguration: newsConfiguration
         )
         
+        // MARK: - Recently Viewed Repository
+
+        let firestore =
+            FirestoreClient()
+
+        let userSession =
+            FirebaseUserSession()
+
+        let recentlyViewedRepository =
+            RecentlyViewedRepository(
+                firestore: firestore,
+                userSession: userSession
+            )
+        
         // MARK: - Use Cases
 
         let fetchTrendingUseCase = FetchTrendingUseCase(
@@ -91,6 +109,33 @@ public struct HomeFactory: HomeFactoryProtocol {
         
         let fetchNewsUseCase = FetchNewsUseCase(repository: repository)
         
+        
+        // MARK: - Recently Viewed Use Cases
+
+        let fetchRecentlyViewedMoviesUseCase =
+            FetchRecentlyViewedMoviesUseCase(
+                repository:
+                    recentlyViewedRepository
+            )
+
+        let fetchRecentlyViewedActorsUseCase =
+            FetchRecentlyViewedActorsUseCase(
+                repository:
+                    recentlyViewedRepository
+            )
+
+        let addRecentlyViewedMovieUseCase =
+            AddRecentlyViewedMovieUseCase(
+                repository:
+                    recentlyViewedRepository
+            )
+
+        let addRecentlyViewedActorUseCase =
+            AddRecentlyViewedActorUseCase(
+                repository:
+                    recentlyViewedRepository
+            )
+        
         // MARK: - ViewModel
 
         let viewModel = HomeViewModel(
@@ -122,7 +167,19 @@ public struct HomeFactory: HomeFactoryProtocol {
                 fetchMostPopularActorsUseCase,
 
             fetchNewsUseCase:
-                fetchNewsUseCase
+                fetchNewsUseCase,
+            
+            fetchRecentlyViewedMoviesUseCase:
+                fetchRecentlyViewedMoviesUseCase,
+
+            fetchRecentlyViewedActorsUseCase:
+                fetchRecentlyViewedActorsUseCase,
+
+            addRecentlyViewedMovieUseCase:
+                addRecentlyViewedMovieUseCase,
+
+            addRecentlyViewedActorUseCase:
+                addRecentlyViewedActorUseCase
         )
         // MARK: - SwiftUI View
 

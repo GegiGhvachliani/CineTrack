@@ -40,33 +40,43 @@ let package = Package(
 
         // MARK: - Data
 
-        .target(
-            name: "HomeData",
-            dependencies: [
-                "HomeDomain",
+            .target(
+                name: "HomeData",
+                dependencies: [
+                    "HomeDomain",
 
-                .product(
-                    name: "SharedCore",
-                    package: "SharedKit"
-                ),
+                    .product(
+                        name: "SharedCore",
+                        package: "SharedKit"
+                    ),
 
-                .product(
-                    name: "SharedNetworking",
-                    package: "SharedKit"
-                ),
+                    .product(
+                        name: "SharedNetworking",
+                        package: "SharedKit"
+                    ),
 
-                .product(
-                    name: "TMDBData",
-                    package: "TMDBData"
-                ),
+                    .product(
+                        name: "SharedStorage",
+                        package: "SharedKit"
+                    ),
 
-                .product(
-                    name: "NewsData",
-                    package: "NewsData"
-                )
-            ],
-            path: "Sources/HomeData"
-        ),
+                    .product(
+                        name: "SharedAuth",
+                        package: "SharedKit"
+                    ),
+
+                    .product(
+                        name: "TMDBData",
+                        package: "TMDBData"
+                    ),
+
+                    .product(
+                        name: "NewsData",
+                        package: "NewsData"
+                    )
+                ],
+                path: "Sources/HomeData"
+            ),
 
         // MARK: - Presentation
 

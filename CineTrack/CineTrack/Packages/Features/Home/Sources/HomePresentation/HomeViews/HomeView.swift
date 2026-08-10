@@ -59,44 +59,4 @@ public struct HomeView: View {
         }
         .padding(.bottom, 50)
     }
-
-    // MARK: - Header
-
-    var header: some View {
-
-        VStack(spacing: 0) {
-
-            if !viewModel.featuredItems.isEmpty {
-
-                FeaturedHorizontalScrollView(
-                    featuredItems: viewModel.featuredItems,
-                    isWatchlisted: {
-                        viewModel.watchlistedMovieIDs.contains($0)
-                    },
-                    onVideoTap: { item in
-                        print(
-                            "Navigate to videos for movie:",
-                            item.movie.id
-                        )
-                    },
-                    onMovieTap: { movie in
-                        print(
-                            "Navigate to movie:",
-                            movie.id
-                        )
-                    },
-                    onWatchlistTap: { movie in
-                        viewModel.toggleWatchlist(for: movie)
-                    }
-                )
-            }
-
-            SearchButtonView {
-                print("Navigate to Search")
-            }
-        }
-        .background(
-            ColorTokens.Background.primary
-        )
-    }
 }

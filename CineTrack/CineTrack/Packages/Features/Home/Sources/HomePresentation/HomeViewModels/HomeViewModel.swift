@@ -22,6 +22,32 @@ public final class HomeViewModel: HomeViewModelProtocol {
     public internal(set) var fanFavouriteMovies: [Movie] = []
     public internal(set) var nowPlayingMovies: [Movie] = []
     public internal(set) var upcomingMovies: [Movie] = []
+    
+    // MARK: - Recently Viewed
+
+    public internal(set) var recentlyViewedMovies:
+        [RecentlyViewedMovie] = []
+
+    public internal(set) var recentlyViewedActors:
+        [RecentlyViewedActor] = []
+
+    public var recentlyViewedItems: [RecentlyViewedItem] {
+
+        let movies = recentlyViewedMovies.map {
+            RecentlyViewedItem.movie($0)
+        }
+
+        let actors = recentlyViewedActors.map {
+            RecentlyViewedItem.actor($0)
+        }
+
+        return (movies + actors)
+            .sorted {
+                $0.viewedAt > $1.viewedAt
+            }
+    }
+
+    public internal(set) var isRecentlyViewedLoading = false
 
     // MARK: - Top 10
 
@@ -123,6 +149,18 @@ public final class HomeViewModel: HomeViewModelProtocol {
 
     internal let fetchNewsUseCase:
         FetchNewsUseCaseProtocol
+    
+    internal let fetchRecentlyViewedMoviesUseCase:
+        FetchRecentlyViewedMoviesUseCaseProtocol
+
+    internal let fetchRecentlyViewedActorsUseCase:
+        FetchRecentlyViewedActorsUseCaseProtocol
+
+    internal let addRecentlyViewedMovieUseCase:
+        AddRecentlyViewedMovieUseCaseProtocol
+
+    internal let addRecentlyViewedActorUseCase:
+        AddRecentlyViewedActorUseCaseProtocol
 
     // MARK: - Initialization
 
@@ -146,7 +184,15 @@ public final class HomeViewModel: HomeViewModelProtocol {
         fetchMostPopularActorsUseCase:
             FetchMostPopularActorsUseCaseProtocol,
         fetchNewsUseCase:
-            FetchNewsUseCaseProtocol
+            FetchNewsUseCaseProtocol,
+        fetchRecentlyViewedMoviesUseCase:
+            FetchRecentlyViewedMoviesUseCaseProtocol,
+        fetchRecentlyViewedActorsUseCase:
+            FetchRecentlyViewedActorsUseCaseProtocol,
+        addRecentlyViewedMovieUseCase:
+            AddRecentlyViewedMovieUseCaseProtocol,
+        addRecentlyViewedActorUseCase:
+            AddRecentlyViewedActorUseCaseProtocol
     ) {
         self.fetchTrendingUseCase =
             fetchTrendingUseCase
@@ -177,5 +223,17 @@ public final class HomeViewModel: HomeViewModelProtocol {
 
         self.fetchNewsUseCase =
             fetchNewsUseCase
+        
+        self.fetchRecentlyViewedMoviesUseCase =
+            fetchRecentlyViewedMoviesUseCase
+
+        self.fetchRecentlyViewedActorsUseCase =
+            fetchRecentlyViewedActorsUseCase
+
+        self.addRecentlyViewedMovieUseCase =
+            addRecentlyViewedMovieUseCase
+
+        self.addRecentlyViewedActorUseCase =
+            addRecentlyViewedActorUseCase
     }
 }
