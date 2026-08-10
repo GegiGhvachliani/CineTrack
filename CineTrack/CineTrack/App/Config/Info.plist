@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NEWS_API_KEY</key>
+	<string>0098d4c3d68d48c6bfa321e3f3af03c0</string>
 	<key>GIDClientID</key>
 	<string>1000843197443-pslsd406h3brtp8lv1hhr4pp9cke28c7.apps.googleusercontent.com</string>
 	<key>CFBundleURLTypes</key>

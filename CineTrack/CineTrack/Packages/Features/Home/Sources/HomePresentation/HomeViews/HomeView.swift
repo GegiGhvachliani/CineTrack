@@ -15,7 +15,9 @@ public struct HomeView: View {
     @State private var viewModel: HomeViewModel
 
     public init(viewModel: HomeViewModel) {
-        self.viewModel = viewModel
+        self._viewModel = State(
+            initialValue: viewModel
+        )
     }
 
     public var body: some View {
@@ -125,30 +127,26 @@ public struct HomeView: View {
     
     private var top10SectionSection: some View {
         VStack {
-            
+
             Text("What to watch")
                 .font(TypographyTokens.title3)
                 .foregroundColor(ColorTokens.Brand.primary)
                 .fontWeight(.bold)
                 .frame(maxWidth: .infinity, alignment: .leading)
-            
+
             HorizontalScrollView(
                 headerText: "Top 10 on CineTrack this week",
-                items: viewModel.topRatedMovies,
+                items: viewModel.top10Movies,
                 onSeeAllTap: {
                     print("Navigate to top 10 See All")
-                },
-                onLoadMore: {
-                    Task {
-                        await viewModel.loadNextTopRatedPage()
-                    }
                 }
-            ) { movie, _ in
-                
-                MovieCell(
+            ) { movie, index in
+
+                Top10MovieCell(
                     movie: movie,
                     isWatchlisted: viewModel.watchlistedMovieIDs.contains(movie.id),
-                    cellHeight: 240,
+                    cellHeight: 265,
+                    ratingNumber: index + 1,
                     onMovieTap: {
                         print("Navigate to movie:", movie.id)
                     },
@@ -260,28 +258,25 @@ public struct HomeView: View {
     // MARK: - News
 
     private var newsSection: some View {
-        VStack (spacing: 10) {
-            
-        Text("More to Explore")
-                .font(TypographyTokens.title3)
-                .foregroundColor(ColorTokens.Brand.primary)
-                .fontWeight(.bold)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            
-            HorizontalScrollView(
-                headerText: "Top News",
-                items: sampleNews,
-                onSeeAllTap: {
-                    print("Navigate to News See All")
+
+        HorizontalScrollView(
+            headerText: "News",
+            items: viewModel.news,
+            onSeeAllTap: {
+                print("Navigate to News See All")
+            },
+            onLoadMore: {
+                Task {
+                    await viewModel.loadNextNewsPage()
                 }
-            ) { news, _ in
-            
+            }
+        ) { news, _ in
+
             NewsCell(
                 news: news,
-                cellHeight: 200
+                cellHeight: 220
             )
         }
-    }
     }
     
     // MARK: - Most Popular Celebrities
@@ -387,47 +382,4 @@ public struct HomeView: View {
             }
         }
     }
-    
-
-    private var sampleMovies: [Movie] {
-        [
-            Movie(
-                id: 3,
-                title: "Loading...",
-                overview: "",
-                posterPath: "",
-                backdropPath: nil,
-                releaseDate: nil,
-                voteAverage: 0.0,
-                voteCount: 0
-            )
-        ]
-    }
-    
-    private let sampleNews: [News] = [
-        
-        News(
-            photoURL: "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
-            artcleAuthor: "BBC News",
-            articleTitle: "Christopher Nolan's new movie becomes one of the biggest releases of the year",
-            article: "The latest movie news, interviews and updates from the entertainment world.",
-            date: "3"
-        ),
-        
-        News(
-            photoURL: "https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg",
-            artcleAuthor: "Variety",
-            articleTitle: "Hollywood prepares for another major award season",
-            article: "Studios announce new projects and upcoming releases for audiences worldwide.",
-            date: "8"
-        ),
-        
-        News(
-            photoURL: "https://image.tmdb.org/t/p/w500/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg",
-            artcleAuthor: "IMDb",
-            articleTitle: "Most anticipated ",
-            article: "Fans are waiting for several major movies arriving in theaters soon.",
-            date: "12"
-        )
-    ]
 }

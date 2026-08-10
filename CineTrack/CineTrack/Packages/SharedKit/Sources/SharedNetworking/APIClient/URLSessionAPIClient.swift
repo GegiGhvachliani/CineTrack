@@ -44,11 +44,20 @@ public final class URLSessionAPIClient: APIClient {
             
             // მარტო საქსესი გვინდა თუ არა ისვრის statuscode-ის ერორს. კონკრეტული ერორით ვიგებთ პრობლემის მიზეზს მაგალითად 401-ზე ვიცით რომ Server-მა request მიიღო, მაგრამ authorization პრობლემა გვაქვს.
             guard (200...299).contains(httpResponse.statusCode) else {
+
+                let responseBody =
+                    String(
+                        data: data,
+                        encoding: .utf8
+                    ) ?? "No response body"
+
+                print("❌ HTTP Status:", httpResponse.statusCode)
+                print("❌ Response Body:", responseBody)
+
                 throw NetworkError.httpError(
                     statusCode: httpResponse.statusCode
                 )
             }
-            
             // თუ HTTP status წარმატებულია
             do {
                 return try decoder.decode(

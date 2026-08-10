@@ -10,17 +10,22 @@ import HomeDomain
 import SharedCore
 import SharedNetworking
 import TMDBData
+import NewsData
 
 public final class HomeRepository: HomeRepositoryProtocol {
 
     // MARK: - Dependencies
 
     private let apiClient: APIClient
+    
     private let requestBuilder: TMDBRequestBuilder
+    private let newsRequestBuilder: NewsRequestBuilder
 
+    
     private let movieMapper: MovieMapper
     private let videoMapper: MovieVideoMapper
     private let personMapper: PersonMapper
+    private let newsMapper: NewsMapper
 
     // MARK: - Born Today Configuration
 
@@ -31,9 +36,11 @@ public final class HomeRepository: HomeRepositoryProtocol {
     public init(
         apiClient: APIClient,
         configuration: TMDBConfiguration,
+        newsConfiguration: NewsConfiguration,
         movieMapper: MovieMapper = MovieMapper(),
         videoMapper: MovieVideoMapper = MovieVideoMapper(),
-        personMapper: PersonMapper = PersonMapper()
+        personMapper: PersonMapper = PersonMapper(),
+        newsMapper: NewsMapper = NewsMapper()
     ) {
         self.apiClient = apiClient
 
@@ -41,9 +48,14 @@ public final class HomeRepository: HomeRepositoryProtocol {
             configuration: configuration
         )
 
+        self.newsRequestBuilder = NewsRequestBuilder(
+            configuration: newsConfiguration
+        )
+
         self.movieMapper = movieMapper
         self.videoMapper = videoMapper
         self.personMapper = personMapper
+        self.newsMapper = newsMapper
     }
 
     // MARK: - Movies
@@ -226,7 +238,38 @@ public final class HomeRepository: HomeRepositoryProtocol {
             }
         }
     }
+    
+    
+    // MARK: - News
 
+    public func fetchNews(
+        page: Int
+    ) async throws -> NewsPage {
+
+        let request =
+            try newsRequestBuilder.build(
+                for: .entertainment(
+                    page: page,
+                    pageSize: 20
+                )
+            )
+
+        let response: NewsResponseDTO =
+            try await apiClient.sendRequest(
+                request
+            )
+
+        let news =
+            response.articles.compactMap {
+                newsMapper.map($0)
+            }
+
+        return NewsPage(
+            news: news,
+            page: page,
+            totalResults: response.totalResults
+        )
+    }
     // MARK: - Born Today Filtering
 
     private func filterBornTodayActors(

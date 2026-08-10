@@ -15,6 +15,7 @@ import HomePresentationAPI
 
 import SharedNetworking
 import TMDBData
+import NewsData
 
 @MainActor
 public struct HomeFactory: HomeFactoryProtocol {
@@ -22,7 +23,7 @@ public struct HomeFactory: HomeFactoryProtocol {
     public init() {}
 
     public func makeHomeViewController() -> UIViewController {
-
+        
         // MARK: - API Client
 
         let apiClient = URLSessionAPIClient()
@@ -36,13 +37,25 @@ public struct HomeFactory: HomeFactoryProtocol {
             accessToken: "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4NWEyZmRkNjQyY2FmOTMzYTVjMzk5N2VkY2VjYTRjNSIsIm5iZiI6MTc2Mzk4OTQxNS42MDA5OTk4LCJzdWIiOiI2OTI0NTdhN2EwYzRiMWIxMzIxODc1ZGIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.ZfESC0ZJHYqzbSE2xCYRjfOSwiacjs7sYl-_qvgDbc4"
         )
 
+        // MARK: - News Configuration
+
+        let newsConfiguration = NewsConfiguration(
+            baseURL: URL(
+                string: "https://newsapi.org"
+            )!,
+            apiKey: Bundle.main.object(
+                forInfoDictionaryKey: "NEWS_API_KEY"
+            ) as? String ?? ""
+        )
+
         // MARK: - Repository
 
         let repository = HomeRepository(
             apiClient: apiClient,
-            configuration: configuration
+            configuration: configuration,
+            newsConfiguration: newsConfiguration
         )
-
+        
         // MARK: - Use Cases
 
         let fetchTrendingUseCase = FetchTrendingUseCase(
@@ -69,10 +82,9 @@ public struct HomeFactory: HomeFactoryProtocol {
 
         let fetchBornTodayActorsUseCase = FetchBornTodayActorsUseCase(repository: repository)
         
-        let fetchMostPopularActorsUseCase =
-            FetchMostPopularActorsUseCase(
-                repository: repository
-            )
+        let fetchMostPopularActorsUseCase = FetchMostPopularActorsUseCase( repository: repository)
+        
+        let fetchNewsUseCase = FetchNewsUseCase(repository: repository)
         
         // MARK: - ViewModel
 
@@ -84,7 +96,8 @@ public struct HomeFactory: HomeFactoryProtocol {
             fetchUpcomingUseCase: fetchUpcomingUseCase,
             fetchMovieVideosUseCase: fetchMovieVideosUseCase,
             fetchBornTodayActorsUseCase: fetchBornTodayActorsUseCase,
-            fetchMostPopularActorsUseCase: fetchMostPopularActorsUseCase
+            fetchMostPopularActorsUseCase: fetchMostPopularActorsUseCase,
+            fetchNewsUseCase: fetchNewsUseCase
         )
         // MARK: - SwiftUI View
 

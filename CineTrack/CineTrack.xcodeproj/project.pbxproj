@@ -67,6 +67,7 @@
 				Packages/Features/Profile,
 				Packages/Features/Search,
 				Packages/Features/Watchlist,
+				Packages/NewsData,
 				Packages/SharedKit,
 				Packages/TMDBData,
 			);

@@ -25,4 +25,6 @@ public protocol HomeRepositoryProtocol: Sendable {
     func fetchBornTodayActors(page: Int) async throws -> ActorPage
         
     func fetchMostPopularActors(page: Int) async throws -> ActorPage
+    
+    func fetchNews(page: Int) async throws -> NewsPage
 }
