@@ -19,9 +19,12 @@ public final class HomeViewModel: HomeViewModelProtocol {
 
     public internal(set) var trendingMovies: [Movie] = []
     public internal(set) var popularMovies: [Movie] = []
-    public internal(set) var topRatedMovies: [Movie] = []
+    public internal(set) var fanFavouriteMovies: [Movie] = []
     public internal(set) var nowPlayingMovies: [Movie] = []
     public internal(set) var upcomingMovies: [Movie] = []
+
+    // MARK: - Top 10
+
     public internal(set) var top10Movies: [Movie] = []
 
     // MARK: - Actors
@@ -50,9 +53,11 @@ public final class HomeViewModel: HomeViewModelProtocol {
 
     public internal(set) var isTrendingLoading = false
     public internal(set) var isPopularLoading = false
-    public internal(set) var isTopRatedLoading = false
+    public internal(set) var isFanFavouriteLoading = false
     public internal(set) var isNowPlayingLoading = false
     public internal(set) var isUpcomingLoading = false
+
+    public internal(set) var isTop10Loading = false
 
     public internal(set) var isBornTodayActorsLoading = false
     public internal(set) var isMostPopularCelebritiesLoading = false
@@ -63,7 +68,7 @@ public final class HomeViewModel: HomeViewModelProtocol {
 
     internal var trendingPage = 1
     internal var popularPage = 1
-    internal var topRatedPage = 1
+    internal var fanFavouritePage = 1
     internal var nowPlayingPage = 1
     internal var upcomingPage = 1
 
@@ -74,7 +79,7 @@ public final class HomeViewModel: HomeViewModelProtocol {
 
     public internal(set) var hasMoreTrending = true
     public internal(set) var hasMorePopular = true
-    public internal(set) var hasMoreTopRated = true
+    public internal(set) var hasMoreFanFavourite = true
     public internal(set) var hasMoreNowPlaying = true
     public internal(set) var hasMoreUpcoming = true
 
@@ -89,11 +94,23 @@ public final class HomeViewModel: HomeViewModelProtocol {
 
     // MARK: - Dependencies
 
-    internal let fetchTrendingUseCase: FetchTrendingUseCaseProtocol
-    internal let fetchPopularUseCase: FetchPopularUseCaseProtocol
-    internal let fetchTopRatedUseCase: FetchTopRatedUseCaseProtocol
-    internal let fetchNowPlayingUseCase: FetchNowPlayingUseCaseProtocol
-    internal let fetchUpcomingUseCase: FetchUpcomingUseCaseProtocol
+    internal let fetchTrendingUseCase:
+        FetchTrendingUseCaseProtocol
+
+    internal let fetchPopularUseCase:
+        FetchPopularUseCaseProtocol
+    
+    internal let fetchTop10MoviesUseCase:
+        FetchTop10MoviesUseCaseProtocol
+
+    internal let fetchFanFavouritesUseCase:
+        FetchFanFavouritesUseCaseProtocol
+
+    internal let fetchNowPlayingUseCase:
+        FetchNowPlayingUseCaseProtocol
+
+    internal let fetchUpcomingUseCase:
+        FetchUpcomingUseCaseProtocol
 
     internal let fetchMovieVideosUseCase:
         FetchMovieVideosUseCaseProtocol
@@ -110,23 +127,44 @@ public final class HomeViewModel: HomeViewModelProtocol {
     // MARK: - Initialization
 
     public init(
-        fetchTrendingUseCase: FetchTrendingUseCaseProtocol,
-        fetchPopularUseCase: FetchPopularUseCaseProtocol,
-        fetchTopRatedUseCase: FetchTopRatedUseCaseProtocol,
-        fetchNowPlayingUseCase: FetchNowPlayingUseCaseProtocol,
-        fetchUpcomingUseCase: FetchUpcomingUseCaseProtocol,
-        fetchMovieVideosUseCase: FetchMovieVideosUseCaseProtocol,
+        fetchTrendingUseCase:
+            FetchTrendingUseCaseProtocol,
+        fetchPopularUseCase:
+            FetchPopularUseCaseProtocol,
+        fetchTop10MoviesUseCase:
+            FetchTop10MoviesUseCaseProtocol,
+        fetchFanFavouritesUseCase:
+            FetchFanFavouritesUseCaseProtocol,
+        fetchNowPlayingUseCase:
+            FetchNowPlayingUseCaseProtocol,
+        fetchUpcomingUseCase:
+            FetchUpcomingUseCaseProtocol,
+        fetchMovieVideosUseCase:
+            FetchMovieVideosUseCaseProtocol,
         fetchBornTodayActorsUseCase:
             FetchBornTodayActorsUseCaseProtocol,
         fetchMostPopularActorsUseCase:
             FetchMostPopularActorsUseCaseProtocol,
-        fetchNewsUseCase: FetchNewsUseCaseProtocol
+        fetchNewsUseCase:
+            FetchNewsUseCaseProtocol
     ) {
-        self.fetchTrendingUseCase = fetchTrendingUseCase
-        self.fetchPopularUseCase = fetchPopularUseCase
-        self.fetchTopRatedUseCase = fetchTopRatedUseCase
-        self.fetchNowPlayingUseCase = fetchNowPlayingUseCase
-        self.fetchUpcomingUseCase = fetchUpcomingUseCase
+        self.fetchTrendingUseCase =
+            fetchTrendingUseCase
+
+        self.fetchPopularUseCase =
+            fetchPopularUseCase
+
+        self.fetchTop10MoviesUseCase =
+            fetchTop10MoviesUseCase
+        
+        self.fetchFanFavouritesUseCase =
+            fetchFanFavouritesUseCase
+
+        self.fetchNowPlayingUseCase =
+            fetchNowPlayingUseCase
+
+        self.fetchUpcomingUseCase =
+            fetchUpcomingUseCase
 
         self.fetchMovieVideosUseCase =
             fetchMovieVideosUseCase

@@ -80,13 +80,28 @@ public final class HomeRepository: HomeRepositoryProtocol {
             from: .popular(page: page)
         )
     }
-
+    
     public func fetchTopRated(
         page: Int
     ) async throws -> MoviePage {
 
         try await fetchMovies(
-            from: .topRated(page: page)
+            from: .topRated(
+                page: page
+            )
+        )
+    }
+
+    public func fetchFanFavourites(
+        page: Int
+    ) async throws -> MoviePage {
+
+        try await fetchMovies(
+            from: .discoverMovies(
+                page: page,
+                sortBy: "vote_average.desc",
+                voteCountGreaterThanOrEqual: 1000
+            )
         )
     }
 

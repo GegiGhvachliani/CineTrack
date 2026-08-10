@@ -13,54 +13,60 @@ import SharedCore
 @MainActor
 public protocol HomeViewModelProtocol {
 
-    // MARK: Movies
+    // MARK: - Movies
 
     var trendingMovies: [Movie] { get }
     var popularMovies: [Movie] { get }
-    var topRatedMovies: [Movie] { get }
+    var fanFavouriteMovies: [Movie] { get }
     var nowPlayingMovies: [Movie] { get }
     var upcomingMovies: [Movie] { get }
 
-    // MARK: Actors
+    // MARK: - Top 10
+
+    var top10Movies: [Movie] { get }
+
+    // MARK: - Actors
 
     var bornTodayActors: [Actor] { get }
     var mostPopularActors: [Actor] { get }
 
-    // MARK: News
+    // MARK: - News
 
     var news: [News] { get }
 
-    // MARK: Videos
+    // MARK: - Videos
 
     var movieVideos: [Int: [MovieVideo]] { get }
     var featuredItems: [FeaturedItem] { get }
 
-    // MARK: Watchlist
+    // MARK: - Watchlist
 
     var watchlistedMovieIDs: Set<Int> { get }
 
-    // MARK: Favourites
+    // MARK: - Favourites
 
     var favouritedActorIDs: Set<Int> { get }
 
-    // MARK: Loading State
+    // MARK: - Loading State
 
     var isTrendingLoading: Bool { get }
     var isPopularLoading: Bool { get }
-    var isTopRatedLoading: Bool { get }
+    var isFanFavouriteLoading: Bool { get }
     var isNowPlayingLoading: Bool { get }
     var isUpcomingLoading: Bool { get }
+
+    var isTop10Loading: Bool { get }
 
     var isBornTodayActorsLoading: Bool { get }
     var isMostPopularCelebritiesLoading: Bool { get }
 
     var isNewsLoading: Bool { get }
 
-    // MARK: Pagination State
+    // MARK: - Pagination State
 
     var hasMoreTrending: Bool { get }
     var hasMorePopular: Bool { get }
-    var hasMoreTopRated: Bool { get }
+    var hasMoreFanFavourite: Bool { get }
     var hasMoreNowPlaying: Bool { get }
     var hasMoreUpcoming: Bool { get }
 
@@ -69,37 +75,54 @@ public protocol HomeViewModelProtocol {
 
     var hasMoreNews: Bool { get }
 
-    // MARK: Error
+    // MARK: - Error
 
     var error: Error? { get }
 
-    // MARK: Public Methods
+    // MARK: - Public Methods
 
     func loadHome() async
 
-    // Movies
+    // MARK: - Movies
+
     func loadNextTrendingPage() async
     func loadNextPopularPage() async
-    func loadNextTopRatedPage() async
+    func loadNextFanFavouritePage() async
     func loadNextNowPlayingPage() async
     func loadNextUpcomingPage() async
 
-    // Actors
+    // MARK: - Top 10
+
+    func loadTop10Movies() async
+
+    // MARK: - Actors
+
     func loadNextBornTodayActorsPage() async
     func loadNextMostPopularCelebritiesPage() async
 
-    // News
+    // MARK: - News
+
     func loadNextNewsPage() async
 
-    // Videos
-    func loadVideos(for movie: Movie) async
+    // MARK: - Videos
 
-    // Watchlist
-    func toggleWatchlist(for movie: Movie)
+    func loadVideos(
+        for movie: Movie
+    ) async
 
-    // Favourites
-    func toggleFavourite(for actor: Actor)
+    // MARK: - Watchlist
 
-    // Error
+    func toggleWatchlist(
+        for movie: Movie
+    )
+
+    // MARK: - Favourites
+
+    func toggleFavourite(
+        for actor: Actor
+    )
+
+    // MARK: - Error
+
     func clearError()
 }

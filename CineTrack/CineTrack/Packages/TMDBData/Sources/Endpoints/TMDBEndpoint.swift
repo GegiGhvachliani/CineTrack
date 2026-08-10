@@ -17,6 +17,13 @@ public enum TMDBEndpoint {
 
     case popular(page: Int)
     case topRated(page: Int)
+
+    case discoverMovies(
+        page: Int,
+        sortBy: String,
+        voteCountGreaterThanOrEqual: Int
+    )
+
     case nowPlaying(page: Int)
     case upcoming(page: Int)
 
@@ -52,6 +59,9 @@ public extension TMDBEndpoint {
         case .topRated:
             return "/3/movie/top_rated"
 
+        case .discoverMovies:
+            return "/3/discover/movie"
+
         case .nowPlaying:
             return "/3/movie/now_playing"
 
@@ -79,6 +89,9 @@ public extension TMDBEndpoint {
             return page
 
         case .topRated(let page):
+            return page
+
+        case .discoverMovies(let page, _, _):
             return page
 
         case .nowPlaying(let page):

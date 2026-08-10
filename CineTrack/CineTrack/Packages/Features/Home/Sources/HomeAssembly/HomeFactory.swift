@@ -66,9 +66,14 @@ public struct HomeFactory: HomeFactoryProtocol {
             repository: repository
         )
 
-        let fetchTopRatedUseCase = FetchTopRatedUseCase(
+        let fetchFanFavouritesUseCase = FetchFanFavouritesUseCase(
             repository: repository
         )
+        
+        let fetchTop10MoviesUseCase =
+            FetchTop10MoviesUseCase(
+                repository: repository
+            )
 
         let fetchNowPlayingUseCase = FetchNowPlayingUseCase(
             repository: repository
@@ -89,15 +94,35 @@ public struct HomeFactory: HomeFactoryProtocol {
         // MARK: - ViewModel
 
         let viewModel = HomeViewModel(
-            fetchTrendingUseCase: fetchTrendingUseCase,
-            fetchPopularUseCase: fetchPopularUseCase,
-            fetchTopRatedUseCase: fetchTopRatedUseCase,
-            fetchNowPlayingUseCase: fetchNowPlayingUseCase,
-            fetchUpcomingUseCase: fetchUpcomingUseCase,
-            fetchMovieVideosUseCase: fetchMovieVideosUseCase,
-            fetchBornTodayActorsUseCase: fetchBornTodayActorsUseCase,
-            fetchMostPopularActorsUseCase: fetchMostPopularActorsUseCase,
-            fetchNewsUseCase: fetchNewsUseCase
+            fetchTrendingUseCase:
+                fetchTrendingUseCase,
+
+            fetchPopularUseCase:
+                fetchPopularUseCase,
+
+            fetchTop10MoviesUseCase:
+                fetchTop10MoviesUseCase,
+            
+            fetchFanFavouritesUseCase:
+                fetchFanFavouritesUseCase,
+
+            fetchNowPlayingUseCase:
+                fetchNowPlayingUseCase,
+
+            fetchUpcomingUseCase:
+                fetchUpcomingUseCase,
+
+            fetchMovieVideosUseCase:
+                fetchMovieVideosUseCase,
+
+            fetchBornTodayActorsUseCase:
+                fetchBornTodayActorsUseCase,
+
+            fetchMostPopularActorsUseCase:
+                fetchMostPopularActorsUseCase,
+
+            fetchNewsUseCase:
+                fetchNewsUseCase
         )
         // MARK: - SwiftUI View
 

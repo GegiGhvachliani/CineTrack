@@ -5,12 +5,10 @@
 //  Created by Gegi Ghvachliani on 06/08/2026.
 //
 
-
 import Foundation
 
 import HomeDomain
 import SharedCore
-
 
 extension HomeViewModel {
 
@@ -27,6 +25,9 @@ extension HomeViewModel {
 
         async let popularTask =
             loadNextPopularPage()
+
+        async let fanFavouritesTask =
+            loadNextFanFavouritePage()
 
         async let top10Task =
             loadTop10Movies()
@@ -49,6 +50,7 @@ extension HomeViewModel {
         await (
             trendingTask,
             popularTask,
+            fanFavouritesTask,
             top10Task,
             nowPlayingTask,
             upcomingTask,
@@ -59,19 +61,23 @@ extension HomeViewModel {
 
         print("🔥 trending:", trendingMovies.count)
         print("🔥 popular:", popularMovies.count)
-        print("🔥 top10:", top10Movies.count)
-        print("🔥 nowPlaying:", nowPlayingMovies.count)
+        print("🔥 fan favourites:", fanFavouriteMovies.count)
+        print("🔥 top 10:", top10Movies.count)
+        print("🔥 now playing:", nowPlayingMovies.count)
         print("🔥 upcoming:", upcomingMovies.count)
-        print("🔥 bornToday:", bornTodayActors.count)
+        print("🔥 born today:", bornTodayActors.count)
         print("🔥 actors:", mostPopularActors.count)
         print("🔥 news:", news.count)
 
         await loadFeaturedItems()
 
         print("🔥 featured:", featuredItems.count)
-        
-        print("🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️")
+
+        print(
+            "🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️"
+        )
     }
+
     // MARK: - Trending
 
     public func loadNextTrendingPage() async {
@@ -147,45 +153,75 @@ extension HomeViewModel {
                 page.hasNextPage
 
         } catch {
+            print("❌ Popular Error:", error)
             self.error = error
         }
     }
 
-    // MARK: - Top Rated
+    // MARK: - Fan Favourites
 
-    public func loadNextTopRatedPage() async {
+    public func loadNextFanFavouritePage() async {
 
         guard
-            !isTopRatedLoading,
-            hasMoreTopRated
+            !isFanFavouriteLoading,
+            hasMoreFanFavourite
         else {
             return
         }
 
-        isTopRatedLoading = true
+        isFanFavouriteLoading = true
         error = nil
 
         defer {
-            isTopRatedLoading = false
+            isFanFavouriteLoading = false
         }
 
         do {
             let page =
-                try await fetchTopRatedUseCase.execute(
-                    page: topRatedPage
+                try await fetchFanFavouritesUseCase.execute(
+                    page: fanFavouritePage
                 )
 
-            topRatedMovies.append(
+            fanFavouriteMovies.append(
                 contentsOf: page.movies
             )
 
-            topRatedPage =
+            fanFavouritePage =
                 page.page + 1
 
-            hasMoreTopRated =
+            hasMoreFanFavourite =
                 page.hasNextPage
 
         } catch {
+            print("❌ Fan Favourites Error:", error)
+            self.error = error
+        }
+    }
+
+    // MARK: - Top 10
+
+    public func loadTop10Movies() async {
+
+        guard
+            !isTop10Loading,
+            top10Movies.isEmpty
+        else {
+            return
+        }
+
+        isTop10Loading = true
+        error = nil
+
+        defer {
+            isTop10Loading = false
+        }
+
+        do {
+            top10Movies =
+                try await fetchTop10MoviesUseCase.execute()
+
+        } catch {
+            print("❌ Top 10 Error:", error)
             self.error = error
         }
     }
@@ -265,6 +301,7 @@ extension HomeViewModel {
                 page.hasNextPage
 
         } catch {
+            print("❌ Upcoming Error:", error)
             self.error = error
         }
     }
@@ -379,30 +416,6 @@ extension HomeViewModel {
 
         } catch {
             print("❌ News Error:", error)
-
-            self.error = error
-        }
-    }
-    
-    // MARK: - Top 10
-
-    public func loadTop10Movies() async {
-
-        guard top10Movies.isEmpty else {
-            return
-        }
-
-        do {
-            let page = try await fetchTopRatedUseCase.execute(
-                page: 1
-            )
-
-            top10Movies = Array(
-                page.movies.prefix(10)
-            )
-
-        } catch {
-            print("❌ Top 10 Error:", error)
             self.error = error
         }
     }
@@ -424,6 +437,7 @@ extension HomeViewModel {
             movieVideos[movie.id] = videos
 
         } catch {
+            print("❌ Videos Error:", error)
             self.error = error
         }
     }
