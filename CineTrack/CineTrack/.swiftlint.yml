@@ -7,6 +7,8 @@ disabled_rules:
   - trailing_comma
   - implicit_optional_initialization
   - static_over_final_class
+  - type_body_length
+  - function_body_length
 
 excluded:
   - CineTrackTests

@@ -157,11 +157,11 @@ extension HomeView {
     var comingSoonToTheaters: some View {
 
         HorizontalScrollView(
-            headerText: "Coming Soon To Theaters (GEO)",
+            headerText: "Coming Soon To Theaters (US)",
             items: viewModel.upcomingMovies,
             onSeeAllTap: {
                 print(
-                    "Navigate Coming Soon To Theaters (GEO) movies See All"
+                    "Navigate Coming Soon To Theaters (US) movies See All"
                 )
             },
             onLoadMore: {
@@ -171,16 +171,23 @@ extension HomeView {
             }
         ) { movie, _ in
 
-            MovieCell(
+            ComingSoonMoviesCell(
                 movie: movie,
                 isWatchlisted:
-                    viewModel.watchlistedMovieIDs.contains(movie.id),
-                cellHeight: 240,
+                    viewModel.watchlistedMovieIDs.contains(
+                        movie.id
+                    ),
+                cellHeight: 265,
                 onMovieTap: {
-                    print("Navigate to movie:", movie.id)
+                    print(
+                        "Navigate to movie:",
+                        movie.id
+                    )
                 },
                 onWatchlistTap: {
-                    viewModel.toggleWatchlist(for: movie)
+                    viewModel.toggleWatchlist(
+                        for: movie
+                    )
                 }
             )
         }

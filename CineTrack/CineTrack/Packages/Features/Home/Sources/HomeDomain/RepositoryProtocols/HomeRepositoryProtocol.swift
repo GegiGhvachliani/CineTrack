@@ -17,7 +17,7 @@ public protocol HomeRepositoryProtocol: Sendable {
     func fetchPopular(
         page: Int
     ) async throws -> MoviePage
-    
+
     func fetchTopRated(
         page: Int
     ) async throws -> MoviePage

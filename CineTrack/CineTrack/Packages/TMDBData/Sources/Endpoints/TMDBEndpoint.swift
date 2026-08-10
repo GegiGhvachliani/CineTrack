@@ -10,12 +10,15 @@ import SharedNetworking
 
 public enum TMDBEndpoint {
 
+    // MARK: - Movies
+
     case trending(
         timeWindow: TrendingTimeWindow,
         page: Int
     )
 
     case popular(page: Int)
+
     case topRated(page: Int)
 
     case discoverMovies(
@@ -25,11 +28,18 @@ public enum TMDBEndpoint {
     )
 
     case nowPlaying(page: Int)
-    case upcoming(page: Int)
+
+    case upcoming(
+        page: Int,
+        region: String
+    )
 
     case movieVideos(movieID: Int)
 
+    // MARK: - People
+
     case popularPeople(page: Int)
+
     case personDetails(personID: Int)
 }
 
@@ -40,6 +50,8 @@ public enum TrendingTimeWindow: String {
 
 public extension TMDBEndpoint {
 
+    // MARK: - Default Trending
+
     static var defaultTrending: TMDBEndpoint {
         .trending(
             timeWindow: .week,
@@ -47,7 +59,10 @@ public extension TMDBEndpoint {
         )
     }
 
+    // MARK: - Path
+
     var path: String {
+
         switch self {
 
         case .trending(let timeWindow, _):
@@ -79,7 +94,10 @@ public extension TMDBEndpoint {
         }
     }
 
+    // MARK: - Page
+
     var page: Int? {
+
         switch self {
 
         case .trending(_, let page):
@@ -97,7 +115,7 @@ public extension TMDBEndpoint {
         case .nowPlaying(let page):
             return page
 
-        case .upcoming(let page):
+        case .upcoming(let page, _):
             return page
 
         case .movieVideos:
@@ -110,6 +128,8 @@ public extension TMDBEndpoint {
             return nil
         }
     }
+
+    // MARK: - Method
 
     var method: HTTPMethod {
         .get
