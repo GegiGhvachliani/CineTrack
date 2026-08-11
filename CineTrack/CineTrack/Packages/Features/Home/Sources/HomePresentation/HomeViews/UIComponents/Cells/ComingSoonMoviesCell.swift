@@ -29,26 +29,15 @@ struct ComingSoonMoviesCell: View {
                 onMovieTap: onMovieTap,
                 onWatchlistTap: onWatchlistTap
             )
-            .frame(
-                height: (cellHeight - 25) * 0.8
-            )
+            .frame(height: (cellHeight - 25) * 0.8)
 
             footer
-                .frame(
-                    height: (cellHeight - 25) * 0.2
-                )
+                .frame(height: (cellHeight - 25) * 0.2)
 
             Spacer()
         }
-        .background(
-            ColorTokens.Background.primary
-        )
-        .frame(
-            width:
-                (cellHeight - 25) *
-                (8.0 / 15.0),
-            height: cellHeight
-        )
+        .background(ColorTokens.Background.primary)
+        .frame(width:(cellHeight - 25) * (8.0 / 15.0), height: cellHeight)
         .clipShape(
             UnevenRoundedRectangle(
                 topLeadingRadius: 5,
@@ -57,11 +46,7 @@ struct ComingSoonMoviesCell: View {
                 topTrailingRadius: 5
             )
         )
-        .shadow(
-            radius: 3,
-            x: 1,
-            y: 3
-        )
+        .shadow(radius: 3, x: 1, y: 3 )
     }
 
     // MARK: - Release Date
@@ -70,18 +55,11 @@ struct ComingSoonMoviesCell: View {
         Text(formattedReleaseDate)
             .font(TypographyTokens.footnote)
             .fontWeight(.bold)
-            .foregroundColor(
-                ColorTokens.Brand.primary
-            )
-            .frame(
-                maxWidth: .infinity,
-                alignment: .leading
-            )
+            .foregroundColor(ColorTokens.Brand.primary)
+            .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 6)
             .padding(.bottom, 5)
-            .background(
-                ColorTokens.Background.secondary
-            )
+            .background(ColorTokens.Background.secondary)
     }
 
     // MARK: - Footer
@@ -105,23 +83,10 @@ struct ComingSoonMoviesCell: View {
                 .scaledToFit()
                 .frame(height: 14)
                 .offset(y: -1)
-                .foregroundStyle(
-                    ColorTokens.Brand.primary
-                )
+                .foregroundStyle(ColorTokens.Brand.primary)
 
-            Text(
-                String(
-                    format: "%.1f",
-                    movie.voteAverage
-                )
-            )
-            .font(
-                Font.system(
-                    size: 15,
-                    weight: .none,
-                    design: .rounded
-                )
-            )
+            Text(String(format: "%.1f",movie.voteAverage))
+            .font(Font.system(size: 15, weight: .none, design: .rounded))
 
             Spacer()
         }
@@ -133,31 +98,15 @@ struct ComingSoonMoviesCell: View {
         HStack(spacing: 4) {
 
             Text(movie.title)
-                .font(
-                    Font.system(
-                        size: 14,
-                        weight: .medium,
-                        design: .rounded
-                    )
-                )
+                .font(Font.system(size: 14, weight: .medium, design: .rounded))
                 .layoutPriority(1)
                 .lineLimit(1)
 
             if let releaseDate = movie.releaseDate,
                !releaseDate.isEmpty {
 
-                Text(
-                    String(
-                        releaseDate.prefix(4)
-                    )
-                )
-                .font(
-                    Font.system(
-                        size: 13,
-                        weight: .regular,
-                        design: .rounded
-                    )
-                )
+                Text(String(releaseDate.prefix(4)))
+                .font(Font.system(size: 13, weight: .regular, design: .rounded))
                 .layoutPriority(0)
                 .foregroundStyle(.secondary)
                 .lineLimit(1)
@@ -174,12 +123,8 @@ struct ComingSoonMoviesCell: View {
         guard
             let releaseDate = movie.releaseDate,
             let date =
-                Self.inputDateFormatter.date(
-                    from: releaseDate
-                )
-        else {
-            return ""
-        }
+                Self.inputDateFormatter.date(from: releaseDate)
+        else { return "" }
 
         return Self.outputDateFormatter
             .string(from: date)

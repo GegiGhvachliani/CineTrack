@@ -470,6 +470,8 @@ extension HomeViewModel {
         }
     }
 
+    // MARK: - Watchlist
+
     public func toggleWatchlist(
         for movie: Movie
     ) async {
@@ -480,7 +482,6 @@ extension HomeViewModel {
             watchlistedMovieIDs.contains(movieID)
 
         // Optimistic UI update
-
         if wasWatchlisted {
             watchlistedMovieIDs.remove(movieID)
         } else {
@@ -506,22 +507,17 @@ extension HomeViewModel {
 
         } catch {
 
-            // Rollback
-
+            // Rollback optimistic UI update
             if wasWatchlisted {
                 watchlistedMovieIDs.insert(movieID)
             } else {
                 watchlistedMovieIDs.remove(movieID)
             }
 
-            print(
-                "❌ Watchlist Toggle Error:",
-                error
-            )
-
             self.error = error
         }
     }
+
 
     // MARK: - Favourites
 

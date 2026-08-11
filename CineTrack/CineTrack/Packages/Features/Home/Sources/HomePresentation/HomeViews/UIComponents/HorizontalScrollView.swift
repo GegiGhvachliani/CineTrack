@@ -44,7 +44,7 @@ struct HorizontalScrollView<Item: Identifiable, Cell: View>: View {
                         cell(item, index)
                             .onAppear {
 
-                                guard index == items.count - 1 else {
+                                guard index == items.count - 5 else {
                                     return
                                 }
 

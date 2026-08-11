@@ -5,7 +5,6 @@
 //  Created by Gegi Ghvachliani on 11/08/2026.
 //
 
-
 import Foundation
 
 import HomeDomain
@@ -18,6 +17,8 @@ public final class WatchlistRepository:
 {
     private let firestore: RemoteDocumentStore
     private let userSession: UserSession
+
+    private let collectionName = "watchlist"
 
     public init(
         firestore: RemoteDocumentStore,
@@ -36,7 +37,7 @@ public final class WatchlistRepository:
         let userID = try currentUserID()
 
         let collection =
-            "users/\(userID)/watchlist"
+            "users/\(userID)/\(collectionName)"
 
         let dtos =
             try await firestore.getCollection(
@@ -58,7 +59,7 @@ public final class WatchlistRepository:
         let userID = try currentUserID()
 
         let collection =
-            "users/\(userID)/watchlist"
+            "users/\(userID)/\(collectionName)"
 
         let dto =
             FirestoreEntityIDDTO(
@@ -81,7 +82,7 @@ public final class WatchlistRepository:
         let userID = try currentUserID()
 
         let collection =
-            "users/\(userID)/watchlist"
+            "users/\(userID)/\(collectionName)"
 
         try await firestore.delete(
             collection: collection,

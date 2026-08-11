@@ -56,35 +56,20 @@ public struct MovieActorCell: View {
         VStack(alignment: .leading) {
 
             Text(actor.name)
-                .font(
-                    DesignSystemTokens
-                        .TypographyTokens
-                        .caption
-                )
+                .font(DesignSystemTokens.TypographyTokens.caption)
                 .lineLimit(2)
 
             if let age = actor.age {
 
                 Text(String(age))
-                    .font(
-                        DesignSystemTokens
-                            .TypographyTokens
-                            .caption
-                    )
+                    .font(DesignSystemTokens.TypographyTokens.caption)
                     .foregroundStyle(.gray)
             }
         }
         .padding(.horizontal, 10)
         .padding(.bottom, 3)
-        .frame(
-            maxWidth: .infinity,
-            alignment: .leading
-        )
-        .frame(
-            height: cellHeight * 0.2 + 10
-        )
-        .background(
-            ColorTokens.Background.primary
-        )
+        .frame(maxWidth: .infinity,alignment: .leading)
+        .frame(height: cellHeight * 0.2 + 10)
+        .background(ColorTokens.Background.primary)
     }
 }

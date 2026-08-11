@@ -1,14 +1,43 @@
 //
-//  PagingHorizontalScrollView.swift
+//  NewsSectionView.swift
 //  Home
 //
 //  Created by Gegi Ghvachliani on 11/08/2026.
 //
 
 import SwiftUI
+import SharedCore
 import DesignSystemTokens
 
-struct PagingHorizontalScrollView<
+struct NewsSectionView: View {
+    
+    let news: [News]
+    
+    let onSeeAllTap: () -> Void
+    let onNewsTap: (News) -> Void
+    
+    var body: some View {
+        
+        PagingHorizontalScrollView(
+            headerText: "News",
+            items: news,
+            cellWidth: 330,
+            cellHeight: 220,
+            onSeeAllTap: onSeeAllTap
+        ) { news, _ in
+            
+            NewsCell(
+                news: news,
+                cellHeight: 220,
+                onTap: { onNewsTap(news) }
+            )
+            
+        }
+    }
+    
+}
+
+private struct PagingHorizontalScrollView<
     Item: Identifiable,
     Cell: View
 >: View {
@@ -145,3 +174,4 @@ struct PagingHorizontalScrollView<
         .padding(.horizontal)
     }
 }
+

@@ -145,6 +145,7 @@ public protocol HomeViewModelProtocol {
     func toggleFavourite(
         for actor: Actor
     ) async
+    
     // MARK: - Error
 
     func clearError()

@@ -1,13 +1,20 @@
 //
-//  MoreMoviesFromFavouriteActorView.swift
+//  MoreMoviesFromFavouriteActorSectionView.swift
 //  Home
 //
-//  Created by Gegi Ghvachliani on 08/08/2026.
+//  Created by Gegi Ghvachliani on 11/08/2026.
 //
 
 import SwiftUI
 import DesignSystemTokens
 import SharedCore
+
+// დასაიმპლემენტებელი გაქვს
+struct MoreMoviesFromFavouriteActorSectionView: View {
+    var body: some View {
+        Circle()
+    }
+}
 
 struct MoreMoviesFromFavouriteActorView: View {
     
@@ -180,7 +187,7 @@ struct MoreMoviesFromFavouriteActorView: View {
 //        name: "Simon Baker", age: 30,
 //        profilePath: "https://image.tmdb.org/t/p/w200/profile.jpg"
 //    )
-//    
+//
 //    // ვქმნით სატესტო ფილმებს Movie სტრუქტურის ზუსტი ინიციალიზატორით
 //    let mockMovies: [Movie] = [
 //        Movie(
@@ -204,7 +211,7 @@ struct MoreMoviesFromFavouriteActorView: View {
 //            voteCount: 850
 //        )
 //    ]
-//    
+//
 //    // ვიძახებთ მთავარ View-ს
 //    MoreMoviesFromFavouriteActorView(
 //        actor: mockActor,

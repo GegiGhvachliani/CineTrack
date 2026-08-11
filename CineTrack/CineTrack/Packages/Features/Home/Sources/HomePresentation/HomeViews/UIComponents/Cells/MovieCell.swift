@@ -44,11 +44,7 @@ struct MovieCell: View {
                 topTrailingRadius: 5
             )
         )
-        .shadow(
-            radius: 3,
-            x: 1,
-            y: 3
-        )
+        .shadow(radius: 3, x: 1, y: 3)
     }
     
     // MARK: - Footer
@@ -75,8 +71,8 @@ struct MovieCell: View {
                 .offset(y: -1)
                 .foregroundStyle(ColorTokens.Brand.primary)
             
-            Text(String(format: "%.1f",movie.voteAverage))
-            .font(Font.system(size: 15,weight: .none,design: .rounded))
+            Text(String(format: "%.1f", movie.voteAverage))
+            .font(Font.system(size: 15, weight: .none, design: .rounded))
             
             Spacer()
         }
