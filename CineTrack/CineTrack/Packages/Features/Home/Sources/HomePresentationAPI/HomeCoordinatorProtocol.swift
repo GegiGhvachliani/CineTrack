@@ -7,7 +7,17 @@
 
 import UIKit
 import SharedCore
+import HomeDomain
 
 public protocol HomeCoordinatorProtocol: Coordinator {
+
     var navigationController: UINavigationController { get }
+
+    func showSearch()
+    func showVideos(item: FeaturedItem)
+    func showSeeAll(section: HomeSection)
+    
+    func showMovieDetails(movie: Movie)
+    func showActorDetails(actor: Actor)
+    func showNewsDetail(news: News)
 }

@@ -202,11 +202,18 @@ public final class HomeRepository: HomeRepositoryProtocol {
             )
         }
 
-        let movies =
-            movieMapper.map(
-                response
-            )
+        let today = Self.todayString
 
+        let movies =
+            movieMapper
+                .map(response)
+                .filter { movie in
+                    guard let releaseDate = movie.releaseDate else {
+                        return false
+                    }
+
+                    return releaseDate >= today
+                }
         print(
             "🎬 MAPPED MOVIES:",
             movies.count
@@ -547,4 +554,13 @@ public final class HomeRepository: HomeRepositoryProtocol {
             return actors
         }
     }
+
+    private static let todayString: String = {
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyy-MM-dd"
+
+        return formatter.string(from: Date())
+    }()
 }

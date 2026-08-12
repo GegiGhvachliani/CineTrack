@@ -5,18 +5,18 @@
 //  Created by Gegi Ghvachliani on 11/08/2026.
 //
 
-
 import Foundation
+import SharedCore
 
 public protocol FavouriteRepositoryProtocol: Sendable {
 
-    func fetchFavouritedActorIDs() async throws -> Set<Int>
+    func fetchFavouritedActors() async throws -> [Actor]
 
     func addFavouritedActor(
-        id: Int
+        actor: Actor
     ) async throws
 
     func removeFavouritedActor(
-        id: Int
+        actor: Actor
     ) async throws
 }

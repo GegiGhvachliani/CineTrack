@@ -19,32 +19,34 @@ struct MovieCell: View {
     let onWatchlistTap: () -> Void
     
     var body: some View {
-        VStack(spacing: 0) {
-
-            MoviePoster(
-                isWatchlisted: isWatchlisted,
-                photoURL: movie.posterPath,
-                onMovieTap: onMovieTap,
-                onWatchlistTap: onWatchlistTap
+        Button(action: onMovieTap) {
+            VStack(spacing: 0) {
+                
+                MoviePoster(
+                    isWatchlisted: isWatchlisted,
+                    photoURL: movie.posterPath,
+                    onMovieTap: onMovieTap,
+                    onWatchlistTap: onWatchlistTap
+                )
+                .frame(height: cellHeight * 0.8)
+                
+                footer
+                    .frame(height: cellHeight * 0.2)
+                
+                Spacer()
+            }
+            .background(ColorTokens.Background.primary)
+            .frame(width: cellHeight * (8.0 / 15.0), height: cellHeight)
+            .clipShape(
+                UnevenRoundedRectangle(
+                    topLeadingRadius: 5,
+                    bottomLeadingRadius: 10,
+                    bottomTrailingRadius: 10,
+                    topTrailingRadius: 5
+                )
             )
-            .frame(height: cellHeight * 0.8)
-
-            footer
-                .frame(height: cellHeight * 0.2)
-
-            Spacer()
+            .shadow(radius: 3, x: 1, y: 3)
         }
-        .background(ColorTokens.Background.primary)
-        .frame(width: cellHeight * (8.0 / 15.0), height: cellHeight)
-        .clipShape(
-            UnevenRoundedRectangle(
-                topLeadingRadius: 5,
-                bottomLeadingRadius: 10,
-                bottomTrailingRadius: 10,
-                topTrailingRadius: 5
-            )
-        )
-        .shadow(radius: 3, x: 1, y: 3)
     }
     
     // MARK: - Footer
@@ -73,7 +75,8 @@ struct MovieCell: View {
             
             Text(String(format: "%.1f", movie.voteAverage))
             .font(Font.system(size: 15, weight: .none, design: .rounded))
-            
+            .foregroundColor(ColorTokens.Text.main)
+
             Spacer()
         }
     }
@@ -85,6 +88,7 @@ struct MovieCell: View {
             
             Text(movie.title)
                 .font(Font.system(size: 14, weight: .medium, design: .rounded))
+                .foregroundColor(ColorTokens.Text.main)
                 .layoutPriority(1)
                 .lineLimit(1)
             
@@ -92,6 +96,7 @@ struct MovieCell: View {
                 
                 Text(String(releaseDate.prefix(4)))
                 .font(Font.system(size: 13, weight: .regular, design: .rounded))
+                .foregroundColor(.gray)
                 .layoutPriority(0)
                 .foregroundStyle(.secondary)
                 .lineLimit(1)

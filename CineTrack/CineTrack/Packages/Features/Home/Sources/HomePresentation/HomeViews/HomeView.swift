@@ -31,17 +31,19 @@ public struct HomeView: View {
             VStack(spacing: 20) {
 
                 header
-
                 bornTodaySection
-
+                
+                whatToWatchDivider
+                
                 top10Section
-
                 fanFavouritesSection
-
                 comingSoonToTheatersSection
                 nowStreamingSection
                 trendingNowSection
+                watchlistedMoviesSection
 
+                moreToExplorDivider
+                
                 topNewsSection
                 mostPopularCelebritiesSection
                 recentlyViewedSection
@@ -68,28 +70,31 @@ public struct HomeView: View {
         
         HomeHeaderView(
             featuredItems: viewModel.featuredItems,
-            watchlistedMovieIDs: viewModel.watchlistedMovieIDs,
-
+            watchlistedMovies: viewModel.watchlistedMovies,
             onVideoTap: { item in
-                print("Navigate to videos for movie:", item.movie.id)
+                viewModel.didTapVideos(item)
             },
 
             onMovieTap: { movie in
+                
+                viewModel.didTapMovie(movie)
+                
                 Task {
                     await viewModel.addRecentlyViewed(movie: movie)
                 }
-
-                print("Navigate to movie:", movie.id)
             },
 
             onWatchlistTap: { movie in
+                
                 Task {
                     await viewModel.toggleWatchlist(for: movie)
                 }
             },
 
             onSearchTap: {
-                print("Navigate to Search")
+                
+                viewModel.didTapSearch()
+                
             }
         )
         
@@ -101,8 +106,10 @@ public struct HomeView: View {
         
         BornTodaySectionView(
             actors: viewModel.bornTodayActors,
-            favouriteActorIDs: viewModel.favouritedActorIDs,
+            favouritedActors: viewModel.favouritedActors,
             onActorTap: { actor in
+                
+                viewModel.didTapActor(actor)
                 
                 Task {
                     await viewModel.addRecentlyViewed(actor: actor)
@@ -116,7 +123,7 @@ public struct HomeView: View {
                 
             }, onSeeAllTap: {
                 
-                print("see all tapped")
+                viewModel.didTapSeeAll(.bornToday)
                 
             }, onLoadMore: {
                 
@@ -128,14 +135,29 @@ public struct HomeView: View {
         )
     }
     
+    // MARK: - Divider
+    
+    private var whatToWatchDivider: some View {
+        
+        Text("What to watch")
+            .font(TypographyTokens.title2)
+            .foregroundColor(ColorTokens.Brand.primary)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.leading)
+            .offset(y: 10)
+    }
+    
     // MARK: - Top 10
     
     private var top10Section: some View {
         
         Top10SectionView(
             movies: viewModel.top10Movies,
-            watchlistedMovieIDs: viewModel.watchlistedMovieIDs
+            watchlistedMovies: viewModel.watchlistedMovies,
         ) { movie in
+            
+                viewModel.didTapMovie(movie)
+            
                 Task {
                     await viewModel.addRecentlyViewed(movie: movie)
                 }
@@ -150,7 +172,7 @@ public struct HomeView: View {
                 
             } onSeeAllTap: {
                 
-                print("See all tapped")
+                viewModel.didTapSeeAll(.top10)
                 
             }
     }
@@ -161,8 +183,10 @@ public struct HomeView: View {
         
         FanFavouritesSectionView(
             movies: viewModel.fanFavouriteMovies,
-            watchlistedMovieIDs: viewModel.watchlistedMovieIDs,
+            watchlistedMovies: viewModel.watchlistedMovies,
             onMovieTap: { movie in
+                
+                viewModel.didTapMovie(movie)
             
                 Task {
                     await viewModel.addRecentlyViewed(movie: movie)
@@ -176,7 +200,7 @@ public struct HomeView: View {
                 
             }, onSeeAllTap: {
                 
-                print("See All Tapped")
+                viewModel.didTapSeeAll(.fanFavourites)
 
             }, onLoadMore: {
                 
@@ -195,8 +219,10 @@ public struct HomeView: View {
         VStack(spacing: 0) {
             NowStreamingSectionView(
                 movies: viewModel.nowPlayingMovies,
-                watchlistedMovieIDs: viewModel.watchlistedMovieIDs,
+                watchlistedMovies: viewModel.watchlistedMovies,
                 onMovieTap: { movie in
+                    
+                    viewModel.didTapMovie(movie)
                     
                     Task {
                         await viewModel.addRecentlyViewed(movie: movie)
@@ -212,7 +238,7 @@ public struct HomeView: View {
                 },
                 onSeeAllTap: {
                     
-                    print("See All Tapped")
+                    viewModel.didTapSeeAll(.nowPlaying)
                     
                 },
                 onLoadMore: {
@@ -236,7 +262,10 @@ public struct HomeView: View {
         
         ComingSoonSectionView(
             movies: viewModel.upcomingMovies,
-            watchlistedMovieIDs: viewModel.watchlistedMovieIDs, onMovieTap: { movie in
+            watchlistedMovies: viewModel.watchlistedMovies,
+            onMovieTap: { movie in
+                
+                viewModel.didTapMovie(movie)
                 
                 Task {
                     await viewModel.addRecentlyViewed(movie: movie)
@@ -250,7 +279,7 @@ public struct HomeView: View {
                 
             }, onSeeAllTap: {
                 
-                print("See All Tapped")
+                viewModel.didTapSeeAll(.upcoming)
                 
             }, onLoadMore: {
                 
@@ -268,9 +297,11 @@ public struct HomeView: View {
         
         TrendingSectionView(
             movies: viewModel.trendingMovies,
-            watchlistedMovieID: viewModel.watchlistedMovieIDs,
+            watchlistedMovies: viewModel.watchlistedMovies,
             onMovieTap: { movie in
             
+                viewModel.didTapMovie(movie)
+                
                 Task {
                     await viewModel.addRecentlyViewed(movie: movie)
                 }
@@ -283,7 +314,7 @@ public struct HomeView: View {
                 
             }, onSeeAllTap: {
                 
-                print("See All Tapped")
+                viewModel.didTapSeeAll(.trending)
                 
             }, onLoadMore: {
                 
@@ -294,7 +325,59 @@ public struct HomeView: View {
         )
     }
     
+    // MARK: - From Watchlist
+    @ViewBuilder
+    private var watchlistedMoviesSection: some View {
+
+        if !viewModel.watchlistedMovies.isEmpty {
+
+            WatchlistedMoviesSesctionView(
+                movies: viewModel.watchlistedMovies,
+                watchlistedMovies: viewModel.watchlistedMovies,
+                onMovieTap: { movie in
+
+                    Task {
+                        await viewModel.addRecentlyViewed(
+                            movie: movie
+                        )
+                    }
+
+                },
+                onWatchlistTap: { movie in
+
+                    Task {
+                        await viewModel.toggleWatchlist(
+                            for: movie
+                        )
+                    }
+
+                },
+                onSeeAllTap: {
+
+                    viewModel.didTapSeeAll(.watchlist)
+
+                },
+                onLoadMore: {
+
+                }
+            )
+        }
+    }
+    
     // TODO: - More From One of Favourite Actor
+    
+    // MARK: - Divider
+    
+    private var moreToExplorDivider: some View {
+        
+        Text("More to explore")
+            .font(TypographyTokens.title2)
+            .foregroundColor(ColorTokens.Brand.primary)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.leading)
+            .offset(y: 10)
+        
+    }
     
     // MARK: - Top News
     
@@ -303,10 +386,12 @@ public struct HomeView: View {
         NewsSectionView(
             news: viewModel.news,
             onSeeAllTap: {
-                print("See All Tapped")
-            }, onNewsTap: { _ in
                 
-                print("Navigate to news details")
+                viewModel.didTapSeeAll(.news)
+                
+            }, onNewsTap: { news in
+                
+                viewModel.didTapNews(news)
                 
             }
         )
@@ -318,8 +403,10 @@ public struct HomeView: View {
         
         MostPopularActorsSectionView(
             actors: viewModel.mostPopularActors,
-            favouriteActorIDs: viewModel.favouritedActorIDs,
+            favouriteActors: viewModel.favouritedActors,
             onActorTap: { actor in
+                
+                viewModel.didTapActor(actor)
                 
                 Task {
                     await viewModel.addRecentlyViewed(actor: actor)
@@ -333,7 +420,7 @@ public struct HomeView: View {
                 
             }, onSeeAllTap: {
                 
-                print("See All Tapped")
+                viewModel.didTapSeeAll(.mostPopularCelebrities)
                 
             }, onLoadMore: {
                 
@@ -350,9 +437,11 @@ public struct HomeView: View {
             
         RecentlyViewedSectionView(
             items: viewModel.recentlyViewedItems,
-            watchlistedMovieIDs: viewModel.watchlistedMovieIDs,
-            favouritedActorIDs: viewModel.favouritedActorIDs,
+            watchlistedMovies: viewModel.watchlistedMovies,
+            favouritedActors: viewModel.favouritedActors,
             onMovieTap: { movie in
+                
+                viewModel.didTapMovie(movie)
             
                 Task {
                     await viewModel.addRecentlyViewed(movie: movie)
@@ -365,6 +454,8 @@ public struct HomeView: View {
                 }
                 
             }, onActorTap: { actor in
+                
+                viewModel.didTapActor(actor)
             
                 Task {
                     await viewModel.addRecentlyViewed(actor: actor)
@@ -378,7 +469,12 @@ public struct HomeView: View {
                 
             }, onSeeAllTap: {
                 
-                print("navigateToSeeALl")
+                viewModel.didTapSeeAll(.recentlyViewed)
+                
+            }, onClearHistory: {
+                Task {
+                    await viewModel.clearRecentlyViewed()
+                }
             }
         )
     }

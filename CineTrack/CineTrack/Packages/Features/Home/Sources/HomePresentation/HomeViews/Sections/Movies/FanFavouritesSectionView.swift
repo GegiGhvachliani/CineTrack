@@ -11,7 +11,7 @@ import SharedCore
 struct FanFavouritesSectionView: View {
 
     let movies: [Movie]
-    let watchlistedMovieIDs: Set<Int>
+    let watchlistedMovies: [Movie]
 
     let onMovieTap: (Movie) -> Void
     let onWatchlistTap: (Movie) -> Void
@@ -29,7 +29,9 @@ struct FanFavouritesSectionView: View {
 
             MovieCell(
                 movie: movie,
-                isWatchlisted: watchlistedMovieIDs.contains(movie.id),
+                isWatchlisted: watchlistedMovies.contains {
+                    $0.id == movie.id
+                },
                 cellHeight: 240,
                 onMovieTap: { onMovieTap(movie) },
                 onWatchlistTap: { onWatchlistTap(movie) }

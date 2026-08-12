@@ -13,140 +13,148 @@ import SharedCore
 @MainActor
 public protocol HomeViewModelProtocol {
 
-    // MARK: - Movies
+var onSearch: (() -> Void)? { get }
+var onVideos: ((FeaturedItem) -> Void)? { get }
+var onSeeAll: ((HomeSection) -> Void)? { get }
 
-    var trendingMovies: [Movie] { get }
-    var popularMovies: [Movie] { get }
-    var fanFavouriteMovies: [Movie] { get }
-    var nowPlayingMovies: [Movie] { get }
-    var upcomingMovies: [Movie] { get }
+var onMovieDetails: ((Movie) -> Void)? { get }
+var onActorDetails: ((Actor) -> Void)? { get }
+var onNewsDetails: ((News) -> Void)? { get }
 
-    // MARK: - Recently Viewed
+// MARK: - Movies
 
-    var recentlyViewedMovies: [RecentlyViewedMovie] { get }
-    var recentlyViewedActors: [RecentlyViewedActor] { get }
-    var recentlyViewedItems: [RecentlyViewedItem] { get }
+var trendingMovies: [Movie] { get }
+var popularMovies: [Movie] { get }
+var fanFavouriteMovies: [Movie] { get }
+var nowPlayingMovies: [Movie] { get }
+var upcomingMovies: [Movie] { get }
 
-    var isRecentlyViewedLoading: Bool { get }
+// MARK: - Recently Viewed
 
-    // MARK: - Top 10
+var recentlyViewedMovies: [RecentlyViewedMovie] { get }
+var recentlyViewedActors: [RecentlyViewedActor] { get }
+var recentlyViewedItems: [RecentlyViewedItem] { get }
 
-    var top10Movies: [Movie] { get }
+var isRecentlyViewedLoading: Bool { get }
 
-    // MARK: - Actors
+// MARK: - Top 10
 
-    var bornTodayActors: [Actor] { get }
-    var mostPopularActors: [Actor] { get }
+var top10Movies: [Movie] { get }
 
-    // MARK: - News
+// MARK: - Actors
 
-    var news: [News] { get }
+var bornTodayActors: [Actor] { get }
+var mostPopularActors: [Actor] { get }
 
-    // MARK: - Videos
+// MARK: - News
 
-    var movieVideos: [Int: [MovieVideo]] { get }
-    var featuredItems: [FeaturedItem] { get }
+var news: [News] { get }
 
-    // MARK: - Watchlist
+// MARK: - Videos
 
-    var watchlistedMovieIDs: Set<Int> { get }
+var movieVideos: [Int: [MovieVideo]] { get }
+var featuredItems: [FeaturedItem] { get }
 
-    // MARK: - Favourites
+// MARK: - Watchlist
 
-    var favouritedActorIDs: Set<Int> { get }
+var watchlistedMovies: [Movie] { get }
 
-    // MARK: - Loading State
+// MARK: - Favourites
 
-    var isTrendingLoading: Bool { get }
-    var isPopularLoading: Bool { get }
-    var isFanFavouriteLoading: Bool { get }
-    var isNowPlayingLoading: Bool { get }
-    var isUpcomingLoading: Bool { get }
+var favouritedActors: [Actor] { get }
 
-    var isTop10Loading: Bool { get }
+// MARK: - Loading State
 
-    var isBornTodayActorsLoading: Bool { get }
-    var isMostPopularCelebritiesLoading: Bool { get }
+var isTrendingLoading: Bool { get }
+var isPopularLoading: Bool { get }
+var isFanFavouriteLoading: Bool { get }
+var isNowPlayingLoading: Bool { get }
+var isUpcomingLoading: Bool { get }
 
-    var isNewsLoading: Bool { get }
+var isTop10Loading: Bool { get }
 
-    // MARK: - Pagination State
+var isBornTodayActorsLoading: Bool { get }
+var isMostPopularCelebritiesLoading: Bool { get }
 
-    var hasMoreTrending: Bool { get }
-    var hasMorePopular: Bool { get }
-    var hasMoreFanFavourite: Bool { get }
-    var hasMoreNowPlaying: Bool { get }
-    var hasMoreUpcoming: Bool { get }
+var isNewsLoading: Bool { get }
 
-    var hasMoreBornTodayActors: Bool { get }
-    var hasMoreMostPopularCelebrities: Bool { get }
+// MARK: - Pagination State
 
-    var hasMoreNews: Bool { get }
+var hasMoreTrending: Bool { get }
+var hasMorePopular: Bool { get }
+var hasMoreFanFavourite: Bool { get }
+var hasMoreNowPlaying: Bool { get }
+var hasMoreUpcoming: Bool { get }
 
-    // MARK: - Error
+var hasMoreBornTodayActors: Bool { get }
+var hasMoreMostPopularCelebrities: Bool { get }
 
-    var error: Error? { get }
+var hasMoreNews: Bool { get }
 
-    // MARK: - Public Methods
+// MARK: - Error
 
-    func loadHome() async
+var error: Error? { get }
 
-    // MARK: - Movies
+// MARK: - Public Methods
 
-    func loadNextTrendingPage() async
-    func loadNextPopularPage() async
-    func loadNextFanFavouritePage() async
-    func loadNextNowPlayingPage() async
-    func loadNextUpcomingPage() async
+func loadHome() async
 
-    // MARK: - Recently Viewed
+// MARK: - Movies
 
-    func loadRecentlyViewed() async
+func loadNextTrendingPage() async
+func loadNextPopularPage() async
+func loadNextFanFavouritePage() async
+func loadNextNowPlayingPage() async
+func loadNextUpcomingPage() async
 
-    func addRecentlyViewed(
-        movie: Movie
-    ) async
+// MARK: - Recently Viewed
 
-    func addRecentlyViewed(
-        actor: Actor
-    ) async
+func loadRecentlyViewed() async
 
-    // MARK: - Top 10
+func addRecentlyViewed(
+movie: Movie
+) async
 
-    func loadTop10Movies() async
+func addRecentlyViewed(
+actor: Actor
+) async
 
-    // MARK: - Actors
+// MARK: - Top 10
 
-    func loadNextBornTodayActorsPage() async
-    func loadNextMostPopularCelebritiesPage() async
+func loadTop10Movies() async
 
-    // MARK: - News
+// MARK: - Actors
 
-    func loadNextNewsPage() async
+func loadNextBornTodayActorsPage() async
+func loadNextMostPopularCelebritiesPage() async
 
-    // MARK: - Videos
+// MARK: - News
 
-    func loadVideos(
-        for movie: Movie
-    ) async
+func loadNextNewsPage() async
 
-    // MARK: - Watchlist
+// MARK: - Videos
 
-    func loadWatchlist() async
+func loadVideos(
+for movie: Movie
+) async
 
-    func toggleWatchlist(
-        for movie: Movie
-    ) async
+// MARK: - Watchlist
 
-    // MARK: - Favourites
+func loadWatchlist() async
 
-    func loadFavourites() async
+func toggleWatchlist(
+for movie: Movie
+) async
 
-    func toggleFavourite(
-        for actor: Actor
-    ) async
-    
-    // MARK: - Error
+// MARK: - Favourites
 
-    func clearError()
+func loadFavourites() async
+
+func toggleFavourite(
+for actor: Actor
+) async
+
+// MARK: - Error
+
+func clearError()
 }

@@ -19,26 +19,27 @@ public struct MovieActorCell: View {
     let onFavouriteTap: () -> Void
 
     public var body: some View {
-
-        VStack(spacing: 0) {
-
-            header
-
-            footer
-        }
-        .frame(
-            width: cellHeight * (8.0 / 15.0),
-            height: cellHeight
-        )
-        .foregroundStyle(.white)
-        .clipShape(
-            UnevenRoundedRectangle(
-                topLeadingRadius: 5,
-                bottomLeadingRadius: 10,
-                bottomTrailingRadius: 10,
-                topTrailingRadius: 5
+        Button(action: onActorTap) {
+            VStack(spacing: 0) {
+                
+                header
+                
+                footer
+            }
+            .frame(
+                width: cellHeight * (8.0 / 15.0),
+                height: cellHeight
             )
-        )
+            .foregroundStyle(.white)
+            .clipShape(
+                UnevenRoundedRectangle(
+                    topLeadingRadius: 5,
+                    bottomLeadingRadius: 10,
+                    bottomTrailingRadius: 10,
+                    topTrailingRadius: 5
+                )
+            )
+        }
     }
 
     private var header: some View {
@@ -57,6 +58,7 @@ public struct MovieActorCell: View {
 
             Text(actor.name)
                 .font(DesignSystemTokens.TypographyTokens.caption)
+                .foregroundStyle(ColorTokens.Text.main)
                 .lineLimit(2)
 
             if let age = actor.age {

@@ -107,6 +107,7 @@ let package = Package(
         .target(
             name: "HomePresentationAPI",
             dependencies: [
+                "HomeDomain",
                 .product(
                     name: "SharedCore",
                     package: "SharedKit"

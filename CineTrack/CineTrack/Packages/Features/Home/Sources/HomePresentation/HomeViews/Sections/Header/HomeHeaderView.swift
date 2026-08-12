@@ -15,7 +15,7 @@ struct HomeHeaderView: View {
     // MARK: - Properties
 
     let featuredItems: [FeaturedItem]
-    let watchlistedMovieIDs: Set<Int>
+    let watchlistedMovies: [Movie]
 
     let onVideoTap: (FeaturedItem) -> Void
     let onMovieTap: (Movie) -> Void
@@ -46,8 +46,10 @@ struct HomeHeaderView: View {
 
             FeaturedHorizontalScrollView(
                 featuredItems: featuredItems,
-                isWatchlisted: {
-                    watchlistedMovieIDs.contains($0)
+                isWatchlisted: { movieID in
+                    watchlistedMovies.contains {
+                        $0.id == movieID
+                    }
                 },
                 onVideoTap: onVideoTap,
                 onMovieTap: onMovieTap,

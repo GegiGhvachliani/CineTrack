@@ -13,25 +13,28 @@ struct NewsCell: View {
 
     let news: News
     let cellHeight: CGFloat
-    
+
     let onTap: () -> Void
 
     var body: some View {
 
-        VStack(spacing: 0) {
+        Button(action: onTap) {
 
-            header
+            VStack(spacing: 0) {
 
-            Rectangle()
-                .fill(.secondary)
-                .frame(height: 1)
+                header
 
-            footer
+                Rectangle()
+                    .fill(.secondary)
+                    .frame(height: 1)
+
+                footer
+            }
+            .frame(width: cellHeight * 1.5, height: cellHeight)
+            .background(ColorTokens.Background.primary)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
         }
-        .frame(width: cellHeight * 1.5, height: cellHeight)
-        .background(ColorTokens.Background.primary)
-        .clipShape(RoundedRectangle(cornerRadius: 8))
-        .onTapGesture { onTap() }
+        .buttonStyle(.plain)
     }
 
     private var header: some View {

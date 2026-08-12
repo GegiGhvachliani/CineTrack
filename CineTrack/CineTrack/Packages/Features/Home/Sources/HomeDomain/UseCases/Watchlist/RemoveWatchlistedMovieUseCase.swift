@@ -7,10 +7,12 @@
 
 import Foundation
 
+import SharedCore
+
 public protocol RemoveWatchlistedMovieUseCaseProtocol: Sendable {
 
     func execute(
-        movieID: Int
+        movie: Movie
     ) async throws
 }
 
@@ -18,6 +20,7 @@ public final class RemoveWatchlistedMovieUseCase:
     RemoveWatchlistedMovieUseCaseProtocol,
     @unchecked Sendable
 {
+
     private let repository: WatchlistRepositoryProtocol
 
     public init(
@@ -27,11 +30,11 @@ public final class RemoveWatchlistedMovieUseCase:
     }
 
     public func execute(
-        movieID: Int
+        movie: Movie
     ) async throws {
 
         try await repository.removeWatchlistedMovie(
-            id: movieID
+            movie: movie
         )
     }
 }

@@ -12,49 +12,74 @@ import SharedCore
 
 extension HomeViewModel {
 
+    public func didTapSearch() {
+        onSearch?()
+    }
+
+    public func didTapMovie(_ movie: Movie) {
+        onMovieDetails?(movie)
+    }
+
+    public func didTapVideos(_ item: FeaturedItem) {
+        onVideos?(item)
+    }
+
+    public func didTapActor(_ actor: Actor) {
+        onActorDetails?(actor)
+    }
+
+    public func didTapSeeAll(_ section: HomeSection) {
+        onSeeAll?(section)
+    }
+
+    public func didTapNews(_ news: News) {
+        onNewsDetails?(news)
+    }
+
     // MARK: - Initial Loading
 
     public func loadHome() async {
 
+ 
         print("🔥 loadHome START")
 
         error = nil
 
         async let trendingTask =
-            loadNextTrendingPage()
+        loadNextTrendingPage()
 
         async let popularTask =
-            loadNextPopularPage()
+        loadNextPopularPage()
 
         async let fanFavouritesTask =
-            loadNextFanFavouritePage()
+        loadNextFanFavouritePage()
 
         async let top10Task =
-            loadTop10Movies()
+        loadTop10Movies()
 
         async let nowPlayingTask =
-            loadNextNowPlayingPage()
+        loadNextNowPlayingPage()
 
         async let upcomingTask =
-            loadNextUpcomingPage()
+        loadNextUpcomingPage()
 
         async let bornTodayTask =
-            loadNextBornTodayActorsPage()
+        loadNextBornTodayActorsPage()
 
         async let popularActorsTask =
-            loadNextMostPopularCelebritiesPage()
+        loadNextMostPopularCelebritiesPage()
 
         async let newsTask =
-            loadNextNewsPage()
-        
+        loadNextNewsPage()
+
         async let recentlyViewedTask =
-            loadRecentlyViewed()
-        
+        loadRecentlyViewed()
+
         async let watchlistTask =
-            loadWatchlist()
+        loadWatchlist()
 
         async let favouritesTask =
-            loadFavourites()
+        loadFavourites()
 
         await (
             trendingTask,
@@ -70,6 +95,7 @@ extension HomeViewModel {
             watchlistTask,
             favouritesTask
         )
+
         print("🔥 trending:", trendingMovies.count)
         print("🔥 popular:", popularMovies.count)
         print("🔥 fan favourites:", fanFavouriteMovies.count)
@@ -87,12 +113,15 @@ extension HomeViewModel {
         print(
             "🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️🅰️"
         )
+ 
+
     }
 
     // MARK: - Trending
 
     public func loadNextTrendingPage() async {
 
+ 
         guard
             !isTrendingLoading,
             hasMoreTrending
@@ -109,30 +138,33 @@ extension HomeViewModel {
 
         do {
             let page =
-                try await fetchTrendingUseCase.execute(
-                    page: trendingPage
-                )
+            try await fetchTrendingUseCase.execute(
+                page: trendingPage
+            )
 
             trendingMovies.append(
                 contentsOf: page.movies
             )
 
             trendingPage =
-                page.page + 1
+            page.page + 1
 
             hasMoreTrending =
-                page.hasNextPage
+            page.hasNextPage
 
         } catch {
             print("❌ Trending Error:", error)
             self.error = error
         }
+ 
+
     }
 
     // MARK: - Popular
 
     public func loadNextPopularPage() async {
 
+ 
         guard
             !isPopularLoading,
             hasMorePopular
@@ -149,30 +181,33 @@ extension HomeViewModel {
 
         do {
             let page =
-                try await fetchPopularUseCase.execute(
-                    page: popularPage
-                )
+            try await fetchPopularUseCase.execute(
+                page: popularPage
+            )
 
             popularMovies.append(
                 contentsOf: page.movies
             )
 
             popularPage =
-                page.page + 1
+            page.page + 1
 
             hasMorePopular =
-                page.hasNextPage
+            page.hasNextPage
 
         } catch {
             print("❌ Popular Error:", error)
             self.error = error
         }
+ 
+
     }
 
     // MARK: - Fan Favourites
 
     public func loadNextFanFavouritePage() async {
 
+ 
         guard
             !isFanFavouriteLoading,
             hasMoreFanFavourite
@@ -189,30 +224,32 @@ extension HomeViewModel {
 
         do {
             let page =
-                try await fetchFanFavouritesUseCase.execute(
-                    page: fanFavouritePage
-                )
+            try await fetchFanFavouritesUseCase.execute(
+                page: fanFavouritePage
+            )
 
             fanFavouriteMovies.append(
                 contentsOf: page.movies
             )
 
             fanFavouritePage =
-                page.page + 1
+            page.page + 1
 
             hasMoreFanFavourite =
-                page.hasNextPage
+            page.hasNextPage
 
         } catch {
             print("❌ Fan Favourites Error:", error)
             self.error = error
         }
+
     }
 
     // MARK: - Top 10
 
     public func loadTop10Movies() async {
 
+ 
         guard
             !isTop10Loading,
             top10Movies.isEmpty
@@ -229,12 +266,13 @@ extension HomeViewModel {
 
         do {
             top10Movies =
-                try await fetchTop10MoviesUseCase.execute()
+            try await fetchTop10MoviesUseCase.execute()
 
         } catch {
             print("❌ Top 10 Error:", error)
             self.error = error
         }
+
     }
 
     // MARK: - Now Playing
@@ -257,30 +295,33 @@ extension HomeViewModel {
 
         do {
             let page =
-                try await fetchNowPlayingUseCase.execute(
-                    page: nowPlayingPage
-                )
+            try await fetchNowPlayingUseCase.execute(
+                page: nowPlayingPage
+            )
 
             nowPlayingMovies.append(
                 contentsOf: page.movies
             )
 
             nowPlayingPage =
-                page.page + 1
+            page.page + 1
 
             hasMoreNowPlaying =
-                page.hasNextPage
+            page.hasNextPage
 
         } catch {
             print("❌ Now Playing Error:", error)
             self.error = error
         }
+ 
+
     }
 
     // MARK: - Upcoming
 
     public func loadNextUpcomingPage() async {
 
+ 
         guard
             !isUpcomingLoading,
             hasMoreUpcoming
@@ -297,30 +338,33 @@ extension HomeViewModel {
 
         do {
             let page =
-                try await fetchUpcomingUseCase.execute(
-                    page: upcomingPage
-                )
+            try await fetchUpcomingUseCase.execute(
+                page: upcomingPage
+            )
 
             upcomingMovies.append(
                 contentsOf: page.movies
             )
 
             upcomingPage =
-                page.page + 1
+            page.page + 1
 
             hasMoreUpcoming =
-                page.hasNextPage
+            page.hasNextPage
 
         } catch {
             print("❌ Upcoming Error:", error)
             self.error = error
         }
+ 
+
     }
 
     // MARK: - Born Today Actors
 
     public func loadNextBornTodayActorsPage() async {
 
+ 
         guard
             !isBornTodayActorsLoading,
             hasMoreBornTodayActors
@@ -336,9 +380,9 @@ extension HomeViewModel {
 
         do {
             let page =
-                try await fetchBornTodayActorsUseCase.execute(
-                    page: bornTodayActorsPage
-                )
+            try await fetchBornTodayActorsUseCase.execute(
+                page: bornTodayActorsPage
+            )
 
             bornTodayActors.append(
                 contentsOf: page.actors
@@ -347,18 +391,21 @@ extension HomeViewModel {
             bornTodayActorsPage += 1
 
             hasMoreBornTodayActors =
-                page.hasNextPage
+            page.hasNextPage
 
         } catch {
             print("❌ Born Today Error:", error)
             self.error = error
         }
+ 
+
     }
 
     // MARK: - Most Popular Celebrities
 
     public func loadNextMostPopularCelebritiesPage() async {
 
+ 
         guard
             !isMostPopularCelebritiesLoading,
             hasMoreMostPopularCelebrities
@@ -374,9 +421,9 @@ extension HomeViewModel {
 
         do {
             let page =
-                try await fetchMostPopularActorsUseCase.execute(
-                    page: mostPopularCelebritiesPage
-                )
+            try await fetchMostPopularActorsUseCase.execute(
+                page: mostPopularCelebritiesPage
+            )
 
             mostPopularActors.append(
                 contentsOf: page.actors
@@ -385,18 +432,21 @@ extension HomeViewModel {
             mostPopularCelebritiesPage += 1
 
             hasMoreMostPopularCelebrities =
-                page.hasNextPage
+            page.hasNextPage
 
         } catch {
             print("❌ Most Popular Actors Error:", error)
             self.error = error
         }
+ 
+
     }
 
     // MARK: - News
 
     public func loadNextNewsPage() async {
 
+ 
         guard
             !isNewsLoading,
             hasMoreNews
@@ -412,9 +462,9 @@ extension HomeViewModel {
 
         do {
             let page =
-                try await fetchNewsUseCase.execute(
-                    page: newsPage
-                )
+            try await fetchNewsUseCase.execute(
+                page: newsPage
+            )
 
             news.append(
                 contentsOf: page.news
@@ -423,42 +473,71 @@ extension HomeViewModel {
             newsPage += 1
 
             hasMoreNews =
-                news.count < page.totalResults
+            news.count < page.totalResults
 
         } catch {
             print("❌ News Error:", error)
             self.error = error
         }
+ 
+
     }
 
     // MARK: - Videos
 
     public func loadVideos(for movie: Movie) async {
 
-    error = nil
+ 
+        error = nil
 
-    do {
-        let videos =
+        do {
+            let videos =
             try await fetchMovieVideosUseCase.execute(
                 movieID: movie.id
             )
 
-        movieVideos[movie.id] = videos
+            movieVideos[movie.id] = videos
 
-    } catch {
-        print("❌ Videos Error:", error)
-        self.error = error
+        } catch {
+            print("❌ Videos Error:", error)
+            self.error = error
+        }
+ 
+
     }
-}
+    
+    // MARK: - Recently Viewed
+
+    public func clearRecentlyViewed() async {
+
+        do {
+
+            try await clearRecentlyViewedUseCase
+                .execute()
+
+            recentlyViewedMovies = []
+            recentlyViewedActors = []
+
+        } catch {
+
+            print(
+                "❌ Clear Recently Viewed Error:",
+                error
+            )
+
+            self.error = error
+        }
+    }
 
     // MARK: - Watchlist
 
     public func loadWatchlist() async {
 
+ 
         do {
-            watchlistedMovieIDs =
-                try await fetchWatchlistedMovieIDsUseCase
-                    .execute()
+            watchlistedMovies =
+            try await fetchWatchlistedMoviesUseCase
+                .execute()
 
         } catch {
             print(
@@ -468,24 +547,29 @@ extension HomeViewModel {
 
             self.error = error
         }
+ 
+
     }
 
-    // MARK: - Watchlist
+    public func toggleWatchlist(for movie: Movie) async {
 
-    public func toggleWatchlist(
-        for movie: Movie
-    ) async {
-
-        let movieID = movie.id
-
+ 
         let wasWatchlisted =
-            watchlistedMovieIDs.contains(movieID)
+        watchlistedMovies.contains {
+            $0.id == movie.id
+        }
 
-        // Optimistic UI update
         if wasWatchlisted {
-            watchlistedMovieIDs.remove(movieID)
+
+            watchlistedMovies.removeAll {
+                $0.id == movie.id
+            }
+
         } else {
-            watchlistedMovieIDs.insert(movieID)
+
+            watchlistedMovies.append(
+                movie
+            )
         }
 
         do {
@@ -494,39 +578,52 @@ extension HomeViewModel {
 
                 try await removeWatchlistedMovieUseCase
                     .execute(
-                        movieID: movieID
+                        movie: movie
                     )
 
             } else {
 
                 try await addWatchlistedMovieUseCase
                     .execute(
-                        movieID: movieID
+                        movie: movie
                     )
             }
 
         } catch {
 
-            // Rollback optimistic UI update
             if wasWatchlisted {
-                watchlistedMovieIDs.insert(movieID)
+
+                watchlistedMovies.append(
+                    movie
+                )
+
             } else {
-                watchlistedMovieIDs.remove(movieID)
+
+                watchlistedMovies.removeAll {
+                    $0.id == movie.id
+                }
             }
+
+            print(
+                "❌ Watchlist Toggle Error:",
+                error
+            )
 
             self.error = error
         }
-    }
+ 
 
+    }
 
     // MARK: - Favourites
 
     public func loadFavourites() async {
 
+ 
         do {
-            favouritedActorIDs =
-                try await fetchFavouritedActorIDsUseCase
-                    .execute()
+            favouritedActors =
+            try await fetchFavouritedActorsUseCase
+                .execute()
 
         } catch {
             print(
@@ -536,23 +633,29 @@ extension HomeViewModel {
 
             self.error = error
         }
+ 
+
     }
 
-    public func toggleFavourite(
-        for actor: Actor
-    ) async {
+    public func toggleFavourite(for actor: Actor) async {
 
-        let actorID = actor.id
-
+ 
         let wasFavourited =
-            favouritedActorIDs.contains(actorID)
-
-        // Optimistic UI update
+        favouritedActors.contains {
+            $0.id == actor.id
+        }
 
         if wasFavourited {
-            favouritedActorIDs.remove(actorID)
+
+            favouritedActors.removeAll {
+                $0.id == actor.id
+            }
+
         } else {
-            favouritedActorIDs.insert(actorID)
+
+            favouritedActors.append(
+                actor
+            )
         }
 
         do {
@@ -561,25 +664,30 @@ extension HomeViewModel {
 
                 try await removeFavouritedActorUseCase
                     .execute(
-                        actorID: actorID
+                        actor: actor
                     )
 
             } else {
 
                 try await addFavouritedActorUseCase
                     .execute(
-                        actorID: actorID
+                        actor: actor
                     )
             }
 
         } catch {
 
-            // Rollback
-
             if wasFavourited {
-                favouritedActorIDs.insert(actorID)
+
+                favouritedActors.append(
+                    actor
+                )
+
             } else {
-                favouritedActorIDs.remove(actorID)
+
+                favouritedActors.removeAll {
+                    $0.id == actor.id
+                }
             }
 
             print(
@@ -589,6 +697,8 @@ extension HomeViewModel {
 
             self.error = error
         }
+ 
+
     }
 
     // MARK: - Error Handling

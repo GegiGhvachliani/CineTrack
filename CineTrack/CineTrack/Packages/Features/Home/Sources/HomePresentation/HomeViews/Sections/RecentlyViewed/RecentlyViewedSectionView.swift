@@ -14,8 +14,8 @@ struct RecentlyViewedSectionView: View {
 
     let items: [RecentlyViewedItem]
 
-    let watchlistedMovieIDs: Set<Int>
-    let favouritedActorIDs: Set<Int>
+    let watchlistedMovies: [Movie]
+    let favouritedActors: [Actor]
 
     let onMovieTap: (Movie) -> Void
     let onWatchlistTap: (Movie) -> Void
@@ -24,6 +24,7 @@ struct RecentlyViewedSectionView: View {
     let onFavouriteTap: (Actor) -> Void
 
     let onSeeAllTap: () -> Void
+    let onClearHistory: () -> Void
 
     var body: some View {
 
@@ -32,24 +33,25 @@ struct RecentlyViewedSectionView: View {
             emptyState
 
         } else {
-
-            HorizontalScrollView(
-                headerText: "Recently viewed",
-                items: items,
-                onSeeAllTap: onSeeAllTap
-            ) { item, _ in
-
-                cell(for: item)
+            VStack(spacing: 0) {
+                HorizontalScrollView(
+                    headerText: "Recently viewed",
+                    items: items,
+                    onSeeAllTap: onSeeAllTap
+                ) { item, _ in
+                    cell(for: item)
+                }
+                
+                clearHistoryButton
             }
+            .background(ColorTokens.Background.secondary)
         }
     }
 
     // MARK: - Cell
 
     @ViewBuilder
-    private func cell(
-        for item: RecentlyViewedItem
-    ) -> some View {
+    private func cell(for item: RecentlyViewedItem) -> some View {
 
         switch item {
 
@@ -68,8 +70,9 @@ struct RecentlyViewedSectionView: View {
 
             MovieCell(
                 movie: movie,
-                isWatchlisted:
-                    watchlistedMovieIDs.contains(movie.id),
+                isWatchlisted: watchlistedMovies.contains {
+                    $0.id == movie.id
+                },
                 cellHeight: 240,
                 onMovieTap: {
                     onMovieTap(movie)
@@ -91,8 +94,9 @@ struct RecentlyViewedSectionView: View {
             MovieActorCell(
                 actor: actor,
                 cellHeight: 240,
-                isFavourited:
-                    favouritedActorIDs.contains(actor.id),
+                isFavourited: favouritedActors.contains {
+                    $0.id == actor.id
+                },
                 onActorTap: {
                     onActorTap(actor)
                 },
@@ -100,6 +104,29 @@ struct RecentlyViewedSectionView: View {
                     onFavouriteTap(actor)
                 }
             )
+        }
+    }
+    
+    // MARK: - Clear History
+    
+    private var clearHistoryButton: some View {
+        
+        HStack {
+            
+            Button(action: onClearHistory) {
+                
+                Text("Clear")
+                    .font(TypographyTokens.bodySmall)
+                    .fontWeight(.medium)
+                    .foregroundStyle(ColorTokens.Text.main)
+                    .padding(.leading, 15)
+                    .padding(.bottom, 10)
+                    .background(ColorTokens.Background.secondary)
+                
+            }
+            
+            Spacer()
+            
         }
     }
 

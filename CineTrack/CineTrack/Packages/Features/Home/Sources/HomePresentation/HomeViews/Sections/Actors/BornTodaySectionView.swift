@@ -11,7 +11,7 @@ import SharedCore
 struct BornTodaySectionView: View {
     
     let actors: [Actor]
-    let favouriteActorIDs: Set<Int>
+    let favouritedActors: [Actor]
     
     let onActorTap: (Actor) -> Void
     let onFavouriteTap: (Actor) -> Void
@@ -30,7 +30,9 @@ struct BornTodaySectionView: View {
             MovieActorCell(
                 actor: actor,
                 cellHeight: 240,
-                isFavourited: favouriteActorIDs.contains(actor.id),
+                isFavourited: favouritedActors.contains {
+                    $0.id == actor.id
+                },
                 onActorTap: { onActorTap(actor) },
                 onFavouriteTap: { onFavouriteTap(actor) }
             )

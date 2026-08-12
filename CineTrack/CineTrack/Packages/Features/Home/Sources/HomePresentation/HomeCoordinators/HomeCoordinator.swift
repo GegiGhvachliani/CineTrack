@@ -11,6 +11,7 @@ import HomePresentationAPI
 import HomeDomain
 
 public final class HomeCoordinator: HomeCoordinatorProtocol {
+    
     public var childCoordinators: [Coordinator] = []
     public let navigationController: UINavigationController
     private let factory: HomeFactoryProtocol
@@ -24,17 +25,26 @@ public final class HomeCoordinator: HomeCoordinatorProtocol {
     }
     
     public func start() {
-        let homeVC = factory.makeHomeViewController()
+        let homeVC = factory.makeHomeViewController(coordinator: self)
         navigationController.setViewControllers(([homeVC]), animated: false)
     }
     
-    func showSearch() {
+    public func showSearch() {
         print("Navigate To Search 🔍")
     }
-    func showMovieDetails(movie: Movie) {
+    public func showMovieDetails(movie: Movie) {
         print("Navigate To Movie Details 🍿")
     }
-    func showVideos(item: FeaturedItem) {
+    public func showVideos(item: FeaturedItem) {
         print("Navigate To Video Playlist 📀")
+    }
+    public func showActorDetails(actor: Actor) {
+        print("Navigate To Actor Details 💃🏿")
+    }
+    public func showSeeAll(section: HomeDomain.HomeSection) {
+        print("Navigate To Section See All 🔥")
+    }
+    public func showNewsDetail(news: SharedCore.News) {
+        print("Navigate To News Details 🍿")
     }
 }

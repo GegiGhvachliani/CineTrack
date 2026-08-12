@@ -8,9 +8,7 @@
 import Foundation
 import HomeDomain
 
-struct RecentlyViewedActorDTO:
-    Codable,
-    Sendable {
+struct RecentlyViewedActorDTO: Codable, Sendable {
 
     let id: Int
     let name: String
@@ -18,9 +16,7 @@ struct RecentlyViewedActorDTO:
     let profilePath: String?
     let viewedAt: Date
 
-    init(
-        actor: RecentlyViewedActor
-    ) {
+    init( actor: RecentlyViewedActor ) {
         self.id = actor.id
         self.name = actor.name
         self.birthday = actor.birthday

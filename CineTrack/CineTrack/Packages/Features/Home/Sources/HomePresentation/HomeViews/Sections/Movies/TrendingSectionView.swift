@@ -11,8 +11,8 @@ import SharedCore
 struct TrendingSectionView: View {
     
     let movies: [Movie]
-    let watchlistedMovieID: Set<Int>
-    
+    let watchlistedMovies: [Movie]
+
     let onMovieTap: (Movie) -> Void
     let onWatchlistTap: (Movie) -> Void
     let onSeeAllTap: () -> Void
@@ -29,7 +29,9 @@ struct TrendingSectionView: View {
             
             MovieCell(
                 movie: movie,
-                isWatchlisted: watchlistedMovieID.contains(movie.id),
+                isWatchlisted: watchlistedMovies.contains {
+                    $0.id == movie.id
+                },
                 cellHeight: 240,
                 onMovieTap: { onMovieTap(movie) },
                 onWatchlistTap: { onWatchlistTap(movie) }

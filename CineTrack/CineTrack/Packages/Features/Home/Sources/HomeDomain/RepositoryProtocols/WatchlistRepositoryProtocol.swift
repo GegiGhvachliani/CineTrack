@@ -5,18 +5,19 @@
 //  Created by Gegi Ghvachliani on 11/08/2026.
 //
 
-
 import Foundation
+
+import SharedCore
 
 public protocol WatchlistRepositoryProtocol: Sendable {
 
-    func fetchWatchlistedMovieIDs() async throws -> Set<Int>
+    func fetchWatchlistedMovies() async throws -> [Movie]
 
     func addWatchlistedMovie(
-        id: Int
+        movie: Movie
     ) async throws
 
     func removeWatchlistedMovie(
-        id: Int
+        movie: Movie
     ) async throws
 }

@@ -10,17 +10,14 @@ import Foundation
 
 public protocol RecentlyViewedRepositoryProtocol: Sendable {
 
-    func fetchRecentlyViewedMovies() async throws
-        -> [RecentlyViewedMovie]
+    func fetchRecentlyViewedMovies() async throws -> [RecentlyViewedMovie]
 
-    func addRecentlyViewedMovie(
-        _ movie: RecentlyViewedMovie
-    ) async throws
+    func addRecentlyViewedMovie(_ movie: RecentlyViewedMovie) async throws
 
-    func fetchRecentlyViewedActors() async throws
-        -> [RecentlyViewedActor]
+    func fetchRecentlyViewedActors() async throws -> [RecentlyViewedActor]
 
-    func addRecentlyViewedActor(
-        _ actor: RecentlyViewedActor
-    ) async throws
+    func addRecentlyViewedActor(_ actor: RecentlyViewedActor) async throws
+    
+    func clearRecentlyViewed() async throws
+
 }

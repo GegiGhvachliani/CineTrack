@@ -129,6 +129,59 @@ public final class RecentlyViewedRepository:
             documentID: String(actor.id)
         )
     }
+    
+    // MARK: - Clear History
+
+    public func clearRecentlyViewed()
+        async throws {
+
+        let userID =
+            try currentUserID()
+
+        let moviesCollection =
+            "users/\(userID)/\(self.moviesCollection)"
+
+        let actorsCollection =
+            "users/\(userID)/\(self.actorsCollection)"
+
+        let movieDTOs =
+            try await firestore.getCollection(
+                RecentlyViewedMovieDTO.self,
+                collection: moviesCollection
+            )
+
+        let actorDTOs =
+            try await firestore.getCollection(
+                RecentlyViewedActorDTO.self,
+                collection: actorsCollection
+            )
+
+        try await withThrowingTaskGroup(
+            of: Void.self
+        ) { group in
+
+            for movie in movieDTOs {
+                group.addTask {
+                    try await self.firestore.delete(
+                        collection: moviesCollection,
+                        documentID: String(movie.id)
+                    )
+                }
+            }
+
+            for actor in actorDTOs {
+                group.addTask {
+                    try await self.firestore.delete(
+                        collection: actorsCollection,
+                        documentID: String(actor.id)
+                    )
+                }
+            }
+
+            try await group.waitForAll()
+        }
+    }
+
 
     // MARK: - User
 

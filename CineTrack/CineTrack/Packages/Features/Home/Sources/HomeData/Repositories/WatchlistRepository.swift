@@ -9,16 +9,16 @@ import Foundation
 
 import HomeDomain
 import SharedAuth
+import SharedCore
 import SharedStorage
 
 public final class WatchlistRepository:
     WatchlistRepositoryProtocol,
     @unchecked Sendable
 {
+
     private let firestore: RemoteDocumentStore
     private let userSession: UserSession
-
-    private let collectionName = "watchlist"
 
     public init(
         firestore: RemoteDocumentStore,
@@ -30,63 +30,63 @@ public final class WatchlistRepository:
 
     // MARK: - Fetch
 
-    public func fetchWatchlistedMovieIDs()
+    public func fetchWatchlistedMovies()
         async throws
-        -> Set<Int>
+        -> [Movie]
     {
         let userID = try currentUserID()
 
         let collection =
-            "users/\(userID)/\(collectionName)"
+            "users/\(userID)/watchlist"
 
         let dtos =
             try await firestore.getCollection(
-                FirestoreEntityIDDTO.self,
+                FirestoreMovieDTO.self,
                 collection: collection
             )
 
-        return Set(
-            dtos.map(\.id)
-        )
+        return dtos.map {
+            $0.toDomain()
+        }
     }
 
     // MARK: - Add
 
     public func addWatchlistedMovie(
-        id: Int
+        movie: Movie
     ) async throws {
 
         let userID = try currentUserID()
 
         let collection =
-            "users/\(userID)/\(collectionName)"
+            "users/\(userID)/watchlist"
 
         let dto =
-            FirestoreEntityIDDTO(
-                id: id
+            FirestoreMovieDTO(
+                movie: movie
             )
 
         try await firestore.set(
             dto,
             collection: collection,
-            documentID: String(id)
+            documentID: String(movie.id)
         )
     }
 
     // MARK: - Remove
 
     public func removeWatchlistedMovie(
-        id: Int
+        movie: Movie
     ) async throws {
 
         let userID = try currentUserID()
 
         let collection =
-            "users/\(userID)/\(collectionName)"
+            "users/\(userID)/watchlist"
 
         try await firestore.delete(
             collection: collection,
-            documentID: String(id)
+            documentID: String(movie.id)
         )
     }
 

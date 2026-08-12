@@ -22,29 +22,13 @@ struct MoreMoviesFromFavouriteActorView: View {
     let actor: Actor
 
     private let items: [Movie]
+    let watchlistedMovies: [Movie]
 
     private let onSeeAllTap: () -> Void
     private let onActorTapped: () -> Void
     private let onSeeYourFavouritePeopleTapped: () -> Void
     
     private let cell: (Movie, Int) -> MovieCell
-    
-
-    init(
-        actor: Actor,
-        items: [Movie],
-        onSeeAllTap: @escaping () -> Void,
-        onActorTapped: @escaping () -> Void,
-        onSeeYourFavouritePeopleTapped: @escaping () -> Void,
-        cell: @escaping (Movie, Int) -> MovieCell
-    ) {
-        self.actor = actor
-        self.items = items
-        self.onSeeAllTap = onSeeAllTap
-        self.onActorTapped = onActorTapped
-        self.onSeeYourFavouritePeopleTapped = onSeeYourFavouritePeopleTapped
-        self.cell = cell
-    }
 
     var body: some View {
         VStack(spacing: 12) {

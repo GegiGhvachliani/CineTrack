@@ -5,11 +5,10 @@
 //  Created by Gegi Ghvachliani on 11/08/2026.
 //
 
-
 import Foundation
-
 import HomeDomain
 import SharedAuth
+import SharedCore
 import SharedStorage
 
 public final class FavouriteRepository:
@@ -29,9 +28,9 @@ public final class FavouriteRepository:
 
     // MARK: - Fetch
 
-    public func fetchFavouritedActorIDs()
+    public func fetchFavouritedActors()
         async throws
-        -> Set<Int>
+        -> [Actor]
     {
         let userID = try currentUserID()
 
@@ -40,19 +39,19 @@ public final class FavouriteRepository:
 
         let dtos =
             try await firestore.getCollection(
-                FirestoreEntityIDDTO.self,
+                FavouritedActorDTO.self,
                 collection: collection
             )
 
-        return Set(
-            dtos.map(\.id)
-        )
+        return dtos.map {
+            $0.toDomain()
+        }
     }
 
     // MARK: - Add
 
     public func addFavouritedActor(
-        id: Int
+        actor: Actor
     ) async throws {
 
         let userID = try currentUserID()
@@ -61,21 +60,21 @@ public final class FavouriteRepository:
             "users/\(userID)/favourites"
 
         let dto =
-            FirestoreEntityIDDTO(
-                id: id
+            FavouritedActorDTO(
+                actor: actor
             )
 
         try await firestore.set(
             dto,
             collection: collection,
-            documentID: String(id)
+            documentID: String(actor.id)
         )
     }
 
     // MARK: - Remove
 
     public func removeFavouritedActor(
-        id: Int
+        actor: Actor
     ) async throws {
 
         let userID = try currentUserID()
@@ -85,7 +84,7 @@ public final class FavouriteRepository:
 
         try await firestore.delete(
             collection: collection,
-            documentID: String(id)
+            documentID: String(actor.id)
         )
     }
 

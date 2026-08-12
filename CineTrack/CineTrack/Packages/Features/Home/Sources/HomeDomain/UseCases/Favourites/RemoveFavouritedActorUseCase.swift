@@ -6,32 +6,34 @@
 //
 
 import Foundation
+import SharedCore
+
 
 public protocol RemoveFavouritedActorUseCaseProtocol: Sendable {
 
     func execute(
-        actorID: Int
+        actor: Actor
     ) async throws
 }
 
 public final class RemoveFavouritedActorUseCase:
-    RemoveFavouritedActorUseCaseProtocol,
-    @unchecked Sendable
+RemoveFavouritedActorUseCaseProtocol,
+@unchecked Sendable
 {
-    private let repository: FavouriteRepositoryProtocol
+private let repository: FavouriteRepositoryProtocol
 
-    public init(
-        repository: FavouriteRepositoryProtocol
-    ) {
-        self.repository = repository
-    }
+public init(
+    repository: FavouriteRepositoryProtocol
+) {
+    self.repository = repository
+}
 
-    public func execute(
-        actorID: Int
-    ) async throws {
+public func execute(
+    actor: Actor
+) async throws {
 
-        try await repository.removeFavouritedActor(
-            id: actorID
-        )
-    }
+    try await repository.removeFavouritedActor(
+        actor: actor
+    )
+}
 }

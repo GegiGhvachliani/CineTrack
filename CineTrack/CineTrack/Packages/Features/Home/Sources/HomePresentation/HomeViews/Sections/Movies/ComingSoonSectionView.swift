@@ -11,8 +11,8 @@ import SharedCore
 struct ComingSoonSectionView: View {
     
     let movies: [Movie]
-    let watchlistedMovieIDs: Set<Int>
-    
+    let watchlistedMovies: [Movie]
+
     let onMovieTap: (Movie) -> Void
     let onWatchlistTap: (Movie) -> Void
     let onSeeAllTap: () -> Void
@@ -27,12 +27,15 @@ struct ComingSoonSectionView: View {
             onLoadMore: onLoadMore)
         { movie, _ in
             
-            MovieCell(
+            ComingSoonMoviesCell(
                 movie: movie,
-                isWatchlisted: watchlistedMovieIDs.contains(movie.id),
-                cellHeight: 240,
+                isWatchlisted: watchlistedMovies.contains {
+                    $0.id == movie.id
+                },
+                cellHeight: 265,
                 onMovieTap: { onMovieTap(movie) },
-                onWatchlistTap: { onWatchlistTap(movie) }
+                onWatchlistTap: { onWatchlistTap(movie)
+                }
             )
             
         }
