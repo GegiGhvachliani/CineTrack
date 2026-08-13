@@ -12,10 +12,7 @@ import SharedAuth
 import SharedCore
 import SharedStorage
 
-public final class WatchlistRepository:
-    WatchlistRepositoryProtocol,
-    @unchecked Sendable
-{
+public final class WatchlistRepository: WatchlistRepositoryProtocol, @unchecked Sendable {
 
     private let firestore: RemoteDocumentStore
     private let userSession: UserSession
@@ -30,73 +27,48 @@ public final class WatchlistRepository:
 
     // MARK: - Fetch
 
-    public func fetchWatchlistedMovies()
-        async throws
-        -> [Movie]
-    {
+    public func fetchWatchlistedMovies() async throws -> [Movie] {
+        
         let userID = try currentUserID()
 
-        let collection =
-            "users/\(userID)/watchlist"
+        let collection = "users/\(userID)/watchlist"
 
-        let dtos =
-            try await firestore.getCollection(
-                FirestoreMovieDTO.self,
-                collection: collection
-            )
+        let dtos = try await firestore.getCollection(FirestoreMovieDTO.self, collection: collection)
 
-        return dtos.map {
-            $0.toDomain()
-        }
+        return dtos.map { $0.toDomain() }
+        
     }
 
     // MARK: - Add
 
-    public func addWatchlistedMovie(
-        movie: Movie
-    ) async throws {
+    public func addWatchlistedMovie(movie: Movie) async throws {
 
         let userID = try currentUserID()
 
-        let collection =
-            "users/\(userID)/watchlist"
+        let collection = "users/\(userID)/watchlist"
 
-        let dto =
-            FirestoreMovieDTO(
-                movie: movie
-            )
+        let dto = FirestoreMovieDTO(movie: movie)
 
-        try await firestore.set(
-            dto,
-            collection: collection,
-            documentID: String(movie.id)
-        )
+        try await firestore.set(dto, collection: collection, documentID: String(movie.id))
     }
 
     // MARK: - Remove
 
-    public func removeWatchlistedMovie(
-        movie: Movie
-    ) async throws {
+    public func removeWatchlistedMovie(movie: Movie) async throws {
 
         let userID = try currentUserID()
 
-        let collection =
-            "users/\(userID)/watchlist"
+        let collection = "users/\(userID)/watchlist"
 
-        try await firestore.delete(
-            collection: collection,
-            documentID: String(movie.id)
-        )
+        try await firestore.delete(collection: collection, documentID: String(movie.id))
+        
     }
 
     // MARK: - User
 
     private func currentUserID() throws -> String {
 
-        guard
-            let userID = userSession.currentUserID
-        else {
+        guard let userID = userSession.currentUserID else {
             throw FirestoreError.unauthenticated
         }
 

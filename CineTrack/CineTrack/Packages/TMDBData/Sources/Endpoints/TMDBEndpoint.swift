@@ -12,10 +12,7 @@ public enum TMDBEndpoint {
 
     // MARK: - Movies
 
-    case trending(
-        timeWindow: TrendingTimeWindow,
-        page: Int
-    )
+    case trending(timeWindow: TrendingTimeWindow, page: Int)
 
     case popular(page: Int)
 
@@ -29,10 +26,7 @@ public enum TMDBEndpoint {
 
     case nowPlaying(page: Int)
 
-    case upcoming(
-        page: Int,
-        region: String
-    )
+    case upcoming(page: Int, region: String)
 
     case movieVideos(movieID: Int)
 
@@ -48,11 +42,11 @@ public enum TrendingTimeWindow: String {
     case week
 }
 
-public extension TMDBEndpoint {
+extension TMDBEndpoint {
 
     // MARK: - Default Trending
 
-    static var defaultTrending: TMDBEndpoint {
+    public static var defaultTrending: TMDBEndpoint {
         .trending(
             timeWindow: .week,
             page: 1
@@ -61,7 +55,7 @@ public extension TMDBEndpoint {
 
     // MARK: - Path
 
-    var path: String {
+    public var path: String {
 
         switch self {
 
@@ -96,7 +90,7 @@ public extension TMDBEndpoint {
 
     // MARK: - Page
 
-    var page: Int? {
+    public var page: Int? {
 
         switch self {
 
@@ -131,7 +125,7 @@ public extension TMDBEndpoint {
 
     // MARK: - Method
 
-    var method: HTTPMethod {
+    public var method: HTTPMethod {
         .get
     }
 }

@@ -21,7 +21,7 @@ struct ComingSoonSectionView: View {
     var body: some View {
         
         HorizontalScrollView(
-            headerText: "Coming soon to theaters (US)",
+            headerText: HomeStrings.Section.upcoming,
             items: movies,
             onSeeAllTap: onSeeAllTap,
             onLoadMore: onLoadMore)

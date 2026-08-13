@@ -10,43 +10,23 @@ import SharedCore
 
 public protocol HomeRepositoryProtocol: Sendable {
 
-    func fetchTrending(
-        page: Int
-    ) async throws -> MoviePage
+    func fetchTrending(page: Int) async throws -> MoviePage
 
-    func fetchPopular(
-        page: Int
-    ) async throws -> MoviePage
+    func fetchPopular(page: Int) async throws -> MoviePage
 
-    func fetchTopRated(
-        page: Int
-    ) async throws -> MoviePage
+    func fetchTopRated(page: Int) async throws -> MoviePage
 
-    func fetchFanFavourites(
-        page: Int
-    ) async throws -> MoviePage
+    func fetchFanFavourites(page: Int) async throws -> MoviePage
 
-    func fetchNowPlaying(
-        page: Int
-    ) async throws -> MoviePage
+    func fetchNowPlaying(page: Int) async throws -> MoviePage
 
-    func fetchUpcoming(
-        page: Int
-    ) async throws -> MoviePage
+    func fetchUpcoming(page: Int) async throws -> MoviePage
 
-    func fetchVideos(
-        movieId: Int
-    ) async throws -> [MovieVideo]
+    func fetchVideos(movieId: Int) async throws -> [MovieVideo]
 
-    func fetchBornTodayActors(
-        page: Int
-    ) async throws -> ActorPage
+    func fetchBornTodayActors(page: Int) async throws -> ActorPage
 
-    func fetchMostPopularActors(
-        page: Int
-    ) async throws -> ActorPage
+    func fetchMostPopularActors(page: Int) async throws -> ActorPage
 
-    func fetchNews(
-        page: Int
-    ) async throws -> NewsPage
+    func fetchNews(page: Int) async throws -> NewsPage
 }

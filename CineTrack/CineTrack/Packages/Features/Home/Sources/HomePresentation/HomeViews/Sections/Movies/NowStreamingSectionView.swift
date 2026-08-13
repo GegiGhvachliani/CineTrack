@@ -21,7 +21,7 @@ struct NowStreamingSectionView: View {
     var body: some View {
         
         HorizontalScrollView(
-            headerText: "Now streaming",
+            headerText: HomeStrings.Section.nowPlaying,
             items: movies,
             onSeeAllTap: onSeeAllTap,
             onLoadMore: onLoadMore

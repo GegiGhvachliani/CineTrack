@@ -21,7 +21,7 @@ struct FanFavouritesSectionView: View {
     var body: some View {
         
         HorizontalScrollView(
-            headerText: "Fan Favourites",
+            headerText: HomeStrings.Section.fanFavourites,
             items: movies,
             onSeeAllTap: onSeeAllTap,
             onLoadMore: onLoadMore

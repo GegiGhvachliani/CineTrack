@@ -7,30 +7,21 @@
 
 import Foundation
 
-public protocol FetchRecentlyViewedMoviesUseCaseProtocol:
-    Sendable {
+public protocol FetchRecentlyViewedMoviesUseCaseProtocol: Sendable {
 
-    func execute() async throws
-        -> [RecentlyViewedMovie]
+    func execute() async throws -> [RecentlyViewedMovie]
 }
 
-public final class FetchRecentlyViewedMoviesUseCase:
-    FetchRecentlyViewedMoviesUseCaseProtocol {
+public final class FetchRecentlyViewedMoviesUseCase: FetchRecentlyViewedMoviesUseCaseProtocol {
 
-    private let repository:
-        RecentlyViewedRepositoryProtocol
+    private let repository: RecentlyViewedRepositoryProtocol
 
-    public init(
-        repository:
-            RecentlyViewedRepositoryProtocol
-    ) {
+    public init(repository: RecentlyViewedRepositoryProtocol) {
         self.repository = repository
     }
 
-    public func execute() async throws
-        -> [RecentlyViewedMovie] {
+    public func execute() async throws -> [RecentlyViewedMovie] {
 
-        try await repository
-            .fetchRecentlyViewedMovies()
+        try await repository.fetchRecentlyViewedMovies()
     }
 }

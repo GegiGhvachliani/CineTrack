@@ -12,11 +12,7 @@ public protocol FavouriteRepositoryProtocol: Sendable {
 
     func fetchFavouritedActors() async throws -> [Actor]
 
-    func addFavouritedActor(
-        actor: Actor
-    ) async throws
+    func addFavouritedActor(actor: Actor) async throws
 
-    func removeFavouritedActor(
-        actor: Actor
-    ) async throws
+    func removeFavouritedActor(actor: Actor) async throws
 }

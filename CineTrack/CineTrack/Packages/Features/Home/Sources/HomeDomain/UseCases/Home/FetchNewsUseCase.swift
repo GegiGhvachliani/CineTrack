@@ -13,11 +13,9 @@ public protocol FetchNewsUseCaseProtocol: Sendable {
     func execute(page: Int) async throws -> NewsPage
 }
 
-public final class FetchNewsUseCase:
-    FetchNewsUseCaseProtocol {
+public final class FetchNewsUseCase: FetchNewsUseCaseProtocol {
 
-    private let repository:
-        HomeRepositoryProtocol
+    private let repository:HomeRepositoryProtocol
 
     public init(repository: HomeRepositoryProtocol) {
         self.repository = repository
@@ -25,8 +23,6 @@ public final class FetchNewsUseCase:
 
     public func execute(page: Int) async throws -> NewsPage {
 
-        try await repository.fetchNews(
-            page: page
-        )
+        try await repository.fetchNews(page: page)
     }
 }

@@ -15,9 +15,7 @@ struct FavouritedActorDTO: Codable, Sendable {
     let birthday: Date?
     let profilePath: String?
 
-    init(
-        actor: Actor
-    ) {
+    init(actor: Actor) {
         self.id = actor.id
         self.name = actor.name
         self.birthday = actor.birthday

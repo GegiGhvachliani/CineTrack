@@ -20,9 +20,7 @@ struct RecentlyViewedMovieDTO:
     let voteAverage: Double
     let viewedAt: Date
 
-    init(
-        movie: RecentlyViewedMovie
-    ) {
+    init(movie: RecentlyViewedMovie) {
         self.id = movie.id
         self.title = movie.title
         self.posterPath = movie.posterPath
@@ -31,8 +29,7 @@ struct RecentlyViewedMovieDTO:
         self.viewedAt = movie.viewedAt
     }
 
-    func toDomain()
-        -> RecentlyViewedMovie {
+    func toDomain() -> RecentlyViewedMovie {
 
         RecentlyViewedMovie(
             id: id,

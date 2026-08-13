@@ -21,7 +21,7 @@ struct TrendingSectionView: View {
     var body: some View {
         
         HorizontalScrollView(
-            headerText: "Trending now",
+            headerText: HomeStrings.Section.trending,
             items: movies,
             onSeeAllTap: onSeeAllTap,
             onLoadMore: onLoadMore

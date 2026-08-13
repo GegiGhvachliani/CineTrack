@@ -19,7 +19,7 @@ struct NewsSectionView: View {
     var body: some View {
         
         PagingHorizontalScrollView(
-            headerText: "News",
+            headerText: HomeStrings.Section.news,
             items: news,
             cellWidth: 330,
             cellHeight: 220,
@@ -37,10 +37,7 @@ struct NewsSectionView: View {
     
 }
 
-private struct PagingHorizontalScrollView<
-    Item: Identifiable,
-    Cell: View
->: View {
+private struct PagingHorizontalScrollView<Item: Identifiable, Cell: View>: View {
 
     let headerText: String
     let items: [Item]

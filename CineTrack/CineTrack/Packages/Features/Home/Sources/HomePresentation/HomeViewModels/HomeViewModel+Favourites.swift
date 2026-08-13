@@ -1,0 +1,78 @@
+//
+//  HomeViewModel+Favourites.swift
+//  Home
+//
+//  Created by Gegi Ghvachliani on 13/08/2026.
+//
+
+
+import Foundation
+
+import HomeDomain
+import SharedCore
+
+extension HomeViewModel {
+
+    // MARK: - Load
+
+    public func loadFavourites() async {
+
+        do {
+
+            favouritedActors = try await fetchFavouritedActorsUseCase.execute()
+
+        } catch {
+
+            print("❌ Favourites Load Error:", error)
+            self.error = error
+            
+        }
+    }
+
+    // MARK: - Toggle
+
+    public func toggleFavourite(for actor: Actor) async {
+
+        let wasFavourited = favouritedActors.contains {
+                $0.id == actor.id
+            }
+
+        if wasFavourited {
+
+            favouritedActors.removeAll { $0.id == actor.id }
+
+        } else {
+
+            favouritedActors.append(actor)
+        }
+
+        do {
+
+            if wasFavourited {
+
+                try await removeFavouritedActorUseCase.execute(actor: actor)
+
+            } else {
+
+                try await addFavouritedActorUseCase.execute(actor: actor)
+            }
+
+        } catch {
+
+            if wasFavourited {
+
+                favouritedActors.append(actor)
+
+            } else {
+
+                favouritedActors.removeAll {
+                    $0.id == actor.id
+                }
+            }
+
+            print("❌ Favourite Toggle Error:", error)
+            self.error = error
+            
+        }
+    }
+}

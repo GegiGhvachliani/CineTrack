@@ -26,15 +26,34 @@ public struct HomeView: View {
 
     public var body: some View {
 
+        Group {
+            if viewModel.isHomeLoading {
+                ProgressView()
+                    .scaleEffect(1.5)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+                homeContent
+            }
+        }
+        .task {
+            await viewModel.loadHome()
+        }
+    }
+    
+    
+    // MARK: - Home content
+    
+    private var homeContent: some View {
+
         ScrollView {
 
             VStack(spacing: 20) {
 
                 header
                 bornTodaySection
-                
+
                 whatToWatchDivider
-                
+
                 top10Section
                 fanFavouritesSection
                 comingSoonToTheatersSection
@@ -43,7 +62,7 @@ public struct HomeView: View {
                 watchlistedMoviesSection
 
                 moreToExplorDivider
-                
+
                 topNewsSection
                 mostPopularCelebritiesSection
                 recentlyViewedSection
@@ -51,18 +70,16 @@ public struct HomeView: View {
                 Text("More Movies From Favourite Actor")
                     .font(TypographyTokens.title3)
                     .foregroundColor(ColorTokens.Brand.primary)
-                
+
                 footer
             }
+            .padding(.top, 16)
+            .padding(.bottom, 100)
         }
         .ignoresSafeArea(edges: .vertical)
-        .padding(.top)
         .scrollIndicators(.hidden)
-        .task {
-            await viewModel.loadHome()
-        }
-        .padding(.bottom, 50)
     }
+    
     
     // MARK: - header
     

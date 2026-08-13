@@ -12,7 +12,6 @@
 		630B69DA2FEFFA44006DF3CD /* MovieDetailPresentationAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 630B69D92FEFFA44006DF3CD /* MovieDetailPresentationAPI */; };
 		630B69DC2FEFFA44006DF3CD /* ProfilePresentationAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 630B69DB2FEFFA44006DF3CD /* ProfilePresentationAPI */; };
 		630B69DE2FEFFA44006DF3CD /* SearchPresentationAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 630B69DD2FEFFA44006DF3CD /* SearchPresentationAPI */; };
-		630B69E02FEFFA44006DF3CD /* WatchlistPresentationAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 630B69DF2FEFFA44006DF3CD /* WatchlistPresentationAPI */; };
 		630B6A1E2FF2AB33006DF3CD /* AuthenticationAssembly in Frameworks */ = {isa = PBXBuildFile; productRef = 630B6A1D2FF2AB33006DF3CD /* AuthenticationAssembly */; };
 		630B6A202FF2AB33006DF3CD /* AuthenticationPresentationAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 630B6A1F2FF2AB33006DF3CD /* AuthenticationPresentationAPI */; };
 		63827DBF2FD3530600DE3E16 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 63827DBE2FD3530600DE3E16 /* FirebaseAuth */; };
@@ -27,7 +26,6 @@
 		63F86A472FE96EC000D43A5F /* SharedCore in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A462FE96EC000D43A5F /* SharedCore */; };
 		63F86A492FE96EC000D43A5F /* SharedNetworking in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A482FE96EC000D43A5F /* SharedNetworking */; };
 		63F86A4B2FE96EC000D43A5F /* SharedStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A4A2FE96EC000D43A5F /* SharedStorage */; };
-		63F86A4D2FE96EC000D43A5F /* WatchlistAssembly in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A4C2FE96EC000D43A5F /* WatchlistAssembly */; };
 		63FB42DD302A714400502D80 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 63FB42DC302A714400502D80 /* FirebaseFirestore */; };
 /* End PBXBuildFile section */
 
@@ -60,14 +58,16 @@
 			membershipExceptions = (
 				App/Config/Info.plist,
 				Packages/DesignSystem,
+				Packages/Features/ActorDetails,
 				Packages/Features/Authentication,
-				Packages/Features/Discover,
 				Packages/Features/Home,
 				Packages/Features/MovieDetail,
+				Packages/Features/NewsDetails,
 				Packages/Features/Onboarding,
 				Packages/Features/Profile,
 				Packages/Features/Search,
-				Packages/Features/Watchlist,
+				Packages/Features/SeeAll,
+				Packages/Features/VideosList,
 				Packages/NewsData,
 				Packages/SharedKit,
 				Packages/TMDBData,
@@ -113,10 +113,8 @@
 				630B69D82FEFFA44006DF3CD /* HomePresentationAPI in Frameworks */,
 				63FB42DD302A714400502D80 /* FirebaseFirestore in Frameworks */,
 				63F86A472FE96EC000D43A5F /* SharedCore in Frameworks */,
-				630B69E02FEFFA44006DF3CD /* WatchlistPresentationAPI in Frameworks */,
 				63F86A392FE96EC000D43A5F /* DesignSystemComponents in Frameworks */,
 				63F86A412FE96EC000D43A5F /* OnboardingAssembly in Frameworks */,
-				63F86A4D2FE96EC000D43A5F /* WatchlistAssembly in Frameworks */,
 				630B6A1E2FF2AB33006DF3CD /* AuthenticationAssembly in Frameworks */,
 				63F86A3F2FE96EC000D43A5F /* MovieDetailAssemby in Frameworks */,
 				63827DBF2FD3530600DE3E16 /* FirebaseAuth in Frameworks */,
@@ -205,13 +203,11 @@
 				63F86A462FE96EC000D43A5F /* SharedCore */,
 				63F86A482FE96EC000D43A5F /* SharedNetworking */,
 				63F86A4A2FE96EC000D43A5F /* SharedStorage */,
-				63F86A4C2FE96EC000D43A5F /* WatchlistAssembly */,
 				630B69D52FEFFA27006DF3CD /* OnboardingPresentationAPI */,
 				630B69D72FEFFA44006DF3CD /* HomePresentationAPI */,
 				630B69D92FEFFA44006DF3CD /* MovieDetailPresentationAPI */,
 				630B69DB2FEFFA44006DF3CD /* ProfilePresentationAPI */,
 				630B69DD2FEFFA44006DF3CD /* SearchPresentationAPI */,
-				630B69DF2FEFFA44006DF3CD /* WatchlistPresentationAPI */,
 				630B6A1D2FF2AB33006DF3CD /* AuthenticationAssembly */,
 				630B6A1F2FF2AB33006DF3CD /* AuthenticationPresentationAPI */,
 				63FB42DC302A714400502D80 /* FirebaseFirestore */,
@@ -744,10 +740,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = SearchPresentationAPI;
 		};
-		630B69DF2FEFFA44006DF3CD /* WatchlistPresentationAPI */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = WatchlistPresentationAPI;
-		};
 		630B6A1D2FF2AB33006DF3CD /* AuthenticationAssembly */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AuthenticationAssembly;
@@ -805,10 +797,6 @@
 		63F86A4A2FE96EC000D43A5F /* SharedStorage */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SharedStorage;
-		};
-		63F86A4C2FE96EC000D43A5F /* WatchlistAssembly */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = WatchlistAssembly;
 		};
 		63FB42DC302A714400502D80 /* FirebaseFirestore */ = {
 			isa = XCSwiftPackageProductDependency;

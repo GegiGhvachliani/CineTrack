@@ -9,6 +9,7 @@ import Foundation
 import SharedCore
 
 public protocol FetchMovieVideosUseCaseProtocol: Sendable {
+    
     func execute(movieID: Int) async throws -> [MovieVideo]
 }
 

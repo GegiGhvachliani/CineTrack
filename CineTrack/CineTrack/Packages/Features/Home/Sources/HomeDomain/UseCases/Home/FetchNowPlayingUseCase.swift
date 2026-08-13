@@ -20,6 +20,7 @@ public final class FetchNowPlayingUseCase: FetchNowPlayingUseCaseProtocol {
     }
     
     public func execute(page: Int) async throws -> MoviePage {
+        
         try await repository.fetchNowPlaying(page: page)
     }
 }

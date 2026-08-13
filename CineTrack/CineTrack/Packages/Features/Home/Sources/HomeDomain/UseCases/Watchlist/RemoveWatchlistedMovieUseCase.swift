@@ -11,30 +11,19 @@ import SharedCore
 
 public protocol RemoveWatchlistedMovieUseCaseProtocol: Sendable {
 
-    func execute(
-        movie: Movie
-    ) async throws
+    func execute(movie: Movie) async throws
 }
 
-public final class RemoveWatchlistedMovieUseCase:
-    RemoveWatchlistedMovieUseCaseProtocol,
-    @unchecked Sendable
-{
+public final class RemoveWatchlistedMovieUseCase: RemoveWatchlistedMovieUseCaseProtocol, @unchecked Sendable {
 
     private let repository: WatchlistRepositoryProtocol
 
-    public init(
-        repository: WatchlistRepositoryProtocol
-    ) {
+    public init(repository: WatchlistRepositoryProtocol) {
         self.repository = repository
     }
 
-    public func execute(
-        movie: Movie
-    ) async throws {
+    public func execute(movie: Movie) async throws {
 
-        try await repository.removeWatchlistedMovie(
-            movie: movie
-        )
+        try await repository.removeWatchlistedMovie(movie: movie)
     }
 }

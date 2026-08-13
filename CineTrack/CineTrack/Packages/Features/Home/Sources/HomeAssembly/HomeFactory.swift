@@ -24,187 +24,183 @@ import NewsData
 @MainActor
 public struct HomeFactory: HomeFactoryProtocol {
 
-public init() {}
+    public init() {}
 
-public func makeHomeViewController(coordinator: HomeCoordinatorProtocol) -> UIViewController {
+    public func makeHomeViewController(coordinator: HomeCoordinatorProtocol) -> UIViewController {
 
-// MARK: - API Client
+        // MARK: - API Client
 
-let apiClient = URLSessionAPIClient()
+        let apiClient = URLSessionAPIClient()
 
-// MARK: - TMDB Configuration
+        // MARK: - TMDB Configuration
 
-let configuration = TMDBConfiguration(
-    baseURL: URL(string: "https://api.themoviedb.org")!,
-    accessToken: "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4NWEyZmRkNjQyY2FmOTMzYTVjMzk5N2VkY2VjYTRjNSIsIm5iZiI6MTc2Mzk4OTQxNS42MDA5OTk4LCJzdWIiOiI2OTI0NTdhN2EwYzRiMWIxMzIxODc1ZGIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.ZfESC0ZJHYqzbSE2xCYRjfOSwiacjs7sYl-_qvgDbc4"
-)
+        let configuration = TMDBConfiguration(
+            baseURL: URL(string: "https://api.themoviedb.org")!,
+            accessToken: "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4NWEyZmRkNjQyY2FmOTMzYTVjMzk5N2VkY2VjYTRjNSIsIm5iZiI6MTc2Mzk4OTQxNS42MDA5OTk4LCJzdWIiOiI2OTI0NTdhN2EwYzRiMWIxMzIxODc1ZGIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.ZfESC0ZJHYqzbSE2xCYRjfOSwiacjs7sYl-_qvgDbc4"
+        )
 
-// MARK: - News Configuration
+        // MARK: - News Configuration
 
-let newsConfiguration = NewsConfiguration(
-    baseURL: URL(string: "https://newsapi.org")!,
-    apiKey: Bundle.main.object(forInfoDictionaryKey: "NEWS_API_KEY") as? String ?? ""
-)
+        let newsConfiguration = NewsConfiguration(
+            baseURL: URL(string: "https://newsapi.org")!,
+            apiKey: Bundle.main.object(forInfoDictionaryKey: "NEWS_API_KEY") as? String ?? ""
+        )
 
-// MARK: - Repository
+        // MARK: - Repository
 
-let repository = HomeRepository(
-    apiClient: apiClient,
-    configuration: configuration,
-    newsConfiguration: newsConfiguration
-)
+        let repository = HomeRepository(
+            apiClient: apiClient,
+            configuration: configuration,
+            newsConfiguration: newsConfiguration
+        )
 
-// MARK: - Recently Viewed Repository
+        // MARK: - Recently Viewed Repository
 
-let firestore = FirestoreClient()
+        let firestore = FirestoreClient()
 
-let userSession = FirebaseUserSession()
+        let userSession = FirebaseUserSession()
 
-let recentlyViewedRepository = RecentlyViewedRepository(
-    firestore: firestore,
-    userSession: userSession
-)
+        let recentlyViewedRepository = RecentlyViewedRepository(
+            firestore: firestore,
+            userSession: userSession
+        )
 
-// MARK: - Watchlist Repository
+        // MARK: - Watchlist Repository
 
-let watchlistRepository = WatchlistRepository(
-    firestore: firestore,
-    userSession: userSession
-)
+        let watchlistRepository = WatchlistRepository(
+            firestore: firestore,
+            userSession: userSession
+        )
 
-// MARK: - Favourite Repository
+        // MARK: - Favourite Repository
 
-let favouriteRepository = FavouriteRepository(
-    firestore: firestore,
-    userSession: userSession
-)
+        let favouriteRepository = FavouriteRepository(
+            firestore: firestore,
+            userSession: userSession
+        )
 
-// MARK: - Use Cases
+        // MARK: - Use Cases
 
-let fetchTrendingUseCase = FetchTrendingUseCase(repository: repository)
+        let fetchTrendingUseCase = FetchTrendingUseCase(repository: repository)
 
-let fetchPopularUseCase = FetchPopularUseCase(repository: repository)
+        let fetchPopularUseCase = FetchPopularUseCase(repository: repository)
 
-let fetchFanFavouritesUseCase = FetchFanFavouritesUseCase(repository: repository)
+        let fetchFanFavouritesUseCase = FetchFanFavouritesUseCase(repository: repository)
 
-let fetchTop10MoviesUseCase = FetchTop10MoviesUseCase(repository: repository)
+        let fetchTop10MoviesUseCase = FetchTop10MoviesUseCase(repository: repository)
 
-let fetchNowPlayingUseCase = FetchNowPlayingUseCase(repository: repository)
+        let fetchNowPlayingUseCase = FetchNowPlayingUseCase(repository: repository)
 
-let fetchUpcomingUseCase = FetchUpcomingUseCase(repository: repository)
+        let fetchUpcomingUseCase = FetchUpcomingUseCase(repository: repository)
 
-let fetchMovieVideosUseCase = FetchMovieVideosUseCase(repository: repository)
+        let fetchMovieVideosUseCase = FetchMovieVideosUseCase(repository: repository)
 
-let fetchBornTodayActorsUseCase = FetchBornTodayActorsUseCase(repository: repository)
+        let fetchBornTodayActorsUseCase = FetchBornTodayActorsUseCase(repository: repository)
 
-let fetchMostPopularActorsUseCase = FetchMostPopularActorsUseCase(repository: repository)
+        let fetchMostPopularActorsUseCase = FetchMostPopularActorsUseCase(repository: repository)
 
-let fetchNewsUseCase = FetchNewsUseCase(repository: repository)
+        let fetchNewsUseCase = FetchNewsUseCase(repository: repository)
 
-// MARK: - Recently Viewed Use Cases
+        // MARK: - Recently Viewed Use Cases
 
-let fetchRecentlyViewedMoviesUseCase = FetchRecentlyViewedMoviesUseCase(repository: recentlyViewedRepository)
+        let fetchRecentlyViewedMoviesUseCase = FetchRecentlyViewedMoviesUseCase(repository: recentlyViewedRepository)
 
-let fetchRecentlyViewedActorsUseCase = FetchRecentlyViewedActorsUseCase( repository: recentlyViewedRepository)
+        let fetchRecentlyViewedActorsUseCase = FetchRecentlyViewedActorsUseCase(repository: recentlyViewedRepository)
 
-let addRecentlyViewedMovieUseCase = AddRecentlyViewedMovieUseCase(repository: recentlyViewedRepository)
+        let addRecentlyViewedMovieUseCase = AddRecentlyViewedMovieUseCase(repository: recentlyViewedRepository)
 
-let addRecentlyViewedActorUseCase = AddRecentlyViewedActorUseCase( repository: recentlyViewedRepository)
+        let addRecentlyViewedActorUseCase = AddRecentlyViewedActorUseCase(repository: recentlyViewedRepository)
     
-let clearRecentlyViewedUseCase = ClearRecentlyViewedUseCase(repository: recentlyViewedRepository)
+        let clearRecentlyViewedUseCase = ClearRecentlyViewedUseCase(repository: recentlyViewedRepository)
 
-// MARK: - Watchlist Use Cases
+        // MARK: - Watchlist Use Cases
 
-let fetchWatchlistedMoviesUseCase = FetchWatchlistedMoviesUseCase(repository: watchlistRepository)
+        let fetchWatchlistedMoviesUseCase = FetchWatchlistedMoviesUseCase(repository: watchlistRepository)
 
-let addWatchlistedMovieUseCase = AddWatchlistedMovieUseCase(repository: watchlistRepository)
+        let addWatchlistedMovieUseCase = AddWatchlistedMovieUseCase(repository: watchlistRepository)
 
-let removeWatchlistedMovieUseCase = RemoveWatchlistedMovieUseCase(repository: watchlistRepository)
+        let removeWatchlistedMovieUseCase = RemoveWatchlistedMovieUseCase(repository: watchlistRepository)
 
-// MARK: - Favourite Use Cases
+        // MARK: - Favourite Use Cases
 
-let fetchFavouritedActorsUseCase = FetchFavouritedActorsUseCase(repository: favouriteRepository)
+        let fetchFavouritedActorsUseCase = FetchFavouritedActorsUseCase(repository: favouriteRepository)
 
-let addFavouritedActorUseCase = AddFavouritedActorUseCase(repository: favouriteRepository)
+        let addFavouritedActorUseCase = AddFavouritedActorUseCase(repository: favouriteRepository)
 
-let removeFavouritedActorUseCase = RemoveFavouritedActorUseCase(repository: favouriteRepository)
+        let removeFavouritedActorUseCase = RemoveFavouritedActorUseCase(repository: favouriteRepository)
 
-// MARK: - ViewModel
+        // MARK: - ViewModel
 
-let viewModel = HomeViewModel(
-    // movies
-    fetchTrendingUseCase: fetchTrendingUseCase,
-    fetchPopularUseCase: fetchPopularUseCase,
-    fetchTop10MoviesUseCase: fetchTop10MoviesUseCase,
-    fetchFanFavouritesUseCase: fetchFanFavouritesUseCase,
-    fetchNowPlayingUseCase: fetchNowPlayingUseCase,
-    fetchUpcomingUseCase: fetchUpcomingUseCase,
-    fetchMovieVideosUseCase: fetchMovieVideosUseCase,
-    fetchBornTodayActorsUseCase: fetchBornTodayActorsUseCase,
-    fetchMostPopularActorsUseCase: fetchMostPopularActorsUseCase,
-    fetchNewsUseCase: fetchNewsUseCase,
-    // recentlyViewed
-    fetchRecentlyViewedMoviesUseCase: fetchRecentlyViewedMoviesUseCase,
-    fetchRecentlyViewedActorsUseCase: fetchRecentlyViewedActorsUseCase,
-    addRecentlyViewedMovieUseCase: addRecentlyViewedMovieUseCase,
-    addRecentlyViewedActorUseCase: addRecentlyViewedActorUseCase,
-    clearRecentlyViewedUseCase: clearRecentlyViewedUseCase,
-    // watchlist
-    fetchWatchlistedMoviesUseCase: fetchWatchlistedMoviesUseCase,
-    addWatchlistedMovieUseCase: addWatchlistedMovieUseCase,
-    removeWatchlistedMovieUseCase: removeWatchlistedMovieUseCase,
-    // favourites
-    fetchFavouritedActorsUseCase: fetchFavouritedActorsUseCase,
-    addFavouritedActorUseCase: addFavouritedActorUseCase,
-    removeFavouritedActorUseCase: removeFavouritedActorUseCase
-)
+        let viewModel = HomeViewModel(
+            // movies
+            fetchTrendingUseCase: fetchTrendingUseCase,
+            fetchPopularUseCase: fetchPopularUseCase,
+            fetchTop10MoviesUseCase: fetchTop10MoviesUseCase,
+            fetchFanFavouritesUseCase: fetchFanFavouritesUseCase,
+            fetchNowPlayingUseCase: fetchNowPlayingUseCase,
+            fetchUpcomingUseCase: fetchUpcomingUseCase,
+            fetchMovieVideosUseCase: fetchMovieVideosUseCase,
+            fetchBornTodayActorsUseCase: fetchBornTodayActorsUseCase,
+            fetchMostPopularActorsUseCase: fetchMostPopularActorsUseCase,
+            fetchNewsUseCase: fetchNewsUseCase,
+            // recentlyViewed
+            fetchRecentlyViewedMoviesUseCase: fetchRecentlyViewedMoviesUseCase,
+            fetchRecentlyViewedActorsUseCase: fetchRecentlyViewedActorsUseCase,
+            addRecentlyViewedMovieUseCase: addRecentlyViewedMovieUseCase,
+            addRecentlyViewedActorUseCase: addRecentlyViewedActorUseCase,
+            clearRecentlyViewedUseCase: clearRecentlyViewedUseCase,
+            // watchlist
+            fetchWatchlistedMoviesUseCase: fetchWatchlistedMoviesUseCase,
+            addWatchlistedMovieUseCase: addWatchlistedMovieUseCase,
+            removeWatchlistedMovieUseCase: removeWatchlistedMovieUseCase,
+            // favourites
+            fetchFavouritedActorsUseCase: fetchFavouritedActorsUseCase,
+            addFavouritedActorUseCase: addFavouritedActorUseCase,
+            removeFavouritedActorUseCase: removeFavouritedActorUseCase
+        )
 
-// MARK: - SwiftUI View
+        // MARK: - SwiftUI View
 
-let homeView = HomeView(
-    viewModel: viewModel
-)
+        let homeView = HomeView(viewModel: viewModel)
 
-viewModel.onSearch = {
-    coordinator.showSearch()
-}
+        viewModel.onSearch = {
+            coordinator.showSearch()
+        }
 
-viewModel.onMovieDetails = { movie in
-    coordinator.showMovieDetails(movie: movie)
-}
+        viewModel.onMovieDetails = { movie in
+            coordinator.showMovieDetails(movie: movie)
+        }
 
-viewModel.onVideos = { item in
-    coordinator.showVideos(item: item)
-}
+        viewModel.onVideos = { item in
+            coordinator.showVideos(item: item)
+        }
 
-viewModel.onActorDetails = { actor in
-    coordinator.showActorDetails(actor: actor)
-}
+        viewModel.onActorDetails = { actor in
+            coordinator.showActorDetails(actor: actor)
+        }
 
-viewModel.onNewsDetails = { news in
-    coordinator.showNewsDetail(news: news)
-}
+        viewModel.onNewsDetails = { news in
+            coordinator.showNewsDetail(news: news)
+        }
 
-viewModel.onSeeAll = { section in
-    coordinator.showSeeAll(section: section)
-}
+        viewModel.onSeeAll = { section in
+            coordinator.showSeeAll(section: section)
+        }
 
-// MARK: - Hosting Controller
+        // MARK: - Hosting Controller
 
-let hostingController = UIHostingController(
-    rootView: homeView
-)
+        let hostingController = UIHostingController(
+            rootView: homeView
+        )
 
-return hostingController
+        return hostingController
 
-}
+    }
 
-public func makeHomeCoordinator(
-navigationController: UINavigationController
-) -> HomeCoordinatorProtocol {
-HomeCoordinator(
-navigationController: navigationController,
-factory: self
-)
-}
+    public func makeHomeCoordinator(navigationController: UINavigationController) -> HomeCoordinatorProtocol {
+        HomeCoordinator(
+            navigationController: navigationController,
+            factory: self
+        )
+    }
 }

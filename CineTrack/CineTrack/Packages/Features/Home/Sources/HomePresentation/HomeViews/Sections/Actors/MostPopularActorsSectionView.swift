@@ -21,7 +21,7 @@ struct MostPopularActorsSectionView: View {
     var body: some View {
         
         HorizontalScrollView(
-            headerText: "Most popular celebrities",
+            headerText: HomeStrings.Section.mostPopularCelebrities,
             items: actors,
             onSeeAllTap: onSeeAllTap,
             onLoadMore: onLoadMore

@@ -7,28 +7,21 @@
 
 import Foundation
 
-public protocol ClearRecentlyViewedUseCaseProtocol:
-Sendable {
+public protocol ClearRecentlyViewedUseCaseProtocol: Sendable {
 
     func execute() async throws
 }
 
-public final class ClearRecentlyViewedUseCase:
-ClearRecentlyViewedUseCaseProtocol {
+public final class ClearRecentlyViewedUseCase: ClearRecentlyViewedUseCaseProtocol {
 
-    private let repository:
-        RecentlyViewedRepositoryProtocol
+    private let repository: RecentlyViewedRepositoryProtocol
 
-    public init(
-        repository:
-            RecentlyViewedRepositoryProtocol
-    ) {
+    public init(repository: RecentlyViewedRepositoryProtocol) {
         self.repository = repository
     }
 
     public func execute() async throws {
 
-        try await repository
-            .clearRecentlyViewed()
+        try await repository.clearRecentlyViewed()
     }
 }

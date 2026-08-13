@@ -9,29 +9,20 @@ import Foundation
 import HomeDomain
 
 public protocol FetchFanFavouritesUseCaseProtocol: Sendable {
-
-    func execute(
-        page: Int
-    ) async throws -> MoviePage
+    
+    func execute(page: Int) async throws -> MoviePage
 }
 
-public final class FetchFanFavouritesUseCase:
-    FetchFanFavouritesUseCaseProtocol {
+public final class FetchFanFavouritesUseCase: FetchFanFavouritesUseCaseProtocol {
 
     private let repository: HomeRepositoryProtocol
 
-    public init(
-        repository: HomeRepositoryProtocol
-    ) {
+    public init(repository: HomeRepositoryProtocol) {
         self.repository = repository
     }
 
-    public func execute(
-        page: Int
-    ) async throws -> MoviePage {
+    public func execute(page: Int) async throws -> MoviePage {
 
-        try await repository.fetchFanFavourites(
-            page: page
-        )
+        try await repository.fetchFanFavourites(page: page)
     }
 }

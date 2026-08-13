@@ -19,7 +19,7 @@ struct Top10SectionView: View {
 
     var body: some View {
         HorizontalScrollView(
-            headerText: "Top 10 in CineTrack this week",
+            headerText: HomeStrings.Section.top10,
             items: movies,
             onSeeAllTap: onSeeAllTap
         ) { movie, index in

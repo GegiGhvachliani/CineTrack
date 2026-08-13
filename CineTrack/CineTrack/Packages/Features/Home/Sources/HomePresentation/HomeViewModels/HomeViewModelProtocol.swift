@@ -5,6 +5,11 @@
 //  Created by Gegi Ghvachliani on 10/08/2026.
 //
 
+//
+//  HomeViewModelProtocol.swift
+//  Home
+//
+
 import Foundation
 
 import HomeDomain
@@ -13,148 +18,123 @@ import SharedCore
 @MainActor
 public protocol HomeViewModelProtocol {
 
-var onSearch: (() -> Void)? { get }
-var onVideos: ((FeaturedItem) -> Void)? { get }
-var onSeeAll: ((HomeSection) -> Void)? { get }
+    // MARK: - Actions
 
-var onMovieDetails: ((Movie) -> Void)? { get }
-var onActorDetails: ((Actor) -> Void)? { get }
-var onNewsDetails: ((News) -> Void)? { get }
+    var onSearch: (() -> Void)? { get }
+    var onVideos: ((FeaturedItem) -> Void)? { get }
+    var onSeeAll: ((HomeSection) -> Void)? { get }
 
-// MARK: - Movies
+    var onMovieDetails: ((Movie) -> Void)? { get }
+    var onActorDetails: ((Actor) -> Void)? { get }
+    var onNewsDetails: ((News) -> Void)? { get }
 
-var trendingMovies: [Movie] { get }
-var popularMovies: [Movie] { get }
-var fanFavouriteMovies: [Movie] { get }
-var nowPlayingMovies: [Movie] { get }
-var upcomingMovies: [Movie] { get }
+    func didTapSearch()
+    func didTapMovie(_ movie: Movie)
+    func didTapVideos(_ item: FeaturedItem)
+    func didTapActor(_ actor: Actor)
+    func didTapSeeAll(_ section: HomeSection)
+    func didTapNews(_ news: News)
 
-// MARK: - Recently Viewed
+    // MARK: - Movies
 
-var recentlyViewedMovies: [RecentlyViewedMovie] { get }
-var recentlyViewedActors: [RecentlyViewedActor] { get }
-var recentlyViewedItems: [RecentlyViewedItem] { get }
+    var trendingMovies: [Movie] { get }
+    var popularMovies: [Movie] { get }
+    var fanFavouriteMovies: [Movie] { get }
+    var nowPlayingMovies: [Movie] { get }
+    var upcomingMovies: [Movie] { get }
 
-var isRecentlyViewedLoading: Bool { get }
+    func loadNextTrendingPage() async
+    func loadNextPopularPage() async
+    func loadNextFanFavouritePage() async
+    func loadNextNowPlayingPage() async
+    func loadNextUpcomingPage() async
 
-// MARK: - Top 10
+    // MARK: - Recently Viewed
 
-var top10Movies: [Movie] { get }
+    var recentlyViewedMovies: [RecentlyViewedMovie] { get }
+    var recentlyViewedActors: [RecentlyViewedActor] { get }
+    var recentlyViewedItems: [RecentlyViewedItem] { get }
 
-// MARK: - Actors
+    var isRecentlyViewedLoading: Bool { get }
 
-var bornTodayActors: [Actor] { get }
-var mostPopularActors: [Actor] { get }
+    func loadRecentlyViewed() async
+    func addRecentlyViewed(movie: Movie) async
+    func addRecentlyViewed(actor: Actor) async
+    func clearRecentlyViewed() async
 
-// MARK: - News
+    // MARK: - Top 10
 
-var news: [News] { get }
+    var top10Movies: [Movie] { get }
+    var isTop10Loading: Bool { get }
 
-// MARK: - Videos
+    func loadTop10Movies() async
 
-var movieVideos: [Int: [MovieVideo]] { get }
-var featuredItems: [FeaturedItem] { get }
+    // MARK: - Actors
 
-// MARK: - Watchlist
+    var bornTodayActors: [Actor] { get }
+    var mostPopularActors: [Actor] { get }
 
-var watchlistedMovies: [Movie] { get }
+    var isBornTodayActorsLoading: Bool { get }
+    var isMostPopularCelebritiesLoading: Bool { get }
 
-// MARK: - Favourites
+    func loadNextBornTodayActorsPage() async
+    func loadNextMostPopularCelebritiesPage() async
 
-var favouritedActors: [Actor] { get }
+    // MARK: - News
 
-// MARK: - Loading State
+    var news: [News] { get }
+    var isNewsLoading: Bool { get }
 
-var isTrendingLoading: Bool { get }
-var isPopularLoading: Bool { get }
-var isFanFavouriteLoading: Bool { get }
-var isNowPlayingLoading: Bool { get }
-var isUpcomingLoading: Bool { get }
+    func loadNextNewsPage() async
 
-var isTop10Loading: Bool { get }
+    // MARK: - Featured
 
-var isBornTodayActorsLoading: Bool { get }
-var isMostPopularCelebritiesLoading: Bool { get }
+    var featuredItems: [FeaturedItem] { get }
 
-var isNewsLoading: Bool { get }
+    // MARK: - Videos
 
-// MARK: - Pagination State
+    var movieVideos: [Int: [MovieVideo]] { get }
 
-var hasMoreTrending: Bool { get }
-var hasMorePopular: Bool { get }
-var hasMoreFanFavourite: Bool { get }
-var hasMoreNowPlaying: Bool { get }
-var hasMoreUpcoming: Bool { get }
+    func loadVideos(for movie: Movie) async
 
-var hasMoreBornTodayActors: Bool { get }
-var hasMoreMostPopularCelebrities: Bool { get }
+    // MARK: - Watchlist
 
-var hasMoreNews: Bool { get }
+    var watchlistedMovies: [Movie] { get }
 
-// MARK: - Error
+    func loadWatchlist() async
+    func toggleWatchlist(for movie: Movie) async
 
-var error: Error? { get }
+    // MARK: - Favourites
 
-// MARK: - Public Methods
+    var favouritedActors: [Actor] { get }
 
-func loadHome() async
+    func loadFavourites() async
+    func toggleFavourite(for actor: Actor) async
 
-// MARK: - Movies
+    // MARK: - Loading
 
-func loadNextTrendingPage() async
-func loadNextPopularPage() async
-func loadNextFanFavouritePage() async
-func loadNextNowPlayingPage() async
-func loadNextUpcomingPage() async
+    var isHomeLoading: Bool { get }
 
-// MARK: - Recently Viewed
+    // MARK: - Pagination
 
-func loadRecentlyViewed() async
+    var hasMoreTrending: Bool { get }
+    var hasMorePopular: Bool { get }
+    var hasMoreFanFavourite: Bool { get }
+    var hasMoreNowPlaying: Bool { get }
+    var hasMoreUpcoming: Bool { get }
 
-func addRecentlyViewed(
-movie: Movie
-) async
+    var hasMoreBornTodayActors: Bool { get }
+    var hasMoreMostPopularCelebrities: Bool { get }
 
-func addRecentlyViewed(
-actor: Actor
-) async
+    var hasMoreNews: Bool { get }
 
-// MARK: - Top 10
+    // MARK: - Error
 
-func loadTop10Movies() async
+    var error: Error? { get }
 
-// MARK: - Actors
+    func clearError()
 
-func loadNextBornTodayActorsPage() async
-func loadNextMostPopularCelebritiesPage() async
+    // MARK: - Initial Loading
 
-// MARK: - News
-
-func loadNextNewsPage() async
-
-// MARK: - Videos
-
-func loadVideos(
-for movie: Movie
-) async
-
-// MARK: - Watchlist
-
-func loadWatchlist() async
-
-func toggleWatchlist(
-for movie: Movie
-) async
-
-// MARK: - Favourites
-
-func loadFavourites() async
-
-func toggleFavourite(
-for actor: Actor
-) async
-
-// MARK: - Error
-
-func clearError()
+    func loadHome() async
 }

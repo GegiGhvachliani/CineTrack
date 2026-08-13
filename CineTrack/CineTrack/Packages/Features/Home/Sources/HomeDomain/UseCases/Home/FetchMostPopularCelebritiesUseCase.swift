@@ -18,18 +18,12 @@ public final class FetchMostPopularActorsUseCase:
 
     private let repository: HomeRepositoryProtocol
 
-    public init(
-        repository: HomeRepositoryProtocol
-    ) {
+    public init(repository: HomeRepositoryProtocol) {
         self.repository = repository
     }
 
-    public func execute(
-        page: Int
-    ) async throws -> ActorPage {
+    public func execute(page: Int) async throws -> ActorPage {
 
-        try await repository.fetchMostPopularActors(
-            page: page
-        )
+        try await repository.fetchMostPopularActors(page: page)
     }
 }

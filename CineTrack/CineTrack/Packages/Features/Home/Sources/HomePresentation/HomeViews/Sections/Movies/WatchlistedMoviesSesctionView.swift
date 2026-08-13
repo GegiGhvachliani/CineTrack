@@ -21,7 +21,7 @@ struct WatchlistedMoviesSesctionView: View {
     var body: some View {
         
         HorizontalScrollView(
-            headerText: "From your Watchlist",
+            headerText: HomeStrings.Section.watchlist,
             items: movies,
             onSeeAllTap: onSeeAllTap,
             onLoadMore: onLoadMore

@@ -5,6 +5,7 @@
 //  Created by Gegi Ghvachliani on 10/08/2026.
 //
 
+
 import Foundation
 
 import HomeDomain
@@ -16,46 +17,31 @@ extension HomeViewModel {
 
     public func loadRecentlyViewed() async {
 
-        guard !isRecentlyViewedLoading else {
-            return
-        }
+        guard !isRecentlyViewedLoading else { return }
 
         isRecentlyViewedLoading = true
 
-        defer {
-            isRecentlyViewedLoading = false
-        }
+        defer { isRecentlyViewedLoading = false }
 
         do {
 
-            async let movies =
-                fetchRecentlyViewedMoviesUseCase.execute()
+            async let movies = fetchRecentlyViewedMoviesUseCase.execute()
 
-            async let actors =
-                fetchRecentlyViewedActorsUseCase.execute()
+            async let actors = fetchRecentlyViewedActorsUseCase.execute()
 
-            recentlyViewedMovies =
-                try await movies
+            recentlyViewedMovies = try await movies
 
-            recentlyViewedActors =
-                try await actors
+            recentlyViewedActors = try await actors
 
         } catch {
-
-            print(
-                "❌ Recently Viewed Error:",
-                error
-            )
-
+            print("❌ Recently Viewed Error:", error)
             self.error = error
         }
     }
 
     // MARK: - Add Movie
 
-    public func addRecentlyViewed(
-        movie: Movie
-    ) async {
+    public func addRecentlyViewed(movie: Movie) async {
 
         let recentlyViewedMovie =
             RecentlyViewedMovie(
@@ -69,36 +55,24 @@ extension HomeViewModel {
 
         do {
 
-            try await addRecentlyViewedMovieUseCase
-                .execute(
-                    recentlyViewedMovie
-                )
+            try await addRecentlyViewedMovieUseCase.execute(recentlyViewedMovie)
 
             recentlyViewedMovies.removeAll {
                 $0.id == movie.id
             }
 
-            recentlyViewedMovies.insert(
-                recentlyViewedMovie,
-                at: 0
-            )
+            recentlyViewedMovies.insert(recentlyViewedMovie, at: 0)
 
         } catch {
-
-            print(
-                "❌ Add Recently Viewed Movie Error:",
-                error
-            )
-
+            
+            print("❌ Add Recently Viewed Movie Error:", error)
             self.error = error
         }
     }
 
     // MARK: - Add Actor
 
-    public func addRecentlyViewed(
-        actor: Actor
-    ) async {
+    public func addRecentlyViewed(actor: Actor) async {
 
         let recentlyViewedActor =
             RecentlyViewedActor(
@@ -111,27 +85,33 @@ extension HomeViewModel {
 
         do {
 
-            try await addRecentlyViewedActorUseCase
-                .execute(
-                    recentlyViewedActor
-                )
+            try await addRecentlyViewedActorUseCase.execute(recentlyViewedActor)
 
             recentlyViewedActors.removeAll {
                 $0.id == actor.id
             }
 
-            recentlyViewedActors.insert(
-                recentlyViewedActor,
-                at: 0
-            )
+            recentlyViewedActors.insert(recentlyViewedActor, at: 0)
 
         } catch {
+            print("❌ Add Recently Viewed Actor Error:", error)
+            self.error = error
+        }
+    }
 
-            print(
-                "❌ Add Recently Viewed Actor Error:",
-                error
-            )
+    // MARK: - Clear
 
+    public func clearRecentlyViewed() async {
+
+        do {
+
+            try await clearRecentlyViewedUseCase.execute()
+
+            recentlyViewedMovies = []
+            recentlyViewedActors = []
+
+        } catch {
+            print("❌ Clear Recently Viewed Error:", error)
             self.error = error
         }
     }

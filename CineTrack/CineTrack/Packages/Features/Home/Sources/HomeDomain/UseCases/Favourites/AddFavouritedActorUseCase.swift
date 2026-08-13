@@ -10,30 +10,21 @@ import SharedCore
 
 
 public protocol AddFavouritedActorUseCaseProtocol: Sendable {
-
-    func execute(
-        actor: Actor
-    ) async throws
+    
+    func execute(actor: Actor) async throws
+    
 }
 
-public final class AddFavouritedActorUseCase:
-AddFavouritedActorUseCaseProtocol,
-@unchecked Sendable
-{
-private let repository: FavouriteRepositoryProtocol
+public final class AddFavouritedActorUseCase: AddFavouritedActorUseCaseProtocol, @unchecked Sendable {
 
-public init(
-    repository: FavouriteRepositoryProtocol
-) {
-    self.repository = repository
-}
+    private let repository: FavouriteRepositoryProtocol
 
-public func execute(
-    actor: Actor
-) async throws {
+    public init(repository: FavouriteRepositoryProtocol) {
+        self.repository = repository
+    }
 
-    try await repository.addFavouritedActor(
-        actor: actor
-    )
-}
+    public func execute(actor: Actor) async throws {
+
+        try await repository.addFavouritedActor(actor: actor)
+    }
 }

@@ -21,7 +21,7 @@ struct BornTodaySectionView: View {
     var body: some View {
         
         HorizontalScrollView(
-            headerText: "Born today",
+            headerText: HomeStrings.Section.bornToday,
             items: actors,
             onSeeAllTap: onSeeAllTap,
             onLoadMore: onLoadMore

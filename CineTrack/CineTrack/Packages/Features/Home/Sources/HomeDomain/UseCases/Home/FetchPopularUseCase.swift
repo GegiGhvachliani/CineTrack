@@ -20,6 +20,7 @@ public final class FetchPopularUseCase: FetchPopularUseCaseProtocol {
     }
     
     public func execute(page: Int) async throws -> MoviePage {
+        
         try await repository.fetchPopular(page: page)
     }
 }

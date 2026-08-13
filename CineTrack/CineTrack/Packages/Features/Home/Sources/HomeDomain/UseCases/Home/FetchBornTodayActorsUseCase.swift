@@ -18,13 +18,12 @@ public final class FetchBornTodayActorsUseCase:
 
     private let repository: HomeRepositoryProtocol
 
-    public init(
-        repository: HomeRepositoryProtocol
-    ) {
+    public init(repository: HomeRepositoryProtocol) {
         self.repository = repository
     }
 
     public func execute(page: Int) async throws -> ActorPage {
+        
         try await repository.fetchBornTodayActors(page: page)
     }
 }

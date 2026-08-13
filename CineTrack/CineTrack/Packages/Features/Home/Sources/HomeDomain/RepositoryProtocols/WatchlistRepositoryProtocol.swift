@@ -13,11 +13,7 @@ public protocol WatchlistRepositoryProtocol: Sendable {
 
     func fetchWatchlistedMovies() async throws -> [Movie]
 
-    func addWatchlistedMovie(
-        movie: Movie
-    ) async throws
+    func addWatchlistedMovie(movie: Movie) async throws
 
-    func removeWatchlistedMovie(
-        movie: Movie
-    ) async throws
+    func removeWatchlistedMovie(movie: Movie) async throws
 }

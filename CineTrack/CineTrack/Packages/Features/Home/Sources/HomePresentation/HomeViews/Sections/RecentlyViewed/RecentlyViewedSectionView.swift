@@ -35,7 +35,7 @@ struct RecentlyViewedSectionView: View {
         } else {
             VStack(spacing: 0) {
                 HorizontalScrollView(
-                    headerText: "Recently viewed",
+                    headerText: HomeStrings.Section.recentlyViewed,
                     items: items,
                     onSeeAllTap: onSeeAllTap
                 ) { item, _ in
@@ -158,7 +158,7 @@ struct RecentlyViewedSectionView: View {
 
             VStack(spacing: 10) {
 
-                Text("No recently viewed yet")
+                Text(HomeStrings.EmptyState.recentlyViewedTitle)
                     .font(
                         TypographyTokens.bodySmall
                     )
@@ -168,12 +168,8 @@ struct RecentlyViewedSectionView: View {
                     )
                     .padding(.horizontal, 40)
 
-                Text(
-                    "Once you start browsing, come back here to see your history."
-                )
-                .font(
-                    TypographyTokens.caption
-                )
+                Text(HomeStrings.EmptyState.recentlyViewedSubtitle )
+                .font(TypographyTokens.caption)
                 .multilineTextAlignment(.center)
                 .frame(
                     maxWidth: .infinity,
