@@ -70,6 +70,24 @@ public struct TMDBRequestBuilder: Sendable {
                 )
             )
         }
+        
+        // MARK: - Chronological Upcoming Movies
+
+        if case let .discoverUpcoming(_, _, releaseDateGTE) = endpoint {
+            queryItems.append(
+                URLQueryItem(
+                    name: "sort_by",
+                    value: "primary_release_date.asc"
+                )
+            )
+
+            queryItems.append(
+                URLQueryItem(
+                    name: "primary_release_date.gte",
+                    value: releaseDateGTE
+                )
+            )
+        }
 
         // MARK: - Upcoming Region
 

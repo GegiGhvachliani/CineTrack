@@ -35,6 +35,12 @@ public enum TMDBEndpoint {
     case popularPeople(page: Int)
 
     case personDetails(personID: Int)
+    
+    case discoverUpcoming(
+        page: Int,
+        region: String,
+        releaseDateGTE: String
+    )
 }
 
 public enum TrendingTimeWindow: String {
@@ -85,6 +91,9 @@ extension TMDBEndpoint {
 
         case .personDetails(let personID):
             return "/3/person/\(personID)"
+            
+        case .discoverUpcoming:
+            return "/3/discover/movie"
         }
     }
 
@@ -120,6 +129,9 @@ extension TMDBEndpoint {
 
         case .personDetails:
             return nil
+            
+        case .discoverUpcoming(let page, _, _):
+            return page
         }
     }
 

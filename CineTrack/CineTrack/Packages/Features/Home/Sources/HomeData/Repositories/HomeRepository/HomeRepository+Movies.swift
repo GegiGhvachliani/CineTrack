@@ -47,22 +47,13 @@ extension HomeRepository {
     }
 
     public func fetchUpcoming(page: Int) async throws -> MoviePage {
-
-        let request = try requestBuilder.build(for: .upcoming(page: page, region: upcomingRegion))
-
-        let response: MovieListResponseDTO = try await apiClient.sendRequest(request)
-
-        let movies = movieMapper.map(response)
-            .filter { movie in
-                guard let releaseDate = movie.releaseDate else {
-                    return false
-                }
-
-                return releaseDate >= Self.todayString
-            }
-
-        return MoviePage(movies: movies, page: response.page, totalPages: response.totalPages)
-        
+        try await fetchMovies(
+            from: .discoverUpcoming(
+                page: page,
+                region: upcomingRegion,
+                releaseDateGTE: Self.todayString
+            )
+        )
     }
 
     // MARK: - Private
