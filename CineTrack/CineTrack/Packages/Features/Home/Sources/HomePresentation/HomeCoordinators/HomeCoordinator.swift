@@ -38,7 +38,7 @@ public final class HomeCoordinator: HomeCoordinatorProtocol {
         print("Navigate To Search 🔍")
     }
     public func showMovieDetails(movie: Movie) {
-        print("Navigate To Movie Details 🍿")
+        router.showMovieDetails(movie: movie)
     }
     public func showVideos(item: FeaturedItem) {
         print("Navigate To Video Playlist 📀")

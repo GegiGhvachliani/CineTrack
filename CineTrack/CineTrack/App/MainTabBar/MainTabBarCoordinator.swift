@@ -4,6 +4,7 @@ import HomePresentationAPI
 import SearchPresentationAPI
 import ProfilePresentationAPI
 import ActorDetailsPresentationAPI
+import MovieDetailsPresentationAPI
 
 final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol {
     // childCoordinators ინახავს შვილ კოორდინატორებს, რომ მეხსიერებიდან არ ამოვარდნენ (სამომავლოდ დაგვჭირდება)
@@ -68,5 +69,15 @@ final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol {
         let viewController = container.actorDetailsFactory.makeActorDetailsViewController(actor: actor)
         
         homeNavigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    func showMovieDetails(movie: Movie) {
+        let viewController = container.movieDetailsFactory
+            .makeMovieDetailsViewController(movie: movie)
+
+        homeNavigationController?.pushViewController(
+            viewController,
+            animated: true
+        )
     }
 }

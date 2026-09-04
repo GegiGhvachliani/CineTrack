@@ -10,5 +10,6 @@ import SharedCore
 @MainActor
 public protocol HomeRoutingProtocol: AnyObject {
     func showActorDetails(actor: SharedCore.Actor)
+    func showMovieDetails(movie: Movie)
 }
 

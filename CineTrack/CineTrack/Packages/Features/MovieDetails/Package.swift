@@ -4,13 +4,13 @@
 import PackageDescription
 
 let package = Package(
-    name: "MovieDetail",
+    name: "MovieDetails",
     platforms: [.iOS(.v17)],
     products: [
-        .library(name: "MovieDetailPresentationAPI", targets: ["MovieDetailPresentationAPI"]),
+        .library(name: "MovieDetailsPresentationAPI", targets: ["MovieDetailsPresentationAPI"]),
         .library(
-            name: "MovieDetailAssemby",
-            targets: ["MovieDetailAssembly"]
+            name: "MovieDetailsAssembly",
+            targets: ["MovieDetailsAssembly"]
         )
     ],
     dependencies: [
@@ -19,62 +19,63 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "MovieDetailDomain",
+            name: "MovieDetailsDomain",
             dependencies: [
                 .product(name: "SharedCore", package: "SharedKit")
             ],
-            path: "Sources/MovieDetailDomain"
+            path: "Sources/MovieDetailsDomain"
         ),
 
         .target(
-            name: "MovieDetailData",
+            name: "MovieDetailsData",
             dependencies: [
-                "MovieDetailDomain",
+                "MovieDetailsDomain",
                 .product(name: "SharedNetworking", package: "SharedKit"),
                 .product(name: "SharedStorage", package: "SharedKit"),
             ],
-            path: "Sources/MovieDetailData"
+            path: "Sources/MovieDetailsData"
         ),
 
         .target(
-            name: "MovieDetailPresentation",
+            name: "MovieDetailsPresentation",
             dependencies: [
-                "MovieDetailDomain",
+                "MovieDetailsDomain",
                 .product(name: "SharedCore", package: "SharedKit"),
                 .product(
                     name: "DesignSystemComponents",
                     package: "DesignSystem"
                 ),
             ],
-            path: "Sources/MovieDetailPresentation"
+            path: "Sources/MovieDetailsPresentation"
         ),
 
         .target(
-            name: "MovieDetailPresentationAPI",
+            name: "MovieDetailsPresentationAPI",
             dependencies: [
                 .product(name: "SharedCore", package: "SharedKit")
             ],
-            path: "Sources/MovieDetailPresentationAPI"
+            path: "Sources/MovieDetailsPresentationAPI"
         ),
 
         .target(
-            name: "MovieDetailAssembly",
+            name: "MovieDetailsAssembly",
             dependencies: [
-                "MovieDetailDomain",
-                "MovieDetailData",
-                "MovieDetailPresentation",
+                "MovieDetailsDomain",
+                "MovieDetailsData",
+                "MovieDetailsPresentation",
+                "MovieDetailsPresentationAPI",
                 .product(name: "SharedCore", package: "SharedKit")
             ],
-            path: "Sources/MovieDetailAssembly"
+            path: "Sources/MovieDetailsAssembly"
         ),
 
         .testTarget(
-            name: "MovieDetailTests",
+            name: "MovieDetailsTests",
             dependencies: [
-                "MovieDetailDomain",
-                "MovieDetailData",
-                "MovieDetailPresentation",
-                "MovieDetailPresentationAPI"
+                "MovieDetailsDomain",
+                "MovieDetailsData",
+                "MovieDetailsPresentation",
+                "MovieDetailsPresentationAPI"
             ],
             path: "Tests"
         ),

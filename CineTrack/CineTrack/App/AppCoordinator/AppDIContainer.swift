@@ -7,17 +7,19 @@
 
 import Foundation
 import HomeAssembly
-import ProfileAssembly
-import SearchAssembly
-import OnboardingAssembly
 import HomePresentationAPI
+import ProfileAssembly
 import ProfilePresentationAPI
+import SearchAssembly
 import SearchPresentationAPI
+import OnboardingAssembly
 import OnboardingPresentationAPI
-import AuthenticationPresentationAPI
 import AuthenticationAssembly
-import ActorDetailsPresentationAPI
+import AuthenticationPresentationAPI
 import ActorDetailsAssembly
+import ActorDetailsPresentationAPI
+import MovieDetailsAssembly
+import MovieDetailsPresentationAPI
 import UIKit
 
 
@@ -28,6 +30,7 @@ final class AppDIContainer: AppDIContainerProtocol {
     lazy var onboardingFactory: OnboardingFactoryProtocol = OnboardingFactory()
     lazy var authenticationFactory: AuthenticationFactoryProtocol = AuthenticationFactory()
     lazy var actorDetailsFactory: ActorDetailsFactoryProtocol = ActorDetailsFactory()
+    lazy var movieDetailsFactory: MovieDetailsFactoryProtocol = MovieDetailsFactory()
 
     init() {}
 }

@@ -12,6 +12,7 @@ import SearchPresentationAPI
 import OnboardingPresentationAPI
 import AuthenticationPresentationAPI
 import ActorDetailsPresentationAPI
+import MovieDetailsPresentationAPI
 
 @MainActor
 protocol AppDIContainerProtocol {
@@ -21,4 +22,5 @@ protocol AppDIContainerProtocol {
     var onboardingFactory: OnboardingFactoryProtocol { get }
     var authenticationFactory: AuthenticationFactoryProtocol { get }
     var actorDetailsFactory: ActorDetailsFactoryProtocol { get }
+    var movieDetailsFactory: MovieDetailsFactoryProtocol { get }
 }
