@@ -13,6 +13,7 @@ import OnboardingPresentationAPI
 import AuthenticationPresentationAPI
 import ActorDetailsPresentationAPI
 import MovieDetailsPresentationAPI
+import NewsDetailsPresentationAPI
 
 @MainActor
 protocol AppDIContainerProtocol {
@@ -23,4 +24,5 @@ protocol AppDIContainerProtocol {
     var authenticationFactory: AuthenticationFactoryProtocol { get }
     var actorDetailsFactory: ActorDetailsFactoryProtocol { get }
     var movieDetailsFactory: MovieDetailsFactoryProtocol { get }
+    var newsDetailsFactory: NewsDetailsFactoryProtocol { get }
 }

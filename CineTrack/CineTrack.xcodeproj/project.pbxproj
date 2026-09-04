@@ -13,10 +13,12 @@
 		630B69DE2FEFFA44006DF3CD /* SearchPresentationAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 630B69DD2FEFFA44006DF3CD /* SearchPresentationAPI */; };
 		630B6A1E2FF2AB33006DF3CD /* AuthenticationAssembly in Frameworks */ = {isa = PBXBuildFile; productRef = 630B6A1D2FF2AB33006DF3CD /* AuthenticationAssembly */; };
 		630B6A202FF2AB33006DF3CD /* AuthenticationPresentationAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 630B6A1F2FF2AB33006DF3CD /* AuthenticationPresentationAPI */; };
+		631C12E9304B2E89007A6450 /* MovieDetailsAssembly in Frameworks */ = {isa = PBXBuildFile; productRef = 631C12E8304B2E89007A6450 /* MovieDetailsAssembly */; };
+		631C12EB304B314B007A6450 /* NewsDetailsAssembly in Frameworks */ = {isa = PBXBuildFile; productRef = 631C12EA304B314B007A6450 /* NewsDetailsAssembly */; };
+		631C12ED304B314B007A6450 /* NewsDetailsPresentationAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 631C12EC304B314B007A6450 /* NewsDetailsPresentationAPI */; };
 		63827DBF2FD3530600DE3E16 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 63827DBE2FD3530600DE3E16 /* FirebaseAuth */; };
 		63A5B728304AFB7600D3C6A2 /* ActorDetailsAssembly in Frameworks */ = {isa = PBXBuildFile; productRef = 63A5B727304AFB7600D3C6A2 /* ActorDetailsAssembly */; };
 		63A5B72A304AFB7600D3C6A2 /* ActorDetailsPresentationAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 63A5B729304AFB7600D3C6A2 /* ActorDetailsPresentationAPI */; };
-		63A5B72D304B00D800D3C6A2 /* MovieDetailsAssemby in Frameworks */ = {isa = PBXBuildFile; productRef = 63A5B72C304B00D800D3C6A2 /* MovieDetailsAssemby */; };
 		63A5B72F304B00D800D3C6A2 /* MovieDetailsPresentationAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 63A5B72E304B00D800D3C6A2 /* MovieDetailsPresentationAPI */; };
 		63F40D8D2FD5F1BB00189862 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 63F40D8C2FD5F1BB00189862 /* Kingfisher */; };
 		63F86A392FE96EC000D43A5F /* DesignSystemComponents in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A382FE96EC000D43A5F /* DesignSystemComponents */; };
@@ -108,15 +110,17 @@
 				63F86A4B2FE96EC000D43A5F /* SharedStorage in Frameworks */,
 				63A5B72A304AFB7600D3C6A2 /* ActorDetailsPresentationAPI in Frameworks */,
 				63F86A432FE96EC000D43A5F /* ProfileAssembly in Frameworks */,
+				631C12EB304B314B007A6450 /* NewsDetailsAssembly in Frameworks */,
 				63F40D8D2FD5F1BB00189862 /* Kingfisher in Frameworks */,
 				630B69D62FEFFA27006DF3CD /* OnboardingPresentationAPI in Frameworks */,
-				63A5B72D304B00D800D3C6A2 /* MovieDetailsAssemby in Frameworks */,
 				63F86A3B2FE96EC000D43A5F /* DesignSystemTokens in Frameworks */,
 				63F86A492FE96EC000D43A5F /* SharedNetworking in Frameworks */,
 				630B69D82FEFFA44006DF3CD /* HomePresentationAPI in Frameworks */,
 				63FB42DD302A714400502D80 /* FirebaseFirestore in Frameworks */,
+				631C12ED304B314B007A6450 /* NewsDetailsPresentationAPI in Frameworks */,
 				63F86A472FE96EC000D43A5F /* SharedCore in Frameworks */,
 				63F86A392FE96EC000D43A5F /* DesignSystemComponents in Frameworks */,
+				631C12E9304B2E89007A6450 /* MovieDetailsAssembly in Frameworks */,
 				63A5B728304AFB7600D3C6A2 /* ActorDetailsAssembly in Frameworks */,
 				63F86A412FE96EC000D43A5F /* OnboardingAssembly in Frameworks */,
 				63A5B72F304B00D800D3C6A2 /* MovieDetailsPresentationAPI in Frameworks */,
@@ -215,8 +219,10 @@
 				63FB42DC302A714400502D80 /* FirebaseFirestore */,
 				63A5B727304AFB7600D3C6A2 /* ActorDetailsAssembly */,
 				63A5B729304AFB7600D3C6A2 /* ActorDetailsPresentationAPI */,
-				63A5B72C304B00D800D3C6A2 /* MovieDetailsAssemby */,
 				63A5B72E304B00D800D3C6A2 /* MovieDetailsPresentationAPI */,
+				631C12E8304B2E89007A6450 /* MovieDetailsAssembly */,
+				631C12EA304B314B007A6450 /* NewsDetailsAssembly */,
+				631C12EC304B314B007A6450 /* NewsDetailsPresentationAPI */,
 			);
 			productName = CineTrack;
 			productReference = 63827D712FD34B7C00DE3E16 /* CineTrack.app */;
@@ -750,6 +756,18 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = AuthenticationPresentationAPI;
 		};
+		631C12E8304B2E89007A6450 /* MovieDetailsAssembly */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MovieDetailsAssembly;
+		};
+		631C12EA304B314B007A6450 /* NewsDetailsAssembly */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = NewsDetailsAssembly;
+		};
+		631C12EC304B314B007A6450 /* NewsDetailsPresentationAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = NewsDetailsPresentationAPI;
+		};
 		63827DBE2FD3530600DE3E16 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 63827DBD2FD3530600DE3E16 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
@@ -762,10 +780,6 @@
 		63A5B729304AFB7600D3C6A2 /* ActorDetailsPresentationAPI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ActorDetailsPresentationAPI;
-		};
-		63A5B72C304B00D800D3C6A2 /* MovieDetailsAssemby */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = MovieDetailsAssemby;
 		};
 		63A5B72E304B00D800D3C6A2 /* MovieDetailsPresentationAPI */ = {
 			isa = XCSwiftPackageProductDependency;

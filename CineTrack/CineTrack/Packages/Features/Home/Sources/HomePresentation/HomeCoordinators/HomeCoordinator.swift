@@ -50,6 +50,6 @@ public final class HomeCoordinator: HomeCoordinatorProtocol {
         print("Navigate To Section See All 🔥")
     }
     public func showNewsDetail(news: SharedCore.News) {
-        print("Navigate To News Details 🍿")
+        router.showNewsDetails(news: news)
     }
 }
