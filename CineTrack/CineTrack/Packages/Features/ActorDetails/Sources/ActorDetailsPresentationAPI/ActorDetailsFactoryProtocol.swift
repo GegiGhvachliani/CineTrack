@@ -1,0 +1,14 @@
+//
+//  ActorDetailsFactoryProtocol.swift
+//  ActorDetails
+//
+//  Created by Gegi Ghvachliani on 04/09/2026.
+//
+
+import UIKit
+import SharedCore
+
+@MainActor
+public protocol ActorDetailsFactoryProtocol {
+    func makeActorDetailsViewController(actor: Actor) -> UIViewController
+}

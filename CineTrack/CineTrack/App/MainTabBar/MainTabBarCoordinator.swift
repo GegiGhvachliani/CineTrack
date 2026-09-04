@@ -3,14 +3,17 @@ import SharedCore
 import HomePresentationAPI
 import SearchPresentationAPI
 import ProfilePresentationAPI
+import ActorDetailsPresentationAPI
 
-final class MainTabBarCoordinator: Coordinator {
+final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol {
     // childCoordinators ინახავს შვილ კოორდინატორებს, რომ მეხსიერებიდან არ ამოვარდნენ (სამომავლოდ დაგვჭირდება)
     var childCoordinators: [Coordinator] = []
     
     private let navigationController: UINavigationController
     private let tabBarController: MainTabBarController
     private let container: AppDIContainerProtocol
+    
+    private weak var homeNavigationController: UINavigationController?
     
     // ინიციალიზატორში გარედან შემოგვაქვს მთავარი ნავიგაცია
     init(
@@ -30,7 +33,12 @@ final class MainTabBarCoordinator: Coordinator {
         let profileNav = UINavigationController()
         
         // 2. ფექთორების დახმარებით ვიღებთ გამზადებულ ფერად ეკრანებს
-        let homeCoordinator = container.homeFactory.makeHomeCoordinator(navigationController: homeNav)
+        homeNavigationController = homeNav
+
+        let homeCoordinator = container.homeFactory.makeHomeCoordinator(
+            navigationController: homeNav,
+            router: self
+        )
         let searchCoordinator = container.searchFactory.makeSearchCoordinator(navigationController: searchNav)
         let profileCoordinator = container.profileFactory.makeProfileCoordinator(navigationController: profileNav)
         
@@ -54,5 +62,11 @@ final class MainTabBarCoordinator: Coordinator {
         // 6. ჩვენს მთავარ ნავიგაციაში root ეკრანად ვსვამთ მთლიან ტაბბარს და ვმალავთ ზედა ნავს
         navigationController.setViewControllers([tabBarController], animated: false)
         navigationController.isNavigationBarHidden = true
+    }
+    
+    func showActorDetails(actor: SharedCore.Actor) {
+        let viewController = container.actorDetailsFactory.makeActorDetailsViewController(actor: actor)
+        
+        homeNavigationController?.pushViewController(viewController, animated: true)
     }
 }

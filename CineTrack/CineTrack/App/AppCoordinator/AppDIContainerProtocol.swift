@@ -11,6 +11,7 @@ import ProfilePresentationAPI
 import SearchPresentationAPI
 import OnboardingPresentationAPI
 import AuthenticationPresentationAPI
+import ActorDetailsPresentationAPI
 
 @MainActor
 protocol AppDIContainerProtocol {
@@ -19,4 +20,5 @@ protocol AppDIContainerProtocol {
     var searchFactory: SearchFactoryProtocol { get }
     var onboardingFactory: OnboardingFactoryProtocol { get }
     var authenticationFactory: AuthenticationFactoryProtocol { get }
+    var actorDetailsFactory: ActorDetailsFactoryProtocol { get }
 }

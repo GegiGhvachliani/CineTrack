@@ -1,27 +1,109 @@
 // swift-tools-version: 6.3
-// The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
     name: "ActorDetails",
+    platforms: [
+        .iOS(.v17)
+    ],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "ActorDetails",
-            targets: ["ActorDetails"]
+            name: "ActorDetailsPresentationAPI",
+            targets: ["ActorDetailsPresentationAPI"]
         ),
+        .library(
+            name: "ActorDetailsAssembly",
+            targets: ["ActorDetailsAssembly"]
+        )
+    ],
+    dependencies: [
+        .package(path: "../../SharedKit"),
+        .package(path: "../../DesignSystem"),
+        .package(path: "../../TMDBData")
     ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "ActorDetails"
+            name: "ActorDetailsDomain",
+            dependencies: [
+                .product(
+                    name: "SharedCore",
+                    package: "SharedKit"
+                )
+            ],
+            path: "Sources/ActorDetailsDomain"
         ),
+
+        .target(
+            name: "ActorDetailsData",
+            dependencies: [
+                "ActorDetailsDomain",
+
+                .product(
+                    name: "SharedCore",
+                    package: "SharedKit"
+                ),
+                .product(
+                    name: "SharedNetworking",
+                    package: "SharedKit"
+                ),
+                .product(
+                    name: "TMDBData",
+                    package: "TMDBData"
+                )
+            ],
+            path: "Sources/ActorDetailsData"
+        ),
+
+        .target(
+            name: "ActorDetailsPresentation",
+            dependencies: [
+                "ActorDetailsDomain",
+                "ActorDetailsPresentationAPI",
+
+                .product(
+                    name: "SharedCore",
+                    package: "SharedKit"
+                ),
+                .product(
+                    name: "DesignSystemComponents",
+                    package: "DesignSystem"
+                )
+            ],
+            path: "Sources/ActorDetailsPresentation"
+        ),
+
+        .target(
+            name: "ActorDetailsPresentationAPI",
+            dependencies: [
+                .product(
+                    name: "SharedCore",
+                    package: "SharedKit"
+                )
+            ],
+            path: "Sources/ActorDetailsPresentationAPI"
+        ),
+
+        .target(
+            name: "ActorDetailsAssembly",
+            dependencies: [
+                "ActorDetailsDomain",
+                "ActorDetailsData",
+                "ActorDetailsPresentation",
+                "ActorDetailsPresentationAPI"
+            ],
+            path: "Sources/ActorDetailsAssembly"
+        ),
+
         .testTarget(
             name: "ActorDetailsTests",
-            dependencies: ["ActorDetails"]
-        ),
+            dependencies: [
+                "ActorDetailsDomain",
+                "ActorDetailsData",
+                "ActorDetailsPresentation"
+            ],
+            path: "Tests"
+        )
     ],
     swiftLanguageModes: [.v6]
 )

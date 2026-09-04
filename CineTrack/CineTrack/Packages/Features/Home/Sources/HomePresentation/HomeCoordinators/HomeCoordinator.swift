@@ -16,12 +16,17 @@ public final class HomeCoordinator: HomeCoordinatorProtocol {
     public let navigationController: UINavigationController
     private let factory: HomeFactoryProtocol
     
+    private let router: HomeRoutingProtocol
+    
     public init(
         navigationController: UINavigationController,
-        factory: HomeFactoryProtocol
+        factory: HomeFactoryProtocol,
+        router: HomeRoutingProtocol
+        
     ) {
         self.navigationController = navigationController
         self.factory = factory
+        self.router = router
     }
     
     public func start() {
@@ -38,8 +43,8 @@ public final class HomeCoordinator: HomeCoordinatorProtocol {
     public func showVideos(item: FeaturedItem) {
         print("Navigate To Video Playlist 📀")
     }
-    public func showActorDetails(actor: Actor) {
-        print("Navigate To Actor Details 💃🏿")
+    public func showActorDetails(actor: SharedCore.Actor) {
+        router.showActorDetails(actor: actor)
     }
     public func showSeeAll(section: HomeDomain.HomeSection) {
         print("Navigate To Section See All 🔥")

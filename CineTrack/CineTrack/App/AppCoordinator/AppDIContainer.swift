@@ -16,6 +16,8 @@ import SearchPresentationAPI
 import OnboardingPresentationAPI
 import AuthenticationPresentationAPI
 import AuthenticationAssembly
+import ActorDetailsPresentationAPI
+import ActorDetailsAssembly
 import UIKit
 
 
@@ -25,6 +27,7 @@ final class AppDIContainer: AppDIContainerProtocol {
     lazy var searchFactory: SearchFactoryProtocol = SearchFactory()
     lazy var onboardingFactory: OnboardingFactoryProtocol = OnboardingFactory()
     lazy var authenticationFactory: AuthenticationFactoryProtocol = AuthenticationFactory()
+    lazy var actorDetailsFactory: ActorDetailsFactoryProtocol = ActorDetailsFactory()
 
     init() {}
 }

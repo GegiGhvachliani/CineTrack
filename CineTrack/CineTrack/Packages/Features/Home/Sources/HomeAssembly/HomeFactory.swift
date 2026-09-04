@@ -205,10 +205,14 @@ public struct HomeFactory: HomeFactoryProtocol {
 
     }
 
-    public func makeHomeCoordinator(navigationController: UINavigationController) -> HomeCoordinatorProtocol {
+    public func makeHomeCoordinator(
+        navigationController: UINavigationController,
+        router: HomeRoutingProtocol
+    ) -> HomeCoordinatorProtocol {
         HomeCoordinator(
             navigationController: navigationController,
-            factory: self
+            factory: self,
+            router: router
         )
     }
 }
