@@ -46,8 +46,8 @@ public final class HomeCoordinator: HomeCoordinatorProtocol {
     public func showActorDetails(actor: SharedCore.Actor) {
         router.showActorDetails(actor: actor)
     }
-    public func showSeeAll(section: HomeDomain.HomeSection) {
-        print("Navigate To Section See All 🔥")
+    public func showSeeAll(section: HomeSection) {
+        router.showSeeAll(section: section)
     }
     public func showNewsDetail(news: SharedCore.News) {
         router.showNewsDetails(news: news)

@@ -9,9 +9,8 @@ import UIKit
 
 @MainActor
 public protocol HomeFactoryProtocol { //TODO: დასამატებელი გაქვს
+    
     func makeHomeViewController(coordinator: HomeCoordinatorProtocol) -> UIViewController
-    func makeHomeCoordinator(
-        navigationController: UINavigationController,
-        router: HomeRoutingProtocol
-    ) -> HomeCoordinatorProtocol
+    
+    func makeHomeCoordinator(navigationController: UINavigationController, router: HomeRoutingProtocol) -> HomeCoordinatorProtocol
 }
