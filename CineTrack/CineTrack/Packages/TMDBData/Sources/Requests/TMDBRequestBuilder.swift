@@ -12,22 +12,14 @@ public struct TMDBRequestBuilder: Sendable {
 
     private let configuration: TMDBConfiguration
 
-    public init(
-        configuration: TMDBConfiguration
-    ) {
+    public init(configuration: TMDBConfiguration) {
         self.configuration = configuration
     }
 
-    public func build(
-        for endpoint: TMDBEndpoint
-    ) throws -> APIRequest {
+    public func build(for endpoint: TMDBEndpoint) throws -> APIRequest {
 
         var components = URLComponents(
-            url:
-                configuration.baseURL
-                .appendingPathComponent(
-                    endpoint.path
-                ),
+            url: configuration.baseURL.appendingPathComponent(endpoint.path),
             resolvingAgainstBaseURL: false
         )
 
@@ -37,12 +29,8 @@ public struct TMDBRequestBuilder: Sendable {
 
         if let page = endpoint.page {
 
-            queryItems.append(
-                URLQueryItem(
-                    name: "page",
-                    value: String(page)
-                )
-            )
+            queryItems.append(URLQueryItem(name: "page",value: String(page)))
+            
         }
 
         // MARK: - Discover Movies

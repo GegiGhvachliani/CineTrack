@@ -14,8 +14,8 @@ import SharedStorage
 
 public final class WatchlistRepository: WatchlistRepositoryProtocol, @unchecked Sendable {
 
-    private let firestore: RemoteDocumentStore
-    private let userSession: UserSession
+    private let firestore: RemoteDocumentStore // მთავაზობს მეთოდებს , set, get, getCollection, delete
+    private let userSession: UserSession // მეუბნება ვინ არის ახლა შესული
 
     public init(
         firestore: RemoteDocumentStore,

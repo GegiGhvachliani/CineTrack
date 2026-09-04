@@ -32,7 +32,7 @@ public struct APIRequest {
     public func asURLRequest() -> URLRequest {
         var request = URLRequest(url: url) // ქმნის ცარიელ ოფიციალურ ფორმას და უწერს მისამართს.
 
-        request.httpMethod = method.rawValue // ანიჭებს მოთხოვნის ტიპს (მაგ: "GET"). rawValue ნიშნავს, რომ შენი შიდა სიტყვიდან (Enum-იდან) ამოიღოს უშუალოდ ტექსტი.
+        request.httpMethod = method.rawValue // ანიჭებს მოთხოვნის ტიპს (მაგ: "GET")
         request.httpBody = body // თუ request-ს აქვს body, მას ვამატებთ მაგალითად პოსტ რექუესთზე
 //        POST /users
         

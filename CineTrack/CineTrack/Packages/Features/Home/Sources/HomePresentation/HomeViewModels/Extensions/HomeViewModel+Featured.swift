@@ -35,6 +35,7 @@ extension HomeViewModel {
                             let videos = try await fetchMovieVideosUseCase.execute(movieID: movie.id)
 
                             guard let video = await self.selectFeaturedVideo(from: videos)
+                                    
                             else {
                                 return (index, nil)
                             }
@@ -70,8 +71,8 @@ extension HomeViewModel {
     internal func selectFeaturedVideo(from videos: [MovieVideo]) -> MovieVideo? {
 
         let priority: [VideoType] = [
-            .behindTheScenes,
             .trailer,
+            .behindTheScenes,
             .featurette,
             .bloopers
         ]

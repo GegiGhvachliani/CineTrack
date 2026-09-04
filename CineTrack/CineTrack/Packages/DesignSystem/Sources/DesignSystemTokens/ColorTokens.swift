@@ -37,4 +37,8 @@ public enum ColorTokens {
         public static let warning = Color("warning", bundle: .module)
         public static let error = Color("error", bundle: .module)
     }
+    
+    public enum Button {
+        public static let textButton = Color("textButton", bundle: .module)
+    }
 }

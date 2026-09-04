@@ -26,3 +26,9 @@ SharedNetworking - დოკუმენტაცია
 ტიპი: ჩამონათვალი (Enum, რომელიც აკმაყოფილებს Error პროტოკოლს)
 პასუხისმგებლობა: აერთიანებს ქსელური ოპერაციების დროს წარმოქმნილ ყველა შესაძლო სპეციფიკურ შეცდომას.
 მაგალითად: .invalidURL, .noInternetConnection, .decodingFailed, .unauthorized, .serverError(statusCode: Int). მისი მიზანია შეცდომების მართვის (Error Handling) გამარტივება, რათა UI-ს ან ViewModel-ს ზუსტად ვაცნობოთ რა წავიდა არასწორად და მომხმარებელს შესაბამისი მესიჯი ვაჩვენოთ.
+
+HTTPMethod      → რა ოპერაციას ვაკეთებთ
+APIRequest      → რა უნდა გაიგზავნოს
+APIClient       → რა კონტრაქტით იგზავნება
+URLSessionAPIClient → რეალური გამგზავნი
+NetworkError    → რა ტიპის შეცდომა მოხდა

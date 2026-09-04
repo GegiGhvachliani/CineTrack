@@ -4,15 +4,19 @@ import OnboardingPresentationAPI
 import AuthenticationPresentationAPI
 
 final class AppCoordinator: Coordinator {
+    
     var childCoordinators: [Coordinator] = []
     
     private let window: UIWindow
+    // თავდაპირველად ვქმნი ერთ მნავარ ნავიგაციის კონრტოლერს
     private let rootNavigationController = UINavigationController()
     private let container: AppDIContainerProtocol
     
     init(window: UIWindow, container: AppDIContainerProtocol) {
         self.window = window
         self.container = container
+        
+        // შექმნილ კონტროლერს ვაყენებ root-ად
         self.window.rootViewController = rootNavigationController
     }
     

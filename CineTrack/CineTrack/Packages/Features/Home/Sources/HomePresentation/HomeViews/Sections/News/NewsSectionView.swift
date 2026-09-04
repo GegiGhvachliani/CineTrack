@@ -161,10 +161,9 @@ private struct PagingHorizontalScrollView<Item: Identifiable, Cell: View>: View 
             Spacer()
 
             Button(action: onSeeAllTap) {
-                Text("See All")
-                    .font(
-                        TypographyTokens.bodySmall
-                    )
+                Text(HomeStrings.Action.seeAll)
+                    .font(TypographyTokens.bodySmall)
+                    .foregroundStyle(ColorTokens.Button.textButton)
             }
             .buttonStyle(.plain)
         }

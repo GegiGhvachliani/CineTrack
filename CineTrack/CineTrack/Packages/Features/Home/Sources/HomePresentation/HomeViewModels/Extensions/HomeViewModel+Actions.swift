@@ -5,11 +5,6 @@
 //  Created by Gegi Ghvachliani on 06/08/2026.
 //
 
-//
-//  HomeViewModel+Actions.swift
-//  Home
-//
-
 import Foundation
 
 import HomeDomain

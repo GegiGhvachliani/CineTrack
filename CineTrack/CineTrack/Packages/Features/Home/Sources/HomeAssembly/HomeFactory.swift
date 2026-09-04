@@ -129,6 +129,12 @@ public struct HomeFactory: HomeFactoryProtocol {
 
         let removeFavouritedActorUseCase = RemoveFavouritedActorUseCase(repository: favouriteRepository)
 
+        // MARK: - Favourite Actor Movies
+        
+        let fetchActorMoviesUseCase = FetchActorMoviesUseCase(
+            repository: repository
+        )
+        
         // MARK: - ViewModel
 
         let viewModel = HomeViewModel(
@@ -156,7 +162,9 @@ public struct HomeFactory: HomeFactoryProtocol {
             // favourites
             fetchFavouritedActorsUseCase: fetchFavouritedActorsUseCase,
             addFavouritedActorUseCase: addFavouritedActorUseCase,
-            removeFavouritedActorUseCase: removeFavouritedActorUseCase
+            removeFavouritedActorUseCase: removeFavouritedActorUseCase,
+            // favourite actor movies
+            fetchActorMoviesUseCase: fetchActorMoviesUseCase,
         )
 
         // MARK: - SwiftUI View

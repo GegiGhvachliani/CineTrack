@@ -65,11 +65,11 @@ struct HomeHeaderView: View {
             HStack(spacing: 5) {
 
                 Image(systemName: "magnifyingglass")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.gray)
                     .frame(width: 40)
 
                 Text(HomeStrings.Section.search)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.gray)
                     .font(Font.system(size: 17, weight: .regular, design: .rounded))
 
                 Spacer()
@@ -77,7 +77,7 @@ struct HomeHeaderView: View {
             .padding(.horizontal, 5)
             .frame(height: 30)
             .frame(maxWidth: .infinity)
-            .background(.white.opacity(0.5))
+            .background(.white.opacity(0.9))
             .clipShape(RoundedRectangle(cornerRadius: 8))
         }
         .buttonStyle(.plain)

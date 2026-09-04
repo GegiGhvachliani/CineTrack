@@ -118,7 +118,7 @@ struct RecentlyViewedSectionView: View {
                 Text("Clear")
                     .font(TypographyTokens.bodySmall)
                     .fontWeight(.medium)
-                    .foregroundStyle(ColorTokens.Text.main)
+                    .foregroundStyle(ColorTokens.Button.textButton)
                     .padding(.leading, 15)
                     .padding(.bottom, 10)
                     .background(ColorTokens.Background.secondary)

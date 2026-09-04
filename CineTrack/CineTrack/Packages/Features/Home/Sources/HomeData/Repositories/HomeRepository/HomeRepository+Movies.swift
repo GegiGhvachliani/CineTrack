@@ -67,4 +67,20 @@ extension HomeRepository {
         return MoviePage(movies: movieMapper.map(response), page: response.page, totalPages: response.totalPages)
         
     }
+    
+    public func fetchMovies(for actorID: Int) async throws -> [Movie] {
+        let request = try requestBuilder.build(
+            for: .personMovieCredits(personID: actorID)
+        )
+
+        let response: PersonMovieCreditsResponseDTO =
+            try await apiClient.sendRequest(request)
+
+        return response.cast
+            .map(movieMapper.map)
+            .filter { $0.posterPath != nil }
+            .sorted {
+                ($0.releaseDate ?? "") > ($1.releaseDate ?? "")
+            }
+    }
 }

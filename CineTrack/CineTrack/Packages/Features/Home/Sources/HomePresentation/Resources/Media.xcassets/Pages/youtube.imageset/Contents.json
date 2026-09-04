@@ -1,11 +1,11 @@
 {
   "images" : [
     {
+      "filename" : "Image.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Screenshot 2026-08-08 at 01.03.31.heic",
       "idiom" : "universal",
       "scale" : "2x"
     },

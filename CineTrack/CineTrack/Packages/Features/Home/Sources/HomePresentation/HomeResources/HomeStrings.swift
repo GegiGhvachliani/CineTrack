@@ -14,7 +14,7 @@ enum HomeStrings {
         static let trending = "Trending"
         static let popular = "Popular"
         static let fanFavourites = "Fan Favourites"
-        static let top10 = "Top 10"
+        static let top10 = "Top 10 on CineTrack this week"
         static let nowPlaying = "Now Playing"
         static let upcoming = "Upcoming"
         static let bornToday = "Born Today"

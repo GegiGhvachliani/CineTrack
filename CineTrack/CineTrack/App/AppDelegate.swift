@@ -9,12 +9,13 @@ import UIKit
 import Firebase
 import GoogleSignIn
 
-@main
+@main // @main ეუბნება აპს რომ ამ კლასიდან დაიწყოს აპლიკაცია
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    // ერთხელ იძახება აპის გაშვებისას, სანამ FireBase-ს გამოვიყენებ
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        FirebaseApp.configure()
+        FirebaseApp.configure() // აკონფიგურირებს Firebase-ს რომ FirebaseUserSession, FirestoreClient და Google Sign-In-მა სწორად იმუშაოს
         
         return true
     }

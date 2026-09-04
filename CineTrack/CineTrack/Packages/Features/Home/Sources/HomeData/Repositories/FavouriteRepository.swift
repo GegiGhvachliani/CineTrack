@@ -31,9 +31,9 @@ public final class FavouriteRepository: FavouriteRepositoryProtocol, @unchecked 
         let userID = try currentUserID()
 
         let collection = "users/\(userID)/favourites"
-
+        print("📥 Loading favourites for user:", userID)
         let dtos = try await firestore.getCollection(FavouritedActorDTO.self, collection: collection)
-
+        print("📥 Favourite documents found:", dtos.count)
         return dtos.map { $0.toDomain() }
     }
 
@@ -44,10 +44,11 @@ public final class FavouriteRepository: FavouriteRepositoryProtocol, @unchecked 
         let userID = try currentUserID()
 
         let collection = "users/\(userID)/favourites"
-
+        print("📤 Saving favourite:", actor.name, "for user:", userID)
         let dto = FavouritedActorDTO(actor: actor)
 
         try await firestore.set(dto, collection: collection, documentID: String(actor.id))
+        print("✅ Favourite saved:", actor.name)
     }
 
     // MARK: - Remove

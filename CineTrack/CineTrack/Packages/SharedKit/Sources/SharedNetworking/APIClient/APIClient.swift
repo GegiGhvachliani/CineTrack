@@ -11,7 +11,5 @@ import Foundation
 
 public protocol APIClient: Sendable {
     // genericFunc: არ ვიცით რა ტიპის მონაცემს დააბრუნებს API: MovieListDTO, UserDTO თუ სხვა, ამიტომ სხვადასხვასთვის რო არ ვწეროთ ერთი გვაქვვს ყველასთვის
-    func sendRequest<T: Decodable>(
-        _ request: APIRequest
-    ) async throws -> T
+    func sendRequest<T: Decodable>(_ request: APIRequest) async throws -> T
 }

@@ -16,18 +16,19 @@ extension HomeViewModel {
     // MARK: - Load
 
     public func loadFavourites() async {
-
         do {
-
             favouritedActors = try await fetchFavouritedActorsUseCase.execute()
 
-        } catch {
+            print("✅ Loaded favourite actors:", favouritedActors.count)
 
+            await loadFavouriteActorMovies()
+        } catch {
             print("❌ Favourites Load Error:", error)
             self.error = error
-            
         }
     }
+    
+    
 
     // MARK: - Toggle
 
@@ -47,24 +48,17 @@ extension HomeViewModel {
         }
 
         do {
-
             if wasFavourited {
-
                 try await removeFavouritedActorUseCase.execute(actor: actor)
-
             } else {
-
                 try await addFavouritedActorUseCase.execute(actor: actor)
             }
 
+            await loadFavouriteActorMovies()
         } catch {
-
             if wasFavourited {
-
                 favouritedActors.append(actor)
-
             } else {
-
                 favouritedActors.removeAll {
                     $0.id == actor.id
                 }
@@ -72,7 +66,6 @@ extension HomeViewModel {
 
             print("❌ Favourite Toggle Error:", error)
             self.error = error
-            
         }
     }
 }

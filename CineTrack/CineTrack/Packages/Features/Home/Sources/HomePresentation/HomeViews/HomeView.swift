@@ -60,6 +60,7 @@ public struct HomeView: View {
                 nowStreamingSection
                 trendingNowSection
                 watchlistedMoviesSection
+                moreMoviesFromFavouriteActorSection
 
                 moreToExplorDivider
 
@@ -67,13 +68,9 @@ public struct HomeView: View {
                 mostPopularCelebritiesSection
                 recentlyViewedSection
 
-                Text("More Movies From Favourite Actor")
-                    .font(TypographyTokens.title3)
-                    .foregroundColor(ColorTokens.Brand.primary)
-
                 footer
             }
-            .padding(.top, 16)
+            .padding(.top, 50)
             .padding(.bottom, 100)
         }
         .ignoresSafeArea(edges: .vertical)
@@ -119,37 +116,34 @@ public struct HomeView: View {
     
     // MARK: - Born Today
     
+    @ViewBuilder
     private var bornTodaySection: some View {
-        
-        BornTodaySectionView(
-            actors: viewModel.bornTodayActors,
-            favouritedActors: viewModel.favouritedActors,
-            onActorTap: { actor in
-                
-                viewModel.didTapActor(actor)
-                
-                Task {
-                    await viewModel.addRecentlyViewed(actor: actor)
+        if !viewModel.bornTodayActors.isEmpty {
+            BornTodaySectionView(
+                actors: viewModel.bornTodayActors,
+                favouritedActors: viewModel.favouritedActors,
+                onActorTap: { actor in
+                    viewModel.didTapActor(actor)
+
+                    Task {
+                        await viewModel.addRecentlyViewed(actor: actor)
+                    }
+                },
+                onFavouriteTap: { actor in
+                    Task {
+                        await viewModel.toggleFavourite(for: actor)
+                    }
+                },
+                onSeeAllTap: {
+                    viewModel.didTapSeeAll(.bornToday)
+                },
+                onLoadMore: {
+                    Task {
+                        await viewModel.loadNextBornTodayActorsPage()
+                    }
                 }
-                
-            }, onFavouriteTap: { actor in
-                
-                Task {
-                    await viewModel.toggleFavourite(for: actor)
-               }
-                
-            }, onSeeAllTap: {
-                
-                viewModel.didTapSeeAll(.bornToday)
-                
-            }, onLoadMore: {
-                
-                Task {
-                    await viewModel.loadNextBornTodayActorsPage()
-                }
-                
-            }
-        )
+            )
+        }
     }
     
     // MARK: - Divider
@@ -381,7 +375,39 @@ public struct HomeView: View {
         }
     }
     
-    // TODO: - More From One of Favourite Actor
+    // MARK: - More From One of Favourite Actor
+    
+    @ViewBuilder
+    private var moreMoviesFromFavouriteActorSection: some View {
+        if let actor = viewModel.selectedFavouriteActor {
+            MoreMoviesFromFavouriteActorSectionView(
+                actor: actor,
+                movies: viewModel.selectedFavouriteActorMovies,
+                watchlistedMovies: viewModel.watchlistedMovies,
+                onMovieTap: { movie in
+                    viewModel.didTapMovie(movie)
+
+                    Task {
+                        await viewModel.addRecentlyViewed(movie: movie)
+                    }
+                },
+                onWatchlistTap: { movie in
+                    Task {
+                        await viewModel.toggleWatchlist(for: movie)
+                    }
+                },
+                onSeeAllTap: {
+                    viewModel.didTapActor(actor)
+                },
+                onActorTap: {
+                    viewModel.didTapActor(actor)
+                },
+                onSeeYourFavouritePeopleTap: {
+                    viewModel.didTapSeeAll(.moreFromActor)
+                }
+            )
+        }
+    }
     
     // MARK: - Divider
     
@@ -499,9 +525,8 @@ public struct HomeView: View {
     // MARK: - Follow us
     
     private var footer: some View {
-        
+
         HomeFooterView()
         
     }
-
 }

@@ -24,7 +24,7 @@ final class MainTabBarCoordinator: Coordinator {
     }
     
     func start() {
-        // 1. თითოეული ჩანართისთვის (ტაბისთვის) ვქმნით ცალკე ნავიგაციის კონტროლერს
+        // 1. თითოეული ჩანართისთვის (ტაბისთვის) ვქმნით ცალკე ნავიგაციის კონტროლერს, რადგან თითოეულს აქვს თავისი ნავიგაციის ისტორია
         let homeNav = UINavigationController()
         let searchNav = UINavigationController()
         let profileNav = UINavigationController()
@@ -34,7 +34,7 @@ final class MainTabBarCoordinator: Coordinator {
         let searchCoordinator = container.searchFactory.makeSearchCoordinator(navigationController: searchNav)
         let profileCoordinator = container.profileFactory.makeProfileCoordinator(navigationController: profileNav)
         
-        // 3. თითოეულ ნავიგაციაში ძირძველ (პირველ) ეკრანად ვსვამთ ჩვენს ფერად ვიუებს
+        // 3. თითოეულ ნავიგაციაში პირველ ეკრანად ვსვამთ ჩვენს ფერად ვიუებს
         childCoordinators.append(homeCoordinator)
         childCoordinators.append(searchCoordinator)
         childCoordinators.append(profileCoordinator)
@@ -43,7 +43,7 @@ final class MainTabBarCoordinator: Coordinator {
         searchCoordinator.start()
         profileCoordinator.start()
         
-        // 4. ვანიჭებთ ტაბბარ აითემებს (როგორც წინა ნაბიჯში ვქენით)
+        // 4. ვანიჭებთ ტაბბარ აითემებს
         homeNav.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), tag: 0)
         searchNav.tabBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magnifyingglass"), tag: 1)
         profileNav.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person"), tag: 2)

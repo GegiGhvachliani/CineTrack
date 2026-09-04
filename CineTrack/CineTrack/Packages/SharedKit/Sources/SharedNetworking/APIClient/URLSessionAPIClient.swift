@@ -22,9 +22,7 @@ public final class URLSessionAPIClient: APIClient {
         self.decoder = decoder
     }
     
-    public func sendRequest<T: Decodable>(
-        _ request: APIRequest
-    ) async throws -> T {
+    public func sendRequest<T: Decodable>(_ request: APIRequest) async throws -> T {
         
         let urlRequest = request.asURLRequest() // APIRequest-ის ფუქნცია, რაც ჩვენი მონაცემს გარდაქმნის რეალურ URLRequest-ად.
         print("🔍 [URL]:", urlRequest.url?.absoluteString ?? "No URL")

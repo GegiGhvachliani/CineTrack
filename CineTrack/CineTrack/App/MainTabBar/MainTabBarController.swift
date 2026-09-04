@@ -15,18 +15,11 @@ final class MainTabBarController: UITabBarController {
         configureTabBarAppearance()
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        configureTabBarFrame()
-    }
-
     private func configureTabBarAppearance() {
         let appearance = UITabBarAppearance()
-
         appearance.configureWithDefaultBackground()
 
-        appearance.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.75)
+        appearance.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.95)
         appearance.shadowColor = .clear
 
         appearance.stackedLayoutAppearance.normal.iconColor = .secondaryLabel
@@ -42,24 +35,7 @@ final class MainTabBarController: UITabBarController {
         tabBar.standardAppearance = appearance
         tabBar.scrollEdgeAppearance = appearance
 
-        tabBar.isTranslucent = true
         tabBar.tintColor = .systemBlue
-
-        tabBar.layer.cornerRadius = 24
-        tabBar.layer.masksToBounds = true
-    }
-
-    private func configureTabBarFrame() {
-        let horizontalInset: CGFloat = 16
-        let bottomInset: CGFloat = 12
-
-        let height: CGFloat = 64
-
-        tabBar.frame = CGRect(
-            x: horizontalInset,
-            y: view.bounds.height - height - bottomInset,
-            width: view.bounds.width - (horizontalInset * 2),
-            height: height
-        )
+        tabBar.isTranslucent = true
     }
 }

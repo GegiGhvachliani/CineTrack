@@ -25,6 +25,7 @@ extension HomeViewModel {
         defer { isTrendingLoading = false }
 
         do {
+            
             let page = try await fetchTrendingUseCase.execute(page: trendingPage)
 
             trendingMovies.append(contentsOf: page.movies)

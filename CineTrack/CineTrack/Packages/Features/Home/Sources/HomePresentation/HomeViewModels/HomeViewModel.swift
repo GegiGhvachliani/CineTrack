@@ -32,15 +32,35 @@ public final class HomeViewModel: HomeViewModelProtocol {
     public internal(set) var fanFavouriteMovies: [Movie] = []
     public internal(set) var nowPlayingMovies: [Movie] = []
     public internal(set) var upcomingMovies: [Movie] = []
+    public internal(set) var top10Movies: [Movie] = []
+
+    public internal(set) var selectedFavouriteActor: Actor?
+    public internal(set) var selectedFavouriteActorMovies: [Movie] = []
+
+
+    // MARK: - Actors
+
+    public internal(set) var bornTodayActors: [Actor] = []
+    public internal(set) var mostPopularActors: [Actor] = []
+
+
+    // MARK: - Featured Content
+
+    public internal(set) var featuredItems: [FeaturedItem] = []
+    public internal(set) var movieVideos: [Int: [MovieVideo]] = [:]
+
+
+    // MARK: - News
+
+    public internal(set) var news: [News] = []
+
 
     // MARK: - Recently Viewed
 
     public internal(set) var recentlyViewedMovies: [RecentlyViewedMovie] = []
-
     public internal(set) var recentlyViewedActors: [RecentlyViewedActor] = []
 
     public var recentlyViewedItems: [RecentlyViewedItem] {
-
         let movies = recentlyViewedMovies.map {
             RecentlyViewedItem.movie($0)
         }
@@ -50,38 +70,20 @@ public final class HomeViewModel: HomeViewModelProtocol {
         }
 
         return (movies + actors).sorted {
-                $0.viewedAt > $1.viewedAt
-            }
+            $0.viewedAt > $1.viewedAt
+        }
     }
 
-    public internal(set) var isRecentlyViewedLoading = false
-
-    // MARK: - Top 10
-
-    public internal(set) var top10Movies: [Movie] = []
-
-    // MARK: - Actors
-
-    public internal(set) var bornTodayActors: [Actor] = []
-    public internal(set) var mostPopularActors: [Actor] = []
-
-    // MARK: - News
-
-    public internal(set) var news: [News] = []
-
-    // MARK: - Videos
-
-    public internal(set) var movieVideos: [Int: [MovieVideo]] = [:]
-
-    public internal(set) var featuredItems: [FeaturedItem] = []
 
     // MARK: - Watchlist
 
     public internal(set) var watchlistedMovies: [Movie] = []
 
+
     // MARK: - Favourites
 
     public internal(set) var favouritedActors: [Actor] = []
+
 
     // MARK: - Loading State
 
@@ -100,6 +102,9 @@ public final class HomeViewModel: HomeViewModelProtocol {
 
     public internal(set) var isNewsLoading = false
 
+    public internal(set) var isRecentlyViewedLoading = false
+
+
     // MARK: - Pagination
 
     internal var trendingPage = 1
@@ -113,6 +118,9 @@ public final class HomeViewModel: HomeViewModelProtocol {
 
     internal var newsPage = 1
 
+
+    // MARK: - Pagination State
+
     public internal(set) var hasMoreTrending = true
     public internal(set) var hasMorePopular = true
     public internal(set) var hasMoreFanFavourite = true
@@ -124,58 +132,52 @@ public final class HomeViewModel: HomeViewModelProtocol {
 
     public internal(set) var hasMoreNews = true
 
+
     // MARK: - Error
 
     public internal(set) var error: Error?
 
-    // MARK: - Dependencies
+
+    // MARK: - Dependencies (UseCases)
+
+    // MARK: Movies
 
     internal let fetchTrendingUseCase: FetchTrendingUseCaseProtocol
-
     internal let fetchPopularUseCase: FetchPopularUseCaseProtocol
-
     internal let fetchTop10MoviesUseCase: FetchTop10MoviesUseCaseProtocol
-
     internal let fetchFanFavouritesUseCase: FetchFanFavouritesUseCaseProtocol
-
     internal let fetchNowPlayingUseCase: FetchNowPlayingUseCaseProtocol
-
     internal let fetchUpcomingUseCase: FetchUpcomingUseCaseProtocol
-
     internal let fetchMovieVideosUseCase: FetchMovieVideosUseCaseProtocol
 
-    internal let fetchBornTodayActorsUseCase: FetchBornTodayActorsUseCaseProtocol
+    // MARK: Actors
 
+    internal let fetchBornTodayActorsUseCase: FetchBornTodayActorsUseCaseProtocol
     internal let fetchMostPopularActorsUseCase: FetchMostPopularActorsUseCaseProtocol
+    internal let fetchActorMoviesUseCase: FetchActorMoviesUseCaseProtocol
+
+    // MARK: News
 
     internal let fetchNewsUseCase: FetchNewsUseCaseProtocol
 
-    // MARK: - Recently Viewed
+    // MARK: Recently Viewed
 
     internal let fetchRecentlyViewedMoviesUseCase: FetchRecentlyViewedMoviesUseCaseProtocol
-
     internal let fetchRecentlyViewedActorsUseCase: FetchRecentlyViewedActorsUseCaseProtocol
-
     internal let addRecentlyViewedMovieUseCase: AddRecentlyViewedMovieUseCaseProtocol
-
     internal let addRecentlyViewedActorUseCase: AddRecentlyViewedActorUseCaseProtocol
-
     internal let clearRecentlyViewedUseCase: ClearRecentlyViewedUseCaseProtocol
 
-    // MARK: - Watchlist
+    // MARK: Watchlist
 
     internal let fetchWatchlistedMoviesUseCase: FetchWatchlistedMoviesUseCaseProtocol
-
     internal let addWatchlistedMovieUseCase: AddWatchlistedMovieUseCaseProtocol
-
     internal let removeWatchlistedMovieUseCase: RemoveWatchlistedMovieUseCaseProtocol
 
-    // MARK: - Favourites
+    // MARK: Favourites
 
     internal let fetchFavouritedActorsUseCase: FetchFavouritedActorsUseCaseProtocol
-
     internal let addFavouritedActorUseCase: AddFavouritedActorUseCaseProtocol
-
     internal let removeFavouritedActorUseCase: RemoveFavouritedActorUseCaseProtocol
 
     // MARK: - Initialization
@@ -201,7 +203,8 @@ public final class HomeViewModel: HomeViewModelProtocol {
         removeWatchlistedMovieUseCase: RemoveWatchlistedMovieUseCaseProtocol,
         fetchFavouritedActorsUseCase: FetchFavouritedActorsUseCaseProtocol,
         addFavouritedActorUseCase: AddFavouritedActorUseCaseProtocol,
-        removeFavouritedActorUseCase: RemoveFavouritedActorUseCaseProtocol
+        removeFavouritedActorUseCase: RemoveFavouritedActorUseCaseProtocol,
+        fetchActorMoviesUseCase: FetchActorMoviesUseCaseProtocol,
     ) {
         self.fetchTrendingUseCase = fetchTrendingUseCase
         self.fetchPopularUseCase = fetchPopularUseCase
@@ -224,5 +227,6 @@ public final class HomeViewModel: HomeViewModelProtocol {
         self.fetchFavouritedActorsUseCase = fetchFavouritedActorsUseCase
         self.addFavouritedActorUseCase = addFavouritedActorUseCase
         self.removeFavouritedActorUseCase = removeFavouritedActorUseCase
+        self.fetchActorMoviesUseCase = fetchActorMoviesUseCase
     }
 }
