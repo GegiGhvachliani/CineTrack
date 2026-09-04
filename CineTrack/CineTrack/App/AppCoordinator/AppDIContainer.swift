@@ -24,6 +24,8 @@ import NewsDetailsAssembly
 import NewsDetailsPresentationAPI
 import SeeAllAssembly
 import SeeAllPresentationAPI
+import VideosListAssembly
+import VideosListPresentationAPI
 import UIKit
 
 
@@ -37,6 +39,7 @@ final class AppDIContainer: AppDIContainerProtocol {
     lazy var movieDetailsFactory: MovieDetailsFactoryProtocol = MovieDetailsFactory()
     lazy var newsDetailsFactory: NewsDetailsFactoryProtocol = NewsDetailsFactory()
     lazy var seeAllFactory: SeeAllFactoryProtocol = SeeAllFactory()
+    lazy var videosListFactory: VideosListFactoryProtocol = VideosListFactory()
 
     init() {}
 }

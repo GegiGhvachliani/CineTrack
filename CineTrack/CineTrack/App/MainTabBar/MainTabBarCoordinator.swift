@@ -7,6 +7,7 @@ import ActorDetailsPresentationAPI
 import MovieDetailsPresentationAPI
 import NewsDetailsPresentationAPI
 import SeeAllPresentationAPI
+import VideosListPresentationAPI
 
 final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol {
     // childCoordinators ინახავს შვილ კოორდინატორებს, რომ მეხსიერებიდან არ ამოვარდნენ (სამომავლოდ დაგვჭირდება)
@@ -88,6 +89,12 @@ final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol {
     
     func showSeeAll(section: HomeSection) {
         let viewController = container.seeAllFactory.makeSeeAllViewController(section: section)
+        
+        homeNavigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    func showVideosList(item: FeaturedItem) {
+        let viewController = container.videosListFactory.makeVideosListViewController(item: item)
         
         homeNavigationController?.pushViewController(viewController, animated: true)
     }

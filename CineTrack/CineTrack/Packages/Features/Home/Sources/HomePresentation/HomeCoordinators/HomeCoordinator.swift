@@ -41,7 +41,7 @@ public final class HomeCoordinator: HomeCoordinatorProtocol {
         router.showMovieDetails(movie: movie)
     }
     public func showVideos(item: FeaturedItem) {
-        print("Navigate To Video Playlist 📀")
+        router.showVideosList(item: item)
     }
     public func showActorDetails(actor: SharedCore.Actor) {
         router.showActorDetails(actor: actor)
@@ -49,7 +49,7 @@ public final class HomeCoordinator: HomeCoordinatorProtocol {
     public func showSeeAll(section: HomeSection) {
         router.showSeeAll(section: section)
     }
-    public func showNewsDetail(news: SharedCore.News) {
+    public func showNewsDetail(news: News) {
         router.showNewsDetails(news: news)
     }
 }

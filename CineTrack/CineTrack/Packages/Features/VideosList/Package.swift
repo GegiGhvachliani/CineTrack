@@ -1,27 +1,109 @@
 // swift-tools-version: 6.3
-// The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
     name: "VideosList",
+    platforms: [
+        .iOS(.v17)
+    ],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "VideosList",
-            targets: ["VideosList"]
+            name: "VideosListPresentationAPI",
+            targets: ["VideosListPresentationAPI"]
         ),
+        .library(
+            name: "VideosListAssembly",
+            targets: ["VideosListAssembly"]
+        )
+    ],
+    dependencies: [
+        .package(path: "../../SharedKit"),
+        .package(path: "../../DesignSystem"),
+        .package(path: "../../TMDBData")
     ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "VideosList"
+            name: "VideosListDomain",
+            dependencies: [
+                .product(
+                    name: "SharedCore",
+                    package: "SharedKit"
+                )
+            ],
+            path: "Sources/VideosListDomain"
         ),
+
+        .target(
+            name: "VideosListData",
+            dependencies: [
+                "VideosListDomain",
+
+                .product(
+                    name: "SharedCore",
+                    package: "SharedKit"
+                ),
+                .product(
+                    name: "SharedNetworking",
+                    package: "SharedKit"
+                ),
+                .product(
+                    name: "TMDBData",
+                    package: "TMDBData"
+                )
+            ],
+            path: "Sources/VideosListData"
+        ),
+
+        .target(
+            name: "VideosListPresentation",
+            dependencies: [
+                "VideosListDomain",
+                "VideosListPresentationAPI",
+
+                .product(
+                    name: "SharedCore",
+                    package: "SharedKit"
+                ),
+                .product(
+                    name: "DesignSystemComponents",
+                    package: "DesignSystem"
+                )
+            ],
+            path: "Sources/VideosListPresentation"
+        ),
+
+        .target(
+            name: "VideosListPresentationAPI",
+            dependencies: [
+                .product(
+                    name: "SharedCore",
+                    package: "SharedKit"
+                )
+            ],
+            path: "Sources/VideosListPresentationAPI"
+        ),
+
+        .target(
+            name: "VideosListAssembly",
+            dependencies: [
+                "VideosListDomain",
+                "VideosListData",
+                "VideosListPresentation",
+                "VideosListPresentationAPI"
+            ],
+            path: "Sources/VideosListAssembly"
+        ),
+
         .testTarget(
             name: "VideosListTests",
-            dependencies: ["VideosList"]
-        ),
+            dependencies: [
+                "VideosListDomain",
+                "VideosListData",
+                "VideosListPresentation"
+            ],
+            path: "Tests"
+        )
     ],
     swiftLanguageModes: [.v6]
 )

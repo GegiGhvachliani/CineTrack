@@ -19,6 +19,8 @@
 		631C12EF304B3A93007A6450 /* SeeAllAssembly in Frameworks */ = {isa = PBXBuildFile; productRef = 631C12EE304B3A93007A6450 /* SeeAllAssembly */; };
 		631C12F1304B3A93007A6450 /* SeeAllPresentationAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 631C12F0304B3A93007A6450 /* SeeAllPresentationAPI */; };
 		63827DBF2FD3530600DE3E16 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 63827DBE2FD3530600DE3E16 /* FirebaseAuth */; };
+		639C8D38304B455200AF45F3 /* VideosListAssembly in Frameworks */ = {isa = PBXBuildFile; productRef = 639C8D37304B455200AF45F3 /* VideosListAssembly */; };
+		639C8D3A304B455200AF45F3 /* VideosListPresentationAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 639C8D39304B455200AF45F3 /* VideosListPresentationAPI */; };
 		63A5B728304AFB7600D3C6A2 /* ActorDetailsAssembly in Frameworks */ = {isa = PBXBuildFile; productRef = 63A5B727304AFB7600D3C6A2 /* ActorDetailsAssembly */; };
 		63A5B72A304AFB7600D3C6A2 /* ActorDetailsPresentationAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 63A5B729304AFB7600D3C6A2 /* ActorDetailsPresentationAPI */; };
 		63A5B72F304B00D800D3C6A2 /* MovieDetailsPresentationAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 63A5B72E304B00D800D3C6A2 /* MovieDetailsPresentationAPI */; };
@@ -114,6 +116,7 @@
 				63A5B72A304AFB7600D3C6A2 /* ActorDetailsPresentationAPI in Frameworks */,
 				63F86A432FE96EC000D43A5F /* ProfileAssembly in Frameworks */,
 				631C12EB304B314B007A6450 /* NewsDetailsAssembly in Frameworks */,
+				639C8D38304B455200AF45F3 /* VideosListAssembly in Frameworks */,
 				63F40D8D2FD5F1BB00189862 /* Kingfisher in Frameworks */,
 				631C12F1304B3A93007A6450 /* SeeAllPresentationAPI in Frameworks */,
 				630B69D62FEFFA27006DF3CD /* OnboardingPresentationAPI in Frameworks */,
@@ -124,6 +127,7 @@
 				631C12ED304B314B007A6450 /* NewsDetailsPresentationAPI in Frameworks */,
 				63F86A472FE96EC000D43A5F /* SharedCore in Frameworks */,
 				63F86A392FE96EC000D43A5F /* DesignSystemComponents in Frameworks */,
+				639C8D3A304B455200AF45F3 /* VideosListPresentationAPI in Frameworks */,
 				631C12E9304B2E89007A6450 /* MovieDetailsAssembly in Frameworks */,
 				63A5B728304AFB7600D3C6A2 /* ActorDetailsAssembly in Frameworks */,
 				63F86A412FE96EC000D43A5F /* OnboardingAssembly in Frameworks */,
@@ -229,6 +233,8 @@
 				631C12EC304B314B007A6450 /* NewsDetailsPresentationAPI */,
 				631C12EE304B3A93007A6450 /* SeeAllAssembly */,
 				631C12F0304B3A93007A6450 /* SeeAllPresentationAPI */,
+				639C8D37304B455200AF45F3 /* VideosListAssembly */,
+				639C8D39304B455200AF45F3 /* VideosListPresentationAPI */,
 			);
 			productName = CineTrack;
 			productReference = 63827D712FD34B7C00DE3E16 /* CineTrack.app */;
@@ -786,6 +792,14 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 63827DBD2FD3530600DE3E16 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
+		};
+		639C8D37304B455200AF45F3 /* VideosListAssembly */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = VideosListAssembly;
+		};
+		639C8D39304B455200AF45F3 /* VideosListPresentationAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = VideosListPresentationAPI;
 		};
 		63A5B727304AFB7600D3C6A2 /* ActorDetailsAssembly */ = {
 			isa = XCSwiftPackageProductDependency;
