@@ -12,7 +12,10 @@ public enum TMDBEndpoint {
 
     // MARK: - Movies
 
-    case trending(timeWindow: TrendingTimeWindow, page: Int)
+    case trending(
+        timeWindow: TrendingTimeWindow,
+        page: Int
+    )
 
     case popular(page: Int)
 
@@ -26,7 +29,10 @@ public enum TMDBEndpoint {
 
     case nowPlaying(page: Int)
 
-    case upcoming(page: Int, region: String)
+    case upcoming(
+        page: Int,
+        region: String
+    )
 
     case movieVideos(movieID: Int)
 
@@ -35,20 +41,34 @@ public enum TMDBEndpoint {
     case popularPeople(page: Int)
 
     case personDetails(personID: Int)
-    
+
+    case personMovieCredits(personID: Int)
+
+    case personTVCredits(personID: Int)
+
+    case personCombinedCredits(personID: Int)
+
+    case personImages(personID: Int)
+
+    case personExternalIDs(personID: Int)
+
+    // MARK: - Discover
+
     case discoverUpcoming(
         page: Int,
         region: String,
         releaseDateGTE: String
     )
-    
-    case personMovieCredits(personID: Int)
 }
+
+// MARK: - Trending Time Window
 
 public enum TrendingTimeWindow: String {
     case day
     case week
 }
+
+// MARK: - TMDBEndpoint + Properties
 
 extension TMDBEndpoint {
 
@@ -64,8 +84,9 @@ extension TMDBEndpoint {
     // MARK: - Path
 
     public var path: String {
-
         switch self {
+
+        // MARK: Movies
 
         case .trending(let timeWindow, _):
             return "/3/trending/movie/\(timeWindow.rawValue)"
@@ -88,24 +109,39 @@ extension TMDBEndpoint {
         case .movieVideos(let movieID):
             return "/3/movie/\(movieID)/videos"
 
+        // MARK: People
+
         case .popularPeople:
             return "/3/person/popular"
 
         case .personDetails(let personID):
             return "/3/person/\(personID)"
-            
-        case .discoverUpcoming:
-            return "/3/discover/movie"
-            
+
         case .personMovieCredits(let personID):
             return "/3/person/\(personID)/movie_credits"
+
+        case .personTVCredits(let personID):
+            return "/3/person/\(personID)/tv_credits"
+
+        case .personCombinedCredits(let personID):
+            return "/3/person/\(personID)/combined_credits"
+
+        case .personImages(let personID):
+            return "/3/person/\(personID)/images"
+
+        case .personExternalIDs(let personID):
+            return "/3/person/\(personID)/external_ids"
+
+        // MARK: Discover
+
+        case .discoverUpcoming:
+            return "/3/discover/movie"
         }
     }
 
     // MARK: - Page
 
     public var page: Int? {
-
         switch self {
 
         case .trending(_, let page):
@@ -134,13 +170,24 @@ extension TMDBEndpoint {
 
         case .personDetails:
             return nil
-            
-        case .discoverUpcoming(let page, _, _):
-            return page
-            
+
         case .personMovieCredits:
             return nil
-            
+
+        case .personTVCredits:
+            return nil
+
+        case .personCombinedCredits:
+            return nil
+
+        case .personImages:
+            return nil
+
+        case .personExternalIDs:
+            return nil
+
+        case .discoverUpcoming(let page, _, _):
+            return page
         }
     }
 
