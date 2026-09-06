@@ -20,7 +20,8 @@ let package = Package(
     dependencies: [
         .package(path: "../../SharedKit"),
         .package(path: "../../DesignSystem"),
-        .package(path: "../../TMDBData")
+        .package(path: "../../TMDBData"),
+        .package(path: "../../NewsData")
     ],
     targets: [
         .target(
@@ -50,6 +51,10 @@ let package = Package(
                 .product(
                     name: "TMDBData",
                     package: "TMDBData"
+                ),
+                .product(
+                    name: "NewsData",
+                    package: "NewsData"
                 )
             ],
             path: "Sources/ActorDetailsData"
@@ -76,6 +81,7 @@ let package = Package(
         .target(
             name: "ActorDetailsPresentationAPI",
             dependencies: [
+                "ActorDetailsDomain",
                 .product(
                     name: "SharedCore",
                     package: "SharedKit"
@@ -90,7 +96,20 @@ let package = Package(
                 "ActorDetailsDomain",
                 "ActorDetailsData",
                 "ActorDetailsPresentation",
-                "ActorDetailsPresentationAPI"
+                "ActorDetailsPresentationAPI",
+
+                .product(
+                    name: "SharedNetworking",
+                    package: "SharedKit"
+                ),
+                .product(
+                    name: "TMDBData",
+                    package: "TMDBData"
+                ),
+                .product(
+                    name: "NewsData",
+                    package: "NewsData"
+                )
             ],
             path: "Sources/ActorDetailsAssembly"
         ),

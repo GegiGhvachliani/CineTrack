@@ -33,6 +33,14 @@ extension HomeViewModel {
     // MARK: - Toggle
 
     public func toggleFavourite(for actor: Actor) async {
+        
+        guard pendingFavouriteIDs.insert(actor.id).inserted else {
+            return
+        }
+
+        defer {
+            pendingFavouriteIDs.remove(actor.id)
+        }
 
         let wasFavourited = favouritedActors.contains {
                 $0.id == actor.id

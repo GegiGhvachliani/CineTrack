@@ -12,6 +12,8 @@ public struct ActorCreditDTO: Decodable, Sendable {
     public let id: Int
     public let backdropPath: String?
     public let character: String?
+    public let department: String?
+    public let job: String?
     public let creditID: String?
     public let genreIDs: [Int]
     public let originalLanguage: String?
@@ -30,6 +32,8 @@ public struct ActorCreditDTO: Decodable, Sendable {
         id: Int,
         backdropPath: String?,
         character: String?,
+        department: String?,
+        job: String?,
         creditID: String?,
         genreIDs: [Int],
         originalLanguage: String?,
@@ -47,6 +51,8 @@ public struct ActorCreditDTO: Decodable, Sendable {
         self.id = id
         self.backdropPath = backdropPath
         self.character = character
+        self.department = department
+        self.job = job
         self.creditID = creditID
         self.genreIDs = genreIDs
         self.originalLanguage = originalLanguage
@@ -66,6 +72,8 @@ public struct ActorCreditDTO: Decodable, Sendable {
         case id
         case backdropPath = "backdrop_path"
         case character
+        case department
+        case job
         case creditID = "credit_id"
         case genreIDs = "genre_ids"
         case originalLanguage = "original_language"

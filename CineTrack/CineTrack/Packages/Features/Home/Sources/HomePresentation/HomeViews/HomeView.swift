@@ -92,10 +92,6 @@ public struct HomeView: View {
             onMovieTap: { movie in
                 
                 viewModel.didTapMovie(movie)
-                
-                Task {
-                    await viewModel.addRecentlyViewed(movie: movie)
-                }
             },
 
             onWatchlistTap: { movie in
@@ -125,9 +121,6 @@ public struct HomeView: View {
                 onActorTap: { actor in
                     viewModel.didTapActor(actor)
 
-                    Task {
-                        await viewModel.addRecentlyViewed(actor: actor)
-                    }
                 },
                 onFavouriteTap: { actor in
                     Task {
@@ -198,10 +191,7 @@ public struct HomeView: View {
             onMovieTap: { movie in
                 
                 viewModel.didTapMovie(movie)
-            
-                Task {
-                    await viewModel.addRecentlyViewed(movie: movie)
-                }
+
                 
             }, onWatchlistTap: { movie in
                 
@@ -234,10 +224,7 @@ public struct HomeView: View {
                 onMovieTap: { movie in
                     
                     viewModel.didTapMovie(movie)
-                    
-                    Task {
-                        await viewModel.addRecentlyViewed(movie: movie)
-                    }
+
                     
                 },
                 onWatchlistTap: { movie in
@@ -277,10 +264,7 @@ public struct HomeView: View {
             onMovieTap: { movie in
                 
                 viewModel.didTapMovie(movie)
-                
-                Task {
-                    await viewModel.addRecentlyViewed(movie: movie)
-                }
+
                 
             }, onWatchlistTap: { movie in
                 
@@ -312,11 +296,7 @@ public struct HomeView: View {
             onMovieTap: { movie in
             
                 viewModel.didTapMovie(movie)
-                
-                Task {
-                    await viewModel.addRecentlyViewed(movie: movie)
-                }
-                
+
             }, onWatchlistTap: { movie in
                 
                 Task {
@@ -346,12 +326,6 @@ public struct HomeView: View {
                 movies: viewModel.watchlistedMovies,
                 watchlistedMovies: viewModel.watchlistedMovies,
                 onMovieTap: { movie in
-
-                    Task {
-                        await viewModel.addRecentlyViewed(
-                            movie: movie
-                        )
-                    }
 
                 },
                 onWatchlistTap: { movie in
@@ -387,9 +361,6 @@ public struct HomeView: View {
                 onMovieTap: { movie in
                     viewModel.didTapMovie(movie)
 
-                    Task {
-                        await viewModel.addRecentlyViewed(movie: movie)
-                    }
                 },
                 onWatchlistTap: { movie in
                     Task {
@@ -450,10 +421,7 @@ public struct HomeView: View {
             onActorTap: { actor in
                 
                 viewModel.didTapActor(actor)
-                
-                Task {
-                    await viewModel.addRecentlyViewed(actor: actor)
-                }
+
                 
             }, onFavouriteTap: { actor in
                 
@@ -485,11 +453,7 @@ public struct HomeView: View {
             onMovieTap: { movie in
                 
                 viewModel.didTapMovie(movie)
-            
-                Task {
-                    await viewModel.addRecentlyViewed(movie: movie)
-                }
-                
+
             }, onWatchlistTap: { movie in
                 
                 Task {
@@ -499,10 +463,7 @@ public struct HomeView: View {
             }, onActorTap: { actor in
                 
                 viewModel.didTapActor(actor)
-            
-                Task {
-                    await viewModel.addRecentlyViewed(actor: actor)
-                }
+
                 
             }, onFavouriteTap: { actor in
             

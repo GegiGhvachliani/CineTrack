@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SharedCore
 
 public protocol ActorDetailsRepositoryProtocol: Sendable {
 
@@ -24,4 +25,6 @@ public protocol ActorDetailsRepositoryProtocol: Sendable {
     func fetchActorExternalLinks(
         actorID: Int
     ) async throws -> ActorExternalLinks
+
+    func fetchActorNews(actorName: String) async throws -> [News]
 }

@@ -171,28 +171,28 @@ public struct HomeFactory: HomeFactoryProtocol {
 
         let homeView = HomeView(viewModel: viewModel)
 
-        viewModel.onSearch = {
-            coordinator.showSearch()
+        viewModel.onSearch = { [weak coordinator] in
+            coordinator?.showSearch()
         }
 
-        viewModel.onMovieDetails = { movie in
-            coordinator.showMovieDetails(movie: movie)
+        viewModel.onMovieDetails = { [weak coordinator] movie in
+            coordinator?.showMovieDetails(movie: movie)
         }
 
-        viewModel.onVideos = { item in
-            coordinator.showVideos(item: item)
+        viewModel.onVideos = { [weak coordinator] item in
+            coordinator?.showVideos(item: item)
         }
 
-        viewModel.onActorDetails = { actor in
-            coordinator.showActorDetails(actor: actor)
+        viewModel.onActorDetails = { [weak coordinator] actorID in
+            coordinator?.showActorDetails(actorID: actorID)
         }
 
-        viewModel.onNewsDetails = { news in
-            coordinator.showNewsDetail(news: news)
+        viewModel.onNewsDetails = { [weak coordinator] news in
+            coordinator?.showNewsDetail(news: news)
         }
 
-        viewModel.onSeeAll = { section in
-            coordinator.showSeeAll(section: section)
+        viewModel.onSeeAll = { [weak coordinator] section in
+            coordinator?.showSeeAll(section: section)
         }
 
         // MARK: - Hosting Controller

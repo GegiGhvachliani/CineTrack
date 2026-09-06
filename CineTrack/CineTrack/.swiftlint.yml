@@ -14,3 +14,4 @@ excluded:
   - CineTrackTests
   - CineTrackUITests
   - Packages/Features/MovieDetails/.build
+  - Packages/Features/ActorDetails/.build

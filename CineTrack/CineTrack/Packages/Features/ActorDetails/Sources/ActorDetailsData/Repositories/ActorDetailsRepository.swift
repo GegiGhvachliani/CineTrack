@@ -11,6 +11,7 @@ import ActorDetailsDomain
 import SharedNetworking
 import SharedCore
 import TMDBData
+import NewsData
 
 public final class ActorDetailsRepository: ActorDetailsRepositoryProtocol {
 
@@ -18,93 +19,90 @@ public final class ActorDetailsRepository: ActorDetailsRepositoryProtocol {
 
     private let apiClient: APIClient
     private let requestBuilder: TMDBRequestBuilder
+    private let newsRequestBuilder: NewsRequestBuilder
 
     private let actorDetailsMapper: ActorDetailsMapper
     private let actorCreditMapper: ActorCreditMapper
     private let actorImageMapper: ActorImageMapper
     private let actorExternalLinksMapper: ActorExternalLinksMapper
+    private let newsMapper: NewsMapper
 
     // MARK: - Initialization
 
     public init(
         apiClient: APIClient,
         configuration: TMDBConfiguration,
+        newsConfiguration: NewsConfiguration,
         actorDetailsMapper: ActorDetailsMapper = ActorDetailsMapper(),
         actorCreditMapper: ActorCreditMapper = ActorCreditMapper(),
         actorImageMapper: ActorImageMapper = ActorImageMapper(),
-        actorExternalLinksMapper: ActorExternalLinksMapper = ActorExternalLinksMapper()
+        actorExternalLinksMapper: ActorExternalLinksMapper = ActorExternalLinksMapper(),
+        newsMapper: NewsMapper = NewsMapper()
     ) {
         self.apiClient = apiClient
         self.requestBuilder = TMDBRequestBuilder(
             configuration: configuration
         )
+        self.newsRequestBuilder = NewsRequestBuilder(configuration: newsConfiguration)
         self.actorDetailsMapper = actorDetailsMapper
         self.actorCreditMapper = actorCreditMapper
         self.actorImageMapper = actorImageMapper
         self.actorExternalLinksMapper = actorExternalLinksMapper
+        self.newsMapper = newsMapper
     }
 
     // MARK: - Actor Details
 
-    public func fetchActorDetails(
-        actorID: Int
-    ) async throws -> ActorDetails {
+    public func fetchActorDetails(actorID: Int) async throws -> ActorDetails {
 
-        let request = try requestBuilder.build(
-            for: .personDetails(personID: actorID)
-        )
+        let request = try requestBuilder.build(for: .personDetails(personID: actorID))
 
-        let response: ActorDetailsDTO =
-            try await apiClient.sendRequest(request)
+        let response: ActorDetailsDTO = try await apiClient.sendRequest(request)
 
         return actorDetailsMapper.map(response)
     }
 
     // MARK: - Credits
 
-    public func fetchActorCredits(
-        actorID: Int
-    ) async throws -> [ActorCredit] {
+    public func fetchActorCredits(actorID: Int) async throws -> [ActorCredit] {
 
-        let request = try requestBuilder.build(
-            for: .personMovieCredits(personID: actorID)
-        )
+        let request = try requestBuilder.build(for: .personMovieCredits(personID: actorID))
 
-        let response: ActorCreditsResponseDTO =
-            try await apiClient.sendRequest(request)
+        let response: ActorCreditsResponseDTO = try await apiClient.sendRequest(request)
 
-        return response.cast.map(actorCreditMapper.map)
+        return (response.cast + response.crew)
+            .map(actorCreditMapper.map)
+            .sorted { ($0.releaseDate ?? "") > ($1.releaseDate ?? "") }
     }
 
     // MARK: - Images
 
-    public func fetchActorImages(
-        actorID: Int
-    ) async throws -> [ActorImage] {
+    public func fetchActorImages(actorID: Int) async throws -> [ActorImage] {
 
-        let request = try requestBuilder.build(
-            for: .personImages(personID: actorID)
-        )
+        let request = try requestBuilder.build(for: .personImages(personID: actorID))
 
-        let response: ActorImagesResponseDTO =
-            try await apiClient.sendRequest(request)
+        let response: ActorImagesResponseDTO = try await apiClient.sendRequest(request)
 
         return response.profiles.map(actorImageMapper.map)
     }
 
     // MARK: - External Links
 
-    public func fetchActorExternalLinks(
-        actorID: Int
-    ) async throws -> ActorExternalLinks {
+    public func fetchActorExternalLinks(actorID: Int) async throws -> ActorExternalLinks {
 
-        let request = try requestBuilder.build(
-            for: .personExternalIDs(personID: actorID)
-        )
+        let request = try requestBuilder.build(for: .personExternalIDs(personID: actorID))
 
-        let response: ActorExternalIDsDTO =
-            try await apiClient.sendRequest(request)
+        let response: ActorExternalIDsDTO = try await apiClient.sendRequest(request)
 
         return actorExternalLinksMapper.map(response)
+    }
+
+    public func fetchActorNews(actorName: String) async throws -> [News] {
+        
+        let request = try newsRequestBuilder.build(for: .person(name: actorName, page: 1, pageSize: 10))
+        
+        let response: NewsResponseDTO = try await apiClient.sendRequest(request)
+        
+        return response.articles.compactMap(newsMapper.map)
     }
 }

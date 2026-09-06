@@ -43,8 +43,8 @@ public final class HomeCoordinator: HomeCoordinatorProtocol {
     public func showVideos(item: FeaturedItem) {
         router.showVideosList(item: item)
     }
-    public func showActorDetails(actor: SharedCore.Actor) {
-        router.showActorDetails(actor: actor)
+    public func showActorDetails(actorID: Int) {
+        router.showActorDetails(actorID: actorID)
     }
     public func showSeeAll(section: HomeSection) {
         router.showSeeAll(section: section)

@@ -18,14 +18,22 @@ extension HomeViewModel {
 
     public func didTapMovie(_ movie: Movie) {
         onMovieDetails?(movie)
-    }
 
-    public func didTapVideos(_ item: FeaturedItem) {
-        onVideos?(item)
+        Task {
+            await addRecentlyViewed(movie: movie)
+        }
     }
 
     public func didTapActor(_ actor: Actor) {
-        onActorDetails?(actor)
+        onActorDetails?(actor.id)
+
+        Task {
+            await addRecentlyViewed(actor: actor)
+        }
+    }
+    
+    public func didTapVideos(_ item: FeaturedItem) {
+        onVideos?(item)
     }
 
     public func didTapSeeAll(_ section: HomeSection) {

@@ -15,6 +15,12 @@ public enum NewsEndpoint: Sendable {
         pageSize: Int
     )
 
+    case person(
+        name: String,
+        page: Int,
+        pageSize: Int
+    )
+
     public var path: String {
         "/v2/everything"
     }
@@ -50,6 +56,15 @@ public enum NewsEndpoint: Sendable {
                     name: "pageSize",
                     value: String(pageSize)
                 )
+            ]
+
+        case .person(let name, let page, let pageSize):
+            return [
+                URLQueryItem(name: "q", value: "\(name) AND (movie OR film OR actor OR actress OR cinema)"),
+                URLQueryItem(name: "language", value: "en"),
+                URLQueryItem(name: "sortBy", value: "publishedAt"),
+                URLQueryItem(name: "page", value: String(page)),
+                URLQueryItem(name: "pageSize", value: String(pageSize))
             ]
         }
     }

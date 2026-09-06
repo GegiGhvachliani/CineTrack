@@ -18,6 +18,6 @@ public protocol HomeCoordinatorProtocol: Coordinator {
     func showSeeAll(section: HomeSection)
     
     func showMovieDetails(movie: Movie)
-    func showActorDetails(actor: Actor)
+    func showActorDetails(actorID: Int)
     func showNewsDetail(news: News)
 }

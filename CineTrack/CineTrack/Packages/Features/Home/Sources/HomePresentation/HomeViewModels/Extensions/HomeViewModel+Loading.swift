@@ -14,36 +14,29 @@ import SharedCore
 extension HomeViewModel {
 
     public func loadHome() async {
+        guard !isHomeLoading, !hasLoadedInitialHome else {
+            return
+        }
 
-        guard isHomeLoading else { return }
-
-        error = nil
         isHomeLoading = true
+        error = nil
 
-        defer { isHomeLoading = false }
+        defer {
+            isHomeLoading = false
+            hasLoadedInitialHome = true
+        }
 
         async let trendingTask = loadNextTrendingPage()
-
         async let popularTask = loadNextPopularPage()
-
         async let fanFavouritesTask = loadNextFanFavouritePage()
-
         async let top10Task = loadTop10Movies()
-
         async let nowPlayingTask = loadNextNowPlayingPage()
-
         async let upcomingTask = loadNextUpcomingPage()
-
         async let bornTodayTask = loadNextBornTodayActorsPage()
-
         async let popularActorsTask = loadNextMostPopularCelebritiesPage()
-
         async let newsTask = loadNextNewsPage()
-
         async let recentlyViewedTask = loadRecentlyViewed()
-
         async let watchlistTask = loadWatchlist()
-
         async let favouritesTask = loadFavourites()
 
         await (
@@ -60,8 +53,7 @@ extension HomeViewModel {
             watchlistTask,
             favouritesTask
         )
-        
-        // featuredItems-ს სჭირდება nowPlaying რომ 5 ავირჩიო მათგან და გამოვაჩინო, ამიტო ცალკე მაქვს
+
         await loadFeaturedItems()
     }
 }

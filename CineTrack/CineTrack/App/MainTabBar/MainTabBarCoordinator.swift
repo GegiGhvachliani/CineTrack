@@ -9,7 +9,7 @@ import NewsDetailsPresentationAPI
 import SeeAllPresentationAPI
 import VideosListPresentationAPI
 
-final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol {
+final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol, ActorDetailsRoutingProtocol {
     // childCoordinators ინახავს შვილ კოორდინატორებს, რომ მეხსიერებიდან არ ამოვარდნენ (სამომავლოდ დაგვჭირდება)
     var childCoordinators: [Coordinator] = []
     
@@ -68,10 +68,16 @@ final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol {
         navigationController.isNavigationBarHidden = true
     }
     
-    func showActorDetails(actor: SharedCore.Actor) {
-        let viewController = container.actorDetailsFactory.makeActorDetailsViewController(actor: actor)
-        
-        homeNavigationController?.pushViewController(viewController, animated: true)
+    func showActorDetails(actorID: Int) {
+        guard let homeNavigationController else { return }
+
+        let coordinator = container.actorDetailsFactory.makeActorDetailsCoordinator(
+            actorID: actorID,
+            navigationController: homeNavigationController,
+            router: self
+        )
+        addChild(coordinator)
+        coordinator.start()
     }
     
     func showMovieDetails(movie: Movie) {

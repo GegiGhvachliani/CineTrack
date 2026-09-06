@@ -1,37 +1,41 @@
-//
-//  ActorDetailsView.swift
-//  ActorDetails
-//
-//  Created by Gegi Ghvachliani on 04/09/2026.
-//
-
 import SwiftUI
-import SharedCore
 
 public struct ActorDetailsView: View {
+    @State private var viewModel: ActorDetailsViewModel
 
-    private let actor: Actor
-
-    public init(actor: Actor) {
-        self.actor = actor
+    public init(viewModel: ActorDetailsViewModel) {
+        _viewModel = State(initialValue: viewModel)
     }
 
     public var body: some View {
-        VStack(spacing: 16) {
-            Image(systemName: "person.crop.circle.fill")
-                .font(.system(size: 72))
-                .foregroundStyle(.secondary)
-
-            Text(actor.name)
-                .font(.title.bold())
-
-            Text("Actor Details")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+        Group {
+            if viewModel.isLoading && viewModel.actor == nil {
+                ProgressView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if let error = viewModel.error {
+                ContentUnavailableView(
+                    "Unable to load actor",
+                    systemImage: "exclamationmark.triangle",
+                    description: Text(error.localizedDescription)
+                )
+            } else {
+                ScrollView {
+                    if let actor = viewModel.actor {
+                        HeaderView(
+                            actor: actor,
+                            credits: viewModel.featuredCredits,
+                            isCreditsLoading: viewModel.isCreditsLoading,
+                            onMovieTap: { credit in
+                                viewModel.didTapCredit(credit)
+                            }
+                        )
+                    }
+                }
+            }
+            
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(uiColor: .systemBackground))
-        .navigationTitle("Actor")
-        .navigationBarTitleDisplayMode(.inline)
+        .task {
+            await viewModel.load()
+        }
     }
 }

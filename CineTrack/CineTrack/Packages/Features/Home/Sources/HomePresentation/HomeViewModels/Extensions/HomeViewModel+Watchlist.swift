@@ -32,6 +32,15 @@ extension HomeViewModel {
     // MARK: - Toggle
 
     public func toggleWatchlist(for movie: Movie) async {
+        
+        guard pendingWatchlistIDs.insert(movie.id).inserted else {
+            return
+        }
+
+        defer {
+            pendingWatchlistIDs.remove(movie.id)
+        }
+
 
         let wasWatchlisted = watchlistedMovies.contains { $0.id == movie.id }
 

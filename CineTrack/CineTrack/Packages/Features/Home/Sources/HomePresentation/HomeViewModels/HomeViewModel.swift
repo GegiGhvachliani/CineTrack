@@ -22,7 +22,7 @@ public final class HomeViewModel: HomeViewModelProtocol {
     public var onSeeAll: ((HomeSection) -> Void)?
 
     public var onMovieDetails: ((Movie) -> Void)?
-    public var onActorDetails: ((Actor) -> Void)?
+    public var onActorDetails: ((Int) -> Void)?
     public var onNewsDetails: ((News) -> Void)?
 
     // MARK: - Movies
@@ -83,11 +83,16 @@ public final class HomeViewModel: HomeViewModelProtocol {
     // MARK: - Favourites
 
     public internal(set) var favouritedActors: [Actor] = []
-
+    
+    // MARK: - Pending
+    
+    internal var pendingWatchlistIDs: Set<Int> = []
+    internal var pendingFavouriteIDs: Set<Int> = []
 
     // MARK: - Loading State
-
-    public internal(set) var isHomeLoading = true
+    
+    public internal(set) var isHomeLoading = false
+    internal var hasLoadedInitialHome = false
 
     public internal(set) var isTrendingLoading = false
     public internal(set) var isPopularLoading = false

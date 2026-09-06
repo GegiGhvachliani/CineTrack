@@ -18,7 +18,7 @@ public protocol HomeViewModelProtocol {
     var onVideos: ((FeaturedItem) -> Void)? { get }
     var onSeeAll: ((HomeSection) -> Void)? { get }
     var onMovieDetails: ((Movie) -> Void)? { get }
-    var onActorDetails: ((Actor) -> Void)? { get }
+    var onActorDetails: ((Int) -> Void)? { get }
     var onNewsDetails: ((News) -> Void)? { get }
 
     func didTapSearch()

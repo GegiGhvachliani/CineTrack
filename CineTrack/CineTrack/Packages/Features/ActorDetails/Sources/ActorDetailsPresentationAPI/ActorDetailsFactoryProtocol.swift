@@ -7,8 +7,35 @@
 
 import UIKit
 import SharedCore
+import ActorDetailsDomain
 
 @MainActor
 public protocol ActorDetailsFactoryProtocol {
-    func makeActorDetailsViewController(actor: Actor) -> UIViewController
+    
+    func makeActorDetailsCoordinator(
+        actorID: Int,
+        navigationController: UINavigationController,
+        router: ActorDetailsRoutingProtocol
+    ) -> ActorDetailsCoordinatorProtocol
+
+    func makeActorDetailsViewController(
+        actorID: Int,
+        onMovieDetails: @escaping (Movie) -> Void,
+        onNewsDetails: @escaping (News) -> Void,
+        onShowAllPhotos: @escaping ([ActorImage], String) -> Void
+    ) -> UIViewController
+
+    func makeActorPhotosViewController(
+        images: [ActorImage],
+        actorName: String
+    ) -> UIViewController
+}
+
+@MainActor
+public protocol ActorDetailsCoordinatorProtocol: Coordinator { }
+
+@MainActor
+public protocol ActorDetailsRoutingProtocol: AnyObject {
+    func showMovieDetails(movie: Movie)
+    func showNewsDetails(news: News)
 }

@@ -22,11 +22,23 @@ extension HomeViewModel {
         print("✅ Selected favourite actor:", actor.name)
 
         selectedFavouriteActor = actor
+        selectedFavouriteActorMovies = []
 
         do {
-            selectedFavouriteActorMovies = try await fetchActorMoviesUseCase.execute(actorID: actor.id)
+            let movies = try await fetchActorMoviesUseCase.execute(
+                actorID: actor.id
+            )
+
+            guard selectedFavouriteActor?.id == actor.id else {
+                return
+            }
+
+            selectedFavouriteActorMovies = movies
         } catch {
-            print("❌ Actor movies error:", error)
+            guard selectedFavouriteActor?.id == actor.id else {
+                return
+            }
+
             self.error = error
             selectedFavouriteActorMovies = []
         }
