@@ -109,7 +109,7 @@ public struct BiographySectionView: View {
             } label: {
                 HStack(spacing: 5) {
                     Text(actor.biography ?? "\(actor.name) biography not found")
-                        .font(TypographyTokens.bodySmall)
+                        .font(TypographyTokens.bodySmallSmall)
                         .foregroundStyle(.white.opacity(0.7))
                         .multilineTextAlignment(.leading)
                         .lineLimit(6)
@@ -127,10 +127,13 @@ public struct BiographySectionView: View {
             VStack(alignment: .leading, spacing: 4) {
                 if let bornText {
                     Text(bornText)
+                        .font(TypographyTokens.body)
+
                 }
 
                 if let diedText {
                     Text(diedText)
+                        .font(TypographyTokens.body)
                 }
             }
         }

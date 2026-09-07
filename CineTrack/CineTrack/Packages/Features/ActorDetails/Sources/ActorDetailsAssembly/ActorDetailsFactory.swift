@@ -34,7 +34,8 @@ public struct ActorDetailsFactory: ActorDetailsFactoryProtocol {
         onMovieDetails: @escaping (Movie) -> Void,
         onNewsDetails: @escaping (News) -> Void,
         onShowAllPhotos: @escaping ([ActorImage], String) -> Void,
-        onShowMiniBiography: @escaping (ActorDetails) -> Void
+        onShowMiniBiography: @escaping (ActorDetails) -> Void,
+        onShowAllFilmography: @escaping () -> Void
     ) -> UIViewController {
         let apiClient = URLSessionAPIClient()
         let tmdbConfiguration = TMDBConfiguration(
@@ -54,6 +55,10 @@ public struct ActorDetailsFactory: ActorDetailsFactoryProtocol {
             firestore: FirestoreClient(),
             userSession: FirebaseUserSession()
         )
+        let watchlistRepository = WatchlistRepository(
+            firestore: FirestoreClient(),
+            userSession: FirebaseUserSession()
+        )
         let viewModel = ActorDetailsViewModel(
             actorID: actorID,
             fetchActorDetailsUseCase: FetchActorDetailsUseCase(repository: repository),
@@ -63,12 +68,16 @@ public struct ActorDetailsFactory: ActorDetailsFactoryProtocol {
             fetchActorNewsUseCase: FetchActorNewsUseCase(repository: repository),
             fetchFavouritedActorsUseCase: FetchFavouritedActorsUseCase(repository: favouriteRepository),
             addFavouritedActorUseCase: AddFavouritedActorUseCase(repository: favouriteRepository),
-            removeFavouritedActorUseCase: RemoveFavouritedActorUseCase(repository: favouriteRepository)
+            removeFavouritedActorUseCase: RemoveFavouritedActorUseCase(repository: favouriteRepository),
+            fetchWatchlistedMoviesUseCase: FetchWatchlistedMoviesUseCase(repository: watchlistRepository),
+            addWatchlistedMovieUseCase: AddWatchlistedMovieUseCase(repository: watchlistRepository),
+            removeWatchlistedMovieUseCase: RemoveWatchlistedMovieUseCase(repository: watchlistRepository)
         )
         viewModel.onMovieDetails = onMovieDetails
         viewModel.onNewsDetails = onNewsDetails
         viewModel.onShowAllPhotos = onShowAllPhotos
         viewModel.onShowMiniBiography = onShowMiniBiography
+        viewModel.onShowAllFilmography = onShowAllFilmography
         viewModel.onOpenURL = { url in
             UIApplication.shared.open(url)
         }

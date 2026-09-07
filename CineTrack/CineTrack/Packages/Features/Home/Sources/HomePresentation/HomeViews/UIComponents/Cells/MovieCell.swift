@@ -8,6 +8,7 @@
 import SwiftUI
 import SharedCore
 import DesignSystemTokens
+import DesignSystemComponents
 
 struct MovieCell: View {
         

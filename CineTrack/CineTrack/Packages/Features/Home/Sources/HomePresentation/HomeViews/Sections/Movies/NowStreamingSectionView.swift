@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SharedCore
+import DesignSystemComponents
 
 struct NowStreamingSectionView: View {
     
@@ -22,6 +23,7 @@ struct NowStreamingSectionView: View {
         
         HorizontalScrollView(
             headerText: HomeStrings.Section.nowPlaying,
+            seeAllTitle: HomeStrings.Action.seeAll,
             items: movies,
             onSeeAllTap: onSeeAllTap,
             onLoadMore: onLoadMore

@@ -38,6 +38,9 @@ public final class ActorDetailsCoordinator: ActorDetailsCoordinatorProtocol {
             },
             onShowMiniBiography: { [weak self] actor in
                 self?.showMiniBiography(actor: actor)
+            },
+            onShowAllFilmography: { [weak self] in
+                self?.router?.showSeeAll(section: .filmography)
             }
         )
         navigationController.pushViewController(viewController, animated: true)

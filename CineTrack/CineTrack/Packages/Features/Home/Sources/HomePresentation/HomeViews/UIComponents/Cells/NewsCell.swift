@@ -8,6 +8,7 @@
 import SwiftUI
 import DesignSystemTokens
 import SharedCore
+import DesignSystemComponents
 
 struct NewsCell: View {
 

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import DesignSystemTokens
+import DesignSystemComponents
 
 struct MovieActorPoster: View {
 

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SharedCore
+import DesignSystemComponents
 
 struct Top10SectionView: View {
 
@@ -20,6 +21,7 @@ struct Top10SectionView: View {
     var body: some View {
         HorizontalScrollView(
             headerText: HomeStrings.Section.top10,
+            seeAllTitle: HomeStrings.Action.seeAll,
             items: movies,
             onSeeAllTap: onSeeAllTap
         ) { movie, index in

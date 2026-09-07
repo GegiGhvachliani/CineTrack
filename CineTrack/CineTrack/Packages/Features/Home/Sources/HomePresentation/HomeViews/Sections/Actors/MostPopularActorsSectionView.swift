@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SharedCore
+import DesignSystemComponents
 
 struct MostPopularActorsSectionView: View {
     
@@ -22,6 +23,7 @@ struct MostPopularActorsSectionView: View {
         
         HorizontalScrollView(
             headerText: HomeStrings.Section.mostPopularCelebrities,
+            seeAllTitle: HomeStrings.Action.seeAll,
             items: actors,
             onSeeAllTap: onSeeAllTap,
             onLoadMore: onLoadMore

@@ -31,7 +31,7 @@ public struct ExternalLinksScrollView: View {
                         linkImage(for: link)
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 30, height: 30)
+                            .frame(width: 35, height: 35)
                             .clipShape(
                                 RoundedRectangle(cornerRadius: 10)
                             )

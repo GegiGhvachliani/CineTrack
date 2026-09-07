@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SharedCore
+import DesignSystemComponents
 
 struct TrendingSectionView: View {
     
@@ -22,6 +23,7 @@ struct TrendingSectionView: View {
         
         HorizontalScrollView(
             headerText: HomeStrings.Section.trending,
+            seeAllTitle: HomeStrings.Action.seeAll,
             items: movies,
             onSeeAllTap: onSeeAllTap,
             onLoadMore: onLoadMore

@@ -61,6 +61,8 @@ public struct SeeAllView: View {
             "Most Popular Celebrities"
         case .recentlyViewed:
             "Recently Viewed"
+        case .filmography:
+            "Filmography"
         }
     }
 }

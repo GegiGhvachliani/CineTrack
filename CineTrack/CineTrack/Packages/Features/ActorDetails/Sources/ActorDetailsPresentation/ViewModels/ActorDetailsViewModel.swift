@@ -20,6 +20,7 @@ public protocol ActorDetailsViewModelProtocol: AnyObject {
     var news: [News] { get }
     var isFavourite: Bool { get }
     var isFavouriteUpdating: Bool { get }
+    func isWatchlisted(_ credit: ActorCredit) -> Bool
     var isLoading: Bool { get }
     var error: Error? { get }
 
@@ -29,8 +30,10 @@ public protocol ActorDetailsViewModelProtocol: AnyObject {
     func didTapNews(_ news: News)
     func didTapShowAllPhotos()
     func didTapMiniBiography()
+    func didTapSeeAllFilmography()
     func didTapExternalURL(_ url: URL)
     func toggleFavourite() async
+    func toggleWatchlist(for credit: ActorCredit) async
 }
 
 @MainActor
@@ -42,6 +45,7 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
     public private(set) var externalLinks: ActorExternalLinks?
     public private(set) var news: [News] = []
     public private(set) var favouritedActorIDs = Set<Int>()
+    public internal(set) var watchlistedMovieIDs = Set<Int>()
 
     public private(set) var isLoading = false
     public private(set) var isCreditsLoading = false
@@ -49,7 +53,7 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
     public private(set) var isExternalLinksLoading = false
     public private(set) var isNewsLoading = false
     public private(set) var error: Error?
-    public private(set) var sectionErrors: [ActorDetailsSection: Error] = [:]
+    public internal(set) var sectionErrors: [ActorDetailsSection: Error] = [:]
 
     public let actorID: Int
 
@@ -57,6 +61,7 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
     public var onNewsDetails: ((News) -> Void)?
     public var onShowAllPhotos: (([ActorImage], String) -> Void)?
     public var onShowMiniBiography: ((ActorDetails) -> Void)?
+    public var onShowAllFilmography: (() -> Void)?
     public var onOpenURL: ((URL) -> Void)?
 
     public var featuredCredits: [ActorCredit] {
@@ -118,7 +123,11 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
     private let fetchFavouritedActorsUseCase: FetchFavouritedActorsUseCaseProtocol
     private let addFavouritedActorUseCase: AddFavouritedActorUseCaseProtocol
     private let removeFavouritedActorUseCase: RemoveFavouritedActorUseCaseProtocol
+    let fetchWatchlistedMoviesUseCase: FetchWatchlistedMoviesUseCaseProtocol
+    let addWatchlistedMovieUseCase: AddWatchlistedMovieUseCaseProtocol
+    let removeWatchlistedMovieUseCase: RemoveWatchlistedMovieUseCaseProtocol
     private var pendingFavouriteIDs = Set<Int>()
+    var pendingWatchlistIDs = Set<Int>()
 
     public init(
         actorID: Int,
@@ -129,7 +138,10 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
         fetchActorNewsUseCase: FetchActorNewsUseCaseProtocol,
         fetchFavouritedActorsUseCase: FetchFavouritedActorsUseCaseProtocol,
         addFavouritedActorUseCase: AddFavouritedActorUseCaseProtocol,
-        removeFavouritedActorUseCase: RemoveFavouritedActorUseCaseProtocol
+        removeFavouritedActorUseCase: RemoveFavouritedActorUseCaseProtocol,
+        fetchWatchlistedMoviesUseCase: FetchWatchlistedMoviesUseCaseProtocol,
+        addWatchlistedMovieUseCase: AddWatchlistedMovieUseCaseProtocol,
+        removeWatchlistedMovieUseCase: RemoveWatchlistedMovieUseCaseProtocol
     ) {
         self.actorID = actorID
         self.fetchActorDetailsUseCase = fetchActorDetailsUseCase
@@ -140,6 +152,9 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
         self.fetchFavouritedActorsUseCase = fetchFavouritedActorsUseCase
         self.addFavouritedActorUseCase = addFavouritedActorUseCase
         self.removeFavouritedActorUseCase = removeFavouritedActorUseCase
+        self.fetchWatchlistedMoviesUseCase = fetchWatchlistedMoviesUseCase
+        self.addWatchlistedMovieUseCase = addWatchlistedMovieUseCase
+        self.removeWatchlistedMovieUseCase = removeWatchlistedMovieUseCase
     }
 
     public func load() async {
@@ -184,12 +199,14 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
         async let linksTask: Void = loadExternalLinks()
         async let newsTask: Void = loadNews(actorName: actor.name)
         async let favouritesTask: Void = loadFavourites()
+        async let watchlistTask: Void = loadWatchlist()
 
         await creditsTask
         await imagesTask
         await linksTask
         await newsTask
         await favouritesTask
+        await watchlistTask
     }
 
     public func didTapCredit(
@@ -231,6 +248,10 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
             return
         }
         onShowMiniBiography?(actor)
+    }
+
+    public func didTapSeeAllFilmography() {
+        onShowAllFilmography?()
     }
 
     public func didTapExternalURL(

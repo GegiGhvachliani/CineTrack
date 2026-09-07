@@ -15,3 +15,4 @@ excluded:
   - CineTrackUITests
   - Packages/Features/MovieDetails/.build
   - Packages/Features/ActorDetails/.build
+  - Packages/Features/Home/.build

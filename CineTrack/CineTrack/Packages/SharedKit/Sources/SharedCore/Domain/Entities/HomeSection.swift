@@ -21,4 +21,5 @@ public enum HomeSection {
     case news
     case mostPopularCelebrities
     case recentlyViewed
+    case filmography
 }

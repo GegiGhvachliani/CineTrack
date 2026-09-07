@@ -9,6 +9,7 @@ import SwiftUI
 import HomeDomain
 import SharedCore
 import DesignSystemTokens
+import DesignSystemComponents
 
 struct RecentlyViewedSectionView: View {
 
@@ -36,6 +37,7 @@ struct RecentlyViewedSectionView: View {
             VStack(spacing: 0) {
                 HorizontalScrollView(
                     headerText: HomeStrings.Section.recentlyViewed,
+                    seeAllTitle: HomeStrings.Action.seeAll,
                     items: items,
                     onSeeAllTap: onSeeAllTap
                 ) { item, _ in

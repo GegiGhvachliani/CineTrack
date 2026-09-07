@@ -9,6 +9,7 @@ import SwiftUI
 import SharedCore
 import HomeDomain
 import DesignSystemTokens
+import DesignSystemComponents
 
 // MARK: - Poster With Video
 

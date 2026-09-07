@@ -23,7 +23,8 @@ public protocol ActorDetailsFactoryProtocol {
         onMovieDetails: @escaping (Movie) -> Void,
         onNewsDetails: @escaping (News) -> Void,
         onShowAllPhotos: @escaping ([ActorImage], String) -> Void,
-        onShowMiniBiography: @escaping (ActorDetails) -> Void
+        onShowMiniBiography: @escaping (ActorDetails) -> Void,
+        onShowAllFilmography: @escaping () -> Void
     ) -> UIViewController
 
     func makeActorPhotosViewController(
@@ -41,4 +42,5 @@ public protocol ActorDetailsCoordinatorProtocol: Coordinator { }
 public protocol ActorDetailsRoutingProtocol: AnyObject {
     func showMovieDetails(movie: Movie)
     func showNewsDetails(news: News)
+    func showSeeAll(section: HomeSection)
 }

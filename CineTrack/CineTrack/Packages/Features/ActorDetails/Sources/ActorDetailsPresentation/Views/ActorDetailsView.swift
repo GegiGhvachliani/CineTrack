@@ -49,6 +49,24 @@ public struct ActorDetailsView: View {
                                 viewModel.didTapExternalURL(url)
                             }
                         )
+                        .padding(.bottom, 20)
+
+                        FilmographySection(
+                            credits: viewModel.filmography,
+                            isWatchlisted: viewModel.isWatchlisted,
+                            onMovieTap: { credit in
+                                viewModel.didTapCredit(credit)
+                            },
+                            onWatchlistTap: { credit in
+                                Task {
+                                    await viewModel.toggleWatchlist(for: credit)
+                                }
+                            },
+                            onSeeAllTap: {
+                                viewModel.didTapSeeAllFilmography()
+                            }
+                        )
+                        .frame(height: 210, alignment: .top)
                     }
                     }
                     .padding(.vertical)

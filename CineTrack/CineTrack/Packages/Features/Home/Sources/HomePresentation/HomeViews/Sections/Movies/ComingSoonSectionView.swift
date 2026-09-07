@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SharedCore
+import DesignSystemComponents
 
 struct ComingSoonSectionView: View {
     
@@ -22,6 +23,7 @@ struct ComingSoonSectionView: View {
         
         HorizontalScrollView(
             headerText: HomeStrings.Section.upcoming,
+            seeAllTitle: HomeStrings.Action.seeAll,
             items: movies,
             onSeeAllTap: onSeeAllTap,
             onLoadMore: onLoadMore)

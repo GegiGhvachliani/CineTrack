@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SharedCore
+import DesignSystemComponents
 
 struct BornTodaySectionView: View {
     
@@ -22,6 +23,7 @@ struct BornTodaySectionView: View {
         
         HorizontalScrollView(
             headerText: HomeStrings.Section.bornToday,
+            seeAllTitle: HomeStrings.Action.seeAll,
             items: actors,
             onSeeAllTap: onSeeAllTap,
             onLoadMore: onLoadMore

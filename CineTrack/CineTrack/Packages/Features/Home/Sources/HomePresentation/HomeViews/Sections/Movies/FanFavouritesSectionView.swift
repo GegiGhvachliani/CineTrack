@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SharedCore
+import DesignSystemComponents
 
 struct FanFavouritesSectionView: View {
 
@@ -22,6 +23,7 @@ struct FanFavouritesSectionView: View {
         
         HorizontalScrollView(
             headerText: HomeStrings.Section.fanFavourites,
+            seeAllTitle: HomeStrings.Action.seeAll,
             items: movies,
             onSeeAllTap: onSeeAllTap,
             onLoadMore: onLoadMore

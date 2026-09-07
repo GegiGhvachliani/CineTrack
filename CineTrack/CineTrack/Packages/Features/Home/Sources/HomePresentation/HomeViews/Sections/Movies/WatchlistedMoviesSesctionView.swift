@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SharedCore
+import DesignSystemComponents
 
 struct WatchlistedMoviesSesctionView: View {
     
@@ -22,6 +23,7 @@ struct WatchlistedMoviesSesctionView: View {
         
         HorizontalScrollView(
             headerText: HomeStrings.Section.watchlist,
+            seeAllTitle: HomeStrings.Action.seeAll,
             items: movies,
             onSeeAllTap: onSeeAllTap,
             onLoadMore: onLoadMore
