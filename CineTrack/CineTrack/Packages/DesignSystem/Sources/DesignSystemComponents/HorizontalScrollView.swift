@@ -6,6 +6,7 @@ public struct HorizontalScrollView<Item: Identifiable, Cell: View>: View {
     private let seeAllTitle: String
     private let items: [Item]
     private let showsSeeAllButton: Bool
+    private let itemSpacing: CGFloat
     private let onSeeAllTap: () -> Void
     private let onLoadMore: (() -> Void)?
     private let cell: (Item, Int) -> Cell
@@ -15,6 +16,7 @@ public struct HorizontalScrollView<Item: Identifiable, Cell: View>: View {
         seeAllTitle: String,
         items: [Item],
         showsSeeAllButton: Bool = true,
+        itemSpacing: CGFloat = 15,
         onSeeAllTap: @escaping () -> Void = {},
         onLoadMore: (() -> Void)? = nil,
         @ViewBuilder cell: @escaping (Item, Int) -> Cell
@@ -23,6 +25,7 @@ public struct HorizontalScrollView<Item: Identifiable, Cell: View>: View {
         self.seeAllTitle = seeAllTitle
         self.items = items
         self.showsSeeAllButton = showsSeeAllButton
+        self.itemSpacing = itemSpacing
         self.onSeeAllTap = onSeeAllTap
         self.onLoadMore = onLoadMore
         self.cell = cell
@@ -33,7 +36,7 @@ public struct HorizontalScrollView<Item: Identifiable, Cell: View>: View {
             header
 
             ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack(spacing: 15) {
+                LazyHStack(spacing: itemSpacing) {
                     ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
                         cell(item, index)
                             .onAppear {

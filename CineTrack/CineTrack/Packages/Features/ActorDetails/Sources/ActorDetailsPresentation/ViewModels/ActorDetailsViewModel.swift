@@ -9,13 +9,13 @@ import Foundation
 import Observation
 
 import ActorDetailsDomain
+import ActorMediaDomain
 import SharedCore
 
 @MainActor
 public protocol ActorDetailsViewModelProtocol: AnyObject {
     var actor: ActorDetails? { get }
     var credits: [ActorCredit] { get }
-    var images: [ActorImage] { get }
     var externalLinks: ActorExternalLinks? { get }
     var news: [News] { get }
     var isFavourite: Bool { get }
@@ -28,7 +28,6 @@ public protocol ActorDetailsViewModelProtocol: AnyObject {
     func retry() async
     func didTapCredit(_ credit: ActorCredit)
     func didTapNews(_ news: News)
-    func didTapShowAllPhotos()
     func didTapMiniBiography()
     func didTapSeeAllFilmography()
     func didTapExternalURL(_ url: URL)
@@ -41,7 +40,10 @@ public protocol ActorDetailsViewModelProtocol: AnyObject {
 public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
     public private(set) var actor: ActorDetails?
     public private(set) var credits: [ActorCredit] = []
-    public private(set) var images: [ActorImage] = []
+    public private(set) var mediaImages: [ActorMediaImage] = []
+    public private(set) var isMediaLoading = false
+    public private(set) var hasMoreMedia = true
+    private var mediaContinuation: String?
     public private(set) var externalLinks: ActorExternalLinks?
     public private(set) var news: [News] = []
     public private(set) var favouritedActorIDs = Set<Int>()
@@ -49,7 +51,6 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
 
     public private(set) var isLoading = false
     public private(set) var isCreditsLoading = false
-    public private(set) var isImagesLoading = false
     public private(set) var isExternalLinksLoading = false
     public private(set) var isNewsLoading = false
     public private(set) var error: Error?
@@ -59,7 +60,6 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
 
     public var onMovieDetails: ((Movie) -> Void)?
     public var onNewsDetails: ((News) -> Void)?
-    public var onShowAllPhotos: (([ActorImage], String) -> Void)?
     public var onShowMiniBiography: ((ActorDetails) -> Void)?
     public var onShowAllFilmography: (() -> Void)?
     public var onOpenURL: ((URL) -> Void)?
@@ -101,10 +101,6 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
         return links
     }
 
-    public var photoPreview: [ActorImage] {
-        Array(images.prefix(6))
-    }
-
     public var isFavourite: Bool {
         favouritedActorIDs.contains(actorID)
     }
@@ -117,7 +113,7 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
 
     private let fetchActorDetailsUseCase: FetchActorDetailsUseCaseProtocol
     private let fetchActorCreditsUseCase: FetchActorCreditsUseCaseProtocol
-    private let fetchActorImagesUseCase: FetchActorImagesUseCaseProtocol
+    private let fetchActorMediaUseCase: FetchActorMediaUseCaseProtocol
     private let fetchActorExternalLinksUseCase: FetchActorExternalLinksUseCaseProtocol
     private let fetchActorNewsUseCase: FetchActorNewsUseCaseProtocol
     private let fetchFavouritedActorsUseCase: FetchFavouritedActorsUseCaseProtocol
@@ -133,7 +129,7 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
         actorID: Int,
         fetchActorDetailsUseCase: FetchActorDetailsUseCaseProtocol,
         fetchActorCreditsUseCase: FetchActorCreditsUseCaseProtocol,
-        fetchActorImagesUseCase: FetchActorImagesUseCaseProtocol,
+        fetchActorMediaUseCase: FetchActorMediaUseCaseProtocol,
         fetchActorExternalLinksUseCase: FetchActorExternalLinksUseCaseProtocol,
         fetchActorNewsUseCase: FetchActorNewsUseCaseProtocol,
         fetchFavouritedActorsUseCase: FetchFavouritedActorsUseCaseProtocol,
@@ -146,7 +142,7 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
         self.actorID = actorID
         self.fetchActorDetailsUseCase = fetchActorDetailsUseCase
         self.fetchActorCreditsUseCase = fetchActorCreditsUseCase
-        self.fetchActorImagesUseCase = fetchActorImagesUseCase
+        self.fetchActorMediaUseCase = fetchActorMediaUseCase
         self.fetchActorExternalLinksUseCase = fetchActorExternalLinksUseCase
         self.fetchActorNewsUseCase = fetchActorNewsUseCase
         self.fetchFavouritedActorsUseCase = fetchFavouritedActorsUseCase
@@ -195,14 +191,14 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
         }
 
         async let creditsTask: Void = loadCredits()
-        async let imagesTask: Void = loadImages()
+        async let mediaTask: Void = loadNextMediaPage(actorName: actor.name)
         async let linksTask: Void = loadExternalLinks()
         async let newsTask: Void = loadNews(actorName: actor.name)
         async let favouritesTask: Void = loadFavourites()
         async let watchlistTask: Void = loadWatchlist()
 
         await creditsTask
-        await imagesTask
+        await mediaTask
         await linksTask
         await newsTask
         await favouritesTask
@@ -230,17 +226,6 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
         _ news: News
     ) {
         onNewsDetails?(news)
-    }
-
-    public func didTapShowAllPhotos() {
-        guard let actor else {
-            return
-        }
-
-        onShowAllPhotos?(
-            images,
-            actor.name
-        )
     }
 
     public func didTapMiniBiography() {
@@ -325,20 +310,22 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
         }
     }
 
-    private func loadImages() async {
-        isImagesLoading = true
+    public func loadNextMediaPage() async {
+        guard let actor else { return }
+        await loadNextMediaPage(actorName: actor.name)
+    }
 
-        defer {
-            isImagesLoading = false
-        }
-
+    private func loadNextMediaPage(actorName: String) async {
+        guard !isMediaLoading, hasMoreMedia else { return }
+        isMediaLoading = true
+        defer { isMediaLoading = false }
         do {
-            images = try await fetchActorImagesUseCase.execute(
-                actorID: actorID
-            )
-        } catch {
-            sectionErrors[.photos] = error
+            let page = try await fetchActorMediaUseCase.execute(actorName: actorName, continuation: mediaContinuation)
+            mediaImages.append(contentsOf: page.images)
+            mediaContinuation = page.nextToken
+            hasMoreMedia = page.nextToken != nil
         }
+        catch { sectionErrors[.photos] = error }
     }
 
     private func loadExternalLinks() async {

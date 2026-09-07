@@ -67,6 +67,14 @@ public struct ActorDetailsView: View {
                             }
                         )
                         .frame(height: 210, alignment: .top)
+                        .padding(.bottom, 20)
+
+
+                        ImageSectionView(
+                            images: viewModel.mediaImages,
+                            onLoadMore: { Task { await viewModel.loadNextMediaPage() } }
+                        )
+                            .frame(height: 145, alignment: .top)
                     }
                     }
                     .padding(.vertical)

@@ -33,23 +33,12 @@ public final class ActorDetailsCoordinator: ActorDetailsCoordinatorProtocol {
             onNewsDetails: { [weak self] news in
                 self?.router?.showNewsDetails(news: news)
             },
-            onShowAllPhotos: { [weak self] images, actorName in
-                self?.showAllPhotos(images: images, actorName: actorName)
-            },
             onShowMiniBiography: { [weak self] actor in
                 self?.showMiniBiography(actor: actor)
             },
             onShowAllFilmography: { [weak self] in
                 self?.router?.showSeeAll(section: .filmography)
             }
-        )
-        navigationController.pushViewController(viewController, animated: true)
-    }
-
-    private func showAllPhotos(images: [ActorImage], actorName: String) {
-        let viewController = factory.makeActorPhotosViewController(
-            images: images,
-            actorName: actorName
         )
         navigationController.pushViewController(viewController, animated: true)
     }

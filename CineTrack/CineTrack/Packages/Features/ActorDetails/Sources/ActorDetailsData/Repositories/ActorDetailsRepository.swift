@@ -23,7 +23,6 @@ public final class ActorDetailsRepository: ActorDetailsRepositoryProtocol {
 
     private let actorDetailsMapper: ActorDetailsMapper
     private let actorCreditMapper: ActorCreditMapper
-    private let actorImageMapper: ActorImageMapper
     private let actorExternalLinksMapper: ActorExternalLinksMapper
     private let newsMapper: NewsMapper
 
@@ -35,7 +34,6 @@ public final class ActorDetailsRepository: ActorDetailsRepositoryProtocol {
         newsConfiguration: NewsConfiguration,
         actorDetailsMapper: ActorDetailsMapper = ActorDetailsMapper(),
         actorCreditMapper: ActorCreditMapper = ActorCreditMapper(),
-        actorImageMapper: ActorImageMapper = ActorImageMapper(),
         actorExternalLinksMapper: ActorExternalLinksMapper = ActorExternalLinksMapper(),
         newsMapper: NewsMapper = NewsMapper()
     ) {
@@ -46,7 +44,6 @@ public final class ActorDetailsRepository: ActorDetailsRepositoryProtocol {
         self.newsRequestBuilder = NewsRequestBuilder(configuration: newsConfiguration)
         self.actorDetailsMapper = actorDetailsMapper
         self.actorCreditMapper = actorCreditMapper
-        self.actorImageMapper = actorImageMapper
         self.actorExternalLinksMapper = actorExternalLinksMapper
         self.newsMapper = newsMapper
     }
@@ -73,17 +70,6 @@ public final class ActorDetailsRepository: ActorDetailsRepositoryProtocol {
         return (response.cast + response.crew)
             .map(actorCreditMapper.map)
             .sorted { ($0.releaseDate ?? "") > ($1.releaseDate ?? "") }
-    }
-
-    // MARK: - Images
-
-    public func fetchActorImages(actorID: Int) async throws -> [ActorImage] {
-
-        let request = try requestBuilder.build(for: .personImages(personID: actorID))
-
-        let response: ActorImagesResponseDTO = try await apiClient.sendRequest(request)
-
-        return response.profiles.map(actorImageMapper.map)
     }
 
     // MARK: - External Links

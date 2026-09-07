@@ -22,14 +22,8 @@ public protocol ActorDetailsFactoryProtocol {
         actorID: Int,
         onMovieDetails: @escaping (Movie) -> Void,
         onNewsDetails: @escaping (News) -> Void,
-        onShowAllPhotos: @escaping ([ActorImage], String) -> Void,
         onShowMiniBiography: @escaping (ActorDetails) -> Void,
         onShowAllFilmography: @escaping () -> Void
-    ) -> UIViewController
-
-    func makeActorPhotosViewController(
-        images: [ActorImage],
-        actorName: String
     ) -> UIViewController
 
     func makeMiniBiographyViewController(actor: ActorDetails) -> UIViewController

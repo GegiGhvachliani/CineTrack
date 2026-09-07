@@ -18,10 +18,6 @@ public protocol ActorDetailsRepositoryProtocol: Sendable {
         actorID: Int
     ) async throws -> [ActorCredit]
 
-    func fetchActorImages(
-        actorID: Int
-    ) async throws -> [ActorImage]
-
     func fetchActorExternalLinks(
         actorID: Int
     ) async throws -> ActorExternalLinks

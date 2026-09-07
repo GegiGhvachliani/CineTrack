@@ -11,6 +11,8 @@ import SharedAuth
 import SharedStorage
 import TMDBData
 import NewsData
+import ActorMediaData
+import ActorMediaDomain
 
 @MainActor
 public struct ActorDetailsFactory: ActorDetailsFactoryProtocol {
@@ -33,7 +35,6 @@ public struct ActorDetailsFactory: ActorDetailsFactoryProtocol {
         actorID: Int,
         onMovieDetails: @escaping (Movie) -> Void,
         onNewsDetails: @escaping (News) -> Void,
-        onShowAllPhotos: @escaping ([ActorImage], String) -> Void,
         onShowMiniBiography: @escaping (ActorDetails) -> Void,
         onShowAllFilmography: @escaping () -> Void
     ) -> UIViewController {
@@ -63,7 +64,9 @@ public struct ActorDetailsFactory: ActorDetailsFactoryProtocol {
             actorID: actorID,
             fetchActorDetailsUseCase: FetchActorDetailsUseCase(repository: repository),
             fetchActorCreditsUseCase: FetchActorCreditsUseCase(repository: repository),
-            fetchActorImagesUseCase: FetchActorImagesUseCase(repository: repository),
+            fetchActorMediaUseCase: FetchActorMediaUseCase(
+                repository: WikimediaActorMediaRepository(apiClient: apiClient)
+            ),
             fetchActorExternalLinksUseCase: FetchActorExternalLinksUseCase(repository: repository),
             fetchActorNewsUseCase: FetchActorNewsUseCase(repository: repository),
             fetchFavouritedActorsUseCase: FetchFavouritedActorsUseCase(repository: favouriteRepository),
@@ -75,7 +78,6 @@ public struct ActorDetailsFactory: ActorDetailsFactoryProtocol {
         )
         viewModel.onMovieDetails = onMovieDetails
         viewModel.onNewsDetails = onNewsDetails
-        viewModel.onShowAllPhotos = onShowAllPhotos
         viewModel.onShowMiniBiography = onShowMiniBiography
         viewModel.onShowAllFilmography = onShowAllFilmography
         viewModel.onOpenURL = { url in
@@ -83,13 +85,6 @@ public struct ActorDetailsFactory: ActorDetailsFactoryProtocol {
         }
 
         return UIHostingController(rootView: ActorDetailsView(viewModel: viewModel))
-    }
-
-    public func makeActorPhotosViewController(
-        images: [ActorImage],
-        actorName: String
-    ) -> UIViewController {
-        UIHostingController(rootView: ActorPhotosView(images: images, actorName: actorName))
     }
 
     public func makeMiniBiographyViewController(actor: ActorDetails) -> UIViewController {

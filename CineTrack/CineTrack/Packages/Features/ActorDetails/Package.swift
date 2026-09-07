@@ -20,6 +20,7 @@ let package = Package(
     dependencies: [
         .package(path: "../../SharedKit"),
         .package(path: "../../DesignSystem"),
+        .package(path: "../ActorMedia"),
         .package(path: "../../TMDBData"),
         .package(path: "../../NewsData")
     ],
@@ -81,7 +82,11 @@ let package = Package(
                 .product(
                     name: "DesignSystemComponents",
                     package: "DesignSystem"
-                )
+                ),
+                .product(
+                    name: "ActorMediaDomain",
+                    package: "ActorMedia"
+                ),
             ],
             path: "Sources/ActorDetailsPresentation"
         ),
@@ -125,6 +130,14 @@ let package = Package(
                 .product(
                     name: "SharedAuth",
                     package: "SharedKit"
+                ),
+                .product(
+                    name: "ActorMediaData",
+                    package: "ActorMedia"
+                ),
+                .product(
+                    name: "ActorMediaDomain",
+                    package: "ActorMedia"
                 )
             ],
             path: "Sources/ActorDetailsAssembly"
