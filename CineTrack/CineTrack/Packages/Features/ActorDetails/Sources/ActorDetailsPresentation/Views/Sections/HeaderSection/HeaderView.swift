@@ -11,11 +11,15 @@ import DesignSystemTokens
 
 public struct HeaderView: View {
     
+    // MARK: - Properties
+    
     let actor: ActorDetails
     let credits: [ActorCredit]
     
     let isCreditsLoading: Bool
     let onMovieTap: (ActorCredit) -> Void
+    
+    // MARK: - Initialization
     
     public init(
         actor: ActorDetails,
@@ -35,6 +39,8 @@ public struct HeaderView: View {
             moviesPagingView
         }
     }
+    
+    // MARK: - Comuputed Properties
     
     private var headerText: some View {
         VStack {

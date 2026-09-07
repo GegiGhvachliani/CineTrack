@@ -55,6 +55,14 @@ let package = Package(
                 .product(
                     name: "NewsData",
                     package: "NewsData"
+                ),
+                .product(
+                    name: "SharedStorage",
+                    package: "SharedKit"
+                ),
+                .product(
+                    name: "SharedAuth",
+                    package: "SharedKit"
                 )
             ],
             path: "Sources/ActorDetailsData"
@@ -109,6 +117,14 @@ let package = Package(
                 .product(
                     name: "NewsData",
                     package: "NewsData"
+                ),
+                .product(
+                    name: "SharedStorage",
+                    package: "SharedKit"
+                ),
+                .product(
+                    name: "SharedAuth",
+                    package: "SharedKit"
                 )
             ],
             path: "Sources/ActorDetailsAssembly"

@@ -7,6 +7,8 @@ import ActorDetailsPresentation
 import ActorDetailsPresentationAPI
 import SharedCore
 import SharedNetworking
+import SharedAuth
+import SharedStorage
 import TMDBData
 import NewsData
 
@@ -31,7 +33,8 @@ public struct ActorDetailsFactory: ActorDetailsFactoryProtocol {
         actorID: Int,
         onMovieDetails: @escaping (Movie) -> Void,
         onNewsDetails: @escaping (News) -> Void,
-        onShowAllPhotos: @escaping ([ActorImage], String) -> Void
+        onShowAllPhotos: @escaping ([ActorImage], String) -> Void,
+        onShowMiniBiography: @escaping (ActorDetails) -> Void
     ) -> UIViewController {
         let apiClient = URLSessionAPIClient()
         let tmdbConfiguration = TMDBConfiguration(
@@ -47,17 +50,25 @@ public struct ActorDetailsFactory: ActorDetailsFactoryProtocol {
             configuration: tmdbConfiguration,
             newsConfiguration: newsConfiguration
         )
+        let favouriteRepository = FavouriteActorRepository(
+            firestore: FirestoreClient(),
+            userSession: FirebaseUserSession()
+        )
         let viewModel = ActorDetailsViewModel(
             actorID: actorID,
             fetchActorDetailsUseCase: FetchActorDetailsUseCase(repository: repository),
             fetchActorCreditsUseCase: FetchActorCreditsUseCase(repository: repository),
             fetchActorImagesUseCase: FetchActorImagesUseCase(repository: repository),
             fetchActorExternalLinksUseCase: FetchActorExternalLinksUseCase(repository: repository),
-            fetchActorNewsUseCase: FetchActorNewsUseCase(repository: repository)
+            fetchActorNewsUseCase: FetchActorNewsUseCase(repository: repository),
+            fetchFavouritedActorsUseCase: FetchFavouritedActorsUseCase(repository: favouriteRepository),
+            addFavouritedActorUseCase: AddFavouritedActorUseCase(repository: favouriteRepository),
+            removeFavouritedActorUseCase: RemoveFavouritedActorUseCase(repository: favouriteRepository)
         )
         viewModel.onMovieDetails = onMovieDetails
         viewModel.onNewsDetails = onNewsDetails
         viewModel.onShowAllPhotos = onShowAllPhotos
+        viewModel.onShowMiniBiography = onShowMiniBiography
         viewModel.onOpenURL = { url in
             UIApplication.shared.open(url)
         }
@@ -70,5 +81,9 @@ public struct ActorDetailsFactory: ActorDetailsFactoryProtocol {
         actorName: String
     ) -> UIViewController {
         UIHostingController(rootView: ActorPhotosView(images: images, actorName: actorName))
+    }
+
+    public func makeMiniBiographyViewController(actor: ActorDetails) -> UIViewController {
+        UIHostingController(rootView: MiniBiographyView(actor: actor))
     }
 }

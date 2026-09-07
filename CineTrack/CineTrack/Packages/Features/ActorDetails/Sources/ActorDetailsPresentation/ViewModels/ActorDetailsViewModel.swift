@@ -18,6 +18,8 @@ public protocol ActorDetailsViewModelProtocol: AnyObject {
     var images: [ActorImage] { get }
     var externalLinks: ActorExternalLinks? { get }
     var news: [News] { get }
+    var isFavourite: Bool { get }
+    var isFavouriteUpdating: Bool { get }
     var isLoading: Bool { get }
     var error: Error? { get }
 
@@ -26,7 +28,9 @@ public protocol ActorDetailsViewModelProtocol: AnyObject {
     func didTapCredit(_ credit: ActorCredit)
     func didTapNews(_ news: News)
     func didTapShowAllPhotos()
+    func didTapMiniBiography()
     func didTapExternalURL(_ url: URL)
+    func toggleFavourite() async
 }
 
 @MainActor
@@ -37,6 +41,7 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
     public private(set) var images: [ActorImage] = []
     public private(set) var externalLinks: ActorExternalLinks?
     public private(set) var news: [News] = []
+    public private(set) var favouritedActorIDs = Set<Int>()
 
     public private(set) var isLoading = false
     public private(set) var isCreditsLoading = false
@@ -51,6 +56,7 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
     public var onMovieDetails: ((Movie) -> Void)?
     public var onNewsDetails: ((News) -> Void)?
     public var onShowAllPhotos: (([ActorImage], String) -> Void)?
+    public var onShowMiniBiography: ((ActorDetails) -> Void)?
     public var onOpenURL: ((URL) -> Void)?
 
     public var featuredCredits: [ActorCredit] {
@@ -94,6 +100,14 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
         Array(images.prefix(6))
     }
 
+    public var isFavourite: Bool {
+        favouritedActorIDs.contains(actorID)
+    }
+
+    public var isFavouriteUpdating: Bool {
+        pendingFavouriteIDs.contains(actorID)
+    }
+
     private var hasLoadedInitialContent = false
 
     private let fetchActorDetailsUseCase: FetchActorDetailsUseCaseProtocol
@@ -101,6 +115,10 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
     private let fetchActorImagesUseCase: FetchActorImagesUseCaseProtocol
     private let fetchActorExternalLinksUseCase: FetchActorExternalLinksUseCaseProtocol
     private let fetchActorNewsUseCase: FetchActorNewsUseCaseProtocol
+    private let fetchFavouritedActorsUseCase: FetchFavouritedActorsUseCaseProtocol
+    private let addFavouritedActorUseCase: AddFavouritedActorUseCaseProtocol
+    private let removeFavouritedActorUseCase: RemoveFavouritedActorUseCaseProtocol
+    private var pendingFavouriteIDs = Set<Int>()
 
     public init(
         actorID: Int,
@@ -108,7 +126,10 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
         fetchActorCreditsUseCase: FetchActorCreditsUseCaseProtocol,
         fetchActorImagesUseCase: FetchActorImagesUseCaseProtocol,
         fetchActorExternalLinksUseCase: FetchActorExternalLinksUseCaseProtocol,
-        fetchActorNewsUseCase: FetchActorNewsUseCaseProtocol
+        fetchActorNewsUseCase: FetchActorNewsUseCaseProtocol,
+        fetchFavouritedActorsUseCase: FetchFavouritedActorsUseCaseProtocol,
+        addFavouritedActorUseCase: AddFavouritedActorUseCaseProtocol,
+        removeFavouritedActorUseCase: RemoveFavouritedActorUseCaseProtocol
     ) {
         self.actorID = actorID
         self.fetchActorDetailsUseCase = fetchActorDetailsUseCase
@@ -116,6 +137,9 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
         self.fetchActorImagesUseCase = fetchActorImagesUseCase
         self.fetchActorExternalLinksUseCase = fetchActorExternalLinksUseCase
         self.fetchActorNewsUseCase = fetchActorNewsUseCase
+        self.fetchFavouritedActorsUseCase = fetchFavouritedActorsUseCase
+        self.addFavouritedActorUseCase = addFavouritedActorUseCase
+        self.removeFavouritedActorUseCase = removeFavouritedActorUseCase
     }
 
     public func load() async {
@@ -159,11 +183,13 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
         async let imagesTask: Void = loadImages()
         async let linksTask: Void = loadExternalLinks()
         async let newsTask: Void = loadNews(actorName: actor.name)
+        async let favouritesTask: Void = loadFavourites()
 
         await creditsTask
         await imagesTask
         await linksTask
         await newsTask
+        await favouritesTask
     }
 
     public func didTapCredit(
@@ -200,10 +226,66 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
         )
     }
 
+    public func didTapMiniBiography() {
+        guard let actor else {
+            return
+        }
+        onShowMiniBiography?(actor)
+    }
+
     public func didTapExternalURL(
         _ url: URL
     ) {
         onOpenURL?(url)
+    }
+
+    public func toggleFavourite() async {
+        guard let actor, pendingFavouriteIDs.insert(actor.id).inserted else {
+            return
+        }
+
+        defer {
+            pendingFavouriteIDs.remove(actor.id)
+        }
+
+        let sharedActor = Actor(
+            id: actor.id,
+            name: actor.name,
+            birthday: actor.birthday,
+            profilePath: actor.profilePath
+        )
+        let wasFavourite = favouritedActorIDs.contains(actor.id)
+
+        if wasFavourite {
+            favouritedActorIDs.remove(actor.id)
+        } else {
+            favouritedActorIDs.insert(actor.id)
+        }
+
+        do {
+            if wasFavourite {
+                try await removeFavouritedActorUseCase.execute(sharedActor)
+            } else {
+                try await addFavouritedActorUseCase.execute(sharedActor)
+            }
+        } catch {
+            if wasFavourite {
+                favouritedActorIDs.insert(actor.id)
+            } else {
+                favouritedActorIDs.remove(actor.id)
+            }
+            sectionErrors[.favourites] = error
+        }
+    }
+
+    private func loadFavourites() async {
+        do {
+            favouritedActorIDs = Set(
+                try await fetchFavouritedActorsUseCase.execute().map(\.id)
+            )
+        } catch {
+            sectionErrors[.favourites] = error
+        }
     }
 
     private func loadCredits() async {
@@ -274,6 +356,7 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
 }
 
 public enum ActorDetailsSection: Hashable, Sendable {
+    case favourites
     case filmography
     case photos
     case personalDetails

@@ -28,6 +28,7 @@ public struct ActorDetails: Identifiable, Equatable, Sendable {
     // MARK: - Images
 
     public let profilePath: String?
+    public let profileURL: URL?
 
     // MARK: - External
 
@@ -49,6 +50,7 @@ public struct ActorDetails: Identifiable, Equatable, Sendable {
         knownForDepartment: String?,
         biography: String?,
         profilePath: String?,
+        profileURL: URL?,
         homepage: String?,
         imdbID: String?,
         alsoKnownAs: [String]
@@ -61,6 +63,7 @@ public struct ActorDetails: Identifiable, Equatable, Sendable {
         self.knownForDepartment = knownForDepartment
         self.biography = biography
         self.profilePath = profilePath
+        self.profileURL = profileURL
         self.homepage = homepage
         self.imdbID = imdbID
         self.alsoKnownAs = alsoKnownAs

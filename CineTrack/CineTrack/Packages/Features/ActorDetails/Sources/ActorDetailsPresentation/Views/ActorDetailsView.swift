@@ -20,6 +20,7 @@ public struct ActorDetailsView: View {
                 )
             } else {
                 ScrollView {
+                    VStack(spacing: 0) {
                     if let actor = viewModel.actor {
                         HeaderView(
                             actor: actor,
@@ -29,7 +30,28 @@ public struct ActorDetailsView: View {
                                 viewModel.didTapCredit(credit)
                             }
                         )
+
+                        BiographySectionView(
+                            actor: actor,
+                            profileImageURL: actor.profileURL,
+                            externalLinks: viewModel.externalLinks?.links ?? [],
+                            isFavourite: viewModel.isFavourite,
+                            isFavouriteUpdating: viewModel.isFavouriteUpdating,
+                            onFavouriteTap: {
+                                Task {
+                                    await viewModel.toggleFavourite()
+                                }
+                            },
+                            onBiographyTap: {
+                                viewModel.didTapMiniBiography()
+                            },
+                            onExternalLinkTap: { url in
+                                viewModel.didTapExternalURL(url)
+                            }
+                        )
                     }
+                    }
+                    .padding(.vertical)
                 }
             }
             

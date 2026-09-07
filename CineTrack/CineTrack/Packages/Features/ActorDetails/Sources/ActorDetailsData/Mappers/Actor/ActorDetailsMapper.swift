@@ -11,6 +11,8 @@ import ActorDetailsDomain
 
 public struct ActorDetailsMapper: Sendable {
 
+    private let imageBaseURL = "https://image.tmdb.org/t/p/w780"
+
     public init() {}
 
     public func map(
@@ -25,6 +27,7 @@ public struct ActorDetailsMapper: Sendable {
             knownForDepartment: dto.knownForDepartment,
             biography: dto.biography,
             profilePath: dto.profilePath,
+            profileURL: makeImageURL(from: dto.profilePath),
             homepage: dto.homepage,
             imdbID: dto.imdbID,
             alsoKnownAs: dto.alsoKnownAs
@@ -44,5 +47,19 @@ public struct ActorDetailsMapper: Sendable {
         formatter.dateFormat = "yyyy-MM-dd"
 
         return formatter.date(from: value)
+    }
+
+    private func makeImageURL(
+        from path: String?
+    ) -> URL? {
+        guard let path, !path.isEmpty else {
+            return nil
+        }
+
+        if path.hasPrefix("http") {
+            return URL(string: path)
+        }
+
+        return URL(string: "\(imageBaseURL)\(path)")
     }
 }

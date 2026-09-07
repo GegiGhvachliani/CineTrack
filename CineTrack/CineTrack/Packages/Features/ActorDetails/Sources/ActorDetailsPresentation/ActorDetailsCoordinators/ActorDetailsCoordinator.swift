@@ -35,6 +35,9 @@ public final class ActorDetailsCoordinator: ActorDetailsCoordinatorProtocol {
             },
             onShowAllPhotos: { [weak self] images, actorName in
                 self?.showAllPhotos(images: images, actorName: actorName)
+            },
+            onShowMiniBiography: { [weak self] actor in
+                self?.showMiniBiography(actor: actor)
             }
         )
         navigationController.pushViewController(viewController, animated: true)
@@ -45,6 +48,11 @@ public final class ActorDetailsCoordinator: ActorDetailsCoordinatorProtocol {
             images: images,
             actorName: actorName
         )
+        navigationController.pushViewController(viewController, animated: true)
+    }
+
+    private func showMiniBiography(actor: ActorDetails) {
+        let viewController = factory.makeMiniBiographyViewController(actor: actor)
         navigationController.pushViewController(viewController, animated: true)
     }
 }

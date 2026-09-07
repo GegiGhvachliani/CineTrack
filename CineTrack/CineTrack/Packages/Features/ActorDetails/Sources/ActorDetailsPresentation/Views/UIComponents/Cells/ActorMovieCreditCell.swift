@@ -63,7 +63,7 @@ public struct ActorMovieCreditCell: View {
             }
 
             LinearGradient(
-                colors: [.clear, .black.opacity(0.8)],
+                colors: [.clear, ColorTokens.Background.secondary],
                 startPoint: .center,
                 endPoint: .bottom
             )

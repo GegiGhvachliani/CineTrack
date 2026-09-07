@@ -38,6 +38,11 @@ public struct HomeView: View {
         .task {
             await viewModel.loadHome()
         }
+        .onAppear {
+            Task {
+                await viewModel.loadFavourites()
+            }
+        }
     }
     
     
