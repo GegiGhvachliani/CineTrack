@@ -19,7 +19,6 @@ public struct NewsDetailsFactory: NewsDetailsFactoryProtocol {
 
     public func makeNewsDetailsViewController(news: News) -> UIViewController {
         let view = NewsDetailsView(news: news)
-
         return UIHostingController(rootView: view)
     }
 }
