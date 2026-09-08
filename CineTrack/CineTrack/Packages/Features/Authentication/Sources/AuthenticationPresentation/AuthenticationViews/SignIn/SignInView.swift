@@ -19,6 +19,7 @@ public struct SignInView<ViewModel: SignInViewModelProtocol>: View {
         ZStack {
             ColorTokens.Background.primary
                 .ignoresSafeArea()
+            ScrollView {
             VStack(spacing: 10) {
                 Spacer()
                 
@@ -31,6 +32,8 @@ public struct SignInView<ViewModel: SignInViewModelProtocol>: View {
                 Spacer()
             }
             .padding()
+            }
+            .scrollDismissesKeyboard(.interactively)
         }
         .errorModal(message: $viewModel.errorMessage)
         .sheet(isPresented: $viewModel.isForgotPasswordPresented) {
@@ -80,7 +83,7 @@ public struct SignInView<ViewModel: SignInViewModelProtocol>: View {
         VStack {
             ButtonView(
                 title: AuthenticationStrings.SignIn.signInButton,
-                isLoading: viewModel.isLoading
+                isLoading: viewModel.isEmailLoading
             ) {
                 Task {
                     await viewModel.signInWithEmail()
@@ -104,7 +107,7 @@ public struct SignInView<ViewModel: SignInViewModelProtocol>: View {
                 }
             } label: {
                 HStack {
-                    if viewModel.isLoading {
+                    if viewModel.isGoogleLoading {
                         ProgressView()
                             .progressViewStyle(
                                 CircularProgressViewStyle(tint: DesignSystemTokens.ColorTokens.Text.inverse)
@@ -147,6 +150,8 @@ final class MockSignInViewModel: SignInViewModelProtocol {
     @Published var email = ""
     @Published var password = ""
     @Published var isLoading = false
+    var isEmailLoading = false
+    var isGoogleLoading = false
     @Published var errorMessage: String?
     
     @Published var forgotPasswordEmail = ""

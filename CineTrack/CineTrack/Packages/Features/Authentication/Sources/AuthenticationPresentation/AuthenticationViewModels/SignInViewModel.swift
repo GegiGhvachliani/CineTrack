@@ -14,6 +14,8 @@ public protocol SignInViewModelProtocol: ObservableObject {
     var email: String { get set }
     var password: String { get set }
     var isLoading: Bool { get set}
+    var isEmailLoading: Bool { get }
+    var isGoogleLoading: Bool { get }
     var errorMessage: String? { get set }
 
     var forgotPasswordEmail: String { get set }
@@ -35,6 +37,8 @@ public final class SignInViewModel: SignInViewModelProtocol {
     @Published public var email = ""
     @Published public var password = ""
     @Published public var isLoading = false
+    @Published public private(set) var isEmailLoading = false
+    @Published public private(set) var isGoogleLoading = false
     @Published public var errorMessage: String?
     
     @Published public var forgotPasswordEmail = ""
@@ -69,31 +73,39 @@ public final class SignInViewModel: SignInViewModelProtocol {
     public func signInWithEmail() async {
         guard validateSignInFields() else { return }
         
+        guard !isLoading else { return }
         isLoading = true
+        isEmailLoading = true
         errorMessage = nil
         
         do {
             _ = try await signInWithEmailUseCase.execute(email: email, password: password)
             isLoading = false
+            isEmailLoading = false
             
             coordinator.onFinish?()
         } catch {
             isLoading = false
+            isEmailLoading = false
             errorMessage = mapFirebaseError(error)
         }
     }
 
     public func signInWithGoogle() async {
+        guard !isLoading else { return }
         isLoading = true
+        isGoogleLoading = true
         errorMessage = nil
         
         do {
             _ = try await signInWithGoogleUseCase.execute()
             isLoading = false
+            isGoogleLoading = false
             
             coordinator.onFinish?()
         } catch {
             isLoading = false
+            isGoogleLoading = false
             errorMessage = error.localizedDescription
         }
     }
