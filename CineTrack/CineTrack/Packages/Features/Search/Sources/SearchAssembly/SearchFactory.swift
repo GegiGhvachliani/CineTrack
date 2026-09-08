@@ -2,39 +2,77 @@
 //  SearchFactory.swift
 //  Search
 //
-//  Created by Gegi Ghvachliani on 25/06/2026.
-//
 
+import SwiftUI
 import UIKit
+
+import SearchData
+import SearchDomain
 import SearchPresentation
 import SearchPresentationAPI
+import SharedNetworking
+import TMDBData
 
+@MainActor
 public struct SearchFactory: SearchFactoryProtocol {
-    
+
     public init() {}
-    
-    public func makeSearchViewController() -> UIViewController {
-        let vc = UIViewController()
-        
-        vc.view.backgroundColor = .systemGreen
-        
-        let label = UILabel()
-        label.text = "Search Page"
-        label.textColor = .white
-        label.font = .systemFont(ofSize: 20, weight: .bold)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        
-        vc.view.addSubview(label)
-        
-        NSLayoutConstraint.activate([
-            label.centerXAnchor.constraint(equalTo: vc.view.centerXAnchor),
-            label.centerYAnchor.constraint(equalTo: vc.view.centerYAnchor)
-        ])
-        
-        return vc
+
+    public func makeSearchViewController(coordinator: SearchCoordinatorProtocol) -> UIViewController {
+
+        // MARK: - API Client
+
+        let apiClient = URLSessionAPIClient()
+
+        // MARK: - TMDB Configuration
+
+        let configuration = TMDBConfiguration(
+            baseURL: URL(string: "https://api.themoviedb.org")!,
+            accessToken: "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4NWEyZmRkNjQyY2FmOTMzYTVjMzk5N2VkY2VjYTRjNSIsIm5iZiI6MTc2Mzk4OTQxNS42MDA5OTk4LCJzdWIiOiI2OTI0NTdhN2EwYzRiMWIxMzIxODc1ZGIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.ZfESC0ZJHYqzbSE2xCYRjfOSwiacjs7sYl-_qvgDbc4"
+        )
+
+        // MARK: - Repository
+
+        let repository = SearchRepository(
+            apiClient: apiClient,
+            configuration: configuration
+        )
+
+        // MARK: - Use Cases
+
+        let searchMoviesUseCase = SearchMoviesUseCase(repository: repository)
+        let searchActorsUseCase = SearchActorsUseCase(repository: repository)
+        let discoverMoviesUseCase = DiscoverMoviesUseCase(repository: repository)
+
+        // MARK: - ViewModel
+
+        let viewModel = SearchViewModel(
+            searchMoviesUseCase: searchMoviesUseCase,
+            searchActorsUseCase: searchActorsUseCase,
+            discoverMoviesUseCase: discoverMoviesUseCase
+        )
+
+        viewModel.onMovieDetails = { [weak coordinator] movie in
+            coordinator?.showMovieDetails(movie: movie)
+        }
+
+        viewModel.onActorDetails = { [weak coordinator] actorID in
+            coordinator?.showActorDetails(actorID: actorID)
+        }
+
+        // MARK: - Hosting Controller
+
+        return UIHostingController(rootView: SearchView(viewModel: viewModel))
     }
-    
-    public func makeSearchCoordinator(navigationController: UINavigationController) -> SearchCoordinatorProtocol {
-        return SearchCoordinator(navigationController: navigationController, factory: self)
+
+    public func makeSearchCoordinator(
+        navigationController: UINavigationController,
+        router: SearchRoutingProtocol
+    ) -> SearchCoordinatorProtocol {
+        SearchCoordinator(
+            navigationController: navigationController,
+            factory: self,
+            router: router
+        )
     }
 }

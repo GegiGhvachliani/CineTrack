@@ -33,6 +33,16 @@ public struct TMDBRequestBuilder: Sendable {
             
         }
 
+        // MARK: - Text search
+
+        switch endpoint {
+        case .searchMovies(let query, _), .searchPeople(let query, _), .searchKeywords(let query, _):
+            queryItems.append(URLQueryItem(name: "query", value: query))
+            queryItems.append(URLQueryItem(name: "include_adult", value: "false"))
+        default:
+            break
+        }
+
         // MARK: - Discover Movies
 
         if case let .discoverMovies(
@@ -57,6 +67,55 @@ public struct TMDBRequestBuilder: Sendable {
                         )
                 )
             )
+        }
+
+        // MARK: - Advanced Movie Search
+
+        if case let .advancedMovieSearch(
+            _,
+            minimumRating,
+            minimumVoteCount,
+            genreIDs,
+            releaseYear,
+            minimumRuntime,
+            maximumRuntime,
+            region,
+            keywordIDs
+        ) = endpoint {
+
+            queryItems.append(URLQueryItem(name: "sort_by", value: "popularity.desc"))
+
+            if let minimumRating {
+                queryItems.append(URLQueryItem(name: "vote_average.gte", value: String(minimumRating)))
+            }
+
+            if let minimumVoteCount {
+                queryItems.append(URLQueryItem(name: "vote_count.gte", value: String(minimumVoteCount)))
+            }
+
+            if let releaseYear {
+                queryItems.append(URLQueryItem(name: "primary_release_year", value: String(releaseYear)))
+            }
+
+            if let minimumRuntime {
+                queryItems.append(URLQueryItem(name: "with_runtime.gte", value: String(minimumRuntime)))
+            }
+
+            if let maximumRuntime {
+                queryItems.append(URLQueryItem(name: "with_runtime.lte", value: String(maximumRuntime)))
+            }
+
+            if !genreIDs.isEmpty {
+                queryItems.append(URLQueryItem(name: "with_genres", value: genreIDs.map(String.init).joined(separator: "|")))
+            }
+
+            if !keywordIDs.isEmpty {
+                queryItems.append(URLQueryItem(name: "with_keywords", value: keywordIDs.map(String.init).joined(separator: "|")))
+            }
+
+            if let region, !region.isEmpty {
+                queryItems.append(URLQueryItem(name: "region", value: region))
+            }
         }
         
         // MARK: - Chronological Upcoming Movies
@@ -110,4 +169,5 @@ public struct TMDBRequestBuilder: Sendable {
             ]
         )
     }
+
 }

@@ -337,7 +337,7 @@ public struct HomeView: View {
                 movies: viewModel.watchlistedMovies,
                 watchlistedMovies: viewModel.watchlistedMovies,
                 onMovieTap: { movie in
-
+                    viewModel.didTapMovie(movie)
                 },
                 onWatchlistTap: { movie in
 

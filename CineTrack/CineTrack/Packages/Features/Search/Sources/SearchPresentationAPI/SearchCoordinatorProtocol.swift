@@ -11,4 +11,6 @@ import SharedCore
 @MainActor
 public protocol SearchCoordinatorProtocol: Coordinator {
     var navigationController: UINavigationController { get }
+    func showMovieDetails(movie: Movie)
+    func showActorDetails(actorID: Int)
 }

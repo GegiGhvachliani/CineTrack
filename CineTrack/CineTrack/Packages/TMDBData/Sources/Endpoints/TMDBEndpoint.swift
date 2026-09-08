@@ -44,6 +44,24 @@ public enum TMDBEndpoint {
 
     case similarMovies(movieID: Int, page: Int)
 
+    case searchMovies(query: String, page: Int)
+
+    case searchPeople(query: String, page: Int)
+
+    case searchKeywords(query: String, page: Int)
+
+    case advancedMovieSearch(
+        page: Int,
+        minimumRating: Int?,
+        minimumVoteCount: Int?,
+        genreIDs: [Int],
+        releaseYear: Int?,
+        minimumRuntime: Int?,
+        maximumRuntime: Int?,
+        region: String?,
+        keywordIDs: [Int]
+    )
+
     // MARK: - People
 
     case popularPeople(page: Int)
@@ -129,6 +147,18 @@ extension TMDBEndpoint {
         case .similarMovies(let movieID, _):
             return "/3/movie/\(movieID)/similar"
 
+        case .searchMovies:
+            return "/3/search/movie"
+
+        case .searchPeople:
+            return "/3/search/person"
+
+        case .searchKeywords:
+            return "/3/search/keyword"
+
+        case .advancedMovieSearch:
+            return "/3/discover/movie"
+
         // MARK: People
 
         case .popularPeople:
@@ -195,6 +225,12 @@ extension TMDBEndpoint {
             return nil
 
         case .similarMovies(_, let page):
+            return page
+
+        case .searchMovies(_, let page), .searchPeople(_, let page), .searchKeywords(_, let page):
+            return page
+
+        case .advancedMovieSearch(let page, _, _, _, _, _, _, _, _):
             return page
 
         case .popularPeople(let page):

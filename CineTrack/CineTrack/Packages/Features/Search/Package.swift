@@ -13,6 +13,8 @@ let package = Package(
     dependencies: [
         .package(path: "../../SharedKit"),
         .package(path: "../../DesignSystem"),
+        .package(path: "../../TMDBData"),
+        .package(path: "../../Home"),
     ],
     targets: [
 
@@ -30,6 +32,8 @@ let package = Package(
                 "SearchDomain",
                 .product(name: "SharedNetworking", package: "SharedKit"),
                 .product(name: "SharedStorage", package: "SharedKit"),
+                .product(name: "SharedCore", package: "SharedKit"),
+                .product(name: "TMDBData", package: "TMDBData"),
             ],
             path: "Sources/SearchData"
         ),
@@ -43,6 +47,10 @@ let package = Package(
                 .product(
                     name: "DesignSystemComponents",
                     package: "DesignSystem"
+                ),
+                .product(
+                    name: "HomePresentation",
+                    package: "Home"
                 ),
             ],
             path: "Sources/SearchPresentation"
@@ -62,7 +70,9 @@ let package = Package(
                 "SearchDomain",
                 "SearchData",
                 "SearchPresentation",
-                "SearchPresentationAPI"
+                "SearchPresentationAPI",
+                .product(name: "SharedNetworking", package: "SharedKit"),
+                .product(name: "TMDBData", package: "TMDBData")
             ],
             path: "Sources/SearchAssembly"
         ),

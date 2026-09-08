@@ -8,7 +8,10 @@
 import UIKit
 
 @MainActor
-public protocol SearchFactoryProtocol { //TODO: დასამატებელი გაქვს
-    func makeSearchViewController() -> UIViewController
-    func makeSearchCoordinator(navigationController: UINavigationController) -> SearchCoordinatorProtocol
+public protocol SearchFactoryProtocol {
+    func makeSearchViewController(coordinator: SearchCoordinatorProtocol) -> UIViewController
+    func makeSearchCoordinator(
+        navigationController: UINavigationController,
+        router: SearchRoutingProtocol
+    ) -> SearchCoordinatorProtocol
 }

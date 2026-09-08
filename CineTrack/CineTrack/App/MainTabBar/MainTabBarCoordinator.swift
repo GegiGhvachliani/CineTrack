@@ -9,7 +9,7 @@ import NewsDetailsPresentationAPI
 import SeeAllPresentationAPI
 import VideosListPresentationAPI
 
-final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol, ActorDetailsRoutingProtocol, MovieDetailsRoutingProtocol {
+final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol, SearchRoutingProtocol, ActorDetailsRoutingProtocol, MovieDetailsRoutingProtocol {
     // childCoordinators ინახავს შვილ კოორდინატორებს, რომ მეხსიერებიდან არ ამოვარდნენ (სამომავლოდ დაგვჭირდება)
     var childCoordinators: [Coordinator] = []
     
@@ -43,7 +43,10 @@ final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol, ActorDetail
             navigationController: homeNav,
             router: self
         )
-        let searchCoordinator = container.searchFactory.makeSearchCoordinator(navigationController: searchNav)
+        let searchCoordinator = container.searchFactory.makeSearchCoordinator(
+            navigationController: searchNav,
+            router: self
+        )
         let profileCoordinator = container.profileFactory.makeProfileCoordinator(navigationController: profileNav)
         
         // 3. თითოეულ ნავიგაციაში პირველ ეკრანად ვსვამთ ჩვენს ფერად ვიუებს
@@ -67,13 +70,17 @@ final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol, ActorDetail
         navigationController.setViewControllers([tabBarController], animated: false)
         navigationController.isNavigationBarHidden = true
     }
+
+    func showSearch() {
+        tabBarController.selectedIndex = 1
+    }
     
     func showActorDetails(actorID: Int) {
-        guard let homeNavigationController else { return }
+        guard let activeNavigationController else { return }
 
         let coordinator = container.actorDetailsFactory.makeActorDetailsCoordinator(
             actorID: actorID,
-            navigationController: homeNavigationController,
+            navigationController: activeNavigationController,
             router: self
         )
         addChild(coordinator)
@@ -81,13 +88,13 @@ final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol, ActorDetail
     }
     
     func showMovieDetails(movie: Movie) {
-        guard let homeNavigationController else {
+        guard let activeNavigationController else {
             return
         }
 
         let coordinator = container.movieDetailsFactory.makeMovieDetailsCoordinator(
             movie: movie,
-            navigationController: homeNavigationController,
+            navigationController: activeNavigationController,
             router: self
         )
         addChild(coordinator)
@@ -97,7 +104,7 @@ final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol, ActorDetail
     func showNewsDetails(news: News) {
         let viewController = container.newsDetailsFactory.makeNewsDetailsViewController(news: news)
         
-        homeNavigationController?.pushViewController(viewController, animated: true)
+        activeNavigationController?.pushViewController(viewController, animated: true)
     }
     
     func showSeeAll(content: SeeAllContent) {
@@ -107,11 +114,15 @@ final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol, ActorDetail
             onActorTap: { [weak self] actor in self?.dismissSeeAllThen { self?.showActorDetails(actorID: actor.id) } },
             onNewsTap: { [weak self] news in self?.dismissSeeAllThen { self?.showNewsDetails(news: news) } }
         )
-        homeNavigationController?.present(viewController, animated: true)
+        activeNavigationController?.present(viewController, animated: true)
     }
 
     private func dismissSeeAllThen(_ action: @escaping () -> Void) {
-        homeNavigationController?.dismiss(animated: true, completion: action)
+        activeNavigationController?.dismiss(animated: true, completion: action)
+    }
+
+    private var activeNavigationController: UINavigationController? {
+        tabBarController.selectedViewController as? UINavigationController ?? homeNavigationController
     }
 
     func showSeeAll(section: HomeSection) {

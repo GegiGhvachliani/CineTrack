@@ -18,6 +18,20 @@ public struct MovieActorCell: View {
     let onActorTap: () -> Void
     let onFavouriteTap: () -> Void
 
+    public init(
+        actor: Actor,
+        cellHeight: CGFloat,
+        isFavourited: Bool,
+        onActorTap: @escaping () -> Void,
+        onFavouriteTap: @escaping () -> Void
+    ) {
+        self.actor = actor
+        self.cellHeight = cellHeight
+        self.isFavourited = isFavourited
+        self.onActorTap = onActorTap
+        self.onFavouriteTap = onFavouriteTap
+    }
+
     public var body: some View {
         Button(action: onActorTap) {
             VStack(spacing: 0) {

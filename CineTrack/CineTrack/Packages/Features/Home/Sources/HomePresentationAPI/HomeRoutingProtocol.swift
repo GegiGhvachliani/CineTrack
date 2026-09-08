@@ -9,6 +9,7 @@ import SharedCore
 
 @MainActor
 public protocol HomeRoutingProtocol: AnyObject {
+    func showSearch()
     func showActorDetails(actorID: Int)
     func showMovieDetails(movie: Movie)
     func showNewsDetails(news: News)

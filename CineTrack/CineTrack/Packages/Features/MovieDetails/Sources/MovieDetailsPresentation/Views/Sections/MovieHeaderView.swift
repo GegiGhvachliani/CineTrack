@@ -20,6 +20,13 @@ struct MovieHeaderView: View {
             ) { video in
                 trailerCell(for: video)
             }
+        } else {
+            Text(movie.title)
+                .font(.system(size: 32, weight: .bold, design: .rounded))
+                .foregroundStyle(ColorTokens.Brand.primary)
+                .lineLimit(3)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal)
         }
     }
 

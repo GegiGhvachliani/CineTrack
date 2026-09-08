@@ -9,6 +9,10 @@ let package = Package(
     ],
     products: [
         .library(
+            name: "HomePresentation",
+            targets: ["HomePresentation"]
+        ),
+        .library(
             name: "HomePresentationAPI",
             targets: ["HomePresentationAPI"]
         ),

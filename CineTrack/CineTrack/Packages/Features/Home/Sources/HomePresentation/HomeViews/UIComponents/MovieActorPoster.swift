@@ -21,13 +21,57 @@ struct MovieActorPoster: View {
         ZStack(alignment: .bottomLeading) {
 
             Button(action: onActorTap) {
-                PosterImageView(photoURL: photoURL)
+                actorProfileImage
             }
             .buttonStyle(.plain)
 
             favouriteButton
         }
         .clipped()
+    }
+
+    private var actorProfileImage: some View {
+        Group {
+            if let photoURL, let url = URL(string: photoURL) {
+                AsyncImage(url: url) { phase in
+                    switch phase {
+                    case .empty:
+                        loadingView
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    case .failure:
+                        missingPhotoView
+                    @unknown default:
+                        missingPhotoView
+                    }
+                }
+            } else {
+                missingPhotoView
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .clipped()
+    }
+
+    private var loadingView: some View {
+        Rectangle()
+            .fill(ColorTokens.Background.primary)
+            .overlay {
+                ProgressView()
+                    .tint(ColorTokens.Brand.primary)
+            }
+    }
+
+    private var missingPhotoView: some View {
+        Rectangle()
+            .fill(ColorTokens.Background.primary)
+            .overlay {
+                Image(systemName: "person.fill")
+                    .font(.system(size: 34, weight: .medium))
+                    .foregroundStyle(ColorTokens.Brand.primary.opacity(0.8))
+            }
     }
 
     private var favouriteButton: some View {
