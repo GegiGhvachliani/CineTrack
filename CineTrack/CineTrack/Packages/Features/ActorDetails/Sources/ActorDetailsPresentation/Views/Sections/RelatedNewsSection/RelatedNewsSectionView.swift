@@ -21,6 +21,7 @@ struct RelatedNewsSectionView: View {
                 items: news,
                 cellWidth: 307.5,
                 cellHeight: 205,
+                showsSeeAllButton: false,
                 onSeeAllTap: {}
             ) { article, _ in
                 NewsCell(

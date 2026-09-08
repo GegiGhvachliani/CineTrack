@@ -60,7 +60,7 @@ public struct ExternalLinksScrollView: View {
         case "WikiData":
             Image("wikipedia", bundle: .module)
         default:
-            Image(systemName: "globe")
+            Image("personal", bundle: .module)
         }
     }
 }

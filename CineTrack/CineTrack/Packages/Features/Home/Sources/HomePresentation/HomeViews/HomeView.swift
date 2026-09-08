@@ -41,6 +41,7 @@ public struct HomeView: View {
         }
         .onAppear {
             Task {
+                await viewModel.loadWatchlist()
                 await viewModel.loadFavourites()
             }
         }

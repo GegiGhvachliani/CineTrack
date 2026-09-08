@@ -52,6 +52,10 @@ let package = Package(
                     name: "DesignSystemComponents",
                     package: "DesignSystem"
                 ),
+                .product(
+                    name: "DesignSystemTokens",
+                    package: "DesignSystem"
+                ),
             ],
             path: "Sources/MovieDetailsPresentation"
         ),

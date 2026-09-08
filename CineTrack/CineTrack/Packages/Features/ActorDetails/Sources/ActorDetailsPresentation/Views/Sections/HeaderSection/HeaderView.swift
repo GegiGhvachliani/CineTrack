@@ -8,6 +8,7 @@
 import SwiftUI
 import ActorDetailsDomain
 import DesignSystemTokens
+import DesignSystemComponents
 
 public struct HeaderView: View {
     
@@ -34,52 +35,22 @@ public struct HeaderView: View {
     }
     
     public var body: some View {
-        VStack(spacing: 10) {
-            headerText
-            moviesPagingView
+        PagingHeaderView(
+            title: actor.name,
+            subtitle: lifeYears,
+            items: credits,
+            isLoading: isCreditsLoading
+        ) { credit in
+            Button {
+                onMovieTap(credit)
+            } label: {
+                ActorMovieCreditCell(credit: credit)
+            }
+            .buttonStyle(.plain)
         }
     }
     
     // MARK: - Comuputed Properties
-    
-    private var headerText: some View {
-        VStack {
-            (Text(actor.name)
-                .font(Font.system(size: 25, weight: .semibold, design: .rounded))
-                .foregroundStyle(ColorTokens.Brand.primary) +
-             Text(lifeYears)
-                .font(TypographyTokens.title3)
-                .foregroundColor(.secondary)
-            )
-            .lineLimit(2)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal)
-        }
-    }
-    
-    @ViewBuilder
-    private var moviesPagingView: some View {
-        if isCreditsLoading {
-            ProgressView()
-                .frame(maxWidth: .infinity)
-                .frame(height: 230)
-            
-        } else if !credits.isEmpty {
-            TabView {
-                ForEach(credits) { credit in
-                    Button {
-                        onMovieTap(credit)
-                    } label: {
-                        ActorMovieCreditCell(credit: credit)
-                    }
-                    .buttonStyle(.plain)
-                    .tag(credit.id)
-                }
-            }
-            .tabViewStyle(.page(indexDisplayMode: .automatic))
-            .frame(height: 230)
-        }
-    }
     
     private var lifeYears: String {
         let formatter = DateFormatter()
@@ -94,4 +65,3 @@ public struct HeaderView: View {
         return "  (\(birthYear) – \(formatter.string(from: deathday)))"
     }
 }
-

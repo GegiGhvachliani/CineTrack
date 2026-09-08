@@ -35,10 +35,14 @@ public final class MovieDetailsViewModel {
     // MARK: - Watchlist
 
     public internal(set) var watchlistedMovieIDs = Set<Int>()
-    public internal(set) var isWatchlistUpdating = false
+    public internal(set) var pendingWatchlistIDs = Set<Int>()
 
     public var isWatchlisted: Bool {
-        watchlistedMovieIDs.contains(movie.id)
+        isWatchlisted(movie)
+    }
+
+    public var isWatchlistUpdating: Bool {
+        pendingWatchlistIDs.contains(movie.id)
     }
 
     // MARK: - Loading state
@@ -114,6 +118,10 @@ public final class MovieDetailsViewModel {
 
     public func didTapNews(_ news: News) {
         onNewsDetails?(news)
+    }
+
+    public func isWatchlisted(_ movie: Movie) -> Bool {
+        watchlistedMovieIDs.contains(movie.id)
     }
 
     private func videoSortOrder(_ left: MovieVideo, _ right: MovieVideo) -> Bool {

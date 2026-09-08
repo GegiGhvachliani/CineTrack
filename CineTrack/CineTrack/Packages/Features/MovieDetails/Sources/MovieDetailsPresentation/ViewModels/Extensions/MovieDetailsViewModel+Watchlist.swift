@@ -5,17 +5,21 @@ extension MovieDetailsViewModel {
     // MARK: - Watchlist
 
     public func toggleWatchlist() async {
-        guard !isWatchlistUpdating else {
+        await toggleWatchlist(for: movie)
+    }
+
+    public func toggleWatchlist(for movie: Movie) async {
+        guard !pendingWatchlistIDs.contains(movie.id) else {
             return
         }
 
-        isWatchlistUpdating = true
+        pendingWatchlistIDs.insert(movie.id)
 
         defer {
-            isWatchlistUpdating = false
+            pendingWatchlistIDs.remove(movie.id)
         }
 
-        let wasWatchlisted = isWatchlisted
+        let wasWatchlisted = isWatchlisted(movie)
 
         if wasWatchlisted {
             watchlistedMovieIDs.remove(movie.id)
