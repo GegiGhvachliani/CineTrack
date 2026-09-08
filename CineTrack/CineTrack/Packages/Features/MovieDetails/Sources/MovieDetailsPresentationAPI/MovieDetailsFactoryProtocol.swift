@@ -10,5 +10,16 @@ import SharedCore
 
 @MainActor
 public protocol MovieDetailsFactoryProtocol {
-    func makeMovieDetailsViewController(movie: Movie) -> UIViewController
+    func makeMovieDetailsCoordinator(
+        movie: Movie,
+        navigationController: UINavigationController,
+        router: MovieDetailsRoutingProtocol
+    ) -> MovieDetailsCoordinatorProtocol
+
+    func makeMovieDetailsViewController(
+        movie: Movie,
+        onMovieDetails: @escaping (Movie) -> Void,
+        onActorDetails: @escaping (Int) -> Void,
+        onNewsDetails: @escaping (News) -> Void
+    ) -> UIViewController
 }

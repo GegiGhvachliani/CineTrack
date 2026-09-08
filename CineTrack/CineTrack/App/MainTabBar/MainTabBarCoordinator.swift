@@ -9,7 +9,7 @@ import NewsDetailsPresentationAPI
 import SeeAllPresentationAPI
 import VideosListPresentationAPI
 
-final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol, ActorDetailsRoutingProtocol {
+final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol, ActorDetailsRoutingProtocol, MovieDetailsRoutingProtocol {
     // childCoordinators ინახავს შვილ კოორდინატორებს, რომ მეხსიერებიდან არ ამოვარდნენ (სამომავლოდ დაგვჭირდება)
     var childCoordinators: [Coordinator] = []
     
@@ -81,10 +81,17 @@ final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol, ActorDetail
     }
     
     func showMovieDetails(movie: Movie) {
-        let viewController = container.movieDetailsFactory
-            .makeMovieDetailsViewController(movie: movie)
+        guard let homeNavigationController else {
+            return
+        }
 
-        homeNavigationController?.pushViewController(viewController, animated: true)
+        let coordinator = container.movieDetailsFactory.makeMovieDetailsCoordinator(
+            movie: movie,
+            navigationController: homeNavigationController,
+            router: self
+        )
+        addChild(coordinator)
+        coordinator.start()
     }
     
     func showNewsDetails(news: News) {

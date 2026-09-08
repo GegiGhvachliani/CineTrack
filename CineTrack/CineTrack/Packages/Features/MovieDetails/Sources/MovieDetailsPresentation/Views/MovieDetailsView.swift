@@ -10,10 +10,10 @@ import SharedCore
 
 public struct MovieDetailsView: View {
 
-    private let movie: Movie
+    @State var viewModel: MovieDetailsViewModel
 
-    public init(movie: Movie) {
-        self.movie = movie
+    public init(viewModel: MovieDetailsViewModel) {
+        self.viewModel = viewModel
     }
 
     public var body: some View {
@@ -22,7 +22,7 @@ public struct MovieDetailsView: View {
                 .font(.system(size: 72))
                 .foregroundStyle(.secondary)
 
-            Text(movie.title)
+            Text(viewModel.movie.title)
                 .font(.title.bold())
 
             Text("Movie Details")
@@ -31,7 +31,10 @@ public struct MovieDetailsView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(uiColor: .blue))
-        .navigationTitle("Movie")
+        .navigationTitle(viewModel.movie.title)
         .navigationBarTitleDisplayMode(.inline)
+        .task {
+            await viewModel.load()
+        }
     }
 }

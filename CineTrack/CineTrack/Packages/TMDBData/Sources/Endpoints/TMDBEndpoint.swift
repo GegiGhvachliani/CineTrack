@@ -36,6 +36,14 @@ public enum TMDBEndpoint {
 
     case movieVideos(movieID: Int)
 
+    case movieDetails(movieID: Int)
+
+    case movieCredits(movieID: Int)
+
+    case movieImages(movieID: Int)
+
+    case similarMovies(movieID: Int, page: Int)
+
     // MARK: - People
 
     case popularPeople(page: Int)
@@ -109,6 +117,18 @@ extension TMDBEndpoint {
         case .movieVideos(let movieID):
             return "/3/movie/\(movieID)/videos"
 
+        case .movieDetails(let movieID):
+            return "/3/movie/\(movieID)"
+
+        case .movieCredits(let movieID):
+            return "/3/movie/\(movieID)/credits"
+
+        case .movieImages(let movieID):
+            return "/3/movie/\(movieID)/images"
+
+        case .similarMovies(let movieID, _):
+            return "/3/movie/\(movieID)/similar"
+
         // MARK: People
 
         case .popularPeople:
@@ -164,6 +184,18 @@ extension TMDBEndpoint {
 
         case .movieVideos:
             return nil
+
+        case .movieDetails:
+            return nil
+
+        case .movieCredits:
+            return nil
+
+        case .movieImages:
+            return nil
+
+        case .similarMovies(_, let page):
+            return page
 
         case .popularPeople(let page):
             return page

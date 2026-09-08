@@ -1,0 +1,153 @@
+import Foundation
+import Observation
+
+import MovieDetailsDomain
+import SharedCore
+
+@MainActor
+@Observable
+public final class MovieDetailsViewModel {
+
+    // MARK: - Movie
+
+    public let movie: Movie
+    public internal(set) var movieDetails: MovieDetails?
+    public internal(set) var cast: [MovieCastMember] = []
+    public internal(set) var videos: [MovieVideo] = []
+    public internal(set) var images: [MovieImage] = []
+    public internal(set) var similarMovies: [Movie] = []
+    public internal(set) var selectedActor: MovieCastMember?
+    public internal(set) var selectedActorMovies: [Movie] = []
+    public internal(set) var news: [News] = []
+
+    public var featuredVideo: MovieVideo? {
+        videos.sorted(by: videoSortOrder).first
+    }
+
+    public var additionalVideos: [MovieVideo] {
+        guard let featuredVideo else {
+            return []
+        }
+
+        return videos.filter { $0.id != featuredVideo.id }
+    }
+
+    // MARK: - Watchlist
+
+    public internal(set) var watchlistedMovieIDs = Set<Int>()
+    public internal(set) var isWatchlistUpdating = false
+
+    public var isWatchlisted: Bool {
+        watchlistedMovieIDs.contains(movie.id)
+    }
+
+    // MARK: - Loading state
+
+    public internal(set) var isLoading = false
+    public internal(set) var isCastLoading = false
+    public internal(set) var isVideosLoading = false
+    public internal(set) var isImagesLoading = false
+    public internal(set) var isSimilarMoviesLoading = false
+    public internal(set) var isRelatedActorLoading = false
+    public internal(set) var isNewsLoading = false
+    public internal(set) var error: Error?
+    public internal(set) var sectionErrors: [MovieDetailsSection: Error] = [:]
+
+    // MARK: - Actions
+
+    public var onMovieDetails: ((Movie) -> Void)?
+    public var onActorDetails: ((Int) -> Void)?
+    public var onNewsDetails: ((News) -> Void)?
+
+    // MARK: - Dependencies
+
+    let fetchMovieDetailsUseCase: FetchMovieDetailsUseCaseProtocol
+    let fetchMovieCastUseCase: FetchMovieCastUseCaseProtocol
+    let fetchMovieVideosUseCase: FetchMovieVideosUseCaseProtocol
+    let fetchMovieImagesUseCase: FetchMovieImagesUseCaseProtocol
+    let fetchSimilarMoviesUseCase: FetchSimilarMoviesUseCaseProtocol
+    let fetchActorMoviesUseCase: FetchActorMoviesUseCaseProtocol
+    let fetchMovieNewsUseCase: FetchMovieNewsUseCaseProtocol
+    let fetchWatchlistedMoviesUseCase: FetchWatchlistedMoviesUseCaseProtocol
+    let addWatchlistedMovieUseCase: AddWatchlistedMovieUseCaseProtocol
+    let removeWatchlistedMovieUseCase: RemoveWatchlistedMovieUseCaseProtocol
+
+    var hasLoadedInitialContent = false
+
+    // MARK: - Initialization
+
+    public init(
+        movie: Movie,
+        fetchMovieDetailsUseCase: FetchMovieDetailsUseCaseProtocol,
+        fetchMovieCastUseCase: FetchMovieCastUseCaseProtocol,
+        fetchMovieVideosUseCase: FetchMovieVideosUseCaseProtocol,
+        fetchMovieImagesUseCase: FetchMovieImagesUseCaseProtocol,
+        fetchSimilarMoviesUseCase: FetchSimilarMoviesUseCaseProtocol,
+        fetchActorMoviesUseCase: FetchActorMoviesUseCaseProtocol,
+        fetchMovieNewsUseCase: FetchMovieNewsUseCaseProtocol,
+        fetchWatchlistedMoviesUseCase: FetchWatchlistedMoviesUseCaseProtocol,
+        addWatchlistedMovieUseCase: AddWatchlistedMovieUseCaseProtocol,
+        removeWatchlistedMovieUseCase: RemoveWatchlistedMovieUseCaseProtocol
+    ) {
+        self.movie = movie
+        self.fetchMovieDetailsUseCase = fetchMovieDetailsUseCase
+        self.fetchMovieCastUseCase = fetchMovieCastUseCase
+        self.fetchMovieVideosUseCase = fetchMovieVideosUseCase
+        self.fetchMovieImagesUseCase = fetchMovieImagesUseCase
+        self.fetchSimilarMoviesUseCase = fetchSimilarMoviesUseCase
+        self.fetchActorMoviesUseCase = fetchActorMoviesUseCase
+        self.fetchMovieNewsUseCase = fetchMovieNewsUseCase
+        self.fetchWatchlistedMoviesUseCase = fetchWatchlistedMoviesUseCase
+        self.addWatchlistedMovieUseCase = addWatchlistedMovieUseCase
+        self.removeWatchlistedMovieUseCase = removeWatchlistedMovieUseCase
+    }
+
+    // MARK: - Navigation
+
+    public func didTapMovie(_ movie: Movie) {
+        onMovieDetails?(movie)
+    }
+
+    public func didTapActor(_ actor: MovieCastMember) {
+        onActorDetails?(actor.id)
+    }
+
+    public func didTapNews(_ news: News) {
+        onNewsDetails?(news)
+    }
+
+    private func videoSortOrder(_ left: MovieVideo, _ right: MovieVideo) -> Bool {
+        videoPriority(left) < videoPriority(right)
+    }
+
+    private func videoPriority(_ video: MovieVideo) -> Int {
+        switch (video.official, video.type) {
+        case (true, .trailer):
+            return 0
+        case (_, .trailer):
+            return 1
+        case (_, .teaser):
+            return 2
+        case (_, .featurette):
+            return 3
+        case (_, .behindTheScenes):
+            return 4
+        case (_, .clip):
+            return 5
+        case (_, .bloopers):
+            return 6
+        case (_, .unknown):
+            return 7
+        }
+    }
+}
+
+public enum MovieDetailsSection: Hashable, Sendable {
+    case cast
+    case videos
+    case images
+    case similarMovies
+    case relatedActor
+    case news
+    case watchlist
+}

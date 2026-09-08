@@ -16,6 +16,8 @@ let package = Package(
     dependencies: [
         .package(path: "../../SharedKit"),
         .package(path: "../../DesignSystem"),
+        .package(path: "../../TMDBData"),
+        .package(path: "../../NewsData"),
     ],
     targets: [
         .target(
@@ -32,6 +34,10 @@ let package = Package(
                 "MovieDetailsDomain",
                 .product(name: "SharedNetworking", package: "SharedKit"),
                 .product(name: "SharedStorage", package: "SharedKit"),
+                .product(name: "SharedAuth", package: "SharedKit"),
+                .product(name: "SharedCore", package: "SharedKit"),
+                .product(name: "TMDBData", package: "TMDBData"),
+                .product(name: "NewsData", package: "NewsData"),
             ],
             path: "Sources/MovieDetailsData"
         ),
@@ -40,6 +46,7 @@ let package = Package(
             name: "MovieDetailsPresentation",
             dependencies: [
                 "MovieDetailsDomain",
+                "MovieDetailsPresentationAPI",
                 .product(name: "SharedCore", package: "SharedKit"),
                 .product(
                     name: "DesignSystemComponents",
@@ -64,7 +71,12 @@ let package = Package(
                 "MovieDetailsData",
                 "MovieDetailsPresentation",
                 "MovieDetailsPresentationAPI",
-                .product(name: "SharedCore", package: "SharedKit")
+                .product(name: "SharedCore", package: "SharedKit"),
+                .product(name: "SharedNetworking", package: "SharedKit"),
+                .product(name: "SharedStorage", package: "SharedKit"),
+                .product(name: "SharedAuth", package: "SharedKit"),
+                .product(name: "TMDBData", package: "TMDBData"),
+                .product(name: "NewsData", package: "NewsData")
             ],
             path: "Sources/MovieDetailsAssembly"
         ),
