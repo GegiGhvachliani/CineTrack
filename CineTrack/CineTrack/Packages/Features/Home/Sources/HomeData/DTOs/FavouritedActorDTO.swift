@@ -14,12 +14,14 @@ struct FavouritedActorDTO: Codable, Sendable {
     let name: String
     let birthday: Date?
     let profilePath: String?
+    let favouritedAt: Date?
 
     init(actor: Actor) {
         self.id = actor.id
         self.name = actor.name
         self.birthday = actor.birthday
         self.profilePath = actor.profilePath
+        self.favouritedAt = .now
     }
 
     func toDomain() -> Actor {

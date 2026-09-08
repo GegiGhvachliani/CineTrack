@@ -17,9 +17,23 @@ public struct SeeAllFactory: SeeAllFactoryProtocol {
 
     public init() {}
 
-    public func makeSeeAllViewController(section: HomeSection) -> UIViewController {
-        let view = SeeAllView(section: section)
+    public func makeSeeAllViewController(
+        content: SeeAllContent,
+        onMovieTap: @escaping (Movie) -> Void,
+        onActorTap: @escaping (Actor) -> Void,
+        onNewsTap: @escaping (News) -> Void
+    ) -> UIViewController {
+        let view = SeeAllView(
+            content: content,
+            onMovieTap: onMovieTap,
+            onActorTap: onActorTap,
+            onNewsTap: onNewsTap
+        )
 
-        return UIHostingController(rootView: view)
+        let viewController = UIHostingController(rootView: view)
+        viewController.modalPresentationStyle = .pageSheet
+        viewController.sheetPresentationController?.detents = [.medium(), .large()]
+        viewController.sheetPresentationController?.prefersGrabberVisible = true
+        return viewController
     }
 }

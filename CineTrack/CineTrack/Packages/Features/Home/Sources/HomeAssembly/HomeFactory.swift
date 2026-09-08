@@ -191,8 +191,8 @@ public struct HomeFactory: HomeFactoryProtocol {
             coordinator?.showNewsDetail(news: news)
         }
 
-        viewModel.onSeeAll = { [weak coordinator] section in
-            coordinator?.showSeeAll(section: section)
+        viewModel.onSeeAll = { [weak coordinator] content in
+            coordinator?.showSeeAll(content: content)
         }
 
         // MARK: - Hosting Controller

@@ -12,7 +12,6 @@ public protocol HomeRoutingProtocol: AnyObject {
     func showActorDetails(actorID: Int)
     func showMovieDetails(movie: Movie)
     func showNewsDetails(news: News)
-    func showSeeAll(section: HomeSection)
+    func showSeeAll(content: SeeAllContent)
     func showVideosList(item: FeaturedItem)
 }
-

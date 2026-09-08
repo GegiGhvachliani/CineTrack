@@ -34,7 +34,12 @@ public final class FavouriteRepository: FavouriteRepositoryProtocol, @unchecked 
         print("📥 Loading favourites for user:", userID)
         let dtos = try await firestore.getCollection(FavouritedActorDTO.self, collection: collection)
         print("📥 Favourite documents found:", dtos.count)
-        return dtos.map { $0.toDomain() }
+        return dtos
+            .sorted {
+                ($0.favouritedAt ?? .distantPast) >
+                    ($1.favouritedAt ?? .distantPast)
+            }
+            .map { $0.toDomain() }
     }
 
     // MARK: - Add

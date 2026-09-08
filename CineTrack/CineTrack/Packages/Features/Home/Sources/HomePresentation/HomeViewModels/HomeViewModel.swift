@@ -19,7 +19,7 @@ public final class HomeViewModel: HomeViewModelProtocol {
 
     public var onSearch: (() -> Void)?
     public var onVideos: ((FeaturedItem) -> Void)?
-    public var onSeeAll: ((HomeSection) -> Void)?
+    public var onSeeAll: ((SeeAllContent) -> Void)?
 
     public var onMovieDetails: ((Movie) -> Void)?
     public var onActorDetails: ((Int) -> Void)?
@@ -106,6 +106,7 @@ public final class HomeViewModel: HomeViewModelProtocol {
     public internal(set) var isMostPopularCelebritiesLoading = false
 
     public internal(set) var isNewsLoading = false
+    public internal(set) var newsError: Error?
 
     public internal(set) var isRecentlyViewedLoading = false
 

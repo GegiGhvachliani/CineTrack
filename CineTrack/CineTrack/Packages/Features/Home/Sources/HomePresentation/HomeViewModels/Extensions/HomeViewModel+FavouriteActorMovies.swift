@@ -12,17 +12,14 @@ import SharedCore
 extension HomeViewModel {
     public func loadFavouriteActorMovies() async {
         
-        guard let actor = favouritedActors.randomElement() else {
+        guard let actor = favouritedActors.first else {
             print("⚠️ No favourite actor available for the section")
             selectedFavouriteActor = nil
             selectedFavouriteActorMovies = []
             return
         }
 
-        print("✅ Selected favourite actor:", actor.name)
-
         selectedFavouriteActor = actor
-        selectedFavouriteActorMovies = []
 
         do {
             let movies = try await fetchActorMoviesUseCase.execute(
@@ -40,7 +37,6 @@ extension HomeViewModel {
             }
 
             self.error = error
-            selectedFavouriteActorMovies = []
         }
     }
 }

@@ -13,6 +13,16 @@ import SharedCore
 
 extension HomeViewModel {
 
+    // MARK: - Refresh
+
+    public func refreshPersonalizedContent() async {
+        async let watchlistTask: Void = loadWatchlist()
+        async let favouritesTask: Void = loadFavourites()
+
+        await watchlistTask
+        await favouritesTask
+    }
+
     // MARK: - Load
 
     public func loadFavourites() async {
@@ -52,7 +62,7 @@ extension HomeViewModel {
 
         } else {
 
-            favouritedActors.append(actor)
+            favouritedActors.insert(actor, at: 0)
         }
 
         do {
@@ -65,7 +75,7 @@ extension HomeViewModel {
             await loadFavouriteActorMovies()
         } catch {
             if wasFavourited {
-                favouritedActors.append(actor)
+                favouritedActors.insert(actor, at: 0)
             } else {
                 favouritedActors.removeAll {
                     $0.id == actor.id

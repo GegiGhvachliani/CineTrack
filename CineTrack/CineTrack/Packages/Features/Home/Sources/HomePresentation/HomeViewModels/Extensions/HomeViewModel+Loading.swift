@@ -13,6 +13,30 @@ import SharedCore
 
 extension HomeViewModel {
 
+    // MARK: - Visible section recovery
+
+    public func restoreVisibleSections() async {
+        async let trendingTask: Void = loadTrendingIfNeeded()
+        async let fanFavouritesTask: Void = loadFanFavouritesIfNeeded()
+        async let nowPlayingTask: Void = loadNowPlayingIfNeeded()
+        async let upcomingTask: Void = loadUpcomingIfNeeded()
+        async let top10Task: Void = loadTop10IfNeeded()
+        async let bornTodayTask: Void = loadBornTodayIfNeeded()
+        async let popularActorsTask: Void = loadPopularActorsIfNeeded()
+        async let newsTask: Void = loadNewsIfNeeded()
+
+        await (
+            trendingTask,
+            fanFavouritesTask,
+            nowPlayingTask,
+            upcomingTask,
+            top10Task,
+            bornTodayTask,
+            popularActorsTask,
+            newsTask
+        )
+    }
+
     public func loadHome() async {
         guard !isHomeLoading, !hasLoadedInitialHome else {
             return
@@ -55,5 +79,47 @@ extension HomeViewModel {
         )
 
         await loadFeaturedItems()
+    }
+
+    // MARK: - Empty section loading
+
+    private func loadTrendingIfNeeded() async {
+        guard trendingMovies.isEmpty else { return }
+        await loadNextTrendingPage()
+    }
+
+    private func loadFanFavouritesIfNeeded() async {
+        guard fanFavouriteMovies.isEmpty else { return }
+        await loadNextFanFavouritePage()
+    }
+
+    private func loadNowPlayingIfNeeded() async {
+        guard nowPlayingMovies.isEmpty else { return }
+        await loadNextNowPlayingPage()
+    }
+
+    private func loadUpcomingIfNeeded() async {
+        guard upcomingMovies.isEmpty else { return }
+        await loadNextUpcomingPage()
+    }
+
+    private func loadTop10IfNeeded() async {
+        guard top10Movies.isEmpty else { return }
+        await loadTop10Movies()
+    }
+
+    private func loadBornTodayIfNeeded() async {
+        guard bornTodayActors.isEmpty else { return }
+        await loadNextBornTodayActorsPage()
+    }
+
+    private func loadPopularActorsIfNeeded() async {
+        guard mostPopularActors.isEmpty else { return }
+        await loadNextMostPopularCelebritiesPage()
+    }
+
+    private func loadNewsIfNeeded() async {
+        guard news.isEmpty else { return }
+        await loadNextNewsPage()
     }
 }

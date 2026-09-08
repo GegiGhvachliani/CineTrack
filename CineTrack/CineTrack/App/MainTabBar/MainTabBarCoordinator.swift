@@ -100,10 +100,22 @@ final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol, ActorDetail
         homeNavigationController?.pushViewController(viewController, animated: true)
     }
     
+    func showSeeAll(content: SeeAllContent) {
+        let viewController = container.seeAllFactory.makeSeeAllViewController(
+            content: content,
+            onMovieTap: { [weak self] movie in self?.dismissSeeAllThen { self?.showMovieDetails(movie: movie) } },
+            onActorTap: { [weak self] actor in self?.dismissSeeAllThen { self?.showActorDetails(actorID: actor.id) } },
+            onNewsTap: { [weak self] news in self?.dismissSeeAllThen { self?.showNewsDetails(news: news) } }
+        )
+        homeNavigationController?.present(viewController, animated: true)
+    }
+
+    private func dismissSeeAllThen(_ action: @escaping () -> Void) {
+        homeNavigationController?.dismiss(animated: true, completion: action)
+    }
+
     func showSeeAll(section: HomeSection) {
-        let viewController = container.seeAllFactory.makeSeeAllViewController(section: section)
-        
-        homeNavigationController?.pushViewController(viewController, animated: true)
+        // ActorDetails still exposes this route; its data-backed modal is added with the feature's filmography flow.
     }
     
     func showVideosList(item: FeaturedItem) {

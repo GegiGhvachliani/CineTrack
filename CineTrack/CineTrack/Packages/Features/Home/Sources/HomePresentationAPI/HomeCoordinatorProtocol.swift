@@ -15,7 +15,7 @@ public protocol HomeCoordinatorProtocol: Coordinator {
 
     func showSearch()
     func showVideos(item: FeaturedItem)
-    func showSeeAll(section: HomeSection)
+    func showSeeAll(content: SeeAllContent)
     
     func showMovieDetails(movie: Movie)
     func showActorDetails(actorID: Int)

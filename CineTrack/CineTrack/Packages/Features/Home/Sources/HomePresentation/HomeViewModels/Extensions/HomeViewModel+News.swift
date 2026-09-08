@@ -18,6 +18,7 @@ extension HomeViewModel {
         guard !isNewsLoading, hasMoreNews else { return }
 
         isNewsLoading = true
+        newsError = nil
 
         defer {
             isNewsLoading = false
@@ -35,6 +36,7 @@ extension HomeViewModel {
 
         } catch {
             print("❌ News Error:", error)
+            newsError = error
             self.error = error
         }
     }

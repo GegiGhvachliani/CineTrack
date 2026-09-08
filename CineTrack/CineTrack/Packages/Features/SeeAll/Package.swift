@@ -68,6 +68,10 @@ let package = Package(
                 .product(
                     name: "DesignSystemComponents",
                     package: "DesignSystem"
+                ),
+                .product(
+                    name: "DesignSystemTokens",
+                    package: "DesignSystem"
                 )
             ],
             path: "Sources/SeeAllPresentation"

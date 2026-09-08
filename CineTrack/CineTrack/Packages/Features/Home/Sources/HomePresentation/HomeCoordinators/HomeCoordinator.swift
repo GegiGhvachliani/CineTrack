@@ -46,8 +46,8 @@ public final class HomeCoordinator: HomeCoordinatorProtocol {
     public func showActorDetails(actorID: Int) {
         router.showActorDetails(actorID: actorID)
     }
-    public func showSeeAll(section: HomeSection) {
-        router.showSeeAll(section: section)
+    public func showSeeAll(content: SeeAllContent) {
+        router.showSeeAll(content: content)
     }
     public func showNewsDetail(news: News) {
         router.showNewsDetails(news: news)

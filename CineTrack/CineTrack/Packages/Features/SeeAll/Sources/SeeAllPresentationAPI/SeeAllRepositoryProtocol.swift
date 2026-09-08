@@ -11,5 +11,10 @@ import SharedCore
 @MainActor
 public protocol SeeAllFactoryProtocol {
 
-    func makeSeeAllViewController(section: HomeSection) -> UIViewController
+    func makeSeeAllViewController(
+        content: SeeAllContent,
+        onMovieTap: @escaping (Movie) -> Void,
+        onActorTap: @escaping (Actor) -> Void,
+        onNewsTap: @escaping (News) -> Void
+    ) -> UIViewController
 }

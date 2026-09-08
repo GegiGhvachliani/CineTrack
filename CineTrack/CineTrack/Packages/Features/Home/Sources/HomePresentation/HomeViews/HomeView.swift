@@ -41,8 +41,8 @@ public struct HomeView: View {
         }
         .onAppear {
             Task {
-                await viewModel.loadWatchlist()
-                await viewModel.loadFavourites()
+                await viewModel.refreshPersonalizedContent()
+                await viewModel.restoreVisibleSections()
             }
         }
     }
@@ -82,6 +82,10 @@ public struct HomeView: View {
         }
         .ignoresSafeArea(edges: .vertical)
         .scrollIndicators(.hidden)
+        .refreshable {
+            await viewModel.refreshPersonalizedContent()
+            await viewModel.restoreVisibleSections()
+        }
     }
     
     
@@ -375,13 +379,13 @@ public struct HomeView: View {
                     }
                 },
                 onSeeAllTap: {
-                    viewModel.didTapActor(actor)
+                    viewModel.didTapSeeAll(.moreFromActor)
                 },
                 onActorTap: {
                     viewModel.didTapActor(actor)
                 },
                 onSeeYourFavouritePeopleTap: {
-                    viewModel.didTapSeeAll(.moreFromActor)
+                    viewModel.didTapSeeAll(.favouritePeople)
                 }
             )
         }
@@ -406,6 +410,8 @@ public struct HomeView: View {
         
         NewsSectionView(
             news: viewModel.news,
+            isLoading: viewModel.isNewsLoading,
+            error: viewModel.newsError,
             onSeeAllTap: {
                 
                 viewModel.didTapSeeAll(.news)
@@ -413,7 +419,8 @@ public struct HomeView: View {
             }, onNewsTap: { news in
                 
                 viewModel.didTapNews(news)
-                
+            }, onRetryTap: {
+                Task { await viewModel.loadNextNewsPage() }
             }
         )
     }

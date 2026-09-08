@@ -18,6 +18,7 @@ public enum HomeSection {
     case popularActors
     case watchlist
     case moreFromActor
+    case favouritePeople
     case news
     case mostPopularCelebrities
     case recentlyViewed

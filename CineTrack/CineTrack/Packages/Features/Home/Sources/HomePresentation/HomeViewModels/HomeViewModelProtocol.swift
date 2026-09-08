@@ -16,7 +16,7 @@ public protocol HomeViewModelProtocol {
 
     var onSearch: (() -> Void)? { get }
     var onVideos: ((FeaturedItem) -> Void)? { get }
-    var onSeeAll: ((HomeSection) -> Void)? { get }
+    var onSeeAll: ((SeeAllContent) -> Void)? { get }
     var onMovieDetails: ((Movie) -> Void)? { get }
     var onActorDetails: ((Int) -> Void)? { get }
     var onNewsDetails: ((News) -> Void)? { get }
