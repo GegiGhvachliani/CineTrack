@@ -1,3 +1,10 @@
+//
+//  ActorDetailsCoordinator.swift
+//  ActorDetailsDomain
+//
+//  Created by Gegi Ghvachliani on 05/09/2026.
+//
+
 import UIKit
 
 import ActorDetailsDomain
@@ -25,6 +32,8 @@ public final class ActorDetailsCoordinator: ActorDetailsCoordinatorProtocol {
     }
 
     public func start() {
+        navigationController.setNavigationBarHidden(false, animated: true)
+
         let viewController = factory.makeActorDetailsViewController(
             actorID: actorID,
             onMovieDetails: { [weak self] movie in

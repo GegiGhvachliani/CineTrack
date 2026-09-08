@@ -1,3 +1,10 @@
+//
+//  ImageSectionView.swift
+//  ActorDetailsDomain
+//
+//  Created by Gegi Ghvachliani on 05/09/2026.
+//
+
 import SwiftUI
 import ActorMediaDomain
 import DesignSystemComponents
@@ -32,7 +39,7 @@ private struct ImagesGalleryView: View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 10)], spacing: 10) {
                 ForEach(images) { image in
-                    ImagesCell(image: image)
+                    ImagesCell(image: image, height: 180)
                         .frame(maxWidth: .infinity, minHeight: 180)
                 }
             }

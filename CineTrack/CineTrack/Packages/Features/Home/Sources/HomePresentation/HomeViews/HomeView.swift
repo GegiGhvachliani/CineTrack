@@ -9,6 +9,7 @@ import SwiftUI
 import HomeDomain
 import SharedCore
 import DesignSystemTokens
+import DesignSystemComponents
 
 public struct HomeView: View {
 
@@ -492,7 +493,7 @@ public struct HomeView: View {
     
     private var footer: some View {
 
-        HomeFooterView()
+        CineTrackFooterView()
         
     }
 }

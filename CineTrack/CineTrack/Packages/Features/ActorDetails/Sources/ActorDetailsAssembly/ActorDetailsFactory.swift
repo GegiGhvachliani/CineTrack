@@ -1,3 +1,11 @@
+//
+//  ActorDetailsFactory.swift
+//  TMDBData
+//
+//  Created by Gegi Ghvachliani on 05/09/2026.
+//
+
+
 import UIKit
 import SwiftUI
 
@@ -13,6 +21,8 @@ import TMDBData
 import NewsData
 import ActorMediaData
 import ActorMediaDomain
+import ActorVideosData
+import ActorVideosDomain
 
 @MainActor
 public struct ActorDetailsFactory: ActorDetailsFactoryProtocol {
@@ -66,6 +76,12 @@ public struct ActorDetailsFactory: ActorDetailsFactoryProtocol {
             fetchActorCreditsUseCase: FetchActorCreditsUseCase(repository: repository),
             fetchActorMediaUseCase: FetchActorMediaUseCase(
                 repository: WikimediaActorMediaRepository(apiClient: apiClient)
+            ),
+            fetchActorVideosUseCase: FetchActorVideosUseCase(
+                repository: ActorVideosRepository(
+                    apiClient: apiClient,
+                    configuration: tmdbConfiguration
+                )
             ),
             fetchActorExternalLinksUseCase: FetchActorExternalLinksUseCase(repository: repository),
             fetchActorNewsUseCase: FetchActorNewsUseCase(repository: repository),

@@ -30,7 +30,10 @@ let package = Package(
                 "DesignSystemTokens",
                 .product(name: "SharedCore", package: "SharedKit")  // თუ Layout/UI Helpers გჭირდება SharedCore-დან
             ],
-            path: "Sources/DesignSystemComponents"
+            path: "Sources/DesignSystemComponents",
+            resources: [
+                .process("Resources")
+            ]
         ),
         
         .testTarget(

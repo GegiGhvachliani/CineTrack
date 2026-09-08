@@ -10,12 +10,14 @@ import Observation
 
 import ActorDetailsDomain
 import ActorMediaDomain
+import ActorVideosDomain
 import SharedCore
 
 @MainActor
 public protocol ActorDetailsViewModelProtocol: AnyObject {
     var actor: ActorDetails? { get }
     var credits: [ActorCredit] { get }
+    var actorVideos: [ActorVideo] { get }
     var externalLinks: ActorExternalLinks? { get }
     var news: [News] { get }
     var isFavourite: Bool { get }
@@ -38,22 +40,24 @@ public protocol ActorDetailsViewModelProtocol: AnyObject {
 @MainActor
 @Observable
 public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
-    public private(set) var actor: ActorDetails?
-    public private(set) var credits: [ActorCredit] = []
-    public private(set) var mediaImages: [ActorMediaImage] = []
-    public private(set) var isMediaLoading = false
-    public private(set) var hasMoreMedia = true
-    private var mediaContinuation: String?
-    public private(set) var externalLinks: ActorExternalLinks?
-    public private(set) var news: [News] = []
-    public private(set) var favouritedActorIDs = Set<Int>()
+    public internal(set) var actor: ActorDetails?
+    public internal(set) var credits: [ActorCredit] = []
+    public internal(set) var mediaImages: [ActorMediaImage] = []
+    public internal(set) var actorVideos: [ActorVideo] = []
+    public internal(set) var isMediaLoading = false
+    public internal(set) var isVideosLoading = false
+    public internal(set) var hasMoreMedia = true
+    var mediaContinuation: String?
+    public internal(set) var externalLinks: ActorExternalLinks?
+    public internal(set) var news: [News] = []
+    public internal(set) var favouritedActorIDs = Set<Int>()
     public internal(set) var watchlistedMovieIDs = Set<Int>()
 
-    public private(set) var isLoading = false
-    public private(set) var isCreditsLoading = false
-    public private(set) var isExternalLinksLoading = false
-    public private(set) var isNewsLoading = false
-    public private(set) var error: Error?
+    public internal(set) var isLoading = false
+    public internal(set) var isCreditsLoading = false
+    public internal(set) var isExternalLinksLoading = false
+    public internal(set) var isNewsLoading = false
+    public internal(set) var error: Error?
     public internal(set) var sectionErrors: [ActorDetailsSection: Error] = [:]
 
     public let actorID: Int
@@ -109,14 +113,15 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
         pendingFavouriteIDs.contains(actorID)
     }
 
-    private var hasLoadedInitialContent = false
+    var hasLoadedInitialContent = false
 
-    private let fetchActorDetailsUseCase: FetchActorDetailsUseCaseProtocol
-    private let fetchActorCreditsUseCase: FetchActorCreditsUseCaseProtocol
-    private let fetchActorMediaUseCase: FetchActorMediaUseCaseProtocol
-    private let fetchActorExternalLinksUseCase: FetchActorExternalLinksUseCaseProtocol
-    private let fetchActorNewsUseCase: FetchActorNewsUseCaseProtocol
-    private let fetchFavouritedActorsUseCase: FetchFavouritedActorsUseCaseProtocol
+    let fetchActorDetailsUseCase: FetchActorDetailsUseCaseProtocol
+    let fetchActorCreditsUseCase: FetchActorCreditsUseCaseProtocol
+    let fetchActorMediaUseCase: FetchActorMediaUseCaseProtocol
+    let fetchActorVideosUseCase: FetchActorVideosUseCaseProtocol
+    let fetchActorExternalLinksUseCase: FetchActorExternalLinksUseCaseProtocol
+    let fetchActorNewsUseCase: FetchActorNewsUseCaseProtocol
+    let fetchFavouritedActorsUseCase: FetchFavouritedActorsUseCaseProtocol
     private let addFavouritedActorUseCase: AddFavouritedActorUseCaseProtocol
     private let removeFavouritedActorUseCase: RemoveFavouritedActorUseCaseProtocol
     let fetchWatchlistedMoviesUseCase: FetchWatchlistedMoviesUseCaseProtocol
@@ -130,6 +135,7 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
         fetchActorDetailsUseCase: FetchActorDetailsUseCaseProtocol,
         fetchActorCreditsUseCase: FetchActorCreditsUseCaseProtocol,
         fetchActorMediaUseCase: FetchActorMediaUseCaseProtocol,
+        fetchActorVideosUseCase: FetchActorVideosUseCaseProtocol,
         fetchActorExternalLinksUseCase: FetchActorExternalLinksUseCaseProtocol,
         fetchActorNewsUseCase: FetchActorNewsUseCaseProtocol,
         fetchFavouritedActorsUseCase: FetchFavouritedActorsUseCaseProtocol,
@@ -143,6 +149,7 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
         self.fetchActorDetailsUseCase = fetchActorDetailsUseCase
         self.fetchActorCreditsUseCase = fetchActorCreditsUseCase
         self.fetchActorMediaUseCase = fetchActorMediaUseCase
+        self.fetchActorVideosUseCase = fetchActorVideosUseCase
         self.fetchActorExternalLinksUseCase = fetchActorExternalLinksUseCase
         self.fetchActorNewsUseCase = fetchActorNewsUseCase
         self.fetchFavouritedActorsUseCase = fetchFavouritedActorsUseCase
@@ -151,58 +158,6 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
         self.fetchWatchlistedMoviesUseCase = fetchWatchlistedMoviesUseCase
         self.addWatchlistedMovieUseCase = addWatchlistedMovieUseCase
         self.removeWatchlistedMovieUseCase = removeWatchlistedMovieUseCase
-    }
-
-    public func load() async {
-        await load(force: false)
-    }
-
-    public func retry() async {
-        await load(force: true)
-    }
-
-    private func load(
-        force: Bool
-    ) async {
-        guard !isLoading, force || !hasLoadedInitialContent else {
-            return
-        }
-
-        isLoading = true
-        error = nil
-        sectionErrors = [:]
-
-        defer {
-            isLoading = false
-            hasLoadedInitialContent = true
-        }
-
-        do {
-            actor = try await fetchActorDetailsUseCase.execute(
-                actorID: actorID
-            )
-        } catch {
-            self.error = error
-            return
-        }
-
-        guard let actor else {
-            return
-        }
-
-        async let creditsTask: Void = loadCredits()
-        async let mediaTask: Void = loadNextMediaPage(actorName: actor.name)
-        async let linksTask: Void = loadExternalLinks()
-        async let newsTask: Void = loadNews(actorName: actor.name)
-        async let favouritesTask: Void = loadFavourites()
-        async let watchlistTask: Void = loadWatchlist()
-
-        await creditsTask
-        await mediaTask
-        await linksTask
-        await newsTask
-        await favouritesTask
-        await watchlistTask
     }
 
     public func didTapCredit(
@@ -284,88 +239,12 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
         }
     }
 
-    private func loadFavourites() async {
-        do {
-            favouritedActorIDs = Set(
-                try await fetchFavouritedActorsUseCase.execute().map(\.id)
-            )
-        } catch {
-            sectionErrors[.favourites] = error
-        }
-    }
-
-    private func loadCredits() async {
-        isCreditsLoading = true
-
-        defer {
-            isCreditsLoading = false
-        }
-
-        do {
-            credits = try await fetchActorCreditsUseCase.execute(
-                actorID: actorID
-            )
-        } catch {
-            sectionErrors[.filmography] = error
-        }
-    }
-
-    public func loadNextMediaPage() async {
-        guard let actor else { return }
-        await loadNextMediaPage(actorName: actor.name)
-    }
-
-    private func loadNextMediaPage(actorName: String) async {
-        guard !isMediaLoading, hasMoreMedia else { return }
-        isMediaLoading = true
-        defer { isMediaLoading = false }
-        do {
-            let page = try await fetchActorMediaUseCase.execute(actorName: actorName, continuation: mediaContinuation)
-            mediaImages.append(contentsOf: page.images)
-            mediaContinuation = page.nextToken
-            hasMoreMedia = page.nextToken != nil
-        }
-        catch { sectionErrors[.photos] = error }
-    }
-
-    private func loadExternalLinks() async {
-        isExternalLinksLoading = true
-
-        defer {
-            isExternalLinksLoading = false
-        }
-
-        do {
-            externalLinks = try await fetchActorExternalLinksUseCase.execute(
-                actorID: actorID
-            )
-        } catch {
-            sectionErrors[.personalDetails] = error
-        }
-    }
-
-    private func loadNews(
-        actorName: String
-    ) async {
-        isNewsLoading = true
-
-        defer {
-            isNewsLoading = false
-        }
-
-        do {
-            news = try await fetchActorNewsUseCase.execute(
-                actorName: actorName
-            )
-        } catch {
-            sectionErrors[.news] = error
-        }
-    }
 }
 
 public enum ActorDetailsSection: Hashable, Sendable {
     case favourites
     case filmography
+    case videos
     case photos
     case personalDetails
     case news

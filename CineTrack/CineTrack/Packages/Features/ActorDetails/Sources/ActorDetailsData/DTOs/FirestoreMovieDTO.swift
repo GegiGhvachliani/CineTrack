@@ -1,3 +1,11 @@
+//
+//  FirestoreMovieDTO.swift
+//  TMDBData
+//
+//  Created by Gegi Ghvachliani on 05/09/2026.
+//
+
+
 import SharedCore
 
 struct FirestoreMovieDTO: Codable, Sendable {
