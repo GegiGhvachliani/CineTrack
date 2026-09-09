@@ -10,5 +10,8 @@ import SharedCore
 
 @MainActor
 public protocol VideosListFactoryProtocol {
-    func makeVideosListViewController(item: FeaturedItem) -> UIViewController
+    func makeVideosListViewController(
+        context: VideoPlaylistContext,
+        onMovieDetails: @escaping (VideoPlaylistContext) -> Void
+    ) -> UIViewController
 }

@@ -24,6 +24,8 @@ public final class MovieDetailsCoordinator: MovieDetailsCoordinatorProtocol {
     }
 
     public func start() {
+        navigationController.setNavigationBarHidden(false, animated: true)
+
         let viewController = factory.makeMovieDetailsViewController(
             movie: movie,
             onMovieDetails: { [weak self] movie in
@@ -37,6 +39,9 @@ public final class MovieDetailsCoordinator: MovieDetailsCoordinatorProtocol {
             },
             onShowSeeAll: { [weak self] content in
                 self?.router?.showSeeAll(content: content)
+            },
+            onShowVideos: { [weak self] context in
+                self?.router?.showVideosList(context: context)
             }
         )
         navigationController.pushViewController(viewController, animated: true)

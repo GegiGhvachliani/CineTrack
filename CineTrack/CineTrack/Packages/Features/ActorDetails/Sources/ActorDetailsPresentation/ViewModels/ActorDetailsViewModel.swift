@@ -66,6 +66,7 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
     public var onNewsDetails: ((News) -> Void)?
     public var onShowMiniBiography: ((ActorDetails) -> Void)?
     public var onShowSeeAll: ((SeeAllContent) -> Void)?
+    public var onShowVideos: ((VideoPlaylistContext) -> Void)?
     public var onOpenURL: ((URL) -> Void)?
     public var onActorViewed: ((ActorDetails) -> Void)?
 
@@ -182,6 +183,30 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
         _ news: News
     ) {
         onNewsDetails?(news)
+    }
+
+    public func didTapVideo(_ actorVideo: ActorVideo) {
+        guard let credit = credits.first(where: { $0.id == actorVideo.movieID }) else {
+            return
+        }
+
+        let movie = Movie(
+            id: credit.id,
+            title: credit.title,
+            overview: credit.overview,
+            posterPath: credit.posterURL?.absoluteString ?? credit.posterPath,
+            backdropPath: credit.backdropURL?.absoluteString ?? credit.backdropPath,
+            releaseDate: credit.releaseDate,
+            voteAverage: credit.voteAverage,
+            voteCount: credit.voteCount
+        )
+        onShowVideos?(
+            VideoPlaylistContext(
+                movie: movie,
+                selectedVideo: actorVideo.video,
+                source: .actorDetails
+            )
+        )
     }
 
     public func didTapMiniBiography() {

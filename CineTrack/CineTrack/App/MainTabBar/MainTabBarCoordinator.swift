@@ -9,7 +9,7 @@ import NewsDetailsPresentationAPI
 import SeeAllPresentationAPI
 import VideosListPresentationAPI
 
-final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol, SearchRoutingProtocol, ActorDetailsRoutingProtocol, MovieDetailsRoutingProtocol {
+final class MainTabBarCoordinator: NSObject, Coordinator, HomeRoutingProtocol, SearchRoutingProtocol, ActorDetailsRoutingProtocol, MovieDetailsRoutingProtocol, UINavigationControllerDelegate {
     // childCoordinators ინახავს შვილ კოორდინატორებს, რომ მეხსიერებიდან არ ამოვარდნენ (სამომავლოდ დაგვჭირდება)
     var childCoordinators: [Coordinator] = []
     
@@ -18,6 +18,8 @@ final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol, SearchRouti
     private let container: AppDIContainerProtocol
     
     private weak var homeNavigationController: UINavigationController?
+    private var detailCoordinators: [ObjectIdentifier: Coordinator] = [:]
+    private var fullScreenViewControllerIDs = Set<ObjectIdentifier>()
     
     // ინიციალიზატორში გარედან შემოგვაქვს მთავარი ნავიგაცია
     init(
@@ -28,6 +30,7 @@ final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol, SearchRouti
         self.navigationController = navigationController
         self.tabBarController = tabBarController
         self.container = container
+        super.init()
     }
     
     func start() {
@@ -35,6 +38,10 @@ final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol, SearchRouti
         let homeNav = UINavigationController()
         let searchNav = UINavigationController()
         let profileNav = UINavigationController()
+
+        homeNav.delegate = self
+        searchNav.delegate = self
+        profileNav.delegate = self
         
         // 2. ფექთორების დახმარებით ვიღებთ გამზადებულ ფერად ეკრანებს
         homeNavigationController = homeNav
@@ -78,13 +85,15 @@ final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol, SearchRouti
     func showActorDetails(actorID: Int) {
         guard let activeNavigationController else { return }
 
+        activeNavigationController.setNavigationBarHidden(false, animated: true)
+
         let coordinator = container.actorDetailsFactory.makeActorDetailsCoordinator(
             actorID: actorID,
             navigationController: activeNavigationController,
             router: self
         )
-        addChild(coordinator)
         coordinator.start()
+        retainDetailCoordinator(coordinator, for: activeNavigationController)
     }
     
     func showMovieDetails(movie: Movie) {
@@ -92,18 +101,21 @@ final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol, SearchRouti
             return
         }
 
+        activeNavigationController.setNavigationBarHidden(false, animated: true)
+
         let coordinator = container.movieDetailsFactory.makeMovieDetailsCoordinator(
             movie: movie,
             navigationController: activeNavigationController,
             router: self
         )
-        addChild(coordinator)
         coordinator.start()
+        retainDetailCoordinator(coordinator, for: activeNavigationController)
     }
     
     func showNewsDetails(news: News) {
         let viewController = container.newsDetailsFactory.makeNewsDetailsViewController(news: news)
-        
+
+        activeNavigationController?.setNavigationBarHidden(false, animated: true)
         activeNavigationController?.pushViewController(viewController, animated: true)
     }
     
@@ -125,9 +137,62 @@ final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol, SearchRouti
         tabBarController.selectedViewController as? UINavigationController ?? homeNavigationController
     }
 
-    func showVideosList(item: FeaturedItem) {
-        let viewController = container.videosListFactory.makeVideosListViewController(item: item)
-        
-        homeNavigationController?.pushViewController(viewController, animated: true)
+    func showVideosList(context: VideoPlaylistContext) {
+        let viewController = container.videosListFactory.makeVideosListViewController(
+            context: context,
+            onMovieDetails: { [weak self] context in
+                self?.showMovieDetails(from: context)
+            }
+        )
+
+        guard let activeNavigationController else {
+            return
+        }
+
+        fullScreenViewControllerIDs.insert(ObjectIdentifier(viewController))
+        activeNavigationController.pushViewController(viewController, animated: true)
+    }
+
+    private func showMovieDetails(from context: VideoPlaylistContext) {
+        guard let navigationController = activeNavigationController else {
+            return
+        }
+
+        navigationController.popViewController(animated: false)
+
+        switch context.source {
+        case .movieDetails:
+            break
+        case .home, .actorDetails:
+            showMovieDetails(movie: context.movie)
+        }
+    }
+
+    func navigationController(
+        _ navigationController: UINavigationController,
+        didShow viewController: UIViewController,
+        animated: Bool
+    ) {
+        let activeViewControllerIDs = Set(navigationController.viewControllers.map(ObjectIdentifier.init))
+        detailCoordinators = detailCoordinators.filter { activeViewControllerIDs.contains($0.key) }
+        fullScreenViewControllerIDs = fullScreenViewControllerIDs.intersection(activeViewControllerIDs)
+
+        let isRootViewController = navigationController.viewControllers.first === viewController
+        let isFullScreenViewController = fullScreenViewControllerIDs.contains(ObjectIdentifier(viewController))
+        navigationController.setNavigationBarHidden(
+            isRootViewController || isFullScreenViewController,
+            animated: animated
+        )
+    }
+
+    private func retainDetailCoordinator(
+        _ coordinator: Coordinator,
+        for navigationController: UINavigationController
+    ) {
+        guard let detailViewController = navigationController.topViewController else {
+            return
+        }
+
+        detailCoordinators[ObjectIdentifier(detailViewController)] = coordinator
     }
 }

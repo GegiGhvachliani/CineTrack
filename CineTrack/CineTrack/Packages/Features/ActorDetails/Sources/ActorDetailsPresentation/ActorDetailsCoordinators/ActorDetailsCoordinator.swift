@@ -47,6 +47,9 @@ public final class ActorDetailsCoordinator: ActorDetailsCoordinatorProtocol {
             },
             onShowSeeAll: { [weak self] content in
                 self?.router?.showSeeAll(content: content)
+            },
+            onShowVideos: { [weak self] context in
+                self?.router?.showVideosList(context: context)
             }
         )
         navigationController.pushViewController(viewController, animated: true)

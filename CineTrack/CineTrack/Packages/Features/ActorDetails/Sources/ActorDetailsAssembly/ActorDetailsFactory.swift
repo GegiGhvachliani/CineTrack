@@ -48,7 +48,8 @@ public struct ActorDetailsFactory: ActorDetailsFactoryProtocol {
         onMovieDetails: @escaping (Movie) -> Void,
         onNewsDetails: @escaping (News) -> Void,
         onShowMiniBiography: @escaping (ActorDetails) -> Void,
-        onShowSeeAll: @escaping (SeeAllContent) -> Void
+        onShowSeeAll: @escaping (SeeAllContent) -> Void,
+        onShowVideos: @escaping (VideoPlaylistContext) -> Void
     ) -> UIViewController {
         let apiClient = URLSessionAPIClient()
         let tmdbConfiguration = TMDBConfiguration(
@@ -102,6 +103,7 @@ public struct ActorDetailsFactory: ActorDetailsFactoryProtocol {
         viewModel.onNewsDetails = onNewsDetails
         viewModel.onShowMiniBiography = onShowMiniBiography
         viewModel.onShowSeeAll = onShowSeeAll
+        viewModel.onShowVideos = onShowVideos
         viewModel.onActorViewed = { (actor: ActorDetails) in
             Task {
                 let recentlyViewedActor = RecentlyViewedActor(

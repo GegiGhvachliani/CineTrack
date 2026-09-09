@@ -44,7 +44,8 @@ public struct MovieDetailsFactory: MovieDetailsFactoryProtocol {
         onMovieDetails: @escaping (Movie) -> Void,
         onActorDetails: @escaping (Int) -> Void,
         onNewsDetails: @escaping (News) -> Void,
-        onShowSeeAll: @escaping (SeeAllContent) -> Void
+        onShowSeeAll: @escaping (SeeAllContent) -> Void,
+        onShowVideos: @escaping (VideoPlaylistContext) -> Void
     ) -> UIViewController {
         // MARK: - API client
 
@@ -118,6 +119,7 @@ public struct MovieDetailsFactory: MovieDetailsFactoryProtocol {
         viewModel.onActorDetails = onActorDetails
         viewModel.onNewsDetails = onNewsDetails
         viewModel.onShowSeeAll = onShowSeeAll
+        viewModel.onShowVideos = onShowVideos
         viewModel.onMovieViewed = { (movie: Movie) in
             Task {
                 let recentlyViewedMovie = RecentlyViewedMovie(

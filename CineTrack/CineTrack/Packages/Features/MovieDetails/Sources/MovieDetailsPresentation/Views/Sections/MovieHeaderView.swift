@@ -9,6 +9,7 @@ struct MovieHeaderView: View {
     let movie: MovieDetails
     let videos: [MovieVideo]
     let isVideosLoading: Bool
+    let onVideoTap: (MovieVideo) -> Void
 
     var body: some View {
         if isVideosLoading || !trailerVideos.isEmpty {
@@ -18,7 +19,14 @@ struct MovieHeaderView: View {
                 items: trailerVideos,
                 isLoading: isVideosLoading
             ) { video in
-                trailerCell(for: video)
+                Button {
+                    onVideoTap(video)
+                } label: {
+                    trailerCell(for: video)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Play \(video.name)")
             }
         } else {
             Text(movie.title)

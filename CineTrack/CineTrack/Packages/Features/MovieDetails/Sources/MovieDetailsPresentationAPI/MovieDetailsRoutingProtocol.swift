@@ -6,4 +6,5 @@ public protocol MovieDetailsRoutingProtocol: AnyObject {
     func showActorDetails(actorID: Int)
     func showNewsDetails(news: News)
     func showSeeAll(content: SeeAllContent)
+    func showVideosList(context: VideoPlaylistContext)
 }

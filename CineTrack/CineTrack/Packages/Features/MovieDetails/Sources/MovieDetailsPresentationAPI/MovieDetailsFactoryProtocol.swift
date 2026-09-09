@@ -21,6 +21,7 @@ public protocol MovieDetailsFactoryProtocol {
         onMovieDetails: @escaping (Movie) -> Void,
         onActorDetails: @escaping (Int) -> Void,
         onNewsDetails: @escaping (News) -> Void,
-        onShowSeeAll: @escaping (SeeAllContent) -> Void
+        onShowSeeAll: @escaping (SeeAllContent) -> Void,
+        onShowVideos: @escaping (VideoPlaylistContext) -> Void
     ) -> UIViewController
 }

@@ -4,10 +4,15 @@ import DesignSystemTokens
 
 public struct MovieVideosSectionView: View {
     private let videos: [MovieVideo]
+    private let onVideoTap: ((MovieVideo) -> Void)?
     @State private var selectedVideo: MovieVideo?
 
-    public init(videos: [MovieVideo]) {
+    public init(
+        videos: [MovieVideo],
+        onVideoTap: ((MovieVideo) -> Void)? = nil
+    ) {
         self.videos = videos
+        self.onVideoTap = onVideoTap
     }
 
     public var body: some View {
@@ -15,7 +20,7 @@ public struct MovieVideosSectionView: View {
             VStack(spacing: 6) {
                 sectionHeader
                 VideoCell(video: featuredVideo, width: nil, height: 200) {
-                    selectedVideo = featuredVideo
+                    handleVideoTap(featuredVideo)
                 }
                 .padding(.horizontal, 16)
 
@@ -24,7 +29,7 @@ public struct MovieVideosSectionView: View {
                         LazyHStack(spacing: 10) {
                             ForEach(videos.dropFirst()) { video in
                                 VideoCell(video: video, width: 120, height: 75) {
-                                    selectedVideo = video
+                                    handleVideoTap(video)
                                 }
                             }
                         }
@@ -49,6 +54,14 @@ public struct MovieVideosSectionView: View {
             Spacer()
         }
         .padding(.horizontal)
+    }
+
+    private func handleVideoTap(_ video: MovieVideo) {
+        if let onVideoTap {
+            onVideoTap(video)
+        } else {
+            selectedVideo = video
+        }
     }
 }
 

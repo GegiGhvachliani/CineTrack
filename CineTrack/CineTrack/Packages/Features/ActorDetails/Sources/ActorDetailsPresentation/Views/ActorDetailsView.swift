@@ -40,6 +40,7 @@ public struct ActorDetailsView: View {
         }
         .navigationTitle(navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.visible, for: .navigationBar)
     }
 
     // MARK: - Actor details content
@@ -148,7 +149,10 @@ public struct ActorDetailsView: View {
     @ViewBuilder
     private var videosSection: some View {
         if !viewModel.actorVideos.isEmpty {
-            VideoSectionView(videos: viewModel.actorVideos)
+            VideoSectionView(
+                videos: viewModel.actorVideos,
+                onVideoTap: viewModel.didTapVideo
+            )
         }
     }
 

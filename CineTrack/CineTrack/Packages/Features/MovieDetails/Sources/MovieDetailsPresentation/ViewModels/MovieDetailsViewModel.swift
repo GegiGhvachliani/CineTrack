@@ -20,16 +20,19 @@ public final class MovieDetailsViewModel {
     public internal(set) var selectedActorMovies: [Movie] = []
     public internal(set) var news: [News] = []
 
-    public var featuredVideo: MovieVideo? {
-        videos.sorted(by: videoSortOrder).first
+    public var videosSectionFeaturedVideo: MovieVideo? {
+        videos
+            .filter { $0.type != .trailer }
+            .sorted(by: videoSortOrder)
+            .first
     }
 
-    public var additionalVideos: [MovieVideo] {
-        guard let featuredVideo else {
+    public var videosSectionAdditionalVideos: [MovieVideo] {
+        guard let videosSectionFeaturedVideo else {
             return []
         }
 
-        return videos.filter { $0.id != featuredVideo.id }
+        return videos.filter { $0.id != videosSectionFeaturedVideo.id }
     }
 
     // MARK: - Watchlist
@@ -64,6 +67,7 @@ public final class MovieDetailsViewModel {
     public var onMovieViewed: ((Movie) -> Void)?
     public var onNewsDetails: ((News) -> Void)?
     public var onShowSeeAll: ((SeeAllContent) -> Void)?
+    public var onShowVideos: ((VideoPlaylistContext) -> Void)?
 
     // MARK: - Dependencies
 
@@ -120,6 +124,16 @@ public final class MovieDetailsViewModel {
 
     public func didTapNews(_ news: News) {
         onNewsDetails?(news)
+    }
+
+    public func didTapVideo(_ video: MovieVideo) {
+        onShowVideos?(
+            VideoPlaylistContext(
+                movie: movie,
+                selectedVideo: video,
+                source: .movieDetails
+            )
+        )
     }
 
     public func didTapSeeAllCast() {

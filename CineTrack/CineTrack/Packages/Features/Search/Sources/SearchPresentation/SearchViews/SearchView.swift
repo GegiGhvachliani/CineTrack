@@ -43,7 +43,7 @@ public struct SearchView: View {
                     searchResults(viewModel: viewModel)
                 }
                 .padding(.horizontal, 8)
-                .padding(.top, -10)
+                .padding(.top, 50)
                 .padding(.bottom, 32)
             }
             .scrollIndicators(.hidden)

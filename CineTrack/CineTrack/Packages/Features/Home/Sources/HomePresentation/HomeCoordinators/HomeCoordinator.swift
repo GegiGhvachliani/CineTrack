@@ -41,7 +41,13 @@ public final class HomeCoordinator: HomeCoordinatorProtocol {
         router.showMovieDetails(movie: movie)
     }
     public func showVideos(item: FeaturedItem) {
-        router.showVideosList(item: item)
+        router.showVideosList(
+            context: VideoPlaylistContext(
+                movie: item.movie,
+                selectedVideo: item.video,
+                source: .home
+            )
+        )
     }
     public func showActorDetails(actorID: Int) {
         router.showActorDetails(actorID: actorID)

@@ -36,6 +36,7 @@ public struct MovieDetailsView: View {
         }
         .navigationTitle(isNavigationTitleVisible ? viewModel.movie.title : "")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.visible, for: .navigationBar)
     }
 
     private var movieDetailsContent: some View {
@@ -78,7 +79,8 @@ public struct MovieDetailsView: View {
                 MovieHeaderView(
                     movie: movieDetails,
                     videos: viewModel.videos,
-                    isVideosLoading: viewModel.isVideosLoading
+                    isVideosLoading: viewModel.isVideosLoading,
+                    onVideoTap: viewModel.didTapVideo
                 )
 
                 MovieInfoSectionView(
@@ -127,8 +129,11 @@ public struct MovieDetailsView: View {
 
     @ViewBuilder
     private var videosSection: some View {
-        if let featuredVideo = viewModel.featuredVideo {
-            MovieVideosSectionView(videos: [featuredVideo] + viewModel.additionalVideos)
+        if let featuredVideo = viewModel.videosSectionFeaturedVideo {
+            MovieVideosSectionView(
+                videos: [featuredVideo] + viewModel.videosSectionAdditionalVideos,
+                onVideoTap: viewModel.didTapVideo
+            )
         }
     }
 

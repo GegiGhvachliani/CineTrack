@@ -39,6 +39,7 @@ public struct NewsDetailsView: View {
         .background(ColorTokens.Background.secondary)
         .navigationTitle("News")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.visible, for: .navigationBar)
     }
 
     // MARK: - Header

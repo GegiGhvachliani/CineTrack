@@ -90,7 +90,9 @@ let package = Package(
                 "VideosListDomain",
                 "VideosListData",
                 "VideosListPresentation",
-                "VideosListPresentationAPI"
+                "VideosListPresentationAPI",
+                .product(name: "SharedNetworking", package: "SharedKit"),
+                .product(name: "TMDBData", package: "TMDBData")
             ],
             path: "Sources/VideosListAssembly"
         ),
