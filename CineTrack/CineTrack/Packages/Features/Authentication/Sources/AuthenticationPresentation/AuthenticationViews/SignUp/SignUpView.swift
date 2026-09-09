@@ -20,18 +20,20 @@ public struct SignUpView<ViewModel: SignUpViewModelProtocol>: View {
             ColorTokens.Background.primary
                 .ignoresSafeArea()
 
-            VStack(spacing: 10) {
-                Spacer()
-
-                headerSection
-
-                middleSection
-
-                belowSection
-
-                Spacer()
+            GeometryReader { geometry in
+                ScrollView {
+                    VStack(spacing: 10) {
+                        Spacer()
+                        headerSection
+                        middleSection
+                        belowSection
+                        Spacer()
+                    }
+                    .frame(minHeight: geometry.size.height)
+                    .padding()
+                }
+                .scrollDismissesKeyboard(.interactively)
             }
-            .padding()
         }
         .navigationBarBackButtonHidden()
         .errorModal(message: $viewModel.errorMessage)
@@ -46,7 +48,6 @@ public struct SignUpView<ViewModel: SignUpViewModelProtocol>: View {
                 .foregroundStyle(ColorTokens.Text.secondary)
                 .multilineTextAlignment(.center)
         }
-        .padding(.top, 20)
         .padding(.bottom, 40)
     }
 

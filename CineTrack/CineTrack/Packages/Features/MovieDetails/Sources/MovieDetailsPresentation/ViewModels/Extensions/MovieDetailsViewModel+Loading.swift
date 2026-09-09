@@ -33,6 +33,8 @@ extension MovieDetailsViewModel {
             return
         }
 
+        onMovieViewed?(movie)
+
         hasLoadedInitialContent = true
 
         async let castTask: Void = loadCastAndRelatedActorMovies()

@@ -20,27 +20,28 @@ public struct ForgotPasswordView<ViewModel: SignInViewModelProtocol>: View {
         ZStack {
             ColorTokens.Background.primary
                 .ignoresSafeArea()
-            
-            VStack(spacing: 5) {
-                
+
+            GeometryReader { geometry in
+                VStack(spacing: 5) {
+                    Spacer()
+
                 VStack(spacing: 8) {
                     Text(AuthenticationStrings.ForgotPassword.title)
                         .font(TypographyTokens.title2)
-                    
+
                     Text(AuthenticationStrings.ForgotPassword.subtitle)
                         .font(TypographyTokens.body)
                         .foregroundStyle(ColorTokens.Text.secondary)
                         .multilineTextAlignment(.center)
                 }
-                .padding(.top, 30)
                 .padding(.bottom, 20)
-                
+
                 EmailFieldView(
                     email: $viewModel.forgotPasswordEmail,
                     text: AuthenticationStrings.SignIn.emailPlaceholder
                 )
                 .padding(.bottom, 20)
-                
+
                 ButtonView(
                     title: AuthenticationStrings.ForgotPassword.sendButton,
                     isLoading: viewModel.isLoading
@@ -52,10 +53,12 @@ public struct ForgotPasswordView<ViewModel: SignInViewModelProtocol>: View {
                         }
                     }
                 }
-                
+
                 Spacer()
+                }
+                .frame(minHeight: geometry.size.height)
+                .padding()
             }
-            .padding()
         }
         .errorModal(message: $viewModel.forgotPasswordErrorMessage)
     }

@@ -5,6 +5,7 @@
 
 import Foundation
 
+import HomeDomain
 import SearchDomain
 import SharedCore
 
@@ -48,7 +49,13 @@ enum SearchPreviewData {
         let viewModel = SearchViewModel(
             searchMoviesUseCase: PreviewSearchMoviesUseCase(),
             searchActorsUseCase: PreviewSearchActorsUseCase(),
-            discoverMoviesUseCase: PreviewDiscoverMoviesUseCase()
+            discoverMoviesUseCase: PreviewDiscoverMoviesUseCase(),
+            fetchWatchlistedMoviesUseCase: PreviewFetchWatchlistedMoviesUseCase(),
+            addWatchlistedMovieUseCase: PreviewAddWatchlistedMovieUseCase(),
+            removeWatchlistedMovieUseCase: PreviewRemoveWatchlistedMovieUseCase(),
+            fetchFavouritedActorsUseCase: PreviewFetchFavouritedActorsUseCase(),
+            addFavouritedActorUseCase: PreviewAddFavouritedActorUseCase(),
+            removeFavouritedActorUseCase: PreviewRemoveFavouritedActorUseCase()
         )
 
         viewModel.movies = movies
@@ -74,4 +81,28 @@ private struct PreviewDiscoverMoviesUseCase: DiscoverMoviesUseCaseProtocol {
     func execute(filters: SearchFilters, page: Int) async throws -> [Movie] {
         SearchPreviewData.movies
     }
+}
+
+private struct PreviewFetchWatchlistedMoviesUseCase: FetchWatchlistedMoviesUseCaseProtocol {
+    func execute() async throws -> [Movie] { [] }
+}
+
+private struct PreviewAddWatchlistedMovieUseCase: AddWatchlistedMovieUseCaseProtocol {
+    func execute(movie: Movie) async throws {}
+}
+
+private struct PreviewRemoveWatchlistedMovieUseCase: RemoveWatchlistedMovieUseCaseProtocol {
+    func execute(movie: Movie) async throws {}
+}
+
+private struct PreviewFetchFavouritedActorsUseCase: FetchFavouritedActorsUseCaseProtocol {
+    func execute() async throws -> [Actor] { [] }
+}
+
+private struct PreviewAddFavouritedActorUseCase: AddFavouritedActorUseCaseProtocol {
+    func execute(actor: Actor) async throws {}
+}
+
+private struct PreviewRemoveFavouritedActorUseCase: RemoveFavouritedActorUseCaseProtocol {
+    func execute(actor: Actor) async throws {}
 }

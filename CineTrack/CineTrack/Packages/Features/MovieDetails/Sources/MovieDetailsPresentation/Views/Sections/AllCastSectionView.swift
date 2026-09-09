@@ -7,14 +7,16 @@ import MovieDetailsDomain
 struct AllCastSectionView: View {
     let cast: [MovieCastMember]
     let onActorTap: (MovieCastMember) -> Void
+    let onSeeAllTap: () -> Void
 
     var body: some View {
         HorizontalScrollView(
             headerText: "All Cast",
             seeAllTitle: "See All",
             items: cast,
-            showsSeeAllButton: false,
-            itemSpacing: 12
+            showsSeeAllButton: true,
+            itemSpacing: 12,
+            onSeeAllTap: onSeeAllTap
         ) { actor, _ in
             Button {
                 onActorTap(actor)

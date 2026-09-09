@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import Foundation
 
 import DesignSystemTokens
 import SearchDomain
@@ -15,7 +16,7 @@ struct AdvancedSearchFiltersSectionView: View {
     let onReset: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 7) {
             sectionHeader
             ratingSection
             voteCountSection
@@ -54,7 +55,10 @@ struct AdvancedSearchFiltersSectionView: View {
 
     private var voteCountSection: some View {
         filterCard {
-            filterRow(title: "Total Votes", values: [100, 500, 1_000, 3_000, 10_000]) { value in
+            filterRow(
+                title: "Total Votes",
+                values: [100, 500, 1_000, 2_500, 5_000, 10_000, 25_000, 50_000, 100_000, 250_000, 500_000, 1_000_000]
+            ) { value in
                 filters.minimumVoteCount = filters.minimumVoteCount == value ? nil : value
             } isSelected: { value in
                 filters.minimumVoteCount == value
@@ -78,37 +82,44 @@ struct AdvancedSearchFiltersSectionView: View {
 
     private var releaseYearSection: some View {
         filterCard {
-            filterRow(title: "Release Year", values: [2026, 2025, 2024, 2023, 2020, 2015, 2010, 2000]) { value in
-                filters.releaseYear = filters.releaseYear == value ? nil : value
-            } isSelected: { value in
-                filters.releaseYear == value
-            } label: { String($0) }
+            rangeSection(title: "Release Year") {
+                SearchRangeSlider(
+                    bounds: Self.releaseYearBounds,
+                    step: 1,
+                    lowerTitle: releaseYearTitle,
+                    upperTitle: releaseYearTitle,
+                    lowerValue: releaseYearLowerBinding,
+                    upperValue: releaseYearUpperBinding
+                )
+            }
         }
     }
 
     private var runtimeSection: some View {
         filterCard {
-            filterRow(title: "Runtime", values: Self.runtimeOptions) { option in
-                if filters.minimumRuntime == option.minimum,
-                   filters.maximumRuntime == option.maximum {
-                    filters.minimumRuntime = nil
-                    filters.maximumRuntime = nil
-                } else {
-                    filters.minimumRuntime = option.minimum
-                    filters.maximumRuntime = option.maximum
-                }
-            } isSelected: { option in
-                filters.minimumRuntime == option.minimum && filters.maximumRuntime == option.maximum
-            } label: { $0.title }
+            rangeSection(title: "Runtime") {
+                SearchRangeSlider(
+                    bounds: Self.runtimeBounds,
+                    step: 5,
+                    lowerTitle: runtimeLowerTitle,
+                    upperTitle: runtimeUpperTitle,
+                    lowerValue: runtimeLowerBinding,
+                    upperValue: runtimeUpperBinding
+                )
+            }
         }
     }
 
     private var regionSection: some View {
         filterCard {
-            filterRow(title: "Region", values: Self.regions) { region in
-                filters.region = filters.region == region.code ? nil : region.code
+            filterRow(title: "Production Region", values: Self.regions) { region in
+                if filters.originCountryCodes.contains(region.code) {
+                    filters.originCountryCodes.removeAll { $0 == region.code }
+                } else {
+                    filters.originCountryCodes.append(region.code)
+                }
             } isSelected: { region in
-                filters.region == region.code
+                filters.originCountryCodes.contains(region.code)
             } label: { $0.name }
         }
     }
@@ -117,9 +128,23 @@ struct AdvancedSearchFiltersSectionView: View {
 
     private func filterCard<Content: View>(@ViewBuilder content: () -> Content) -> some View {
         content()
-            .padding(14)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 9)
             .background(.clear)
             .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+
+    private func rangeSection<Content: View>(
+        title: String,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(title)
+                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .foregroundStyle(ColorTokens.Text.main)
+
+            content()
+        }
     }
 
     private func filterRow<Value: Hashable>(
@@ -149,6 +174,48 @@ struct AdvancedSearchFiltersSectionView: View {
             .scrollIndicators(.hidden)
         }
     }
+
+    // MARK: - Range bindings
+
+    private var releaseYearLowerBinding: Binding<Int> {
+        Binding(
+            get: { filters.minimumReleaseYear ?? Self.releaseYearBounds.lowerBound },
+            set: { filters.minimumReleaseYear = $0 == Self.releaseYearBounds.lowerBound ? nil : $0 }
+        )
+    }
+
+    private var releaseYearUpperBinding: Binding<Int> {
+        Binding(
+            get: { filters.maximumReleaseYear ?? Self.releaseYearBounds.upperBound },
+            set: { filters.maximumReleaseYear = $0 == Self.releaseYearBounds.upperBound ? nil : $0 }
+        )
+    }
+
+    private var runtimeLowerBinding: Binding<Int> {
+        Binding(
+            get: { filters.minimumRuntime ?? Self.runtimeBounds.lowerBound },
+            set: { filters.minimumRuntime = $0 == Self.runtimeBounds.lowerBound ? nil : $0 }
+        )
+    }
+
+    private var runtimeUpperBinding: Binding<Int> {
+        Binding(
+            get: { filters.maximumRuntime ?? Self.runtimeBounds.upperBound },
+            set: { filters.maximumRuntime = $0 == Self.runtimeBounds.upperBound ? nil : $0 }
+        )
+    }
+
+    private func releaseYearTitle(_ year: Int) -> String {
+        String(year)
+    }
+
+    private func runtimeLowerTitle(_ runtime: Int) -> String {
+        runtime == Self.runtimeBounds.lowerBound ? "Any" : "\(runtime) min"
+    }
+
+    private func runtimeUpperTitle(_ runtime: Int) -> String {
+        runtime == Self.runtimeBounds.upperBound ? "Any" : "\(runtime) min"
+    }
 }
 
 // MARK: - Filter options
@@ -160,12 +227,6 @@ private extension AdvancedSearchFiltersSectionView {
         let name: String
     }
 
-    struct RuntimeOption: Hashable {
-        let title: String
-        let minimum: Int?
-        let maximum: Int?
-    }
-
     struct Region: Hashable {
         let code: String
         let name: String
@@ -174,24 +235,50 @@ private extension AdvancedSearchFiltersSectionView {
     static let genres = [
         Genre(id: 28, name: "Action"), Genre(id: 12, name: "Adventure"),
         Genre(id: 16, name: "Animation"), Genre(id: 35, name: "Comedy"),
-        Genre(id: 80, name: "Crime"), Genre(id: 18, name: "Drama"),
-        Genre(id: 10751, name: "Family"), Genre(id: 14, name: "Fantasy"),
-        Genre(id: 27, name: "Horror"), Genre(id: 878, name: "Sci-Fi"),
-        Genre(id: 53, name: "Thriller")
+        Genre(id: 80, name: "Crime"), Genre(id: 99, name: "Documentary"),
+        Genre(id: 18, name: "Drama"), Genre(id: 10751, name: "Family"),
+        Genre(id: 14, name: "Fantasy"), Genre(id: 36, name: "History"),
+        Genre(id: 27, name: "Horror"), Genre(id: 10402, name: "Music"),
+        Genre(id: 9648, name: "Mystery"), Genre(id: 10749, name: "Romance"),
+        Genre(id: 878, name: "Science Fiction"), Genre(id: 10770, name: "TV Movie"),
+        Genre(id: 53, name: "Thriller"), Genre(id: 10752, name: "War"),
+        Genre(id: 37, name: "Western")
     ]
 
-    static let runtimeOptions = [
-        RuntimeOption(title: "Under 90 min", minimum: nil, maximum: 89),
-        RuntimeOption(title: "90–120 min", minimum: 90, maximum: 120),
-        RuntimeOption(title: "120–150 min", minimum: 120, maximum: 150),
-        RuntimeOption(title: "150+ min", minimum: 150, maximum: nil)
-    ]
+    static let releaseYearBounds = 1900...Calendar.current.component(.year, from: .now)
+    static let runtimeBounds = 0...360
 
     static let regions = [
-        Region(code: "US", name: "United States"), Region(code: "GB", name: "United Kingdom"),
-        Region(code: "GE", name: "Georgia"), Region(code: "FR", name: "France"),
-        Region(code: "DE", name: "Germany"), Region(code: "JP", name: "Japan"),
-        Region(code: "KR", name: "South Korea"), Region(code: "IN", name: "India")
+        Region(code: "US", name: "United States"),
+        Region(code: "IN", name: "India"),
+        Region(code: "GB", name: "United Kingdom"),
+        Region(code: "FR", name: "France"),
+        Region(code: "JP", name: "Japan"),
+        Region(code: "KR", name: "South Korea"),
+        Region(code: "DE", name: "Germany"),
+        Region(code: "IT", name: "Italy"),
+        Region(code: "ES", name: "Spain"),
+        Region(code: "CN", name: "China"),
+        Region(code: "CA", name: "Canada"),
+        Region(code: "AU", name: "Australia"),
+        Region(code: "MX", name: "Mexico"),
+        Region(code: "BR", name: "Brazil"),
+        Region(code: "RU", name: "Russia"),
+        Region(code: "HK", name: "Hong Kong"),
+        Region(code: "SE", name: "Sweden"),
+        Region(code: "DK", name: "Denmark"),
+        Region(code: "NO", name: "Norway"),
+        Region(code: "NL", name: "Netherlands"),
+        Region(code: "BE", name: "Belgium"),
+        Region(code: "CH", name: "Switzerland"),
+        Region(code: "AT", name: "Austria"),
+        Region(code: "IE", name: "Ireland"),
+        Region(code: "NZ", name: "New Zealand"),
+        Region(code: "AR", name: "Argentina"),
+        Region(code: "TR", name: "Turkey"),
+        Region(code: "TH", name: "Thailand"),
+        Region(code: "ID", name: "Indonesia"),
+        Region(code: "PH", name: "Philippines")
     ]
 }
 

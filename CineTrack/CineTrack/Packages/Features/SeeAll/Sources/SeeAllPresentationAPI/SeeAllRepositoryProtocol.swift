@@ -18,3 +18,4 @@ public protocol SeeAllFactoryProtocol {
         onNewsTap: @escaping (News) -> Void
     ) -> UIViewController
 }
+

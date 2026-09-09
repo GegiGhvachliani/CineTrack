@@ -166,7 +166,9 @@ public struct BiographySectionView: View {
                 RoundedRectangle(cornerRadius: 5)
                     .stroke(ColorTokens.Brand.primary, lineWidth: isFavourite ? 0 : 1)
             )
+            .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
         .disabled(isFavouriteUpdating)
     }
 

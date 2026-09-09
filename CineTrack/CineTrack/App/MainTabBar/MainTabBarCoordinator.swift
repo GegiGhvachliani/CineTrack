@@ -125,10 +125,6 @@ final class MainTabBarCoordinator: Coordinator, HomeRoutingProtocol, SearchRouti
         tabBarController.selectedViewController as? UINavigationController ?? homeNavigationController
     }
 
-    func showSeeAll(section: HomeSection) {
-        // ActorDetails still exposes this route; its data-backed modal is added with the feature's filmography flow.
-    }
-    
     func showVideosList(item: FeaturedItem) {
         let viewController = container.videosListFactory.makeVideosListViewController(item: item)
         

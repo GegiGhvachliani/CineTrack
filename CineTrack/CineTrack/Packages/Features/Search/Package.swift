@@ -52,6 +52,10 @@ let package = Package(
                     name: "HomePresentation",
                     package: "Home"
                 ),
+                .product(
+                    name: "HomeDomain",
+                    package: "Home"
+                ),
             ],
             path: "Sources/SearchPresentation"
         ),
@@ -72,7 +76,11 @@ let package = Package(
                 "SearchPresentation",
                 "SearchPresentationAPI",
                 .product(name: "SharedNetworking", package: "SharedKit"),
-                .product(name: "TMDBData", package: "TMDBData")
+                .product(name: "TMDBData", package: "TMDBData"),
+                .product(name: "SharedAuth", package: "SharedKit"),
+                .product(name: "SharedStorage", package: "SharedKit"),
+                .product(name: "HomeData", package: "Home"),
+                .product(name: "HomeDomain", package: "Home")
             ],
             path: "Sources/SearchAssembly"
         ),

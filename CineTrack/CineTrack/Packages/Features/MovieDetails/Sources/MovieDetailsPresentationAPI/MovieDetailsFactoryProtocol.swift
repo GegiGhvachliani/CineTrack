@@ -20,6 +20,7 @@ public protocol MovieDetailsFactoryProtocol {
         movie: Movie,
         onMovieDetails: @escaping (Movie) -> Void,
         onActorDetails: @escaping (Int) -> Void,
-        onNewsDetails: @escaping (News) -> Void
+        onNewsDetails: @escaping (News) -> Void,
+        onShowSeeAll: @escaping (SeeAllContent) -> Void
     ) -> UIViewController
 }

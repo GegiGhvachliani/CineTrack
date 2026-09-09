@@ -18,6 +18,8 @@ import MovieDetailsData
 import MovieDetailsDomain
 import MovieDetailsPresentation
 import MovieDetailsPresentationAPI
+import HomeData
+import HomeDomain
 
 @MainActor
 public struct MovieDetailsFactory: MovieDetailsFactoryProtocol {
@@ -41,7 +43,8 @@ public struct MovieDetailsFactory: MovieDetailsFactoryProtocol {
         movie: Movie,
         onMovieDetails: @escaping (Movie) -> Void,
         onActorDetails: @escaping (Int) -> Void,
-        onNewsDetails: @escaping (News) -> Void
+        onNewsDetails: @escaping (News) -> Void,
+        onShowSeeAll: @escaping (SeeAllContent) -> Void
     ) -> UIViewController {
         // MARK: - API client
 
@@ -67,7 +70,11 @@ public struct MovieDetailsFactory: MovieDetailsFactoryProtocol {
             configuration: tmdbConfiguration,
             newsConfiguration: newsConfiguration
         )
-        let watchlistRepository = WatchlistRepository(
+        let watchlistRepository = MovieDetailsData.WatchlistRepository(
+            firestore: FirestoreClient(),
+            userSession: FirebaseUserSession()
+        )
+        let recentlyViewedRepository = RecentlyViewedRepository(
             firestore: FirestoreClient(),
             userSession: FirebaseUserSession()
         )
@@ -110,6 +117,23 @@ public struct MovieDetailsFactory: MovieDetailsFactoryProtocol {
         viewModel.onMovieDetails = onMovieDetails
         viewModel.onActorDetails = onActorDetails
         viewModel.onNewsDetails = onNewsDetails
+        viewModel.onShowSeeAll = onShowSeeAll
+        viewModel.onMovieViewed = { (movie: Movie) in
+            Task {
+                let recentlyViewedMovie = RecentlyViewedMovie(
+                    id: movie.id,
+                    title: movie.title,
+                    posterPath: movie.posterPath,
+                    releaseDate: movie.releaseDate,
+                    voteAverage: movie.voteAverage,
+                    viewedAt: .now
+                )
+
+                try? await recentlyViewedRepository.addRecentlyViewedMovie(
+                    recentlyViewedMovie
+                )
+            }
+        }
 
         let view = MovieDetailsView(viewModel: viewModel)
 

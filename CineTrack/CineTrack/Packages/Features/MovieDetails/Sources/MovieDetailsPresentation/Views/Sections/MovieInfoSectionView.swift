@@ -71,6 +71,7 @@ struct MovieInfoSectionView: View {
                 RoundedRectangle(cornerRadius: 5)
                     .stroke(ColorTokens.Brand.primary, lineWidth: isWatchlisted ? 0 : 1)
             }
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .disabled(isWatchlistUpdating)

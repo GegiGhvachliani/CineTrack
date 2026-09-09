@@ -18,9 +18,11 @@ extension HomeViewModel {
     public func refreshPersonalizedContent() async {
         async let watchlistTask: Void = loadWatchlist()
         async let favouritesTask: Void = loadFavourites()
+        async let recentlyViewedTask: Void = loadRecentlyViewed()
 
         await watchlistTask
         await favouritesTask
+        await recentlyViewedTask
     }
 
     // MARK: - Load

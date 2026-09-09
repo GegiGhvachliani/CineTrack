@@ -58,10 +58,11 @@ public final class SearchRepository: SearchRepositoryProtocol {
                 minimumRating: filters.minimumRating,
                 minimumVoteCount: filters.minimumVoteCount,
                 genreIDs: filters.genreIDs,
-                releaseYear: filters.releaseYear,
+                minimumReleaseYear: filters.minimumReleaseYear,
+                maximumReleaseYear: filters.maximumReleaseYear,
                 minimumRuntime: filters.minimumRuntime,
                 maximumRuntime: filters.maximumRuntime,
-                region: filters.region,
+                originCountryCodes: filters.originCountryCodes,
                 keywordIDs: []
             )
         )

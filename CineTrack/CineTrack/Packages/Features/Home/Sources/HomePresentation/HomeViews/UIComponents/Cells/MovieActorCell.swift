@@ -53,6 +53,7 @@ public struct MovieActorCell: View {
                     topTrailingRadius: 5
                 )
             )
+            .contentShape(Rectangle())
         }
     }
 

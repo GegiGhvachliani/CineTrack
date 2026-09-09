@@ -5,6 +5,19 @@ public enum SeeAllPayload {
     case movies([Movie])
     case actors([Actor])
     case news([News])
+    case images([GalleryImage])
+}
+
+public struct GalleryImage: Identifiable, Sendable, Equatable {
+    public let id: String
+    public let url: URL
+    public let aspectRatio: Double
+
+    public init(id: String, url: URL, aspectRatio: Double) {
+        self.id = id
+        self.url = url
+        self.aspectRatio = aspectRatio
+    }
 }
 
 @MainActor

@@ -49,6 +49,8 @@ extension ActorDetailsViewModel {
             return
         }
 
+        onActorViewed?(actor)
+
         if force {
             resetSectionContent()
         }

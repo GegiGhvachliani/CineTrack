@@ -22,7 +22,7 @@ public struct OnboardingPageView: View {
     public var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .bottom) {
-                ColorTokens.Background.main.ignoresSafeArea()
+                ColorTokens.Background.primary.ignoresSafeArea()
                 
                 VStack {
                     movieImageView
@@ -45,7 +45,7 @@ public struct OnboardingPageView: View {
                 .offset(y: 30)
                 .background(
                     Rectangle()
-                        .fill(ColorTokens.Background.main)
+                        .fill(ColorTokens.Background.primary)
                 )
                 
             }
@@ -86,7 +86,7 @@ public struct OnboardingPageView: View {
         Button(action: action) {
             Text(page.buttonText)
                 .font(TypographyTokens.headline)
-                .foregroundStyle(ColorTokens.Background.main)
+                .foregroundStyle(ColorTokens.Background.primary)
                 .frame(maxWidth: .infinity)
                 .frame(height: 50)
                 .background(ColorTokens.Brand.primary)

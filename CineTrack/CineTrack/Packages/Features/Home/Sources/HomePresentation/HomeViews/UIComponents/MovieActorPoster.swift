@@ -32,7 +32,7 @@ struct MovieActorPoster: View {
 
     private var actorProfileImage: some View {
         Group {
-            if let photoURL, let url = URL(string: photoURL) {
+            if let photoURL, let url = imageURL(from: photoURL) {
                 AsyncImage(url: url) { phase in
                     switch phase {
                     case .empty:
@@ -72,6 +72,14 @@ struct MovieActorPoster: View {
                     .font(.system(size: 34, weight: .medium))
                     .foregroundStyle(ColorTokens.Brand.primary.opacity(0.8))
             }
+    }
+
+    private func imageURL(from path: String) -> URL? {
+        if path.hasPrefix("http") {
+            return URL(string: path)
+        }
+
+        return URL(string: "https://image.tmdb.org/t/p/w500\(path)")
     }
 
     private var favouriteButton: some View {

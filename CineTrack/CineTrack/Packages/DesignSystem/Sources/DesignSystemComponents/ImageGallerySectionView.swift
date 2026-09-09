@@ -5,17 +5,20 @@ public struct ImageGallerySectionView<Item: Identifiable>: View {
     private let imageURL: (Item) -> URL
     private let aspectRatio: (Item) -> Double
     private let onLoadMore: (() -> Void)?
+    private let onSeeAllTap: (() -> Void)?
     @State private var showsGallery = false
 
     public init(
         items: [Item],
         imageURL: @escaping (Item) -> URL,
         aspectRatio: @escaping (Item) -> Double,
+        onSeeAllTap: (() -> Void)? = nil,
         onLoadMore: (() -> Void)? = nil
     ) {
         self.items = items
         self.imageURL = imageURL
         self.aspectRatio = aspectRatio
+        self.onSeeAllTap = onSeeAllTap
         self.onLoadMore = onLoadMore
     }
 
@@ -26,7 +29,13 @@ public struct ImageGallerySectionView<Item: Identifiable>: View {
                 seeAllTitle: "See All",
                 items: items,
                 itemSpacing: 10,
-                onSeeAllTap: { showsGallery = true },
+                onSeeAllTap: {
+                    if let onSeeAllTap {
+                        onSeeAllTap()
+                    } else {
+                        showsGallery = true
+                    }
+                },
                 onLoadMore: onLoadMore
             ) { item, _ in
                 imageCell(item, height: 133)

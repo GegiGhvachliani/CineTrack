@@ -21,10 +21,14 @@ struct SearchResultsSectionView: View {
     let errorMessage: String?
     let hasSearched: Bool
     let selectedMode: SearchMode
+    let watchlistedMovieIDs: Set<Int>
+    let favouritedActorIDs: Set<Int>
 
     let onLoadMore: () -> Void
     let onMovieTap: (Movie) -> Void
     let onActorTap: (Actor) -> Void
+    let onWatchlistTap: (Movie) -> Void
+    let onFavouriteTap: (Actor) -> Void
 
     var body: some View {
         Group {
@@ -69,10 +73,10 @@ struct SearchResultsSectionView: View {
             ForEach(movies) { movie in
                 MovieCell(
                     movie: movie,
-                    isWatchlisted: false,
+                    isWatchlisted: watchlistedMovieIDs.contains(movie.id),
                     cellHeight: 216,
                     onMovieTap: { onMovieTap(movie) },
-                    onWatchlistTap: {}
+                    onWatchlistTap: { onWatchlistTap(movie) }
                 )
                 .onAppear {
                     loadMoreIfNeeded(for: movie.id, in: movies.map(\.id))
@@ -83,9 +87,9 @@ struct SearchResultsSectionView: View {
                 MovieActorCell(
                     actor: actor,
                     cellHeight: 216,
-                    isFavourited: false,
+                    isFavourited: favouritedActorIDs.contains(actor.id),
                     onActorTap: { onActorTap(actor) },
-                    onFavouriteTap: {}
+                    onFavouriteTap: { onFavouriteTap(actor) }
                 )
                 .onAppear {
                     loadMoreIfNeeded(for: actor.id, in: actors.map(\.id))
@@ -118,9 +122,13 @@ struct SearchResultsSectionView: View {
         errorMessage: nil,
         hasSearched: true,
         selectedMode: .recent,
+        watchlistedMovieIDs: [],
+        favouritedActorIDs: [],
         onLoadMore: {},
         onMovieTap: { _ in },
-        onActorTap: { _ in }
+        onActorTap: { _ in },
+        onWatchlistTap: { _ in },
+        onFavouriteTap: { _ in }
     )
     .padding()
     .background(ColorTokens.Background.main)

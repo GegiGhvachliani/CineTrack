@@ -43,10 +43,18 @@ public struct SearchView: View {
                     searchResults(viewModel: viewModel)
                 }
                 .padding(.horizontal, 8)
-                .padding(.top, 8)
+                .padding(.top, -10)
                 .padding(.bottom, 32)
             }
             .scrollIndicators(.hidden)
+        }
+        .task {
+            await viewModel.loadPersonalization()
+        }
+        .onAppear {
+            Task {
+                await viewModel.loadPersonalization()
+            }
         }
     }
 
@@ -108,6 +116,7 @@ public struct SearchView: View {
                 .padding(.vertical, 15)
                 .background(ColorTokens.Brand.primary)
                 .clipShape(Capsule())
+                .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
     }
@@ -124,9 +133,21 @@ public struct SearchView: View {
             errorMessage: viewModel.errorMessage,
             hasSearched: viewModel.hasSearched,
             selectedMode: viewModel.selectedMode,
+            watchlistedMovieIDs: viewModel.watchlistedMovieIDs,
+            favouritedActorIDs: viewModel.favouritedActorIDs,
             onLoadMore: { Task { await viewModel.loadNextResultsPage() } },
             onMovieTap: viewModel.didTapMovie,
-            onActorTap: viewModel.didTapActor
+            onActorTap: viewModel.didTapActor,
+            onWatchlistTap: { movie in
+                Task {
+                    await viewModel.toggleWatchlist(for: movie)
+                }
+            },
+            onFavouriteTap: { actor in
+                Task {
+                    await viewModel.toggleFavourite(for: actor)
+                }
+            }
         )
     }
 }

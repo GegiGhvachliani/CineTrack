@@ -25,8 +25,10 @@ struct SearchTargetSectionView: View {
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 5)
                             .background(selectedTarget == target ? ColorTokens.Brand.primary : Color.clear, in: RoundedRectangle(cornerRadius: 14))
+                            .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
+                    .frame(maxWidth: .infinity)
                 }
             }
             .padding(3)

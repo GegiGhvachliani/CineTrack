@@ -61,7 +61,9 @@ public final class MovieDetailsViewModel {
 
     public var onMovieDetails: ((Movie) -> Void)?
     public var onActorDetails: ((Int) -> Void)?
+    public var onMovieViewed: ((Movie) -> Void)?
     public var onNewsDetails: ((News) -> Void)?
+    public var onShowSeeAll: ((SeeAllContent) -> Void)?
 
     // MARK: - Dependencies
 
@@ -118,6 +120,38 @@ public final class MovieDetailsViewModel {
 
     public func didTapNews(_ news: News) {
         onNewsDetails?(news)
+    }
+
+    public func didTapSeeAllCast() {
+        let actors = cast.map {
+            Actor(
+                id: $0.id,
+                name: $0.name,
+                birthday: nil,
+                profilePath: $0.profileURL?.absoluteString ?? $0.profilePath
+            )
+        }
+        onShowSeeAll?(SeeAllContent(title: "All Cast", payload: .actors(actors)))
+    }
+
+    public func didTapSeeAllSimilarMovies() {
+        onShowSeeAll?(SeeAllContent(title: "More Like This", payload: .movies(similarMovies)))
+    }
+
+    public func didTapSeeAllActorMovies() {
+        let title = "More From \(selectedActor?.name ?? "Actor")"
+        onShowSeeAll?(SeeAllContent(title: title, payload: .movies(selectedActorMovies)))
+    }
+
+    public func didTapSeeAllImages() {
+        let galleryImages = images.map {
+            GalleryImage(id: $0.id, url: $0.url, aspectRatio: $0.aspectRatio)
+        }
+        onShowSeeAll?(SeeAllContent(title: "Images", payload: .images(galleryImages)))
+    }
+
+    public func didTapSeeAllNews() {
+        onShowSeeAll?(SeeAllContent(title: "Related News", payload: .news(news)))
     }
 
     public func isWatchlisted(_ movie: Movie) -> Bool {

@@ -12,6 +12,7 @@ import DesignSystemComponents
 struct RelatedNewsSectionView: View {
     let news: [News]
     let onNewsTap: (News) -> Void
+    let onSeeAllTap: () -> Void
 
     var body: some View {
         if !news.isEmpty {
@@ -21,8 +22,8 @@ struct RelatedNewsSectionView: View {
                 items: news,
                 cellWidth: 307.5,
                 cellHeight: 205,
-                showsSeeAllButton: false,
-                onSeeAllTap: {}
+                showsSeeAllButton: true,
+                onSeeAllTap: onSeeAllTap
             ) { article, _ in
                 NewsCell(
                     news: article,

@@ -9,13 +9,15 @@ struct MoreFromActorSectionView: View {
     let isWatchlisted: (Movie) -> Bool
     let onMovieTap: (Movie) -> Void
     let onWatchlistTap: (Movie) -> Void
+    let onSeeAllTap: () -> Void
 
     var body: some View {
         HorizontalScrollView(
             headerText: "More From \(actorName)",
             seeAllTitle: "See All",
             items: movies,
-            showsSeeAllButton: false
+            showsSeeAllButton: true,
+            onSeeAllTap: onSeeAllTap
         ) { movie, _ in
             MovieCell(
                 movie: movie,

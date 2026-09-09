@@ -96,7 +96,11 @@ public struct MovieDetailsView: View {
     @ViewBuilder
     private var castSection: some View {
         if !viewModel.cast.isEmpty {
-            AllCastSectionView(cast: viewModel.cast, onActorTap: viewModel.didTapActor)
+            AllCastSectionView(
+                cast: viewModel.cast,
+                onActorTap: viewModel.didTapActor,
+                onSeeAllTap: viewModel.didTapSeeAllCast
+            )
         }
     }
 
@@ -107,7 +111,8 @@ public struct MovieDetailsView: View {
                 headerText: "More Like This",
                 seeAllTitle: "See All",
                 items: viewModel.similarMovies,
-                showsSeeAllButton: false
+                showsSeeAllButton: true,
+                onSeeAllTap: viewModel.didTapSeeAllSimilarMovies
             ) { movie, _ in
                 MovieCell(
                     movie: movie,
@@ -133,7 +138,8 @@ public struct MovieDetailsView: View {
             ImageGallerySectionView(
                 items: viewModel.images,
                 imageURL: \.url,
-                aspectRatio: \.aspectRatio
+                aspectRatio: \.aspectRatio,
+                onSeeAllTap: viewModel.didTapSeeAllImages
             )
         }
     }
@@ -148,7 +154,8 @@ public struct MovieDetailsView: View {
                 onMovieTap: viewModel.didTapMovie,
                 onWatchlistTap: { movie in
                     Task { await viewModel.toggleWatchlist(for: movie) }
-                }
+                },
+                onSeeAllTap: viewModel.didTapSeeAllActorMovies
             )
         }
     }
@@ -162,8 +169,8 @@ public struct MovieDetailsView: View {
                 items: viewModel.news,
                 cellWidth: 307.5,
                 cellHeight: 205,
-                showsSeeAllButton: false,
-                onSeeAllTap: {}
+                showsSeeAllButton: true,
+                onSeeAllTap: viewModel.didTapSeeAllNews
             ) { article, _ in
                 NewsCell(news: article, cellHeight: 205) {
                     viewModel.didTapNews(article)

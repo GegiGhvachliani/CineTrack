@@ -19,6 +19,14 @@ let package = Package(
         .library(
             name: "HomeAssembly",
             targets: ["HomeAssembly"]
+        ),
+        .library(
+            name: "HomeDomain",
+            targets: ["HomeDomain"]
+        ),
+        .library(
+            name: "HomeData",
+            targets: ["HomeData"]
         )
     ],
     dependencies: [

@@ -34,6 +34,9 @@ public final class MovieDetailsCoordinator: MovieDetailsCoordinatorProtocol {
             },
             onNewsDetails: { [weak self] news in
                 self?.router?.showNewsDetails(news: news)
+            },
+            onShowSeeAll: { [weak self] content in
+                self?.router?.showSeeAll(content: content)
             }
         )
         navigationController.pushViewController(viewController, animated: true)

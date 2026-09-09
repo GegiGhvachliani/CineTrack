@@ -55,10 +55,11 @@ public enum TMDBEndpoint {
         minimumRating: Int?,
         minimumVoteCount: Int?,
         genreIDs: [Int],
-        releaseYear: Int?,
+        minimumReleaseYear: Int?,
+        maximumReleaseYear: Int?,
         minimumRuntime: Int?,
         maximumRuntime: Int?,
-        region: String?,
+        originCountryCodes: [String],
         keywordIDs: [Int]
     )
 
@@ -230,7 +231,7 @@ extension TMDBEndpoint {
         case .searchMovies(_, let page), .searchPeople(_, let page), .searchKeywords(_, let page):
             return page
 
-        case .advancedMovieSearch(let page, _, _, _, _, _, _, _, _):
+        case .advancedMovieSearch(let page, _, _, _, _, _, _, _, _, _):
             return page
 
         case .popularPeople(let page):

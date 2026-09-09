@@ -11,7 +11,7 @@ public enum AuthenticationStrings {
     
     // MARK: - SignIn
     public enum SignIn {
-        public static let title = "Welcome Back"
+        public static let title = "Welcome to CineTrack"
         public static let subtitle = "Sign in to your account to continue tracking your favorite movies."
         public static let emailPlaceholder = "Email Address"
         public static let emailPlaceholderIcon = "envelope.fill"

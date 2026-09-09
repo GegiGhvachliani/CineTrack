@@ -23,7 +23,8 @@ let package = Package(
         .package(path: "../ActorMedia"),
         .package(path: "../ActorVideos"),
         .package(path: "../../TMDBData"),
-        .package(path: "../../NewsData")
+        .package(path: "../../NewsData"),
+        .package(path: "../Home")
     ],
     targets: [
         .target(
@@ -151,6 +152,14 @@ let package = Package(
                 .product(
                     name: "ActorVideosDomain",
                     package: "ActorVideos"
+                ),
+                .product(
+                    name: "HomeData",
+                    package: "Home"
+                ),
+                .product(
+                    name: "HomeDomain",
+                    package: "Home"
                 )
             ],
             path: "Sources/ActorDetailsAssembly"

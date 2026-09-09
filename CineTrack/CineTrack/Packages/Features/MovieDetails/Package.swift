@@ -18,6 +18,7 @@ let package = Package(
         .package(path: "../../DesignSystem"),
         .package(path: "../../TMDBData"),
         .package(path: "../../NewsData"),
+        .package(path: "../Home"),
     ],
     targets: [
         .target(
@@ -80,7 +81,9 @@ let package = Package(
                 .product(name: "SharedStorage", package: "SharedKit"),
                 .product(name: "SharedAuth", package: "SharedKit"),
                 .product(name: "TMDBData", package: "TMDBData"),
-                .product(name: "NewsData", package: "NewsData")
+                .product(name: "NewsData", package: "NewsData"),
+                .product(name: "HomeData", package: "Home"),
+                .product(name: "HomeDomain", package: "Home")
             ],
             path: "Sources/MovieDetailsAssembly"
         ),

@@ -19,19 +19,18 @@ public struct SignInView<ViewModel: SignInViewModelProtocol>: View {
         ZStack {
             ColorTokens.Background.primary
                 .ignoresSafeArea()
-            ScrollView {
-            VStack(spacing: 10) {
-                Spacer()
-                
-                headerSection
-                
-                middleSection
-                
-                belowSection
-                
-                Spacer()
-            }
-            .padding()
+            GeometryReader { geometry in
+                ScrollView {
+                    VStack(spacing: 10) {
+                        Spacer()
+                        headerSection
+                        middleSection
+                        belowSection
+                        Spacer()
+                    }
+                    .frame(minHeight: geometry.size.height)
+                    .padding()
+                }
             }
             .scrollDismissesKeyboard(.interactively)
         }

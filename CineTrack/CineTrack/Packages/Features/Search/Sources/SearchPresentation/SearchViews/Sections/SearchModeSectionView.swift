@@ -24,8 +24,10 @@ struct SearchModeSectionView: View {
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 5)
                         .background(selectedMode == mode ? ColorTokens.Brand.primary : Color.clear, in: RoundedRectangle(cornerRadius: 14))
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
+                .frame(maxWidth: .infinity)
             }
         }
         .padding(3)

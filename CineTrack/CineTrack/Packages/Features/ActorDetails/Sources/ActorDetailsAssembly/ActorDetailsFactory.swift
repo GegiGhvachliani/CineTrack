@@ -23,6 +23,8 @@ import ActorMediaData
 import ActorMediaDomain
 import ActorVideosData
 import ActorVideosDomain
+import HomeData
+import HomeDomain
 
 @MainActor
 public struct ActorDetailsFactory: ActorDetailsFactoryProtocol {
@@ -46,7 +48,7 @@ public struct ActorDetailsFactory: ActorDetailsFactoryProtocol {
         onMovieDetails: @escaping (Movie) -> Void,
         onNewsDetails: @escaping (News) -> Void,
         onShowMiniBiography: @escaping (ActorDetails) -> Void,
-        onShowAllFilmography: @escaping () -> Void
+        onShowSeeAll: @escaping (SeeAllContent) -> Void
     ) -> UIViewController {
         let apiClient = URLSessionAPIClient()
         let tmdbConfiguration = TMDBConfiguration(
@@ -66,7 +68,11 @@ public struct ActorDetailsFactory: ActorDetailsFactoryProtocol {
             firestore: FirestoreClient(),
             userSession: FirebaseUserSession()
         )
-        let watchlistRepository = WatchlistRepository(
+        let watchlistRepository = ActorDetailsData.WatchlistRepository(
+            firestore: FirestoreClient(),
+            userSession: FirebaseUserSession()
+        )
+        let recentlyViewedRepository = RecentlyViewedRepository(
             firestore: FirestoreClient(),
             userSession: FirebaseUserSession()
         )
@@ -95,7 +101,22 @@ public struct ActorDetailsFactory: ActorDetailsFactoryProtocol {
         viewModel.onMovieDetails = onMovieDetails
         viewModel.onNewsDetails = onNewsDetails
         viewModel.onShowMiniBiography = onShowMiniBiography
-        viewModel.onShowAllFilmography = onShowAllFilmography
+        viewModel.onShowSeeAll = onShowSeeAll
+        viewModel.onActorViewed = { (actor: ActorDetails) in
+            Task {
+                let recentlyViewedActor = RecentlyViewedActor(
+                    id: actor.id,
+                    name: actor.name,
+                    birthday: actor.birthday,
+                    profilePath: actor.profileURL?.absoluteString ?? actor.profilePath,
+                    viewedAt: .now
+                )
+
+                try? await recentlyViewedRepository.addRecentlyViewedActor(
+                    recentlyViewedActor
+                )
+            }
+        }
         viewModel.onOpenURL = { url in
             UIApplication.shared.open(url)
         }

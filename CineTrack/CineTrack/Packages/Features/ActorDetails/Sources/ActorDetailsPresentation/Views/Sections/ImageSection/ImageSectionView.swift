@@ -12,12 +12,14 @@ import DesignSystemComponents
 struct ImageSectionView: View {
     let images: [ActorMediaImage]
     let onLoadMore: () -> Void
+    let onSeeAllTap: () -> Void
 
     var body: some View {
         ImageGallerySectionView(
             items: images,
             imageURL: \.url,
             aspectRatio: \.aspectRatio,
+            onSeeAllTap: onSeeAllTap,
             onLoadMore: onLoadMore
         )
     }

@@ -163,7 +163,8 @@ public struct ActorDetailsView: View {
                     Task {
                         await viewModel.loadNextMediaPage()
                     }
-                }
+                },
+                onSeeAllTap: viewModel.didTapSeeAllImages
             )
         }
     }
@@ -177,7 +178,8 @@ public struct ActorDetailsView: View {
                 news: viewModel.news,
                 onNewsTap: { news in
                     viewModel.didTapNews(news)
-                }
+                },
+                onSeeAllTap: viewModel.didTapSeeAllNews
             )
         }
     }

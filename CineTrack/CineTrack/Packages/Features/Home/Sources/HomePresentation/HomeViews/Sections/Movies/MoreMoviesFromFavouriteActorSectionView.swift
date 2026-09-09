@@ -86,6 +86,8 @@ struct MoreMoviesFromFavouriteActorSectionView: View {
                     Image(systemName: "chevron.right")
                         .foregroundStyle(.secondary)
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .contentShape(Rectangle())
             }
             .padding(.bottom, 5)
             .buttonStyle(.plain)
@@ -101,6 +103,8 @@ struct MoreMoviesFromFavouriteActorSectionView: View {
                     Image(systemName: "chevron.right")
                         .foregroundStyle(.secondary)
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
         }

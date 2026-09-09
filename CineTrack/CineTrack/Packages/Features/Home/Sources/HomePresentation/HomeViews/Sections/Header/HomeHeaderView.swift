@@ -79,6 +79,7 @@ struct HomeHeaderView: View {
             .frame(maxWidth: .infinity)
             .background(.white.opacity(0.9))
             .clipShape(RoundedRectangle(cornerRadius: 8))
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .padding(.horizontal, 16)

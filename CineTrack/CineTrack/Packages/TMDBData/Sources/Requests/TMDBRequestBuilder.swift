@@ -76,10 +76,11 @@ public struct TMDBRequestBuilder: Sendable {
             minimumRating,
             minimumVoteCount,
             genreIDs,
-            releaseYear,
+            minimumReleaseYear,
+            maximumReleaseYear,
             minimumRuntime,
             maximumRuntime,
-            region,
+            originCountryCodes,
             keywordIDs
         ) = endpoint {
 
@@ -93,8 +94,22 @@ public struct TMDBRequestBuilder: Sendable {
                 queryItems.append(URLQueryItem(name: "vote_count.gte", value: String(minimumVoteCount)))
             }
 
-            if let releaseYear {
-                queryItems.append(URLQueryItem(name: "primary_release_year", value: String(releaseYear)))
+            if let minimumReleaseYear {
+                queryItems.append(
+                    URLQueryItem(
+                        name: "primary_release_date.gte",
+                        value: "\(minimumReleaseYear)-01-01"
+                    )
+                )
+            }
+
+            if let maximumReleaseYear {
+                queryItems.append(
+                    URLQueryItem(
+                        name: "primary_release_date.lte",
+                        value: "\(maximumReleaseYear)-12-31"
+                    )
+                )
             }
 
             if let minimumRuntime {
@@ -106,15 +121,25 @@ public struct TMDBRequestBuilder: Sendable {
             }
 
             if !genreIDs.isEmpty {
-                queryItems.append(URLQueryItem(name: "with_genres", value: genreIDs.map(String.init).joined(separator: "|")))
+                queryItems.append(
+                    URLQueryItem(
+                        name: "with_genres",
+                        value: genreIDs.map(String.init).joined(separator: ",")
+                    )
+                )
             }
 
             if !keywordIDs.isEmpty {
                 queryItems.append(URLQueryItem(name: "with_keywords", value: keywordIDs.map(String.init).joined(separator: "|")))
             }
 
-            if let region, !region.isEmpty {
-                queryItems.append(URLQueryItem(name: "region", value: region))
+            if !originCountryCodes.isEmpty {
+                queryItems.append(
+                    URLQueryItem(
+                        name: "with_origin_country",
+                        value: originCountryCodes.joined(separator: "|")
+                    )
+                )
             }
         }
         

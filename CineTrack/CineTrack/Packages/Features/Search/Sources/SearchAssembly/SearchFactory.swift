@@ -10,7 +10,11 @@ import SearchData
 import SearchDomain
 import SearchPresentation
 import SearchPresentationAPI
+import HomeData
+import HomeDomain
+import SharedAuth
 import SharedNetworking
+import SharedStorage
 import TMDBData
 
 @MainActor
@@ -37,6 +41,14 @@ public struct SearchFactory: SearchFactoryProtocol {
             apiClient: apiClient,
             configuration: configuration
         )
+        let watchlistRepository = WatchlistRepository(
+            firestore: FirestoreClient(),
+            userSession: FirebaseUserSession()
+        )
+        let favouriteRepository = FavouriteRepository(
+            firestore: FirestoreClient(),
+            userSession: FirebaseUserSession()
+        )
 
         // MARK: - Use Cases
 
@@ -49,7 +61,13 @@ public struct SearchFactory: SearchFactoryProtocol {
         let viewModel = SearchViewModel(
             searchMoviesUseCase: searchMoviesUseCase,
             searchActorsUseCase: searchActorsUseCase,
-            discoverMoviesUseCase: discoverMoviesUseCase
+            discoverMoviesUseCase: discoverMoviesUseCase,
+            fetchWatchlistedMoviesUseCase: FetchWatchlistedMoviesUseCase(repository: watchlistRepository),
+            addWatchlistedMovieUseCase: AddWatchlistedMovieUseCase(repository: watchlistRepository),
+            removeWatchlistedMovieUseCase: RemoveWatchlistedMovieUseCase(repository: watchlistRepository),
+            fetchFavouritedActorsUseCase: FetchFavouritedActorsUseCase(repository: favouriteRepository),
+            addFavouritedActorUseCase: AddFavouritedActorUseCase(repository: favouriteRepository),
+            removeFavouritedActorUseCase: RemoveFavouritedActorUseCase(repository: favouriteRepository)
         )
 
         viewModel.onMovieDetails = { [weak coordinator] movie in

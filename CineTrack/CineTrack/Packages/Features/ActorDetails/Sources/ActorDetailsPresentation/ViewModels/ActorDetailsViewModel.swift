@@ -65,8 +65,9 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
     public var onMovieDetails: ((Movie) -> Void)?
     public var onNewsDetails: ((News) -> Void)?
     public var onShowMiniBiography: ((ActorDetails) -> Void)?
-    public var onShowAllFilmography: (() -> Void)?
+    public var onShowSeeAll: ((SeeAllContent) -> Void)?
     public var onOpenURL: ((URL) -> Void)?
+    public var onActorViewed: ((ActorDetails) -> Void)?
 
     public var featuredCredits: [ActorCredit] {
         Array(
@@ -191,7 +192,30 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
     }
 
     public func didTapSeeAllFilmography() {
-        onShowAllFilmography?()
+        let movies = filmography.map {
+            Movie(
+                id: $0.id,
+                title: $0.title,
+                overview: $0.overview,
+                posterPath: $0.posterURL?.absoluteString ?? $0.posterPath,
+                backdropPath: $0.backdropURL?.absoluteString ?? $0.backdropPath,
+                releaseDate: $0.releaseDate,
+                voteAverage: $0.voteAverage,
+                voteCount: $0.voteCount
+            )
+        }
+        onShowSeeAll?(SeeAllContent(title: "Filmography", payload: .movies(movies)))
+    }
+
+    public func didTapSeeAllImages() {
+        let images = mediaImages.map {
+            GalleryImage(id: $0.id, url: $0.url, aspectRatio: $0.aspectRatio)
+        }
+        onShowSeeAll?(SeeAllContent(title: "Images", payload: .images(images)))
+    }
+
+    public func didTapSeeAllNews() {
+        onShowSeeAll?(SeeAllContent(title: "Related News", payload: .news(news)))
     }
 
     public func didTapExternalURL(
@@ -213,7 +237,7 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
             id: actor.id,
             name: actor.name,
             birthday: actor.birthday,
-            profilePath: actor.profilePath
+            profilePath: actor.profileURL?.absoluteString ?? actor.profilePath
         )
         let wasFavourite = favouritedActorIDs.contains(actor.id)
 

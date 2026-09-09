@@ -7,6 +7,7 @@ import Combine
 import Foundation
 import Observation
 
+import HomeDomain
 import SearchDomain
 import SharedCore
 
@@ -53,12 +54,23 @@ public final class SearchViewModel {
     public internal(set) var hasMoreResults = false
     public internal(set) var errorMessage: String?
     public internal(set) var hasSearched = false
+    public internal(set) var watchlistedMovieIDs = Set<Int>()
+    public internal(set) var favouritedActorIDs = Set<Int>()
 
     // MARK: - Dependencies
 
     private let searchMoviesUseCase: SearchMoviesUseCaseProtocol
     private let searchActorsUseCase: SearchActorsUseCaseProtocol
     private let discoverMoviesUseCase: DiscoverMoviesUseCaseProtocol
+    private let fetchWatchlistedMoviesUseCase: FetchWatchlistedMoviesUseCaseProtocol
+    private let addWatchlistedMovieUseCase: AddWatchlistedMovieUseCaseProtocol
+    private let removeWatchlistedMovieUseCase: RemoveWatchlistedMovieUseCaseProtocol
+    private let fetchFavouritedActorsUseCase: FetchFavouritedActorsUseCaseProtocol
+    private let addFavouritedActorUseCase: AddFavouritedActorUseCaseProtocol
+    private let removeFavouritedActorUseCase: RemoveFavouritedActorUseCaseProtocol
+
+    private var pendingWatchlistIDs = Set<Int>()
+    private var pendingFavouriteIDs = Set<Int>()
 
     // MARK: - Combine
 
@@ -73,11 +85,23 @@ public final class SearchViewModel {
     public init(
         searchMoviesUseCase: SearchMoviesUseCaseProtocol,
         searchActorsUseCase: SearchActorsUseCaseProtocol,
-        discoverMoviesUseCase: DiscoverMoviesUseCaseProtocol
+        discoverMoviesUseCase: DiscoverMoviesUseCaseProtocol,
+        fetchWatchlistedMoviesUseCase: FetchWatchlistedMoviesUseCaseProtocol,
+        addWatchlistedMovieUseCase: AddWatchlistedMovieUseCaseProtocol,
+        removeWatchlistedMovieUseCase: RemoveWatchlistedMovieUseCaseProtocol,
+        fetchFavouritedActorsUseCase: FetchFavouritedActorsUseCaseProtocol,
+        addFavouritedActorUseCase: AddFavouritedActorUseCaseProtocol,
+        removeFavouritedActorUseCase: RemoveFavouritedActorUseCaseProtocol
     ) {
         self.searchMoviesUseCase = searchMoviesUseCase
         self.searchActorsUseCase = searchActorsUseCase
         self.discoverMoviesUseCase = discoverMoviesUseCase
+        self.fetchWatchlistedMoviesUseCase = fetchWatchlistedMoviesUseCase
+        self.addWatchlistedMovieUseCase = addWatchlistedMovieUseCase
+        self.removeWatchlistedMovieUseCase = removeWatchlistedMovieUseCase
+        self.fetchFavouritedActorsUseCase = fetchFavouritedActorsUseCase
+        self.addFavouritedActorUseCase = addFavouritedActorUseCase
+        self.removeFavouritedActorUseCase = removeFavouritedActorUseCase
 
         bindSearchQuery()
     }
@@ -117,6 +141,88 @@ public final class SearchViewModel {
     public func resetAdvancedOptions() {
         advancedFilters = SearchFilters()
         clearResults()
+    }
+
+    // MARK: - Personalization
+
+    public func loadPersonalization() async {
+        async let watchlistedMovies = fetchWatchlistedMoviesUseCase.execute()
+        async let favouritedActors = fetchFavouritedActorsUseCase.execute()
+
+        do {
+            watchlistedMovieIDs = Set(try await watchlistedMovies.map(\.id))
+            favouritedActorIDs = Set(try await favouritedActors.map(\.id))
+        } catch {
+            print("❌ Search Personalization Error:", error)
+        }
+    }
+
+    public func toggleWatchlist(for movie: Movie) async {
+        guard pendingWatchlistIDs.insert(movie.id).inserted else {
+            return
+        }
+
+        defer {
+            pendingWatchlistIDs.remove(movie.id)
+        }
+
+        let wasWatchlisted = watchlistedMovieIDs.contains(movie.id)
+
+        if wasWatchlisted {
+            watchlistedMovieIDs.remove(movie.id)
+        } else {
+            watchlistedMovieIDs.insert(movie.id)
+        }
+
+        do {
+            if wasWatchlisted {
+                try await removeWatchlistedMovieUseCase.execute(movie: movie)
+            } else {
+                try await addWatchlistedMovieUseCase.execute(movie: movie)
+            }
+        } catch {
+            if wasWatchlisted {
+                watchlistedMovieIDs.insert(movie.id)
+            } else {
+                watchlistedMovieIDs.remove(movie.id)
+            }
+
+            print("❌ Search Watchlist Error:", error)
+        }
+    }
+
+    public func toggleFavourite(for actor: Actor) async {
+        guard pendingFavouriteIDs.insert(actor.id).inserted else {
+            return
+        }
+
+        defer {
+            pendingFavouriteIDs.remove(actor.id)
+        }
+
+        let wasFavourited = favouritedActorIDs.contains(actor.id)
+
+        if wasFavourited {
+            favouritedActorIDs.remove(actor.id)
+        } else {
+            favouritedActorIDs.insert(actor.id)
+        }
+
+        do {
+            if wasFavourited {
+                try await removeFavouritedActorUseCase.execute(actor: actor)
+            } else {
+                try await addFavouritedActorUseCase.execute(actor: actor)
+            }
+        } catch {
+            if wasFavourited {
+                favouritedActorIDs.insert(actor.id)
+            } else {
+                favouritedActorIDs.remove(actor.id)
+            }
+
+            print("❌ Search Favourite Error:", error)
+        }
     }
 
     // MARK: - Pagination
