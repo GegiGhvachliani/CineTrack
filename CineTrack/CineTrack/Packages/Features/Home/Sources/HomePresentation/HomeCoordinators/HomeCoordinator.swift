@@ -16,7 +16,7 @@ public final class HomeCoordinator: HomeCoordinatorProtocol {
     public let navigationController: UINavigationController
     private let factory: HomeFactoryProtocol
     
-    private let router: HomeRoutingProtocol
+    private weak var router: HomeRoutingProtocol?
     
     public init(
         navigationController: UINavigationController,
@@ -35,13 +35,13 @@ public final class HomeCoordinator: HomeCoordinatorProtocol {
     }
     
     public func showSearch() {
-        router.showSearch()
+        router?.showSearch()
     }
     public func showMovieDetails(movie: Movie) {
-        router.showMovieDetails(movie: movie)
+        router?.showMovieDetails(movie: movie)
     }
     public func showVideos(item: FeaturedItem) {
-        router.showVideosList(
+        router?.showVideosList(
             context: VideoPlaylistContext(
                 movie: item.movie,
                 selectedVideo: item.video,
@@ -50,12 +50,12 @@ public final class HomeCoordinator: HomeCoordinatorProtocol {
         )
     }
     public func showActorDetails(actorID: Int) {
-        router.showActorDetails(actorID: actorID)
+        router?.showActorDetails(actorID: actorID)
     }
     public func showSeeAll(content: SeeAllContent) {
-        router.showSeeAll(content: content)
+        router?.showSeeAll(content: content)
     }
     public func showNewsDetail(news: News) {
-        router.showNewsDetails(news: news)
+        router?.showNewsDetails(news: news)
     }
 }

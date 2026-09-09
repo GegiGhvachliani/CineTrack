@@ -11,7 +11,7 @@ import SharedCore
 import DesignSystemTokens
 import DesignSystemComponents
 
-struct RecentlyViewedSectionView: View {
+public struct RecentlyViewedSectionView: View {
 
     let items: [RecentlyViewedItem]
 
@@ -27,7 +27,19 @@ struct RecentlyViewedSectionView: View {
     let onSeeAllTap: () -> Void
     let onClearHistory: () -> Void
 
-    var body: some View {
+    public init(items: [RecentlyViewedItem], watchlistedMovies: [Movie], favouritedActors: [Actor], onMovieTap: @escaping (Movie) -> Void, onWatchlistTap: @escaping (Movie) -> Void, onActorTap: @escaping (Actor) -> Void, onFavouriteTap: @escaping (Actor) -> Void, onSeeAllTap: @escaping () -> Void, onClearHistory: @escaping () -> Void) {
+        self.items = items
+        self.watchlistedMovies = watchlistedMovies
+        self.favouritedActors = favouritedActors
+        self.onMovieTap = onMovieTap
+        self.onWatchlistTap = onWatchlistTap
+        self.onActorTap = onActorTap
+        self.onFavouriteTap = onFavouriteTap
+        self.onSeeAllTap = onSeeAllTap
+        self.onClearHistory = onClearHistory
+    }
+
+    public var body: some View {
 
         if items.isEmpty {
 

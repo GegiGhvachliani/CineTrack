@@ -13,6 +13,8 @@ let package = Package(
     dependencies: [
         .package(path: "../../SharedKit"),
         .package(path: "../../DesignSystem"),
+        .package(path: "../Home"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "12.1.0"),
     ],
     targets: [
 
@@ -28,6 +30,7 @@ let package = Package(
             name: "ProfileData",
             dependencies: [
                 "ProfileDomain",
+                .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
                 .product(name: "SharedNetworking", package: "SharedKit"),
                 .product(name: "SharedStorage", package: "SharedKit"),
             ],
@@ -39,6 +42,8 @@ let package = Package(
             dependencies: [
                 "ProfileDomain",
                 "ProfilePresentationAPI",
+                .product(name: "HomeDomain", package: "Home"),
+                .product(name: "HomePresentation", package: "Home"),
                 .product(name: "SharedCore", package: "SharedKit"),
                 .product(
                     name: "DesignSystemComponents",
@@ -63,6 +68,9 @@ let package = Package(
                 "ProfileData",
                 "ProfilePresentation",
                 "ProfilePresentationAPI",
+                .product(name: "HomeData", package: "Home"),
+                .product(name: "SharedAuth", package: "SharedKit"),
+                .product(name: "SharedStorage", package: "SharedKit"),
                 .product(name: "SharedCore", package: "SharedKit"),
             ],
             path: "Sources/ProfileAssembly"

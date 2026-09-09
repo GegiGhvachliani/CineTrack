@@ -70,6 +70,13 @@ final class AppCoordinator: Coordinator {
             navigationController: rootNavigationController,
             container: container
         )
+        tabBarCoordinator.onSignedOut = { [weak self] in
+            guard let self else { return }
+            self.childCoordinators.removeAll { $0 is MainTabBarCoordinator }
+            self.rootNavigationController.dismiss(animated: false)
+            self.rootNavigationController.setViewControllers([], animated: false)
+            self.showAuthFlow()
+        }
         
         childCoordinators.append(tabBarCoordinator)
         

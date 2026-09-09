@@ -9,7 +9,8 @@ import SwiftUI
 import SharedCore
 import DesignSystemComponents
 
-struct WatchlistedMoviesSesctionView: View {
+public struct WatchlistedMoviesSesctionView: View {
+    private let title: String
     
     let movies: [Movie]
     let watchlistedMovies: [Movie]
@@ -19,10 +20,28 @@ struct WatchlistedMoviesSesctionView: View {
     let onSeeAllTap: () -> Void
     let onLoadMore: () -> Void
     
-    var body: some View {
+    public init(
+        title: String = "From your Watchlist",
+        movies: [Movie],
+        watchlistedMovies: [Movie],
+        onMovieTap: @escaping (Movie) -> Void,
+        onWatchlistTap: @escaping (Movie) -> Void,
+        onSeeAllTap: @escaping () -> Void,
+        onLoadMore: @escaping () -> Void
+    ) {
+        self.title = title
+        self.movies = movies
+        self.watchlistedMovies = watchlistedMovies
+        self.onMovieTap = onMovieTap
+        self.onWatchlistTap = onWatchlistTap
+        self.onSeeAllTap = onSeeAllTap
+        self.onLoadMore = onLoadMore
+    }
+
+    public var body: some View {
         
         HorizontalScrollView(
-            headerText: HomeStrings.Section.watchlist,
+            headerText: title,
             seeAllTitle: HomeStrings.Action.seeAll,
             items: movies,
             onSeeAllTap: onSeeAllTap,

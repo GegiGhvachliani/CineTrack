@@ -45,6 +45,8 @@ public struct SeeAllView: View {
                         newsList(news)
                     case .images(let images):
                         GalleryImagesView(images: images)
+                    case .library(let items):
+                        libraryList(items)
                     }
                 }
             }
@@ -76,6 +78,26 @@ public struct SeeAllView: View {
     }
 
     // MARK: - Lists
+
+    private func libraryList(_ items: [SeeAllLibraryItem]) -> some View {
+        List(items) { item in
+            Group {
+                switch item {
+                case .movie(let movie):
+                    Button { onMovieTap(movie) } label: { CompactMovieCell(movie: movie) }
+                case .actor(let actor):
+                    Button { onActorTap(actor) } label: { CompactActorCell(actor: actor) }
+                }
+            }
+            .buttonStyle(.plain)
+            .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
+            .listRowBackground(ColorTokens.Background.secondary)
+        }
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .background(ColorTokens.Background.secondary)
+        .overlay { emptyState(isEmpty: items.isEmpty) }
+    }
 
     private func movieList(_ movies: [Movie]) -> some View {
         List(movies) { movie in

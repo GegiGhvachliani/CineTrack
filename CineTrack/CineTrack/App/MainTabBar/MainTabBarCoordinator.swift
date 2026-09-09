@@ -9,7 +9,8 @@ import NewsDetailsPresentationAPI
 import SeeAllPresentationAPI
 import VideosListPresentationAPI
 
-final class MainTabBarCoordinator: NSObject, Coordinator, HomeRoutingProtocol, SearchRoutingProtocol, ActorDetailsRoutingProtocol, MovieDetailsRoutingProtocol, UINavigationControllerDelegate {
+final class MainTabBarCoordinator: NSObject, Coordinator, HomeRoutingProtocol, SearchRoutingProtocol, ActorDetailsRoutingProtocol, MovieDetailsRoutingProtocol, ProfileRoutingProtocol, UINavigationControllerDelegate {
+    var onSignedOut: (() -> Void)?
     // childCoordinators ინახავს შვილ კოორდინატორებს, რომ მეხსიერებიდან არ ამოვარდნენ (სამომავლოდ დაგვჭირდება)
     var childCoordinators: [Coordinator] = []
     
@@ -54,7 +55,7 @@ final class MainTabBarCoordinator: NSObject, Coordinator, HomeRoutingProtocol, S
             navigationController: searchNav,
             router: self
         )
-        let profileCoordinator = container.profileFactory.makeProfileCoordinator(navigationController: profileNav)
+        let profileCoordinator = container.profileFactory.makeProfileCoordinator(navigationController: profileNav, router: self)
         
         // 3. თითოეულ ნავიგაციაში პირველ ეკრანად ვსვამთ ჩვენს ფერად ვიუებს
         childCoordinators.append(homeCoordinator)
@@ -80,6 +81,13 @@ final class MainTabBarCoordinator: NSObject, Coordinator, HomeRoutingProtocol, S
 
     func showSearch() {
         tabBarController.selectedIndex = 1
+    }
+
+    func didSignOut() {
+        detailCoordinators.removeAll()
+        fullScreenViewControllerIDs.removeAll()
+        childCoordinators.removeAll()
+        onSignedOut?()
     }
     
     func showActorDetails(actorID: Int) {
@@ -173,7 +181,8 @@ final class MainTabBarCoordinator: NSObject, Coordinator, HomeRoutingProtocol, S
         didShow viewController: UIViewController,
         animated: Bool
     ) {
-        let activeViewControllerIDs = Set(navigationController.viewControllers.map(ObjectIdentifier.init))
+        let navigationControllers = (tabBarController.viewControllers ?? []).compactMap { $0 as? UINavigationController }
+        let activeViewControllerIDs = Set(navigationControllers.flatMap(\.viewControllers).map(ObjectIdentifier.init))
         detailCoordinators = detailCoordinators.filter { activeViewControllerIDs.contains($0.key) }
         fullScreenViewControllerIDs = fullScreenViewControllerIDs.intersection(activeViewControllerIDs)
 

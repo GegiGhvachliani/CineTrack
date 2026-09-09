@@ -6,6 +6,19 @@ public enum SeeAllPayload {
     case actors([Actor])
     case news([News])
     case images([GalleryImage])
+    case library([SeeAllLibraryItem])
+}
+
+public enum SeeAllLibraryItem: Identifiable, Sendable {
+    case movie(Movie)
+    case actor(Actor)
+
+    public var id: String {
+        switch self {
+        case .movie(let movie): "movie-\(movie.id)"
+        case .actor(let actor): "actor-\(actor.id)"
+        }
+    }
 }
 
 public struct GalleryImage: Identifiable, Sendable, Equatable {

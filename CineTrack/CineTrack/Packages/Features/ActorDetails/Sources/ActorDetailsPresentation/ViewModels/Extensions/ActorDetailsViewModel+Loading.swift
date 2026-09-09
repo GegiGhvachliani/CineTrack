@@ -12,6 +12,13 @@ extension ActorDetailsViewModel {
     // MARK: - Initial loading
 
     public func load() async {
+        if hasLoadedInitialContent {
+            async let favourites: Void = loadFavourites()
+            async let watchlist: Void = loadWatchlist()
+            await favourites
+            await watchlist
+            return
+        }
         await load(force: false)
     }
 

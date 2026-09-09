@@ -6,6 +6,10 @@ extension MovieDetailsViewModel {
     // MARK: - Initial loading
 
     public func load() async {
+        if hasLoadedInitialContent {
+            await loadWatchlist()
+            return
+        }
         await load(force: false)
     }
 
