@@ -1,3 +1,8 @@
+//
+//  SearchFilters.swift
+//  Search
+//
+
 import Foundation
 
 public struct SearchFilters: Sendable, Equatable {

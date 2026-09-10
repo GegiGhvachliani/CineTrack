@@ -1,3 +1,8 @@
+//
+//  SearchStrings.swift
+//  Search
+//
+
 public enum SearchStrings {
 
     // MARK: - Screen Content

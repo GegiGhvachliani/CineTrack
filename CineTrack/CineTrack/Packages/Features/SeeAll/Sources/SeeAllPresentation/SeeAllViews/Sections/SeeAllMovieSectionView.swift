@@ -1,3 +1,10 @@
+//
+//  SeeAllMovieSectionView.swift
+//  SeeAll
+//
+//  Created by Gegi Ghvachliani on 04/09/2026.
+//
+
 import SwiftUI
 
 import DesignSystemComponents

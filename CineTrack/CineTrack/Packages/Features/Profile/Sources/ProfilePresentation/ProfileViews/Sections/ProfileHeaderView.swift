@@ -1,3 +1,10 @@
+//
+//  ProfileHeaderView.swift
+//  Profile
+//
+//  Created by Gegi Ghvachliani on 22/06/2026.
+//
+
 import DesignSystemTokens
 import PhotosUI
 import ProfileDomain

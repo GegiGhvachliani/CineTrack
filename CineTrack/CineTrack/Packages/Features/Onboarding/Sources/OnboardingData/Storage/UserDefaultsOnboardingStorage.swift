@@ -1,3 +1,10 @@
+//
+//  UserDefaultsOnboardingStorage.swift
+//  Onboarding
+//
+//  Created by Gegi Ghvachliani on 26/06/2026.
+//
+
 import Foundation
 
 public final class UserDefaultsOnboardingStorage: OnboardingStorageProtocol, @unchecked Sendable {

@@ -1,3 +1,8 @@
+//
+//  SearchRepositoryProtocol.swift
+//  Search
+//
+
 import SharedCore
 
 public protocol SearchRepositoryProtocol: Sendable {

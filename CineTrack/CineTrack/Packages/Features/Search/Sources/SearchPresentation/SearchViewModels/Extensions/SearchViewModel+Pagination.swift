@@ -1,3 +1,8 @@
+//
+//  SearchViewModel+Pagination.swift
+//  Search
+//
+
 import Combine
 import Foundation
 import Observation

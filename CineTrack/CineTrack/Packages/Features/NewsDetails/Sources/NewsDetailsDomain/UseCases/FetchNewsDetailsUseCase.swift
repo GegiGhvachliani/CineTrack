@@ -1,3 +1,10 @@
+//
+//  FetchNewsDetailsUseCase.swift
+//  NewsDetails
+//
+//  Created by Gegi Ghvachliani on 04/09/2026.
+//
+
 import SharedCore
 
 public protocol FetchNewsDetailsUseCaseProtocol: Sendable {

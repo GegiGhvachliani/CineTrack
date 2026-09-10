@@ -2,7 +2,7 @@
 
 განახლებულია: 2026-09-10.
 
-ეს დოკუმენტი აერთიანებს წინა რეფაქტორინგსა და News-ის ფოტოს ბოლო შესწორებას: რა შეიცვალა, რატომ, რა დარჩა უცვლელი და რა შეზღუდვები აქვს მიმდინარე გადაწყვეტას. საწყისი შედარების წერტილია Git commit `0d0a1fc`; ცვლილებები სამუშაო ხეშია და ახალი commit არ შემიქმნია.
+ეს დოკუმენტი აერთიანებს წინა რეფაქტორინგს, News-ის ფოტოს შესწორებასა და Actor ფექიჯების გაერთიანებას: რა შეიცვალა, რატომ, რა დარჩა უცვლელი და რა შეზღუდვები აქვს მიმდინარე გადაწყვეტას. საწყისი შედარების წერტილია Git commit `0d0a1fc`; ცვლილებები სამუშაო ხეშია და ახალი commit არ შემიქმნია.
 
 ## 1. მთავარი შედეგი
 
@@ -110,60 +110,72 @@ ViewModel-მა არ იცის, `RemoteDocumentStore` რეალურ�
 
 მნიშვნელოვანი ნიუანსი: რამდენიმე FeatureFactory-ს კვლავ შეუძლია ცალ-ცალკე repository ობიექტის შექმნა. გაერთიანებულია მათი კოდი და საერთო storage/session დამოკიდებულებები; არ შემიქმნია ყველა ეკრანის state-ის სინქრონიზაციის ახალი გლობალური cache ან event bus.
 
-## 4. ActorMedia / ActorVideos / ActorDetails — საჭიროა სამივე?
+## 4. ActorMedia / ActorVideos / ActorDetails — გაერთიანებული ფექიჯი
 
-სამივე ფექიჯი რეფაქტორინგამდე, საწყის commit-შიც არსებობდა. ამ რეფაქტორინგით სამი ახალი Actor ფექიჯი არ შემიქმნია.
+მომხმარებლის მოთხოვნით, სამივე გაერთიანდა ერთ **ActorDetails** ფექიჯში. ActorMedia და ActorVideos აღარ არის ცალკე Swift Package ან ცალკე Domain/Data მოდული.
 
-ამჟამინდელი განაწილება:
+მანამდე სამივე ფექიჯი არსებობდა, მაგრამ ActorMedia-სა და ActorVideos-ს მხოლოდ ActorDetails იყენებდა. ამიტომ ცალკე manifests და imports დამატებით სირთულეს ქმნიდა დამოუკიდებელი გამოყენების სარგებლის გარეშე.
 
-| ფექიჯი | მოვალეობა | საკუთარი ეკრანი |
-| --- | --- | --- |
-| ActorDetails | მსახიობის დეტალები, ფილმოგრაფია, სიახლეები, Presentation და ნავიგაცია | აქვს |
-| ActorMedia | Wikimedia-დან მსახიობის სურათების მიღება და გვერდების გაგრძელება | არ აქვს |
-| ActorVideos | მსახიობთან დაკავშირებული ფილმების ვიდეოების მიღება და გაერთიანება | არ აქვს |
+### შესრულებული გადანაწილება
 
-კოდში სხვა ფექიჯების imports/დამოკიდებულებების შემოწმებით, ActorMedia-სა და ActorVideos-ს ამჟამად მხოლოდ ActorDetails იყენებს.
+| ძველი შრე | ახალი მდებარეობა ActorDetails-ის შიგნით |
+| --- | --- |
+| ActorMediaDomain-ის მოდელები | ActorDetailsDomain/Entities/Media |
+| ActorMediaDomain-ის კონტრაქტები და UseCase | ActorDetailsDomain/RepositoryProtocols/Media და UseCases/Media |
+| ActorMediaData-ის Repository და DTO | ActorDetailsData/Repositories/Media და DTOs/Media |
+| ActorVideosDomain-ის მოდელები | ActorDetailsDomain/Entities/Videos |
+| ActorVideosDomain-ის კონტრაქტები და UseCase | ActorDetailsDomain/RepositoryProtocols/Videos და UseCases/Videos |
+| ActorVideosData-ის Repository | ActorDetailsData/Repositories/Videos |
 
-### ჩემი რეკომენდაცია მიმდინარე პროექტისთვის
-
-**ერთ ActorDetails ფექიჯში გადანაწილება გონივრულია.** ცალკე API პროვაიდერი ავტომატურად ცალკე Package-ს არ მოითხოვს. Clean-ის შრეები ერთ ფექიჯშიც შენარჩუნდება.
-
-შესაძლო სტრუქტურა — ეს არის შეთავაზება, ჯერ არა შესრულებული გადატანა:
+რეალური სტრუქტურა:
 
 ```text
 ActorDetails
   ActorDetailsDomain
     Entities
-      Actor
+      არსებული Actor ტიპები
       Media
       Videos
     RepositoryProtocols
-      ActorDetailsRepositoryProtocol
-      ActorMediaRepositoryProtocol
-      ActorVideosRepositoryProtocol
+      ActorDetailsRepositoryProtocol.swift
+      Media
+      Videos
     UseCases
       Actor
       Media
       Videos
   ActorDetailsData
     Repositories
-      Actor
+      ActorDetailsRepository.swift
       Media
       Videos
     DTOs
+      Media
     Mappers
   ActorDetailsPresentation
   ActorDetailsPresentationAPI
   ActorDetailsAssembly
 ```
 
-ერთ ფექიჯში გაერთიანება არ ნიშნავს ყველაფრის ერთ Repository-ში ან ViewModel-ში ჩაყრას. სურათებსა და ვიდეოებს კვლავ თავისი კონტრაქტები და UseCase-ები ექნებოდა; უბრალოდ ცალკე manifests/imports შემცირდებოდა.
+### რა შენარჩუნდა და რა მოიშალა
 
-ორი ფექიჯის ვარიანტიც შესაძლებელია: ActorDetails + ActorMedia, სადაც ActorMedia სურათებსაც და ვიდეოებსაც მოიცავს. ეს უფრო გამართლდება, თუ ამ შესაძლებლობებს სხვა ეკრანები ან აპებიც გამოიყენებს.
+- გადატანილია 10 Swift source ფაილი; მათში არსებული ტიპების სახელები და ოპერაციების კონტრაქტები შენარჩუნებულია.
+- ActorMediaRepositoryProtocol და ActorVideosRepositoryProtocol კვლავ არსებობს — უბრალოდ ActorDetailsDomain-ში.
+- FetchActorMediaUseCase/FetchActorVideosUseCase კვლავ დამოუკიდებელი UseCase-ებია.
+- WikimediaActorMediaRepository/ActorVideosRepository კვლავ ცალკე იმპლემენტაციებია ActorDetailsData-ში.
+- ViewModel კვლავ იღებს მხოლოდ UseCase პროტოკოლებს; მას networking/storage არ დამატებია.
+- სურათების pagination და ვიდეოების მიღება/გაერთიანება არ გადაკეთებულა.
+- imports შეიცვალა ActorDetailsDomain/ActorDetailsData-ით.
+- ActorDetails-ის manifest-იდან ამოღებულია ორი local package dependency და ძველი ოთხი მოდულის product references.
+- წაშლილია ActorMedia/ActorVideos-ის ცალკე Package.swift ფაილები.
+- ActorDetails-ის არსებული PresentationAPI/Assembly პროდუქტები და ხუთი ძირითადი შრე შენარჩუნებულია.
+- ტესტები არ დამატებულა და არ შეცვლილა.
 
-სამი დამოუკიდებელი ფექიჯი უფრო სასარგებლოა დამოუკიდებელი გამოყენების, გამოშვების ან გუნდის საზღვრების არსებობისას. მიმდინარე გამოყენებაში ასეთი საჭიროება კოდით არ ჩანს. ამიტომ ერთი ფექიჯი ნაკლებ საორგანიზაციო სირთულეს მოიტანს.
+გაერთიანების შემდეგ iOS build და არქიტექტურული შემოწმება წარმატებით დასრულდა. ძველი მოდულების imports/product dependencies აღარ დარჩა. ძველი ფექიჯების მხოლოდ ლოკალური Xcode metadata სარეზერვოდ ინახება `/private/tmp/cinetrack-actor-package-metadata.uyoIgW`-ში; იმპლემენტაციის ფაილები ActorDetails-შია და არ დაკარგულა.
 
-**ამ პასუხის ფარგლებში ფექიჯები არ გამიერთიანებია:** შეიცვალა News-ის ფოტო და მომზადდა ეს შეფასება/დოკუმენტაცია. არსებული imports და manifests შენარჩუნებულია.
+ერთ ფექიჯში გაერთიანება არ ნიშნავს ერთ დიდ Repository-ს ან ViewModel-ს: გაერთიანდა განთავსება და build-ის საზღვარი, არა ყველა პასუხისმგებლობა. ცალკე API პროვაიდერი თავისთავად ცალკე Package-ს არ მოითხოვს.
+
+თუ მომავალში სურათები/ვიდეოები სხვა დამოუკიდებელ Feature-საც დასჭირდება, მათი ხელახლა გამოყოფა შესაძლებელი იქნება შენარჩუნებული კონტრაქტების წყალობით.
 
 ## 5. ViewModel-ების შენს ოთხ წესთან შესაბამისობა
 
@@ -255,7 +267,7 @@ ViewModel-ები იყენებს `Observation`-ს და `@Observable`
 - ბიზნესოპერაციები და მოქმედებები გადანაწილდა extensions-ში.
 - გამოეყო დამატებითი sections, error components და scroll preference key ფაილები.
 - SeeAll/ვიდეო/დეტალების ნავიგაცია გადის Coordinator-ის მოქმედებებზე.
-- ActorMedia/ActorVideos-ის არსებული შესაძლებლობები შენარჩუნდა.
+- ActorMedia/ActorVideos-ის შესაძლებლობები შენარჩუნდა და მათი კოდი ActorDetailsDomain/ActorDetailsData-ის Media/Videos ფოლდერებში გაერთიანდა.
 
 მიზანი: დეტალების ViewModel მხოლოდ ეკრანის state-სა და UseCase-ების გამოძახებას მართავდეს, ხოლო საერთო კოლექციის კოდი არ დუბლირდებოდეს.
 
@@ -403,7 +415,7 @@ Data-ის API-ზე დამოკიდებულების ზუს�
 - ViewModel-ის თემატური მეთოდები → შესაბამისი FeatureViewModels/Extensions.
 - Authentication-ის navigation/factory კონტრაქტები → PresentationAPI.
 - HomeSection → HomePresentation.
-- ActorMedia/ActorVideos-ის ერთ ფაილში თავმოყრილი ტიპები → Entities/RepositoryProtocols/UseCases/DTOs/Repositories ფოლდერები.
+- ActorMedia/ActorVideos-ის ტიპები → ActorDetailsDomain/ActorDetailsData-ის Entities/RepositoryProtocols/UseCases/DTOs/Repositories ფოლდერების Media/Videos ქვედანაყოფები.
 
 ### დამატებული ძირითადი ნაწილები
 
@@ -502,9 +514,8 @@ ruby Scripts/check_architecture.rb
 ruby Scripts/format.rb
 ```
 
-## 13. რომელი გადაწყვეტილებები არ მიმიღია შენს ნაცვლად
+## 13. რომელი დამატებითი ცვლილებები არ შესრულებულა
 
-- ActorMedia/ActorVideos/ActorDetails ჯერ არ გაერთიანებულა; რეკომენდაცია ზემოთაა.
 - ViewModel-ები ცალკე PresentationModel target-ებში არ გადატანილა.
 - არ დამატებულა საერთო გლობალური cache/event bus.
 - არ შეცვლილა აპის backend/provider-ები ან მონაცემების მიგრაცია.

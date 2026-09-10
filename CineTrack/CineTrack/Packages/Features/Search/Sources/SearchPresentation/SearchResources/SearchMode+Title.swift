@@ -1,3 +1,8 @@
+//
+//  SearchRepositoryProtocol.swift
+//  Search
+//
+
 import SearchDomain
 
 extension SearchMode {

@@ -1,4 +1,4 @@
-import ActorVideosDomain
+import ActorDetailsDomain
 import SharedNetworking
 import TMDBData
 

@@ -1,3 +1,10 @@
+//
+//  ProfileStrings.swift
+//  Profile
+//
+//  Created by Gegi Ghvachliani on 22/06/2026.
+//
+
 public enum ProfileStrings {
 
     // MARK: - Screen Content

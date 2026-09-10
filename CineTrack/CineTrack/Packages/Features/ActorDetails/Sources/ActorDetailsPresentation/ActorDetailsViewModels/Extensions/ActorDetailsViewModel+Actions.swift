@@ -1,9 +1,14 @@
+//
+//  ActorDetailsViewModel+Actions.swift
+//  TMDBData
+//
+//  Created by Gegi Ghvachliani on 05/09/2026.
+//
+
 import Foundation
 import LibraryDomain
 import Observation
 import ActorDetailsDomain
-import ActorMediaDomain
-import ActorVideosDomain
 import SharedCore
 
 extension ActorDetailsViewModel {
@@ -27,9 +32,7 @@ extension ActorDetailsViewModel {
         )
     }
 
-    public func didTapNews(
-        _ news: News
-    ) {
+    public func didTapNews(_ news: News) {
         onNewsDetails?(news)
     }
 

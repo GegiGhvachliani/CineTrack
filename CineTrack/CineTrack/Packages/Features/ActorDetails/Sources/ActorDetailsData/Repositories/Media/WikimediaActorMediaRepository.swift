@@ -1,5 +1,5 @@
 import Foundation
-import ActorMediaDomain
+import ActorDetailsDomain
 import SharedNetworking
 
 public final class WikimediaActorMediaRepository: ActorMediaRepositoryProtocol, @unchecked Sendable {

@@ -1,3 +1,10 @@
+//
+//  ProfileFavouritesSectionView.swift
+//  Profile
+//
+//  Created by Gegi Ghvachliani on 22/06/2026.
+//
+
 import SwiftUI
 
 import DesignSystemComponents

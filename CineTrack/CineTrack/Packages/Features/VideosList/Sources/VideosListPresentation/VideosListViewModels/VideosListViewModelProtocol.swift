@@ -1,3 +1,10 @@
+//
+//  VideosListViewModelProtocol.swift
+//  VideosList
+//
+//  Created by Gegi Ghvachliani on 04/09/2026.
+//
+
 import Foundation
 import Observation
 import SharedCore

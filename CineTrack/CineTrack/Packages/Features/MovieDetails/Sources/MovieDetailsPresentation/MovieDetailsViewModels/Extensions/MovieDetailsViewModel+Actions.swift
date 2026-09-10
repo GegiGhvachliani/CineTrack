@@ -1,3 +1,10 @@
+//
+//  MovieDetailsViewModel+Actions.swift
+//  MovieDetails
+//
+//  Created by Gegi Ghvachliani on 04/09/2026.
+//
+
 import Foundation
 import LibraryDomain
 import Observation

@@ -1,3 +1,10 @@
+//
+//  ProfileEmptySectionView.swift
+//  Profile
+//
+//  Created by Gegi Ghvachliani on 22/06/2026.
+//
+
 import DesignSystemTokens
 import LibraryDomain
 import SwiftUI

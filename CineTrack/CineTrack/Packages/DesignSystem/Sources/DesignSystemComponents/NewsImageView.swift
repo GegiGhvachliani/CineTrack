@@ -1,3 +1,10 @@
+//
+//  file.swift
+//  DesignSystem
+//
+//  Created by Gegi Ghvachliani on 06/08/2026.
+//
+
 import SwiftUI
 
 public struct NewsImageView: View {

@@ -42,9 +42,7 @@ public struct ActorCreditMapper: Sendable {
         )
     }
 
-    private func makeImageURL(
-        from path: String?
-    ) -> URL? {
+    private func makeImageURL(from path: String?) -> URL? {
         guard let path, !path.isEmpty else {
             return nil
         }

@@ -10,8 +10,6 @@ import LibraryDomain
 import Observation
 
 import ActorDetailsDomain
-import ActorMediaDomain
-import ActorVideosDomain
 import SharedCore
 
 @Observable

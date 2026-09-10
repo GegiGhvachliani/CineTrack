@@ -15,9 +15,7 @@ public struct ActorExternalLinksMapper: Sendable {
 
     public init() {}
 
-    public func map(
-        _ dto: ActorExternalIDsDTO
-    ) -> ActorExternalLinks {
+    public func map(_ dto: ActorExternalIDsDTO) -> ActorExternalLinks {
         ActorExternalLinks(
             facebookID: dto.facebookID,
             instagramID: dto.instagramID,

@@ -1,3 +1,8 @@
+//
+//  SearchViewModelProtocol.swift
+//  Search
+//
+
 import Foundation
 import Observation
 import LibraryDomain

@@ -1,3 +1,10 @@
+//
+//  FetchMovieDetailsUseCase.swift
+//  MovieDetails
+//
+//  Created by Gegi Ghvachliani on 04/09/2026.
+//
+
 public protocol FetchMovieDetailsUseCaseProtocol: Sendable {
     func execute(movieID: Int) async throws -> MovieDetails
 }

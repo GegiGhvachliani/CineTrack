@@ -1,3 +1,10 @@
+//
+//  ProfileFactory.swift
+//  Profile
+//
+//  Created by Gegi Ghvachliani on 22/06/2026.
+//
+
 import SharedAuth
 import Foundation
 import ProfileDomain

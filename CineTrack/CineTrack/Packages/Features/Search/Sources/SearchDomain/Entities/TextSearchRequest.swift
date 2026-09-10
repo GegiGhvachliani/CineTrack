@@ -1,5 +1,9 @@
+//
+//  TextSearchRequest.swift
+//  Search
+//
+
 import Foundation
-import SearchDomain
 
 struct TextSearchRequest: Equatable {
 

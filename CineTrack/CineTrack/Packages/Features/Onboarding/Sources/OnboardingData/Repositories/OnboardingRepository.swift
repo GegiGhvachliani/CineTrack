@@ -1,3 +1,10 @@
+//
+//  OnboardingRepository.swift
+//  Onboarding
+//
+//  Created by Gegi Ghvachliani on 26/06/2026.
+//
+
 import OnboardingDomain
 
 public final class OnboardingRepository: OnboardingRepositoryProtocol {

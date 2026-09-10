@@ -1,3 +1,10 @@
+//
+//  ActorDetailsStrings.swift
+//  TMDBData
+//
+//  Created by Gegi Ghvachliani on 05/09/2026.
+//
+
 public enum ActorDetailsStrings {
 
     // MARK: - Screen Content

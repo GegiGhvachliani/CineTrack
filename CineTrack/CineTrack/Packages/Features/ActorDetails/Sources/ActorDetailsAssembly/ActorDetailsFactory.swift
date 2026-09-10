@@ -18,10 +18,6 @@ import SharedAuth
 import SharedStorage
 import TMDBData
 import NewsData
-import ActorMediaData
-import ActorMediaDomain
-import ActorVideosData
-import ActorVideosDomain
 import LibraryData
 import LibraryDomain
 

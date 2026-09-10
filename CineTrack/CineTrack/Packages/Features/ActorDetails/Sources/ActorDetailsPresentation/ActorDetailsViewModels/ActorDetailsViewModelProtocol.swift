@@ -1,9 +1,14 @@
+//
+//  ActorDetailsStrings.swift
+//  TMDBData
+//
+//  Created by Gegi Ghvachliani on 05/09/2026.
+//
+
 import Foundation
 import LibraryDomain
 import Observation
 import ActorDetailsDomain
-import ActorMediaDomain
-import ActorVideosDomain
 import SharedCore
 
 @MainActor

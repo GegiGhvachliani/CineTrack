@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import ActorMediaDomain
+import ActorDetailsDomain
 import DesignSystemComponents
 
 struct ImageSectionView: View {

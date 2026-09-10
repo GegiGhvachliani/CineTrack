@@ -1,3 +1,8 @@
+//
+//  SearchTarget.swift
+//  Search
+//
+
 import SearchDomain
 
 extension SearchTarget {

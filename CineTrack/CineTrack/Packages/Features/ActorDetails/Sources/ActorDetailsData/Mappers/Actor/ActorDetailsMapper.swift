@@ -19,9 +19,7 @@ public struct ActorDetailsMapper: Sendable {
 
     public init() {}
 
-    public func map(
-        _ dto: ActorDetailsDTO
-    ) -> ActorDetails {
+    public func map(_ dto: ActorDetailsDTO) -> ActorDetails {
         ActorDetails(
             id: dto.id,
             name: dto.name,
@@ -38,9 +36,7 @@ public struct ActorDetailsMapper: Sendable {
         )
     }
 
-    private static func parseDate(
-        _ value: String?
-    ) -> Date? {
+    private static func parseDate(_ value: String?) -> Date? {
         guard let value else {
             return nil
         }
@@ -53,9 +49,7 @@ public struct ActorDetailsMapper: Sendable {
         return formatter.date(from: value)
     }
 
-    private func makeImageURL(
-        from path: String?
-    ) -> URL? {
+    private func makeImageURL(from path: String?) -> URL? {
         guard let path, !path.isEmpty else {
             return nil
         }

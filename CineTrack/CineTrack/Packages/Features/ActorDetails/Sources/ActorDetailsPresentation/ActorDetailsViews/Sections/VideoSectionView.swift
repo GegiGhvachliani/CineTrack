@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import ActorVideosDomain
+import ActorDetailsDomain
 import DesignSystemComponents
 
 struct VideoSectionView: View {
