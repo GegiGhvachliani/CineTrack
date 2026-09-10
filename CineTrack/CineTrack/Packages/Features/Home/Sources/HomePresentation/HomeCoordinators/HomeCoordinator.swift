@@ -11,29 +11,33 @@ import HomePresentationAPI
 import HomeDomain
 
 public final class HomeCoordinator: HomeCoordinatorProtocol {
-    
+
+    // MARK: - Properties
+
     public var childCoordinators: [Coordinator] = []
     public let navigationController: UINavigationController
     private let factory: HomeFactoryProtocol
-    
+
     private weak var router: HomeRoutingProtocol?
-    
+
+    // MARK: - Initialization
+
     public init(
         navigationController: UINavigationController,
         factory: HomeFactoryProtocol,
         router: HomeRoutingProtocol
-        
+
     ) {
         self.navigationController = navigationController
         self.factory = factory
         self.router = router
     }
-    
+
     public func start() {
         let homeVC = factory.makeHomeViewController(coordinator: self)
         navigationController.setViewControllers(([homeVC]), animated: false)
     }
-    
+
     public func showSearch() {
         router?.showSearch()
     }

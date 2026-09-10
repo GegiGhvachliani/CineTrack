@@ -6,10 +6,13 @@
 //
 
 import SwiftUI
+import LibraryDomain
 import SharedCore
 import DesignSystemComponents
 
 struct FanFavouritesSectionView: View {
+
+    // MARK: - Properties
 
     let movies: [Movie]
     let watchlistedMovies: [Movie]
@@ -19,8 +22,10 @@ struct FanFavouritesSectionView: View {
     let onSeeAllTap: () -> Void
     let onLoadMore: () -> Void
 
+    // MARK: - Body
+
     var body: some View {
-        
+
         HorizontalScrollView(
             headerText: HomeStrings.Section.fanFavourites,
             seeAllTitle: HomeStrings.Action.seeAll,
@@ -40,5 +45,5 @@ struct FanFavouritesSectionView: View {
             )
         }
     }
-    
+
 }

@@ -8,5 +8,8 @@
 import Foundation
 
 public struct PersonMovieCreditsResponseDTO: Decodable {
+
+    // MARK: - Properties
+
     public let cast: [MovieDTO]
 }

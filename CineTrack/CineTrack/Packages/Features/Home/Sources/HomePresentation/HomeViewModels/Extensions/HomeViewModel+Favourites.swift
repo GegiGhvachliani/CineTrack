@@ -5,8 +5,8 @@
 //  Created by Gegi Ghvachliani on 13/08/2026.
 //
 
-
 import Foundation
+import LibraryDomain
 
 import HomeDomain
 import SharedCore
@@ -39,13 +39,11 @@ extension HomeViewModel {
             self.error = error
         }
     }
-    
-    
 
     // MARK: - Toggle
 
     public func toggleFavourite(for actor: Actor) async {
-        
+
         guard pendingFavouriteIDs.insert(actor.id).inserted else {
             return
         }
@@ -55,8 +53,8 @@ extension HomeViewModel {
         }
 
         let wasFavourited = favouritedActors.contains {
-                $0.id == actor.id
-            }
+            $0.id == actor.id
+        }
 
         if wasFavourited {
 

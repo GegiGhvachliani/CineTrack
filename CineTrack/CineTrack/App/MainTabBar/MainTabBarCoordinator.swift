@@ -9,20 +9,28 @@ import NewsDetailsPresentationAPI
 import SeeAllPresentationAPI
 import VideosListPresentationAPI
 
-final class MainTabBarCoordinator: NSObject, Coordinator, HomeRoutingProtocol, SearchRoutingProtocol, ActorDetailsRoutingProtocol, MovieDetailsRoutingProtocol, ProfileRoutingProtocol, UINavigationControllerDelegate {
+final class MainTabBarCoordinator: NSObject, MainTabBarCoordinatorProtocol, VideosListRoutingProtocol,
+    SeeAllRoutingProtocol, HomeRoutingProtocol, SearchRoutingProtocol, ActorDetailsRoutingProtocol,
+    MovieDetailsRoutingProtocol, ProfileRoutingProtocol, UINavigationControllerDelegate {
+
+    // MARK: - Properties
+
     var onSignedOut: (() -> Void)?
-    // childCoordinators ინახავს შვილ კოორდინატორებს, რომ მეხსიერებიდან არ ამოვარდნენ (სამომავლოდ დაგვჭირდება)
     var childCoordinators: [Coordinator] = []
-    
+
     private let navigationController: UINavigationController
     private let tabBarController: MainTabBarController
     private let container: AppDIContainerProtocol
-    
+
     private weak var homeNavigationController: UINavigationController?
     private var detailCoordinators: [ObjectIdentifier: Coordinator] = [:]
+    private var seeAllCoordinator: SeeAllCoordinatorProtocol?
     private var fullScreenViewControllerIDs = Set<ObjectIdentifier>()
-    
+
     // ინიციალიზატორში გარედან შემოგვაქვს მთავარი ნავიგაცია
+
+    // MARK: - Initialization
+
     init(
         navigationController: UINavigationController,
         tabBarController: MainTabBarController = MainTabBarController(),
@@ -33,7 +41,7 @@ final class MainTabBarCoordinator: NSObject, Coordinator, HomeRoutingProtocol, S
         self.container = container
         super.init()
     }
-    
+
     func start() {
         // 1. თითოეული ჩანართისთვის (ტაბისთვის) ვქმნით ცალკე ნავიგაციის კონტროლერს, რადგან თითოეულს აქვს თავისი ნავიგაციის ისტორია
         let homeNav = UINavigationController()
@@ -43,7 +51,7 @@ final class MainTabBarCoordinator: NSObject, Coordinator, HomeRoutingProtocol, S
         homeNav.delegate = self
         searchNav.delegate = self
         profileNav.delegate = self
-        
+
         // 2. ფექთორების დახმარებით ვიღებთ გამზადებულ ფერად ეკრანებს
         homeNavigationController = homeNav
 
@@ -55,25 +63,28 @@ final class MainTabBarCoordinator: NSObject, Coordinator, HomeRoutingProtocol, S
             navigationController: searchNav,
             router: self
         )
-        let profileCoordinator = container.profileFactory.makeProfileCoordinator(navigationController: profileNav, router: self)
-        
+        let profileCoordinator = container.profileFactory.makeProfileCoordinator(
+            navigationController: profileNav, router: self)
+
         // 3. თითოეულ ნავიგაციაში პირველ ეკრანად ვსვამთ ჩვენს ფერად ვიუებს
         childCoordinators.append(homeCoordinator)
         childCoordinators.append(searchCoordinator)
         childCoordinators.append(profileCoordinator)
-        
+
         homeCoordinator.start()
         searchCoordinator.start()
         profileCoordinator.start()
-        
+
         // 4. ვანიჭებთ ტაბბარ აითემებს
-        homeNav.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), tag: 0)
-        searchNav.tabBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magnifyingglass"), tag: 1)
-        profileNav.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person"), tag: 2)
-        
+        homeNav.tabBarItem = UITabBarItem(title: AppStrings.Tab.home, image: UIImage(systemName: "house"), tag: 0)
+        searchNav.tabBarItem = UITabBarItem(
+            title: AppStrings.Tab.search, image: UIImage(systemName: "magnifyingglass"), tag: 1)
+        profileNav.tabBarItem = UITabBarItem(
+            title: AppStrings.Tab.profile, image: UIImage(systemName: "person"), tag: 2)
+
         // 5. ტაბბარ კონტროლერს ვაწვდით ამ აწყობილ ნავიგაციებს
         tabBarController.viewControllers = [homeNav, searchNav, profileNav]
-        
+
         // 6. ჩვენს მთავარ ნავიგაციაში root ეკრანად ვსვამთ მთლიან ტაბბარს და ვმალავთ ზედა ნავს
         navigationController.setViewControllers([tabBarController], animated: false)
         navigationController.isNavigationBarHidden = true
@@ -84,12 +95,13 @@ final class MainTabBarCoordinator: NSObject, Coordinator, HomeRoutingProtocol, S
     }
 
     func didSignOut() {
+        seeAllCoordinator = nil
         detailCoordinators.removeAll()
         fullScreenViewControllerIDs.removeAll()
         childCoordinators.removeAll()
         onSignedOut?()
     }
-    
+
     func showActorDetails(actorID: Int) {
         guard let activeNavigationController else { return }
 
@@ -103,7 +115,7 @@ final class MainTabBarCoordinator: NSObject, Coordinator, HomeRoutingProtocol, S
         coordinator.start()
         retainDetailCoordinator(coordinator, for: activeNavigationController)
     }
-    
+
     func showMovieDetails(movie: Movie) {
         guard let activeNavigationController else {
             return
@@ -119,26 +131,36 @@ final class MainTabBarCoordinator: NSObject, Coordinator, HomeRoutingProtocol, S
         coordinator.start()
         retainDetailCoordinator(coordinator, for: activeNavigationController)
     }
-    
+
     func showNewsDetails(news: News) {
-        let viewController = container.newsDetailsFactory.makeNewsDetailsViewController(news: news)
+        guard let activeNavigationController else {
+            return
+        }
 
-        activeNavigationController?.setNavigationBarHidden(false, animated: true)
-        activeNavigationController?.pushViewController(viewController, animated: true)
-    }
-    
-    func showSeeAll(content: SeeAllContent) {
-        let viewController = container.seeAllFactory.makeSeeAllViewController(
-            content: content,
-            onMovieTap: { [weak self] movie in self?.dismissSeeAllThen { self?.showMovieDetails(movie: movie) } },
-            onActorTap: { [weak self] actor in self?.dismissSeeAllThen { self?.showActorDetails(actorID: actor.id) } },
-            onNewsTap: { [weak self] news in self?.dismissSeeAllThen { self?.showNewsDetails(news: news) } }
+        activeNavigationController.setNavigationBarHidden(false, animated: true)
+        let coordinator = container.newsDetailsFactory.makeNewsDetailsCoordinator(
+            news: news,
+            navigationController: activeNavigationController
         )
-        activeNavigationController?.present(viewController, animated: true)
+        coordinator.start()
+        retainDetailCoordinator(coordinator, for: activeNavigationController)
     }
 
-    private func dismissSeeAllThen(_ action: @escaping () -> Void) {
-        activeNavigationController?.dismiss(animated: true, completion: action)
+    func showSeeAll(content: SeeAllContent) {
+        guard let activeNavigationController, seeAllCoordinator == nil else {
+            return
+        }
+
+        let coordinator = container.seeAllFactory.makeSeeAllCoordinator(
+            content: content,
+            presentingController: activeNavigationController,
+            router: self
+        )
+        coordinator.onFinish = { [weak self] in
+            self?.seeAllCoordinator = nil
+        }
+        seeAllCoordinator = coordinator
+        coordinator.start()
     }
 
     private var activeNavigationController: UINavigationController? {
@@ -146,22 +168,24 @@ final class MainTabBarCoordinator: NSObject, Coordinator, HomeRoutingProtocol, S
     }
 
     func showVideosList(context: VideoPlaylistContext) {
-        let viewController = container.videosListFactory.makeVideosListViewController(
-            context: context,
-            onMovieDetails: { [weak self] context in
-                self?.showMovieDetails(from: context)
-            }
-        )
-
         guard let activeNavigationController else {
             return
         }
 
-        fullScreenViewControllerIDs.insert(ObjectIdentifier(viewController))
-        activeNavigationController.pushViewController(viewController, animated: true)
+        let coordinator = container.videosListFactory.makeVideosListCoordinator(
+            context: context,
+            navigationController: activeNavigationController,
+            router: self
+        )
+        coordinator.start()
+        retainDetailCoordinator(coordinator, for: activeNavigationController)
+
+        if let viewController = activeNavigationController.topViewController {
+            fullScreenViewControllerIDs.insert(ObjectIdentifier(viewController))
+        }
     }
 
-    private func showMovieDetails(from context: VideoPlaylistContext) {
+    func showMovieDetails(from context: VideoPlaylistContext) {
         guard let navigationController = activeNavigationController else {
             return
         }
@@ -181,7 +205,9 @@ final class MainTabBarCoordinator: NSObject, Coordinator, HomeRoutingProtocol, S
         didShow viewController: UIViewController,
         animated: Bool
     ) {
-        let navigationControllers = (tabBarController.viewControllers ?? []).compactMap { $0 as? UINavigationController }
+        let navigationControllers = (tabBarController.viewControllers ?? []).compactMap {
+            $0 as? UINavigationController
+        }
         let activeViewControllerIDs = Set(navigationControllers.flatMap(\.viewControllers).map(ObjectIdentifier.init))
         detailCoordinators = detailCoordinators.filter { activeViewControllerIDs.contains($0.key) }
         fullScreenViewControllerIDs = fullScreenViewControllerIDs.intersection(activeViewControllerIDs)

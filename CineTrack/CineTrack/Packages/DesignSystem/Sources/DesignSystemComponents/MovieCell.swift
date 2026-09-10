@@ -3,11 +3,16 @@ import SharedCore
 import DesignSystemTokens
 
 public struct MovieCell: View {
+
+    // MARK: - Properties
+
     private let movie: Movie
     private let isWatchlisted: Bool
     private let cellHeight: CGFloat
     private let onMovieTap: () -> Void
     private let onWatchlistTap: () -> Void
+
+    // MARK: - Initialization
 
     public init(
         movie: Movie,
@@ -22,6 +27,8 @@ public struct MovieCell: View {
         self.onMovieTap = onMovieTap
         self.onWatchlistTap = onWatchlistTap
     }
+
+    // MARK: - Body
 
     public var body: some View {
         VStack(spacing: 0) {

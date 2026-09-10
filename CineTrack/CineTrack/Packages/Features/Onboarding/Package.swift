@@ -11,35 +11,38 @@ let package = Package(
             name: "OnboardingPresentationAPI",
             targets: ["OnboardingPresentationAPI"]
         ),
-        .library(name: "OnboardingAssembly", targets: ["OnboardingAssembly"]),
+        .library(name: "OnboardingAssembly", targets: ["OnboardingAssembly"])
     ],
     dependencies: [
-        .package(path: "../SharedKit"),
-        .package(path: "../DesignSystem"),
+        .package(path: "../../SharedKit"),
+        .package(path: "../../DesignSystem")
     ],
     targets: [
-        .target(name: "OnboardingDomain",
-                dependencies: [],
-                path: "Sources/OnboardingDomain"
-               ),
-        
-        .target(name: "OnboardingData",
-                dependencies: [
-                    "OnboardingDomain"
-                ],
-                path: "Sources/OnboardingData"
-               ),
-        
+        .target(
+            name: "OnboardingDomain",
+            dependencies: [],
+            path: "Sources/OnboardingDomain"
+        ),
+
+        .target(
+            name: "OnboardingData",
+            dependencies: [
+                "OnboardingDomain"
+            ],
+            path: "Sources/OnboardingData"
+        ),
+
         .target(
             name: "OnboardingPresentation",
             dependencies: [
+                .product(name: "DesignSystemTokens", package: "DesignSystem"),
                 "OnboardingDomain",
                 "OnboardingPresentationAPI",
                 .product(name: "SharedCore", package: "SharedKit"),  // კოორდინატორის პროტოკოლებისთვის
                 .product(
                     name: "DesignSystemComponents",
                     package: "DesignSystem"
-                ),  // ღილაკებისთვის და ფონტებისთვის
+                )  // ღილაკებისთვის და ფონტებისთვის
             ],
             path: "Sources/OnboardingPresentation",
             resources: [.process("OnboardingResources/OnboardingAssets.xcassets")]
@@ -69,6 +72,6 @@ let package = Package(
             name: "OnboardingTests",
             dependencies: ["OnboardingPresentation"],
             path: "Tests"
-        ),
+        )
     ]
 )

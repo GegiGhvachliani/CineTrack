@@ -23,10 +23,11 @@ let package = Package(
                 .process("Resources/DesignSystemAssets.xcassets")
             ]
         ),
-        
+
         .target(
             name: "DesignSystemComponents",
             dependencies: [
+                .product(name: "LibraryDomain", package: "SharedKit"),
                 "DesignSystemTokens",
                 .product(name: "SharedCore", package: "SharedKit")  // თუ Layout/UI Helpers გჭირდება SharedCore-დან
             ],
@@ -35,12 +36,12 @@ let package = Package(
                 .process("Resources")
             ]
         ),
-        
+
         .testTarget(
             name: "DesignSystemTests",
             dependencies: ["DesignSystemComponents", "DesignSystemTokens"],
             path: "Tests"
-        ),
+        )
     ],
     swiftLanguageModes: [.v6]
 )

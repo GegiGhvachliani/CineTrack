@@ -9,8 +9,12 @@ import Foundation
 
 public struct NewsConfiguration: Sendable {
 
+    // MARK: - Properties
+
     public let baseURL: URL
     public let apiKey: String
+
+    // MARK: - Initialization
 
     public init(
         baseURL: URL,

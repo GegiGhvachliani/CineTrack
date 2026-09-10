@@ -1,5 +1,5 @@
 //
-//  OnboardingPageVIew.swift
+//  OnboardingPageView.swift
 //  Onboarding
 //
 //  Created by Gegi Ghvachliani on 29/06/2026.
@@ -10,33 +10,39 @@ import OnboardingDomain
 import SwiftUI
 
 public struct OnboardingPageView: View {
-    
+
+    // MARK: - Properties
+
     let page: OnboardingStep
     let action: () -> Void
-    
+
+    // MARK: - Initialization
+
     public init(page: OnboardingStep, action: @escaping () -> Void) {
         self.page = page
         self.action = action
     }
-    
+
+    // MARK: - Body
+
     public var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .bottom) {
                 ColorTokens.Background.primary.ignoresSafeArea()
-                
+
                 VStack {
                     movieImageView
                     Spacer()
                 }
-                
+
                 VStack(spacing: SpacingTokens.medium) {
                     appTitleView
                         .padding(.bottom)
                     discoverTitleView
                     discoverSubtitleView
-                    
+
                     Spacer()
-                    
+
                     buttonView
                 }
                 .frame(height: geometry.size.height * 0.80)
@@ -47,11 +53,11 @@ public struct OnboardingPageView: View {
                     Rectangle()
                         .fill(ColorTokens.Background.primary)
                 )
-                
+
             }
         }
     }
-    
+
     private var movieImageView: some View {
         Image(page.imageTitle, bundle: .module)
             .resizable()
@@ -59,21 +65,21 @@ public struct OnboardingPageView: View {
             .frame(maxWidth: .infinity)
             .ignoresSafeArea()
     }
-    
+
     private var appTitleView: some View {
         Text(page.appTitle)
             .font(TypographyTokens.logo)
             .foregroundStyle(ColorTokens.Brand.primary)
             .frame(alignment: .center)
     }
-    
+
     private var discoverTitleView: some View {
         Text(page.title)
             .font(TypographyTokens.title2)
             .foregroundStyle(ColorTokens.Text.main)
             .frame(alignment: .center)
     }
-    
+
     private var discoverSubtitleView: some View {
         Text(page.subtitle)
             .font(TypographyTokens.body)
@@ -81,7 +87,7 @@ public struct OnboardingPageView: View {
             .multilineTextAlignment(.center)
             .padding(.horizontal, SpacingTokens.large)
     }
-    
+
     private var buttonView: some View {
         Button(action: action) {
             Text(page.buttonText)
@@ -98,6 +104,6 @@ public struct OnboardingPageView: View {
 }
 
 #Preview {
-    var action = { print(5)}
+    var action = { print(5) }
     OnboardingPageView(page: .preferences, action: action)
 }

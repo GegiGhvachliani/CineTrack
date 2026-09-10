@@ -113,7 +113,7 @@ extension TMDBEndpoint {
     public var path: String {
         switch self {
 
-        // MARK: Movies
+        // MARK: - Movies
 
         case .trending(let timeWindow, _):
             return "/3/trending/movie/\(timeWindow.rawValue)"
@@ -160,7 +160,7 @@ extension TMDBEndpoint {
         case .advancedMovieSearch:
             return "/3/discover/movie"
 
-        // MARK: People
+        // MARK: - People
 
         case .popularPeople:
             return "/3/person/popular"
@@ -183,7 +183,7 @@ extension TMDBEndpoint {
         case .personExternalIDs(let personID):
             return "/3/person/\(personID)/external_ids"
 
-        // MARK: Discover
+        // MARK: - Discover
 
         case .discoverUpcoming:
             return "/3/discover/movie"

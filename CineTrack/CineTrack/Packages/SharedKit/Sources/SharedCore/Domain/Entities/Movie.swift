@@ -9,6 +9,8 @@ import Foundation
 
 public struct Movie: Identifiable, Equatable, Sendable {
 
+    // MARK: - Properties
+
     public let id: Int
     public let title: String
     public let overview: String
@@ -17,6 +19,8 @@ public struct Movie: Identifiable, Equatable, Sendable {
     public let releaseDate: String?
     public let voteAverage: Double
     public let voteCount: Int
+
+    // MARK: - Initialization
 
     public init(
         id: Int,

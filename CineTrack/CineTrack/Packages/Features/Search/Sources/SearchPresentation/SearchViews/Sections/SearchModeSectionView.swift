@@ -10,7 +10,12 @@ import SearchDomain
 
 struct SearchModeSectionView: View {
 
-    @Binding var selectedMode: SearchMode
+    // MARK: - Properties
+
+    @Binding
+    var selectedMode: SearchMode
+
+    // MARK: - Body
 
     var body: some View {
         HStack(spacing: 0) {
@@ -18,12 +23,15 @@ struct SearchModeSectionView: View {
                 Button {
                     selectedMode = mode
                 } label: {
-                    Text(mode.rawValue)
+                    Text(mode.title)
                         .font(.system(size: 15, weight: .semibold, design: .rounded))
                         .foregroundStyle(selectedMode == mode ? ColorTokens.Text.inverse : ColorTokens.Text.main)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 5)
-                        .background(selectedMode == mode ? ColorTokens.Brand.primary : Color.clear, in: RoundedRectangle(cornerRadius: 14))
+                        .background(
+                            selectedMode == mode ? ColorTokens.Brand.primary : Color.clear,
+                            in: RoundedRectangle(cornerRadius: 14)
+                        )
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)

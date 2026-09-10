@@ -10,6 +10,8 @@ import SharedCore
 
 public struct PersonMapper: Sendable {
 
+    // MARK: - Initialization
+
     public init() {}
 
     public func map(_ dto: PersonDTO) -> Actor? {

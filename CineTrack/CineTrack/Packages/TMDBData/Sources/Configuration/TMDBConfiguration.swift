@@ -10,8 +10,12 @@ import Foundation
 // ინახავს TMDB-თან დაკავშირებულ configuration-ს.
 public struct TMDBConfiguration: Sendable {
 
+    // MARK: - Properties
+
     public let baseURL: URL
     public let accessToken: String
+
+    // MARK: - Initialization
 
     public init(
         baseURL: URL,
@@ -22,7 +26,8 @@ public struct TMDBConfiguration: Sendable {
     }
 }
 
-// MARK: მაგალითად
+// MARK: - Მაგალითად
+
 /* let configuration = TMDBConfiguration(
  baseURL: URL(
      string: "https://api.themoviedb.org"
@@ -30,7 +35,8 @@ public struct TMDBConfiguration: Sendable {
  accessToken: "..."
 )*/
 
-// MARK: რატომ არ ვწერთ ამას პირდაპირ TMDBRequestBuilder-ში?
+// MARK: - Რატომ არ ვწერთ ამას პირდაპირ TMDBRequestBuilder-ში?
+
 // შეგვეძლო მაგრამ მაშინ configuration hardcoded გვექნებოდა
 /*
  private let baseURL =

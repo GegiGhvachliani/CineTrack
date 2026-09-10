@@ -4,14 +4,16 @@
 //
 
 import SwiftUI
+import LibraryDomain
 
 import DesignSystemTokens
 import DesignSystemComponents
-import HomePresentation
 import SearchDomain
 import SharedCore
 
 struct SearchResultsSectionView: View {
+
+    // MARK: - Properties
 
     let movies: [Movie]
     let actors: [Actor]
@@ -30,6 +32,8 @@ struct SearchResultsSectionView: View {
     let onWatchlistTap: (Movie) -> Void
     let onFavouriteTap: (Actor) -> Void
 
+    // MARK: - Body
+
     var body: some View {
         Group {
             if isLoading {
@@ -46,9 +50,9 @@ struct SearchResultsSectionView: View {
             } else if hasSearched {
                 if movies.isEmpty, actors.isEmpty {
                     ContentUnavailableView(
-                        "No results",
+                        SearchStrings.Content.noResults,
                         systemImage: "film.stack",
-                        description: Text("Try another search or adjust the filters.")
+                        description: Text(SearchStrings.Content.tryAnotherSearchOrAdjustTheFilters)
                     )
                     .frame(maxWidth: .infinity, minHeight: 360, alignment: .center)
                 } else {
@@ -56,9 +60,12 @@ struct SearchResultsSectionView: View {
                 }
             } else {
                 ContentUnavailableView(
-                    "Start exploring",
+                    SearchStrings.Content.startExploring,
                     systemImage: "magnifyingglass",
-                    description: Text(selectedMode == .recent ? "Search for a movie or an actor." : "Choose filters, then see your results.")
+                    description: Text(
+                        selectedMode == .recent
+                            ? SearchStrings.Content.searchForAMovieOrAnActor
+                            : SearchStrings.Content.chooseFiltersThenSeeYourResults)
                 )
                 .frame(maxWidth: .infinity, minHeight: 420, alignment: .center)
             }

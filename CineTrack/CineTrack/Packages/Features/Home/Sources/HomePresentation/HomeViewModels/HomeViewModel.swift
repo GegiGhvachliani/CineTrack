@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LibraryDomain
 import Observation
 
 import HomeDomain
@@ -37,23 +38,19 @@ public final class HomeViewModel: HomeViewModelProtocol {
     public internal(set) var selectedFavouriteActor: Actor?
     public internal(set) var selectedFavouriteActorMovies: [Movie] = []
 
-
     // MARK: - Actors
 
     public internal(set) var bornTodayActors: [Actor] = []
     public internal(set) var mostPopularActors: [Actor] = []
-
 
     // MARK: - Featured Content
 
     public internal(set) var featuredItems: [FeaturedItem] = []
     public internal(set) var movieVideos: [Int: [MovieVideo]] = [:]
 
-
     // MARK: - News
 
     public internal(set) var news: [News] = []
-
 
     // MARK: - Recently Viewed
 
@@ -74,23 +71,21 @@ public final class HomeViewModel: HomeViewModelProtocol {
         }
     }
 
-
     // MARK: - Watchlist
 
     public internal(set) var watchlistedMovies: [Movie] = []
 
-
     // MARK: - Favourites
 
     public internal(set) var favouritedActors: [Actor] = []
-    
+
     // MARK: - Pending
-    
+
     internal var pendingWatchlistIDs: Set<Int> = []
     internal var pendingFavouriteIDs: Set<Int> = []
 
     // MARK: - Loading State
-    
+
     public internal(set) var isHomeLoading = false
     internal var hasLoadedInitialHome = false
 
@@ -110,7 +105,6 @@ public final class HomeViewModel: HomeViewModelProtocol {
 
     public internal(set) var isRecentlyViewedLoading = false
 
-
     // MARK: - Pagination
 
     internal var trendingPage = 1
@@ -123,7 +117,6 @@ public final class HomeViewModel: HomeViewModelProtocol {
     internal var mostPopularCelebritiesPage = 1
 
     internal var newsPage = 1
-
 
     // MARK: - Pagination State
 
@@ -138,15 +131,11 @@ public final class HomeViewModel: HomeViewModelProtocol {
 
     public internal(set) var hasMoreNews = true
 
-
     // MARK: - Error
 
     public internal(set) var error: Error?
 
-
-    // MARK: - Dependencies (UseCases)
-
-    // MARK: Movies
+    // MARK: - Movies
 
     internal let fetchTrendingUseCase: FetchTrendingUseCaseProtocol
     internal let fetchPopularUseCase: FetchPopularUseCaseProtocol
@@ -156,31 +145,29 @@ public final class HomeViewModel: HomeViewModelProtocol {
     internal let fetchUpcomingUseCase: FetchUpcomingUseCaseProtocol
     internal let fetchMovieVideosUseCase: FetchMovieVideosUseCaseProtocol
 
-    // MARK: Actors
+    // MARK: - Actors
 
     internal let fetchBornTodayActorsUseCase: FetchBornTodayActorsUseCaseProtocol
     internal let fetchMostPopularActorsUseCase: FetchMostPopularActorsUseCaseProtocol
     internal let fetchActorMoviesUseCase: FetchActorMoviesUseCaseProtocol
 
-    // MARK: News
+    // MARK: - News
 
     internal let fetchNewsUseCase: FetchNewsUseCaseProtocol
 
-    // MARK: Recently Viewed
+    // MARK: - Recently Viewed
 
     internal let fetchRecentlyViewedMoviesUseCase: FetchRecentlyViewedMoviesUseCaseProtocol
     internal let fetchRecentlyViewedActorsUseCase: FetchRecentlyViewedActorsUseCaseProtocol
-    internal let addRecentlyViewedMovieUseCase: AddRecentlyViewedMovieUseCaseProtocol
-    internal let addRecentlyViewedActorUseCase: AddRecentlyViewedActorUseCaseProtocol
     internal let clearRecentlyViewedUseCase: ClearRecentlyViewedUseCaseProtocol
 
-    // MARK: Watchlist
+    // MARK: - Watchlist
 
     internal let fetchWatchlistedMoviesUseCase: FetchWatchlistedMoviesUseCaseProtocol
     internal let addWatchlistedMovieUseCase: AddWatchlistedMovieUseCaseProtocol
     internal let removeWatchlistedMovieUseCase: RemoveWatchlistedMovieUseCaseProtocol
 
-    // MARK: Favourites
+    // MARK: - Favourites
 
     internal let fetchFavouritedActorsUseCase: FetchFavouritedActorsUseCaseProtocol
     internal let addFavouritedActorUseCase: AddFavouritedActorUseCaseProtocol
@@ -201,8 +188,6 @@ public final class HomeViewModel: HomeViewModelProtocol {
         fetchNewsUseCase: FetchNewsUseCaseProtocol,
         fetchRecentlyViewedMoviesUseCase: FetchRecentlyViewedMoviesUseCaseProtocol,
         fetchRecentlyViewedActorsUseCase: FetchRecentlyViewedActorsUseCaseProtocol,
-        addRecentlyViewedMovieUseCase: AddRecentlyViewedMovieUseCaseProtocol,
-        addRecentlyViewedActorUseCase: AddRecentlyViewedActorUseCaseProtocol,
         clearRecentlyViewedUseCase: ClearRecentlyViewedUseCaseProtocol,
         fetchWatchlistedMoviesUseCase: FetchWatchlistedMoviesUseCaseProtocol,
         addWatchlistedMovieUseCase: AddWatchlistedMovieUseCaseProtocol,
@@ -224,8 +209,6 @@ public final class HomeViewModel: HomeViewModelProtocol {
         self.fetchNewsUseCase = fetchNewsUseCase
         self.fetchRecentlyViewedMoviesUseCase = fetchRecentlyViewedMoviesUseCase
         self.fetchRecentlyViewedActorsUseCase = fetchRecentlyViewedActorsUseCase
-        self.addRecentlyViewedMovieUseCase = addRecentlyViewedMovieUseCase
-        self.addRecentlyViewedActorUseCase = addRecentlyViewedActorUseCase
         self.clearRecentlyViewedUseCase = clearRecentlyViewedUseCase
         self.fetchWatchlistedMoviesUseCase = fetchWatchlistedMoviesUseCase
         self.addWatchlistedMovieUseCase = addWatchlistedMovieUseCase

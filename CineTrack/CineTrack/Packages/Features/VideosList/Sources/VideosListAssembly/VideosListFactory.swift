@@ -19,17 +19,25 @@ import VideosListPresentationAPI
 @MainActor
 public struct VideosListFactory: VideosListFactoryProtocol {
 
-    public init() {}
+    // MARK: - Dependencies
+
+    private let apiClient: APIClient
+    private let configuration: TMDBConfiguration
+
+    // MARK: - Initialization
+
+    public init(
+        apiClient: APIClient,
+        configuration: TMDBConfiguration
+    ) {
+        self.apiClient = apiClient
+        self.configuration = configuration
+    }
 
     public func makeVideosListViewController(
         context: VideoPlaylistContext,
-        onMovieDetails: @escaping (VideoPlaylistContext) -> Void
+        coordinator: VideosListCoordinatorProtocol
     ) -> UIViewController {
-        let apiClient = URLSessionAPIClient()
-        let configuration = TMDBConfiguration(
-            baseURL: URL(string: "https://api.themoviedb.org")!,
-            accessToken: "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4NWEyZmRkNjQyY2FmOTMzYTVjMzk5N2VkY2VjYTRjNSIsIm5iZiI6MTc2Mzk4OTQxNS42MDA5OTk4LCJzdWIiOiI2OTI0NTdhN2EwYzRiMWIxMzIxODc1ZGIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.ZfESC0ZJHYqzbSE2xCYRjfOSwiacjs7sYl-_qvgDbc4"
-        )
         let repository = VideosListRepository(
             apiClient: apiClient,
             configuration: configuration
@@ -38,9 +46,29 @@ public struct VideosListFactory: VideosListFactoryProtocol {
             context: context,
             fetchPlaylistVideosUseCase: FetchPlaylistVideosUseCase(repository: repository)
         )
-        viewModel.onMovieDetails = onMovieDetails
+        viewModel.onMovieDetails = { [weak coordinator] context in
+            coordinator?.showMovieDetails(context: context)
+        }
+        viewModel.onClose = { [weak coordinator] in
+            coordinator?.close()
+        }
         let view = VideosListView(viewModel: viewModel)
 
         return UIHostingController(rootView: view)
+    }
+
+    // MARK: - Coordinator
+
+    public func makeVideosListCoordinator(
+        context: VideoPlaylistContext,
+        navigationController: UINavigationController,
+        router: VideosListRoutingProtocol
+    ) -> VideosListCoordinatorProtocol {
+        VideosListCoordinator(
+            context: context,
+            navigationController: navigationController,
+            factory: self,
+            router: router
+        )
     }
 }

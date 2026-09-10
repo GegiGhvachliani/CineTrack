@@ -7,12 +7,20 @@
 
 import SwiftUI
 
-public struct OnboardingView: View {
-    @ObservedObject private var viewModel: OnboardingViewModel
+public struct OnboardingView<ViewModel: OnboardingViewModelProtocol>: View {
 
-    public init(viewModel: OnboardingViewModel) {
+    // MARK: - Properties
+
+    @State
+    private var viewModel: ViewModel
+
+    // MARK: - Initialization
+
+    public init(viewModel: ViewModel) {
         self.viewModel = viewModel
     }
+
+    // MARK: - Body
 
     public var body: some View {
         OnboardingPageView(page: viewModel.currentStep) {

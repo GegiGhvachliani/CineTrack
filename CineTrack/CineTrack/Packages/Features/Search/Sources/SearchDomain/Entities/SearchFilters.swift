@@ -1,6 +1,9 @@
 import Foundation
 
 public struct SearchFilters: Sendable, Equatable {
+
+    // MARK: - Properties
+
     public var minimumRating: Int?
     public var minimumVoteCount: Int?
     public var genreIDs: [Int]
@@ -9,6 +12,8 @@ public struct SearchFilters: Sendable, Equatable {
     public var minimumRuntime: Int?
     public var maximumRuntime: Int?
     public var originCountryCodes: [String]
+
+    // MARK: - Initialization
 
     public init(
         minimumRating: Int? = nil,

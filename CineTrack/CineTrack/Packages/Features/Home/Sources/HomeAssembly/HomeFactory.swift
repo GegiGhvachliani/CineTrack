@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import LibraryData
+import LibraryDomain
 import SwiftUI
 
 import HomeDomain
@@ -24,27 +26,31 @@ import NewsData
 @MainActor
 public struct HomeFactory: HomeFactoryProtocol {
 
-    public init() {}
+    // MARK: - Dependencies
+
+    private let apiClient: APIClient
+    private let configuration: TMDBConfiguration
+    private let newsConfiguration: NewsConfiguration
+    private let firestore: RemoteDocumentStore
+    private let userSession: UserSession
+
+    // MARK: - Initialization
+
+    public init(
+        apiClient: APIClient,
+        configuration: TMDBConfiguration,
+        newsConfiguration: NewsConfiguration,
+        firestore: RemoteDocumentStore,
+        userSession: UserSession
+    ) {
+        self.apiClient = apiClient
+        self.configuration = configuration
+        self.newsConfiguration = newsConfiguration
+        self.firestore = firestore
+        self.userSession = userSession
+    }
 
     public func makeHomeViewController(coordinator: HomeCoordinatorProtocol) -> UIViewController {
-
-        // MARK: - API Client
-
-        let apiClient = URLSessionAPIClient()
-
-        // MARK: - TMDB Configuration
-
-        let configuration = TMDBConfiguration(
-            baseURL: URL(string: "https://api.themoviedb.org")!,
-            accessToken: "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4NWEyZmRkNjQyY2FmOTMzYTVjMzk5N2VkY2VjYTRjNSIsIm5iZiI6MTc2Mzk4OTQxNS42MDA5OTk4LCJzdWIiOiI2OTI0NTdhN2EwYzRiMWIxMzIxODc1ZGIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.ZfESC0ZJHYqzbSE2xCYRjfOSwiacjs7sYl-_qvgDbc4"
-        )
-
-        // MARK: - News Configuration
-
-        let newsConfiguration = NewsConfiguration(
-            baseURL: URL(string: "https://newsapi.org")!,
-            apiKey: Bundle.main.object(forInfoDictionaryKey: "NEWS_API_KEY") as? String ?? ""
-        )
 
         // MARK: - Repository
 
@@ -55,10 +61,6 @@ public struct HomeFactory: HomeFactoryProtocol {
         )
 
         // MARK: - Recently Viewed Repository
-
-        let firestore = FirestoreClient()
-
-        let userSession = FirebaseUserSession()
 
         let recentlyViewedRepository = RecentlyViewedRepository(
             firestore: firestore,
@@ -107,10 +109,6 @@ public struct HomeFactory: HomeFactoryProtocol {
 
         let fetchRecentlyViewedActorsUseCase = FetchRecentlyViewedActorsUseCase(repository: recentlyViewedRepository)
 
-        let addRecentlyViewedMovieUseCase = AddRecentlyViewedMovieUseCase(repository: recentlyViewedRepository)
-
-        let addRecentlyViewedActorUseCase = AddRecentlyViewedActorUseCase(repository: recentlyViewedRepository)
-    
         let clearRecentlyViewedUseCase = ClearRecentlyViewedUseCase(repository: recentlyViewedRepository)
 
         // MARK: - Watchlist Use Cases
@@ -130,11 +128,11 @@ public struct HomeFactory: HomeFactoryProtocol {
         let removeFavouritedActorUseCase = RemoveFavouritedActorUseCase(repository: favouriteRepository)
 
         // MARK: - Favourite Actor Movies
-        
+
         let fetchActorMoviesUseCase = FetchActorMoviesUseCase(
             repository: repository
         )
-        
+
         // MARK: - ViewModel
 
         let viewModel = HomeViewModel(
@@ -152,8 +150,6 @@ public struct HomeFactory: HomeFactoryProtocol {
             // recentlyViewed
             fetchRecentlyViewedMoviesUseCase: fetchRecentlyViewedMoviesUseCase,
             fetchRecentlyViewedActorsUseCase: fetchRecentlyViewedActorsUseCase,
-            addRecentlyViewedMovieUseCase: addRecentlyViewedMovieUseCase,
-            addRecentlyViewedActorUseCase: addRecentlyViewedActorUseCase,
             clearRecentlyViewedUseCase: clearRecentlyViewedUseCase,
             // watchlist
             fetchWatchlistedMoviesUseCase: fetchWatchlistedMoviesUseCase,

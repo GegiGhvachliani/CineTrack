@@ -7,7 +7,8 @@
 
 import Foundation
 
-// MARK: ინახავს SF Symbol-ის ან Asset-ების სახელებს
+// MARK: - Ინახავს SF Symbol-ის ან Asset-ების სახელებს
+
 public enum ImageNames {
     public enum Tabs {
         public static let home = "house.fill"

@@ -10,12 +10,17 @@ public protocol FinishOnboardingUseCaseProtocol {
 }
 
 public final class FinishOnboardingUseCase: FinishOnboardingUseCaseProtocol {
+
+    // MARK: - Properties
+
     private let repository: OnboardingRepositoryProtocol
-    
+
+    // MARK: - Initialization
+
     public init(repository: OnboardingRepositoryProtocol) {
         self.repository = repository
     }
-    
+
     public func execute() {
         repository.saveOnboardingCompleted()
     }

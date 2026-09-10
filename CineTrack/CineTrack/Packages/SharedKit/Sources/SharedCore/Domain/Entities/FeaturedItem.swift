@@ -6,13 +6,16 @@
 //
 
 import Foundation
-import SharedCore
 
 public struct FeaturedItem: Identifiable, Equatable, Sendable {
+
+    // MARK: - Properties
 
     public let id: Int
     public let movie: Movie
     public let video: MovieVideo
+
+    // MARK: - Initialization
 
     public init(
         movie: Movie,

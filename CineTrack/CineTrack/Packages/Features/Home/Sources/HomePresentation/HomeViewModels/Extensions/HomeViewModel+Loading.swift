@@ -5,8 +5,8 @@
 //  Created by Gegi Ghvachliani on 06/08/2026.
 //
 
-
 import Foundation
+import LibraryDomain
 
 import HomeDomain
 import SharedCore
@@ -25,7 +25,7 @@ extension HomeViewModel {
         async let popularActorsTask: Void = loadPopularActorsIfNeeded()
         async let newsTask: Void = loadNewsIfNeeded()
 
-        await (
+        _ = await (
             trendingTask,
             fanFavouritesTask,
             nowPlayingTask,
@@ -63,7 +63,7 @@ extension HomeViewModel {
         async let watchlistTask = loadWatchlist()
         async let favouritesTask = loadFavourites()
 
-        await (
+        _ = await (
             trendingTask,
             popularTask,
             fanFavouritesTask,

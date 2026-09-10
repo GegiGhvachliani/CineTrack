@@ -12,7 +12,11 @@ import ActorDetailsDomain
 
 public struct ActorCreditMapper: Sendable {
 
+    // MARK: - Properties
+
     private let imageBaseURL = "https://image.tmdb.org/t/p/w780"
+
+    // MARK: - Initialization
 
     public init() {}
 

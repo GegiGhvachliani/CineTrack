@@ -9,13 +9,24 @@ import SwiftUI
 import DesignSystemTokens
 
 public struct SignUpView<ViewModel: SignUpViewModelProtocol>: View {
-    @ObservedObject var viewModel: ViewModel
+
+    // MARK: - Properties
+
+    @State
+    private var viewModel: ViewModel
+
+    // MARK: - Initialization
 
     public init(viewModel: ViewModel) {
         self.viewModel = viewModel
     }
 
+    // MARK: - Body
+
     public var body: some View {
+        @Bindable
+        var viewModel = viewModel
+
         ZStack {
             ColorTokens.Background.primary
                 .ignoresSafeArea()
@@ -40,84 +51,28 @@ public struct SignUpView<ViewModel: SignUpViewModelProtocol>: View {
     }
 
     private var headerSection: some View {
-        VStack(spacing: 10) {
-            Text(AuthenticationStrings.SignUp.title)
-                .font(TypographyTokens.largeTitle)
-            Text(AuthenticationStrings.SignUp.subtitle)
-                .font(TypographyTokens.body)
-                .foregroundStyle(ColorTokens.Text.secondary)
-                .multilineTextAlignment(.center)
-        }
-        .padding(.bottom, 40)
+        SignUpHeaderSectionView()
     }
 
     private var middleSection: some View {
-        VStack {
-            TextFieldView(
-                title: AuthenticationStrings.SignUp.usernamePlaceholder,
-                icon: "person.fill",
-                text: $viewModel.username
-            )
-            .padding(.bottom, 20)
+        @Bindable
+        var viewModel = viewModel
 
-            EmailFieldView(
-                email: $viewModel.email,
-                text: AuthenticationStrings.SignUp.emailPlaceholder
-            )
-            .padding(.bottom, 20)
-
-            PasswordFieldView(
-                password: $viewModel.password,
-                title: AuthenticationStrings.SignUp.passwordPlaceholder
-            )
-            .padding(.bottom, 20)
-
-            PasswordFieldView(
-                password: $viewModel.confirmPassword,
-                title: AuthenticationStrings.SignUp.confirmPasswordPlaceholder
-            )
-
-            HStack {
-                Spacer()
-
-                Text(AuthenticationStrings.SignUp.alreadyHaveAccount)
-                    .font(TypographyTokens.bodySmall)
-                Button {
-                    viewModel.navigateToSignIn()
-                } label: {
-                    Text(AuthenticationStrings.SignUp.signInLink)
-                        .font(TypographyTokens.bodySmall)
-                        .foregroundStyle(ColorTokens.Brand.primary)
-                        .offset(x: -7)
-                }
-                .frame(alignment: .trailing)
-            }
-        }
-        .padding(.bottom, 40)
+        return SignUpFormSectionView(
+            username: $viewModel.username,
+            email: $viewModel.email,
+            password: $viewModel.password,
+            confirmPassword: $viewModel.confirmPassword,
+            onSignIn: viewModel.navigateToSignIn
+        )
     }
 
     private var belowSection: some View {
-        ButtonView(
-            title: AuthenticationStrings.SignUp.signUpButton,
-            isLoading: viewModel.isLoading
-        ) {
-            Task {
-                await viewModel.signUpWithEmail()
-            }
-        }
+        SignUpActionsSectionView(
+            isLoading: viewModel.isLoading,
+            onSignUp: { Task { await viewModel.signUpWithEmail() } }
+        )
     }
-}
-
-final class MockSignUpViewModel: SignUpViewModelProtocol {
-    @Published var username = ""
-    @Published var email = ""
-    @Published var password = ""
-    @Published var confirmPassword = ""
-    @Published var isLoading = false
-    @Published var errorMessage: String?
-
-    func signUpWithEmail() async { print("Mock Sign Up") }
-    func navigateToSignIn() { print("Navigate to Sign In") }
 }
 
 #Preview {

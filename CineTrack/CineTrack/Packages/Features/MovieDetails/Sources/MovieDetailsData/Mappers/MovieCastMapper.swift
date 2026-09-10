@@ -3,6 +3,9 @@ import MovieDetailsDomain
 import TMDBData
 
 struct MovieCastMapper: Sendable {
+
+    // MARK: - Properties
+
     private let imageBaseURL = "https://image.tmdb.org/t/p/w500"
 
     func map(_ dto: MovieCastDTO) -> MovieCastMember {

@@ -2,11 +2,16 @@ import SwiftUI
 import DesignSystemTokens
 
 public struct PagingHeaderView<Item: Identifiable, Content: View>: View {
+
+    // MARK: - Properties
+
     private let title: String
     private let subtitle: String?
     private let items: [Item]
     private let isLoading: Bool
     private let content: (Item) -> Content
+
+    // MARK: - Initialization
 
     public init(
         title: String,
@@ -22,6 +27,8 @@ public struct PagingHeaderView<Item: Identifiable, Content: View>: View {
         self.content = content
     }
 
+    // MARK: - Body
+
     public var body: some View {
         VStack(spacing: 10) {
             headerText
@@ -32,14 +39,13 @@ public struct PagingHeaderView<Item: Identifiable, Content: View>: View {
     private var headerText: some View {
         (Text(title)
             .font(.system(size: 25, weight: .semibold, design: .rounded))
-            .foregroundStyle(ColorTokens.Brand.primary) +
-         Text(subtitle ?? "")
+            .foregroundStyle(ColorTokens.Brand.primary)
+            + Text(subtitle ?? "")
             .font(TypographyTokens.title3)
-            .foregroundStyle(.secondary)
-        )
-        .lineLimit(2)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal)
+            .foregroundStyle(.secondary))
+            .lineLimit(2)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal)
     }
 
     @ViewBuilder

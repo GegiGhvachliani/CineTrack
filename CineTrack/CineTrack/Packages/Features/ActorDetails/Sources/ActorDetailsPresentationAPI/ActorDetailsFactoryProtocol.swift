@@ -11,7 +11,7 @@ import ActorDetailsDomain
 
 @MainActor
 public protocol ActorDetailsFactoryProtocol {
-    
+
     func makeActorDetailsCoordinator(
         actorID: Int,
         navigationController: UINavigationController,
@@ -28,15 +28,4 @@ public protocol ActorDetailsFactoryProtocol {
     ) -> UIViewController
 
     func makeMiniBiographyViewController(actor: ActorDetails) -> UIViewController
-}
-
-@MainActor
-public protocol ActorDetailsCoordinatorProtocol: Coordinator { }
-
-@MainActor
-public protocol ActorDetailsRoutingProtocol: AnyObject {
-    func showMovieDetails(movie: Movie)
-    func showNewsDetails(news: News)
-    func showSeeAll(content: SeeAllContent)
-    func showVideosList(context: VideoPlaylistContext)
 }

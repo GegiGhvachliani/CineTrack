@@ -8,7 +8,7 @@ let package = Package(
     platforms: [.iOS(.v17)],
     products: [
         .library(name: "AuthenticationAssembly", targets: ["AuthenticationAssembly"]),
-        .library(name: "AuthenticationPresentationAPI", targets: ["AuthenticationPresentationAPI"]),
+        .library(name: "AuthenticationPresentationAPI", targets: ["AuthenticationPresentationAPI"])
     ],
     dependencies: [
         .package(path: "../../SharedKit"),
@@ -64,7 +64,7 @@ let package = Package(
                 "AuthenticationDomain",
                 "AuthenticationData",
                 "AuthenticationPresentation",
-                "AuthenticationPresentationAPI",
+                "AuthenticationPresentationAPI"
             ],
             path: "Sources/AuthenticationAssembly"
         ),
@@ -74,10 +74,10 @@ let package = Package(
             dependencies: [
                 "AuthenticationDomain",
                 "AuthenticationData",
-                "AuthenticationPresentation",
+                "AuthenticationPresentation"
             ],
             path: "Tests"
-        ),
+        )
     ],
     swiftLanguageModes: [.v6]
 )

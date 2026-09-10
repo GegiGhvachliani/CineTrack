@@ -5,8 +5,8 @@
 //  Created by Gegi Ghvachliani on 13/08/2026.
 //
 
-
 import Foundation
+import LibraryDomain
 
 import HomeDomain
 import SharedCore
@@ -25,7 +25,7 @@ extension HomeViewModel {
         defer { isTrendingLoading = false }
 
         do {
-            
+
             let page = try await fetchTrendingUseCase.execute(page: trendingPage)
 
             trendingMovies.append(contentsOf: page.movies)
@@ -82,7 +82,7 @@ extension HomeViewModel {
         }
 
         do {
-            let page = try await fetchFanFavouritesUseCase.execute( page: fanFavouritePage)
+            let page = try await fetchFanFavouritesUseCase.execute(page: fanFavouritePage)
 
             fanFavouriteMovies.append(contentsOf: page.movies)
 
@@ -110,8 +110,8 @@ extension HomeViewModel {
         }
 
         do {
-            
-            let page = try await fetchNowPlayingUseCase.execute(page: nowPlayingPage )
+
+            let page = try await fetchNowPlayingUseCase.execute(page: nowPlayingPage)
 
             nowPlayingMovies.append(contentsOf: page.movies)
 
@@ -167,7 +167,7 @@ extension HomeViewModel {
         }
 
         do {
-            
+
             top10Movies = try await fetchTop10MoviesUseCase.execute()
 
         } catch {

@@ -9,6 +9,8 @@ import Foundation
 
 public struct ActorDetailsDTO: Decodable, Sendable {
 
+    // MARK: - Properties
+
     public let id: Int
     public let name: String
     public let birthday: String?
@@ -22,6 +24,8 @@ public struct ActorDetailsDTO: Decodable, Sendable {
     public let homepage: String?
     public let imdbID: String?
     public let alsoKnownAs: [String]
+
+    // MARK: - Initialization
 
     public init(
         id: Int,

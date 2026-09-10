@@ -9,6 +9,8 @@ let package = Package(
     ],
 
     products: [
+        .library(name: "LibraryDomain", targets: ["LibraryDomain"]),
+        .library(name: "LibraryData", targets: ["LibraryData"]),
         .library(
             name: "SharedCore",
             targets: ["SharedCore"]
@@ -38,6 +40,19 @@ let package = Package(
     ],
 
     targets: [
+
+        // MARK: - Library
+
+        .target(
+            name: "LibraryDomain",
+            dependencies: ["SharedCore"],
+            path: "Sources/LibraryDomain"
+        ),
+        .target(
+            name: "LibraryData",
+            dependencies: ["LibraryDomain", "SharedCore", "SharedAuth", "SharedStorage"],
+            path: "Sources/LibraryData"
+        ),
 
         // MARK: - SharedCore
 

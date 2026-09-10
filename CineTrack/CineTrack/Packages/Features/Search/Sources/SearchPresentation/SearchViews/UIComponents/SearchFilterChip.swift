@@ -8,11 +8,15 @@ import SwiftUI
 import DesignSystemTokens
 
 struct SearchFilterChip: View {
-    
+
+    // MARK: - Properties
+
     let title: String
     let isSelected: Bool
     let action: () -> Void
-    
+
+    // MARK: - Body
+
     var body: some View {
         Button(action: action) {
             Text(title)
@@ -21,7 +25,8 @@ struct SearchFilterChip: View {
                 .padding(.horizontal, 14)
                 .padding(.vertical, 7)
                 .background(isSelected ? ColorTokens.Brand.primary : ColorTokens.Background.secondary)
-                .clipShape(RoundedRectangle(cornerRadius: 5))        }
+                .clipShape(RoundedRectangle(cornerRadius: 5))
+        }
         .buttonStyle(.plain)
     }
 }

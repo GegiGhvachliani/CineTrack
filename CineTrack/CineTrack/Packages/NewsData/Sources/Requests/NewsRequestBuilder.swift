@@ -5,13 +5,16 @@
 //  Created by Gegi Ghvachliani on 10/08/2026.
 //
 
-
 import Foundation
 import SharedNetworking
 
 public struct NewsRequestBuilder: Sendable {
 
+    // MARK: - Properties
+
     private let configuration: NewsConfiguration
+
+    // MARK: - Initialization
 
     public init(
         configuration: NewsConfiguration

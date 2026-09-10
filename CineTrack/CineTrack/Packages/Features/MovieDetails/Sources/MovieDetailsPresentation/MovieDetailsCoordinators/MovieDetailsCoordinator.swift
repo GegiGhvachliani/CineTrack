@@ -4,12 +4,17 @@ import MovieDetailsPresentationAPI
 import SharedCore
 
 public final class MovieDetailsCoordinator: MovieDetailsCoordinatorProtocol {
+
+    // MARK: - Properties
+
     public var childCoordinators: [Coordinator] = []
 
     private let movie: Movie
     private let navigationController: UINavigationController
     private let factory: MovieDetailsFactoryProtocol
     private weak var router: MovieDetailsRoutingProtocol?
+
+    // MARK: - Initialization
 
     public init(
         movie: Movie,

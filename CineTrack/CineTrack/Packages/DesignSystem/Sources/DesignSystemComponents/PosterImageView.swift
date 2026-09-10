@@ -1,11 +1,18 @@
 import SwiftUI
 
 public struct PosterImageView: View {
+
+    // MARK: - Properties
+
     private let photoURL: String?
+
+    // MARK: - Initialization
 
     public init(photoURL: String?) {
         self.photoURL = photoURL
     }
+
+    // MARK: - Body
 
     public var body: some View {
         AsyncImage(url: URL(string: photoURL ?? "")) { phase in

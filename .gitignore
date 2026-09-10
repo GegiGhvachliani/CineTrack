@@ -25,3 +25,6 @@ project.xcworkspace/
 # Firebase & Crashlytics
 # ========================
 crashlytics_build_sender_secret.json
+
+# Local API configuration
+CineTrack/CineTrack/App/Config/Secrets.plist

@@ -6,16 +6,28 @@
 //
 
 import SwiftUI
+import Observation
 import DesignSystemTokens
 
 public struct SignInView<ViewModel: SignInViewModelProtocol>: View {
-    @ObservedObject var viewModel: ViewModel
-    
+
+    // MARK: - Properties
+
+    @State
+    private var viewModel: ViewModel
+
+    // MARK: - Initialization
+
     public init(viewModel: ViewModel) {
         self.viewModel = viewModel
     }
-    
+
+    // MARK: - Body
+
     public var body: some View {
+        @Bindable
+        var viewModel = viewModel
+
         ZStack {
             ColorTokens.Background.primary
                 .ignoresSafeArea()
@@ -41,127 +53,32 @@ public struct SignInView<ViewModel: SignInViewModelProtocol>: View {
                 .presentationDragIndicator(.visible)
         }
     }
-    
-    private var headerSection: some View {
-        VStack(spacing: 10) {
-            Text(AuthenticationStrings.SignIn.title)
-                .font(TypographyTokens.largeTitle)
-            Text(AuthenticationStrings.SignIn.subtitle)
-                .font(TypographyTokens.body)
-                .foregroundStyle(ColorTokens.Text.secondary)
-                .multilineTextAlignment(.center)
-        }
-        .padding(.bottom, 40)
-    }
-    
-    private var middleSection: some View {
-        VStack {
-            EmailFieldView(email: $viewModel.email, text: AuthenticationStrings.SignIn.emailPlaceholder)
-                .padding(.bottom, 20)
-            
-            PasswordFieldView(
-                password: $viewModel.password,
-                title: AuthenticationStrings.SignIn.passwordPlaceholder
-            )
-            
-            Button {
-                viewModel.isForgotPasswordPresented = true
-            } label: {
-                Spacer()
-                Text(AuthenticationStrings.ForgotPassword.navigationButtonText)
-                    .font(TypographyTokens.bodySmall)
-                    .foregroundStyle(ColorTokens.Brand.primary)
-                    .offset(x: -7)
-            }
-            
-        }
-        .padding(.bottom, 40)
-    }
-    
-    private var belowSection: some View {
-        VStack {
-            ButtonView(
-                title: AuthenticationStrings.SignIn.signInButton,
-                isLoading: viewModel.isEmailLoading
-            ) {
-                Task {
-                    await viewModel.signInWithEmail()
-                }
-            }
-            
-            HStack(spacing: 15) {
-                Rectangle()
-                    .fill(DesignSystemTokens.ColorTokens.Brand.primary.opacity(0.5))
-                    .frame(width: 150, height: 1)
-                Text("OR")
-                    .font(DesignSystemTokens.TypographyTokens.footnote)
-                Rectangle()
-                    .fill(DesignSystemTokens.ColorTokens.Brand.primary.opacity(0.8))
-                    .frame(width: 150, height: 1)
-            }
-            
-            Button {
-                Task {
-                    await viewModel.signInWithGoogle()
-                }
-            } label: {
-                HStack {
-                    if viewModel.isGoogleLoading {
-                        ProgressView()
-                            .progressViewStyle(
-                                CircularProgressViewStyle(tint: DesignSystemTokens.ColorTokens.Text.inverse)
-                            )
-                    } else {
-                        Text(AuthenticationStrings.SignIn.googleButton)
-                            .font(TypographyTokens.body)
-                            .foregroundStyle(DesignSystemTokens.ColorTokens.Text.inverse)
-                        Image(AuthenticationStrings.SignIn.googleButtonIcon, bundle: .module)
-                            .resizable()
-                            .frame(width: 20, height: 20)
-                            .padding(.leading, 5)
-                    }
-                }
-                .frame(height: 55)
-                .frame(maxWidth: .infinity)
-                .background(DesignSystemTokens.ColorTokens.Brand.primary)
-                .cornerRadius(15)
-            }
-            .disabled(viewModel.isLoading)
-            
-            HStack {
-                
-                Text(AuthenticationStrings.SignIn.dontHaveAccount)
-                    .font(TypographyTokens.bodySmall)
-                Button {
-                    viewModel.navigateToSignUp()
-                } label: {
-                    Text(AuthenticationStrings.SignIn.signUpLink)
-                        .font(TypographyTokens.bodySmall)
-                        .foregroundStyle(ColorTokens.Brand.primary)
-                        .offset(x: -7)
-                }
-            }
-        }
-    }
-}
 
-final class MockSignInViewModel: SignInViewModelProtocol {
-    @Published var email = ""
-    @Published var password = ""
-    @Published var isLoading = false
-    var isEmailLoading = false
-    var isGoogleLoading = false
-    @Published var errorMessage: String?
-    
-    @Published var forgotPasswordEmail = ""
-    @Published var isForgotPasswordPresented = false
-    @Published var forgotPasswordSuccessMessage: String?
-    @Published var forgotPasswordErrorMessage: String?
-    
-    func signInWithEmail() async { print("Mock Sign In") }
-    func signInWithGoogle() async { print("Mock Google Sign In") }
-    func sendResetPasswordLink() async { print("Mock Reset") }
-    func navigateToSignUp() { print("Navigate to Sign Up") }
+    private var headerSection: some View {
+        SignInHeaderSectionView()
+    }
+
+    private var middleSection: some View {
+        @Bindable
+        var viewModel = viewModel
+
+        return SignInFormSectionView(
+            email: $viewModel.email,
+            password: $viewModel.password,
+            onForgotPassword: { viewModel.isForgotPasswordPresented = true }
+        )
+    }
+
+    private var belowSection: some View {
+        SignInActionsSectionView(
+            isLoading: viewModel.isLoading,
+            isEmailLoading: viewModel.isEmailLoading,
+            isGoogleLoading: viewModel.isGoogleLoading,
+            onEmailSignIn: { Task { await viewModel.signInWithEmail() } },
+            onGoogleSignIn: { Task { await viewModel.signInWithGoogle() } },
+            onSignUp: viewModel.navigateToSignUp
+        )
+    }
 }
 
 #Preview {

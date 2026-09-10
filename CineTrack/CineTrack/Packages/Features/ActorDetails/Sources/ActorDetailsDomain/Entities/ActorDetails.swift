@@ -39,7 +39,7 @@ public struct ActorDetails: Identifiable, Equatable, Sendable {
 
     public let alsoKnownAs: [String]
 
-    // MARK: - Init
+    // MARK: - Initialization
 
     public init(
         id: Int,

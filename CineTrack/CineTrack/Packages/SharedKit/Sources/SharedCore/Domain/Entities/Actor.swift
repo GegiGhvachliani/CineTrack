@@ -5,15 +5,18 @@
 //  Created by Gegi Ghvachliani on 10/08/2026.
 //
 
-
 import Foundation
 
 public struct Actor: Identifiable, Sendable, Equatable {
+
+    // MARK: - Properties
 
     public let id: Int
     public let name: String
     public let birthday: Date?
     public let profilePath: String?
+
+    // MARK: - Initialization
 
     public init(
         id: Int,

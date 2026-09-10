@@ -13,7 +13,10 @@ let package = Package(
     ],
     targets: [
         .target(name: "ActorMediaDomain", path: "Sources/ActorMediaDomain"),
-        .target(name: "ActorMediaData", dependencies: ["ActorMediaDomain", .product(name: "SharedNetworking", package: "SharedKit")], path: "Sources/ActorMediaData"),
+        .target(
+            name: "ActorMediaData",
+            dependencies: ["ActorMediaDomain", .product(name: "SharedNetworking", package: "SharedKit")],
+            path: "Sources/ActorMediaData")
     ],
     swiftLanguageModes: [.v6]
 )

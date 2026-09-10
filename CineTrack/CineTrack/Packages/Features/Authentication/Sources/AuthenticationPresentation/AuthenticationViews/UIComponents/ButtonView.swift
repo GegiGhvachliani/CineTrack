@@ -9,16 +9,23 @@ import SwiftUI
 import DesignSystemTokens
 
 public struct ButtonView: View {
+
+    // MARK: - Properties
+
     public let title: String
     public let isLoading: Bool
     public let action: () -> Void
-    
+
+    // MARK: - Initialization
+
     public init(title: String, isLoading: Bool = false, action: @escaping () -> Void) {
         self.title = title
         self.isLoading = isLoading
         self.action = action
     }
-    
+
+    // MARK: - Body
+
     public var body: some View {
         Button {
             action()
@@ -43,7 +50,6 @@ public struct ButtonView: View {
         .disabled(isLoading)
     }
 }
-
 
 #Preview {
     VStack(spacing: 16) {

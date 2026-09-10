@@ -7,8 +7,8 @@ import Foundation
 
 public enum SearchMode: String, CaseIterable, Identifiable, Sendable {
 
-    case recent = "Recent"
-    case advanced = "Advanced"
+    case recent
+    case advanced
 
     public var id: Self { self }
 }

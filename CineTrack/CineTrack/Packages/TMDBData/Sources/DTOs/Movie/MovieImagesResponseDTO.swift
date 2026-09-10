@@ -1,11 +1,17 @@
 import Foundation
 
 public struct MovieImagesResponseDTO: Decodable {
+
+    // MARK: - Properties
+
     public let backdrops: [MovieImageDTO]
     public let posters: [MovieImageDTO]
 }
 
 public struct MovieImageDTO: Decodable {
+
+    // MARK: - Properties
+
     public let filePath: String
     public let aspectRatio: Double
     public let width: Int

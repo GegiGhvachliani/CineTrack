@@ -5,7 +5,6 @@
 //  Created by Gegi Ghvachliani on 13/08/2026.
 //
 
-
 import Foundation
 
 import HomeDomain
@@ -26,7 +25,7 @@ extension HomeViewModel {
         }
 
         do {
-            
+
             let page = try await fetchBornTodayActorsUseCase.execute(page: bornTodayActorsPage)
 
             bornTodayActors.append(contentsOf: page.actors)
@@ -54,7 +53,7 @@ extension HomeViewModel {
         }
 
         do {
-            
+
             let page = try await fetchMostPopularActorsUseCase.execute(page: mostPopularCelebritiesPage)
 
             mostPopularActors.append(contentsOf: page.actors)

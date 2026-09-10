@@ -11,6 +11,8 @@ import ActorDetailsDomain
 
 public struct ActorExternalLinksMapper: Sendable {
 
+    // MARK: - Initialization
+
     public init() {}
 
     public func map(

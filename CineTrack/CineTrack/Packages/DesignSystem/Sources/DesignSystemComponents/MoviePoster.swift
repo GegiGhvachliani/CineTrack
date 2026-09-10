@@ -1,12 +1,17 @@
 import SwiftUI
 
 public struct MoviePoster: View {
+
+    // MARK: - Properties
+
     private let isWatchlisted: Bool?
     private let photoURL: String?
     private let watchlistButtonSize: CGFloat
     private let watchlistButtonVerticalOffset: CGFloat?
     private let onMovieTap: () -> Void
     private let onWatchlistTap: (() -> Void)?
+
+    // MARK: - Initialization
 
     public init(
         isWatchlisted: Bool,
@@ -24,6 +29,8 @@ public struct MoviePoster: View {
         self.onWatchlistTap = onWatchlistTap
     }
 
+    // MARK: - Initialization
+
     public init(
         photoURL: URL?,
         onMovieTap: @escaping () -> Void
@@ -35,6 +42,8 @@ public struct MoviePoster: View {
         self.onMovieTap = onMovieTap
         self.onWatchlistTap = nil
     }
+
+    // MARK: - Body
 
     public var body: some View {
         ZStack(alignment: .topLeading) {

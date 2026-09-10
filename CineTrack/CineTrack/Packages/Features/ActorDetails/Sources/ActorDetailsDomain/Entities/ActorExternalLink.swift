@@ -5,13 +5,17 @@
 //  Created by Gegi Ghvachliani on 05/09/2026.
 //
 
-
 import Foundation
 
 public struct ActorExternalLink: Identifiable, Equatable, Sendable {
+
+    // MARK: - Properties
+
     public let id: String
     public let title: String
     public let url: URL
+
+    // MARK: - Initialization
 
     public init(id: String, title: String, url: URL) {
         self.id = id
@@ -21,6 +25,9 @@ public struct ActorExternalLink: Identifiable, Equatable, Sendable {
 }
 
 public extension ActorExternalLinks {
+
+    // MARK: - Properties
+
     var links: [ActorExternalLink] {
         [
             makeLink(id: facebookID, title: "Facebook", baseURL: "https://www.facebook.com/"),

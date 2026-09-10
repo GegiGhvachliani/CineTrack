@@ -6,11 +6,14 @@
 //
 
 import SwiftUI
+import LibraryDomain
 import SharedCore
 import HomeDomain
 import DesignSystemTokens
 
 public struct FeaturedHorizontalScrollView: View {
+
+    // MARK: - Properties
 
     let featuredItems: [FeaturedItem]
 
@@ -20,11 +23,16 @@ public struct FeaturedHorizontalScrollView: View {
     let onMovieTap: (Movie) -> Void
     let onWatchlistTap: (Movie) -> Void
 
-    @State private var currentPage: Int?
-    @State private var isUserInteracting = false
-    @State private var resetInteractionTask: Task<Void, Never>?
+    @State
+    private var currentPage: Int?
+    @State
+    private var isUserInteracting = false
+    @State
+    private var resetInteractionTask: Task<Void, Never>?
 
     private let autoScrollInterval: UInt64 = 4_000_000_000
+
+    // MARK: - Body
 
     public var body: some View {
 

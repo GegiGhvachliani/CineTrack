@@ -2,10 +2,15 @@ import SwiftUI
 import DesignSystemTokens
 
 public struct WatchlistButton: View {
+
+    // MARK: - Properties
+
     private let isAdded: Bool
     private let size: CGFloat
     private let verticalOffset: CGFloat?
     private let action: () -> Void
+
+    // MARK: - Initialization
 
     public init(
         isAdded: Bool,
@@ -18,6 +23,8 @@ public struct WatchlistButton: View {
         self.verticalOffset = verticalOffset
         self.action = action
     }
+
+    // MARK: - Body
 
     public var body: some View {
         Button(action: action) {

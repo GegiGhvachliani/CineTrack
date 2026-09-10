@@ -5,11 +5,13 @@
 
 import Foundation
 
-import HomeDomain
+import LibraryDomain
 import SearchDomain
 import SharedCore
 
 enum SearchPreviewData {
+
+    // MARK: - Properties
 
     static let movies = [
         Movie(

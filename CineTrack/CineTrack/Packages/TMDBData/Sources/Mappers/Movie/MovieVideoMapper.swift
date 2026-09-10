@@ -10,6 +10,8 @@ import SharedCore
 
 public struct MovieVideoMapper: Sendable {
 
+    // MARK: - Initialization
+
     public init() {}
 
     public func map(_ dto: MovieVideoDTO) -> MovieVideo {

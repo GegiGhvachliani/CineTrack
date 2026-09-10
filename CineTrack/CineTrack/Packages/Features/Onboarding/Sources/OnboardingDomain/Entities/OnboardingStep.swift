@@ -9,7 +9,7 @@ public enum OnboardingStep: Int, CaseIterable {
     case discover
     case watchlist
     case preferences
-    
+
     public var isLast: Bool {
         self == .preferences
     }

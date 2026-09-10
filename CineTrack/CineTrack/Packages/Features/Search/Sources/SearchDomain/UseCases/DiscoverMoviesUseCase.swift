@@ -11,7 +11,11 @@ public protocol DiscoverMoviesUseCaseProtocol: Sendable {
 
 public struct DiscoverMoviesUseCase: DiscoverMoviesUseCaseProtocol {
 
+    // MARK: - Properties
+
     private let repository: SearchRepositoryProtocol
+
+    // MARK: - Initialization
 
     public init(repository: SearchRepositoryProtocol) {
         self.repository = repository

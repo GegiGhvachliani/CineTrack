@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LibraryDomain
 
 import HomeDomain
 import SharedCore
@@ -18,20 +19,12 @@ extension HomeViewModel {
 
     public func didTapMovie(_ movie: Movie) {
         onMovieDetails?(movie)
-
-        Task {
-            await addRecentlyViewed(movie: movie)
-        }
     }
 
     public func didTapActor(_ actor: Actor) {
         onActorDetails?(actor.id)
-
-        Task {
-            await addRecentlyViewed(actor: actor)
-        }
     }
-    
+
     public func didTapVideos(_ item: FeaturedItem) {
         onVideos?(item)
     }
@@ -47,40 +40,111 @@ extension HomeViewModel {
     private func seeAllContent(for section: HomeSection) -> SeeAllContent {
         switch section {
         case .bornToday:
-            pagedContent(title: "Born Today", payload: .actors(bornTodayActors), hasMore: { self.hasMoreBornTodayActors }) { [weak self] in
+            pagedContent(
+                title: HomeStrings.Section.bornToday, payload: .actors(bornTodayActors),
+                hasMore: { self.hasMoreBornTodayActors }
+            ) { [weak self] in
                 await self?.loadNextBornTodayActorsPage()
                 return self.map { .actors($0.bornTodayActors) }
             }
         case .top10:
-            SeeAllContent(title: "Top 10", payload: .movies(top10Movies))
+            SeeAllContent(title: HomeStrings.Content.top10Title, payload: .movies(top10Movies))
         case .fanFavourites:
-            pagedContent(title: "Fan Favourites", payload: .movies(fanFavouriteMovies), hasMore: { self.hasMoreFanFavourite }) { [weak self] in await self?.loadNextFanFavouritePage(); return self.map { .movies($0.fanFavouriteMovies) } }
+            pagedContent(
+                title: HomeStrings.Section.fanFavourites, payload: .movies(fanFavouriteMovies),
+                hasMore: { self.hasMoreFanFavourite }
+            ) { [weak self] in
+                await self?.loadNextFanFavouritePage()
+                return self.map { .movies($0.fanFavouriteMovies) }
+            }
         case .nowPlaying:
-            pagedContent(title: "Now Streaming", payload: .movies(nowPlayingMovies), hasMore: { self.hasMoreNowPlaying }) { [weak self] in await self?.loadNextNowPlayingPage(); return self.map { .movies($0.nowPlayingMovies) } }
+            pagedContent(
+                title: HomeStrings.Content.nowStreaming, payload: .movies(nowPlayingMovies),
+                hasMore: { self.hasMoreNowPlaying }
+            ) { [weak self] in
+                await self?.loadNextNowPlayingPage()
+                return self.map { .movies($0.nowPlayingMovies) }
+            }
         case .upcoming:
-            pagedContent(title: "Coming Soon", payload: .movies(upcomingMovies), hasMore: { self.hasMoreUpcoming }) { [weak self] in await self?.loadNextUpcomingPage(); return self.map { .movies($0.upcomingMovies) } }
+            pagedContent(
+                title: HomeStrings.Content.comingSoon, payload: .movies(upcomingMovies),
+                hasMore: { self.hasMoreUpcoming }
+            ) { [weak self] in
+                await self?.loadNextUpcomingPage()
+                return self.map { .movies($0.upcomingMovies) }
+            }
         case .fromYourWatchlist, .watchlist:
-            SeeAllContent(title: "From Your Watchlist", payload: .movies(watchlistedMovies))
+            SeeAllContent(title: HomeStrings.Content.fromYourWatchlist, payload: .movies(watchlistedMovies))
         case .trending:
-            pagedContent(title: "Trending Now", payload: .movies(trendingMovies), hasMore: { self.hasMoreTrending }) { [weak self] in await self?.loadNextTrendingPage(); return self.map { .movies($0.trendingMovies) } }
+            pagedContent(
+                title: HomeStrings.Content.trendingNow, payload: .movies(trendingMovies),
+                hasMore: { self.hasMoreTrending }
+            ) { [weak self] in
+                await self?.loadNextTrendingPage()
+                return self.map { .movies($0.trendingMovies) }
+            }
         case .popularActors, .mostPopularCelebrities:
-            pagedContent(title: "Most Popular Celebrities", payload: .actors(mostPopularActors), hasMore: { self.hasMoreMostPopularCelebrities }) { [weak self] in await self?.loadNextMostPopularCelebritiesPage(); return self.map { .actors($0.mostPopularActors) } }
+            pagedContent(
+                title: HomeStrings.Section.mostPopularCelebrities, payload: .actors(mostPopularActors),
+                hasMore: { self.hasMoreMostPopularCelebrities }
+            ) { [weak self] in
+                await self?.loadNextMostPopularCelebritiesPage()
+                return self.map { .actors($0.mostPopularActors) }
+            }
         case .moreFromActor:
-            SeeAllContent(title: "More From \(selectedFavouriteActor?.name ?? "Actor")", payload: .movies(selectedFavouriteActorMovies))
+            SeeAllContent(
+                title: HomeStrings.Format.moreFrom(
+                    actorName: selectedFavouriteActor?.name ?? HomeStrings.Content.actor),
+                payload: .movies(selectedFavouriteActorMovies))
         case .favouritePeople:
-            SeeAllContent(title: "Your Favourite People", payload: .actors(favouritedActors))
+            SeeAllContent(title: HomeStrings.Content.yourFavouritePeople, payload: .actors(favouritedActors))
         case .news:
-            pagedContent(title: "Top News", payload: .news(news), hasMore: { self.hasMoreNews }) { [weak self] in await self?.loadNextNewsPage(); return self.map { .news($0.news) } }
+            pagedContent(title: HomeStrings.Content.topNews, payload: .news(news), hasMore: { self.hasMoreNews }) {
+                [weak self] in
+                await self?.loadNextNewsPage()
+                return self.map { .news($0.news) }
+            }
         case .recentlyViewed:
-            SeeAllContent(title: "Recently Viewed", payload: .movies(recentlyViewedMovies.map { movie in
-                Movie(id: movie.id, title: movie.title, overview: "", posterPath: movie.posterPath, backdropPath: nil, releaseDate: movie.releaseDate, voteAverage: movie.voteAverage, voteCount: 0)
-            }))
+            recentlyViewedContent()
         case .header, .filmography:
-            SeeAllContent(title: "Movies", payload: .movies([]))
+            SeeAllContent(title: HomeStrings.Content.movies, payload: .movies([]))
         }
     }
 
-    private func pagedContent(title: String, payload: SeeAllPayload, hasMore: @escaping () -> Bool, loadMore: @escaping () async -> SeeAllPayload?) -> SeeAllContent {
+    private func recentlyViewedContent() -> SeeAllContent {
+        let items = recentlyViewedItems.map { item -> SeeAllLibraryItem in
+            switch item {
+            case .movie(let movie):
+                return .movie(
+                    Movie(
+                        id: movie.id,
+                        title: movie.title,
+                        overview: "",
+                        posterPath: movie.posterPath,
+                        backdropPath: nil,
+                        releaseDate: movie.releaseDate,
+                        voteAverage: movie.voteAverage,
+                        voteCount: 0
+                    )
+                )
+            case .actor(let actor):
+                return .actor(
+                    Actor(
+                        id: actor.id,
+                        name: actor.name,
+                        birthday: actor.birthday,
+                        profilePath: actor.profilePath
+                    )
+                )
+            }
+        }
+        return SeeAllContent(title: HomeStrings.Section.recentlyViewed, payload: .library(items))
+    }
+
+    private func pagedContent(
+        title: String, payload: SeeAllPayload, hasMore: @escaping () -> Bool,
+        loadMore: @escaping () async -> SeeAllPayload?
+    ) -> SeeAllContent {
         SeeAllContent(title: title, payload: payload, hasMore: hasMore, loadMore: loadMore)
     }
 }

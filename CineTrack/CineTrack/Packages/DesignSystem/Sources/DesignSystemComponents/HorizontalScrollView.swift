@@ -2,6 +2,9 @@ import SwiftUI
 import DesignSystemTokens
 
 public struct HorizontalScrollView<Item: Identifiable, Cell: View>: View {
+
+    // MARK: - Properties
+
     private let headerText: String
     private let seeAllTitle: String
     private let items: [Item]
@@ -10,6 +13,8 @@ public struct HorizontalScrollView<Item: Identifiable, Cell: View>: View {
     private let onSeeAllTap: () -> Void
     private let onLoadMore: (() -> Void)?
     private let cell: (Item, Int) -> Cell
+
+    // MARK: - Initialization
 
     public init(
         headerText: String,
@@ -30,6 +35,8 @@ public struct HorizontalScrollView<Item: Identifiable, Cell: View>: View {
         self.onLoadMore = onLoadMore
         self.cell = cell
     }
+
+    // MARK: - Body
 
     public var body: some View {
         VStack(spacing: 12) {

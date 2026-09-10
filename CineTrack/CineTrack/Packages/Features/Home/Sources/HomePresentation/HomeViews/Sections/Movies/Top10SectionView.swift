@@ -6,10 +6,13 @@
 //
 
 import SwiftUI
+import LibraryDomain
 import SharedCore
 import DesignSystemComponents
 
 struct Top10SectionView: View {
+
+    // MARK: - Properties
 
     let movies: [Movie]
     let watchlistedMovies: [Movie]
@@ -17,6 +20,8 @@ struct Top10SectionView: View {
     let onMovieTap: (Movie) -> Void
     let onWatchlistTap: (Movie) -> Void
     let onSeeAllTap: () -> Void
+
+    // MARK: - Body
 
     var body: some View {
         HorizontalScrollView(
@@ -34,10 +39,11 @@ struct Top10SectionView: View {
                 cellHeight: 265,
                 ratingNumber: index + 1,
                 onMovieTap: { onMovieTap(movie) },
-                onWatchlistTap: { onWatchlistTap(movie)
+                onWatchlistTap: {
+                    onWatchlistTap(movie)
                 }
             )
-            
+
         }
     }
 }

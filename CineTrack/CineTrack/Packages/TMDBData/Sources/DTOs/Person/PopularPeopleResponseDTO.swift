@@ -5,15 +5,18 @@
 //  Created by Gegi Ghvachliani on 10/08/2026.
 //
 
-
 import Foundation
 
 public struct PopularPeopleResponseDTO: Decodable, Sendable {
+
+    // MARK: - Properties
 
     public let page: Int
     public let results: [PersonDTO]
     public let totalPages: Int
     public let totalResults: Int
+
+    // MARK: - Initialization
 
     public init(
         page: Int,

@@ -1,10 +1,16 @@
 import Foundation
 
 public struct MovieCreditsResponseDTO: Decodable {
+
+    // MARK: - Properties
+
     public let cast: [MovieCastDTO]
 }
 
 public struct MovieCastDTO: Decodable {
+
+    // MARK: - Properties
+
     public let id: Int
     public let castID: Int?
     public let creditID: String?

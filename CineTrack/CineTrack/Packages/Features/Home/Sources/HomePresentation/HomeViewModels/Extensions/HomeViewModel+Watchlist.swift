@@ -5,8 +5,8 @@
 //  Created by Gegi Ghvachliani on 13/08/2026.
 //
 
-
 import Foundation
+import LibraryDomain
 
 import HomeDomain
 import SharedCore
@@ -25,14 +25,14 @@ extension HomeViewModel {
 
             print("❌ Watchlist Load Error:", error)
             self.error = error
-            
+
         }
     }
 
     // MARK: - Toggle
 
     public func toggleWatchlist(for movie: Movie) async {
-        
+
         guard pendingWatchlistIDs.insert(movie.id).inserted else {
             return
         }
@@ -41,11 +41,10 @@ extension HomeViewModel {
             pendingWatchlistIDs.remove(movie.id)
         }
 
-
         let wasWatchlisted = watchlistedMovies.contains { $0.id == movie.id }
 
         if wasWatchlisted {
-            
+
             watchlistedMovies.removeAll { $0.id == movie.id }
 
         } else {
@@ -77,7 +76,7 @@ extension HomeViewModel {
 
             print("❌ Watchlist Toggle Error:", error)
             self.error = error
-            
+
         }
     }
 }

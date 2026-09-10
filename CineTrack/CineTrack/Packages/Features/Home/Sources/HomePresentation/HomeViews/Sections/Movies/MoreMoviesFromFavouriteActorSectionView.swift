@@ -1,8 +1,13 @@
 import SwiftUI
+import DesignSystemComponents
+import LibraryDomain
 import DesignSystemTokens
 import SharedCore
 
 struct MoreMoviesFromFavouriteActorSectionView: View {
+
+    // MARK: - Properties
+
     let actor: Actor
     let movies: [Movie]
     let watchlistedMovies: [Movie]
@@ -12,6 +17,8 @@ struct MoreMoviesFromFavouriteActorSectionView: View {
     let onSeeAllTap: () -> Void
     let onActorTap: () -> Void
     let onSeeYourFavouritePeopleTap: () -> Void
+
+    // MARK: - Body
 
     var body: some View {
         VStack(spacing: 12) {
@@ -53,7 +60,7 @@ struct MoreMoviesFromFavouriteActorSectionView: View {
                     .fill(ColorTokens.Brand.primary)
                     .frame(width: 4, height: 25)
 
-                Text("More from \(actor.name)")
+                Text(HomeStrings.Format.moreFromHeader(actorName: actor.name))
                     .font(TypographyTokens.headline)
 
                 Spacer()
@@ -64,7 +71,7 @@ struct MoreMoviesFromFavouriteActorSectionView: View {
                     .buttonStyle(.plain)
             }
 
-            Text("because they're one of your favourite people")
+            Text(HomeStrings.Content.becauseTheyreOneOfYourFavouritePeople)
                 .font(TypographyTokens.bodySmall)
                 .foregroundStyle(.secondary)
         }
@@ -94,7 +101,7 @@ struct MoreMoviesFromFavouriteActorSectionView: View {
 
             Button(action: onSeeYourFavouritePeopleTap) {
                 HStack {
-                    Text("See your favourite people")
+                    Text(HomeStrings.Content.seeYourFavouritePeople)
                         .font(TypographyTokens.bodySmall)
                         .foregroundStyle(ColorTokens.Text.main)
 

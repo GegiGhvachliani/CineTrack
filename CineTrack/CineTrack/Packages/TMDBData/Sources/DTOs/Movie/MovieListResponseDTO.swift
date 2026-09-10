@@ -9,6 +9,8 @@ import Foundation
 
 public struct MovieListResponseDTO: Decodable {
 
+    // MARK: - Properties
+
     public let page: Int
     public let results: [MovieDTO]
     public let totalPages: Int

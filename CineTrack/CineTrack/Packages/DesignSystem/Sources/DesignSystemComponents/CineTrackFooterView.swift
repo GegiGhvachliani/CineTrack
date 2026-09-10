@@ -2,7 +2,12 @@ import SwiftUI
 import DesignSystemTokens
 
 public struct CineTrackFooterView: View {
+
+    // MARK: - Initialization
+
     public init() {}
+
+    // MARK: - Body
 
     public var body: some View {
         VStack(spacing: 15) {
@@ -20,7 +25,7 @@ public struct CineTrackFooterView: View {
                 .frame(width: 4, height: 25)
                 .foregroundStyle(ColorTokens.Brand.primary)
 
-            Text("Follow CineTrack on")
+            Text(DesignSystemStrings.Section.socialLinks)
                 .font(TypographyTokens.headline)
 
             Spacer()
@@ -57,12 +62,17 @@ public struct CineTrackFooterView: View {
 }
 
 private struct SocialLink: Identifiable {
+
+    // MARK: - Properties
+
     let imageName: String
     let url: URL
 
     var id: String {
         imageName
     }
+
+    // MARK: - Initialization
 
     init(imageName: String, url: String) {
         self.imageName = imageName

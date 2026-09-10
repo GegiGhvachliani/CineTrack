@@ -1,18 +1,22 @@
 import SwiftUI
 
 public struct ImageGallerySectionView<Item: Identifiable>: View {
+
+    // MARK: - Properties
+
     private let items: [Item]
     private let imageURL: (Item) -> URL
     private let aspectRatio: (Item) -> Double
     private let onLoadMore: (() -> Void)?
-    private let onSeeAllTap: (() -> Void)?
-    @State private var showsGallery = false
+    private let onSeeAllTap: () -> Void
+
+    // MARK: - Initialization
 
     public init(
         items: [Item],
         imageURL: @escaping (Item) -> URL,
         aspectRatio: @escaping (Item) -> Double,
-        onSeeAllTap: (() -> Void)? = nil,
+        onSeeAllTap: @escaping () -> Void,
         onLoadMore: (() -> Void)? = nil
     ) {
         self.items = items
@@ -22,6 +26,8 @@ public struct ImageGallerySectionView<Item: Identifiable>: View {
         self.onLoadMore = onLoadMore
     }
 
+    // MARK: - Body
+
     public var body: some View {
         if !items.isEmpty {
             HorizontalScrollView(
@@ -29,31 +35,12 @@ public struct ImageGallerySectionView<Item: Identifiable>: View {
                 seeAllTitle: "See All",
                 items: items,
                 itemSpacing: 10,
-                onSeeAllTap: {
-                    if let onSeeAllTap {
-                        onSeeAllTap()
-                    } else {
-                        showsGallery = true
-                    }
-                },
+                onSeeAllTap: onSeeAllTap,
                 onLoadMore: onLoadMore
             ) { item, _ in
                 imageCell(item, height: 133)
             }
-            .sheet(isPresented: $showsGallery) {
-                ScrollView {
-                    LazyVGrid(
-                        columns: [GridItem(.adaptive(minimum: 140), spacing: 10)],
-                        spacing: 10
-                    ) {
-                        ForEach(items) { item in
-                            imageCell(item, height: 180)
-                                .frame(maxWidth: .infinity, minHeight: 180)
-                        }
-                    }
-                    .padding()
-                }
-            }
+
         }
     }
 

@@ -9,8 +9,11 @@ import UIKit
 
 @MainActor
 public protocol AuthenticationFactoryProtocol {
-    func makeAuthenticationCoordinator(navigationController: UINavigationController) -> AuthenticationCoordinatorProtocol
-    
-    
+    func makeAuthenticationCoordinator(navigationController: UINavigationController)
+        -> AuthenticationCoordinatorProtocol
+
     func isUserAuthenticated() -> Bool
+
+    func makeSignInViewController(coordinator: AuthenticationNavigationProtocol) -> UIViewController
+    func makeSignUpViewController(coordinator: AuthenticationNavigationProtocol) -> UIViewController
 }

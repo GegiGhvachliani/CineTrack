@@ -6,21 +6,26 @@
 //
 
 import SwiftUI
+import LibraryDomain
 import SharedCore
 import DesignSystemComponents
 
 struct BornTodaySectionView: View {
-    
+
+    // MARK: - Properties
+
     let actors: [Actor]
     let favouritedActors: [Actor]
-    
+
     let onActorTap: (Actor) -> Void
     let onFavouriteTap: (Actor) -> Void
     let onSeeAllTap: () -> Void
     let onLoadMore: () -> Void
-    
+
+    // MARK: - Body
+
     var body: some View {
-        
+
         HorizontalScrollView(
             headerText: HomeStrings.Section.bornToday,
             seeAllTitle: HomeStrings.Action.seeAll,
@@ -28,7 +33,7 @@ struct BornTodaySectionView: View {
             onSeeAllTap: onSeeAllTap,
             onLoadMore: onLoadMore
         ) { actor, _ in
-            
+
             MovieActorCell(
                 actor: actor,
                 cellHeight: 240,
@@ -38,8 +43,8 @@ struct BornTodaySectionView: View {
                 onActorTap: { onActorTap(actor) },
                 onFavouriteTap: { onFavouriteTap(actor) }
             )
-            
+
         }
     }
-    
+
 }

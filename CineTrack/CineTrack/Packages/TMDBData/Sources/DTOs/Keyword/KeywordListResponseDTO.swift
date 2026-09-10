@@ -7,6 +7,8 @@ import Foundation
 
 public struct KeywordListResponseDTO: Decodable, Sendable {
 
+    // MARK: - Properties
+
     public let page: Int
     public let results: [KeywordDTO]
     public let totalPages: Int

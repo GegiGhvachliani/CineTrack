@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import LibraryDomain
 import SharedCore
 import HomeDomain
 import DesignSystemTokens
@@ -15,6 +16,8 @@ import DesignSystemComponents
 
 public struct PosterWithVideoView: View {
 
+    // MARK: - Properties
+
     let featuredItem: FeaturedItem
 
     let isWatchlisted: Bool
@@ -23,7 +26,7 @@ public struct PosterWithVideoView: View {
     let onMovieTap: () -> Void
     let onWatchlistTap: () -> Void
 
-  public var body: some View {
+    public var body: some View {
 
         VStack(spacing: 0) {
 

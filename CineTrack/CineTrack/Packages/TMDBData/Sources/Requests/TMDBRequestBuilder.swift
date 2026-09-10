@@ -10,7 +10,11 @@ import SharedNetworking
 
 public struct TMDBRequestBuilder: Sendable {
 
+    // MARK: - Properties
+
     private let configuration: TMDBConfiguration
+
+    // MARK: - Initialization
 
     public init(configuration: TMDBConfiguration) {
         self.configuration = configuration
@@ -29,8 +33,8 @@ public struct TMDBRequestBuilder: Sendable {
 
         if let page = endpoint.page {
 
-            queryItems.append(URLQueryItem(name: "page",value: String(page)))
-            
+            queryItems.append(URLQueryItem(name: "page", value: String(page)))
+
         }
 
         // MARK: - Text search
@@ -130,7 +134,8 @@ public struct TMDBRequestBuilder: Sendable {
             }
 
             if !keywordIDs.isEmpty {
-                queryItems.append(URLQueryItem(name: "with_keywords", value: keywordIDs.map(String.init).joined(separator: "|")))
+                queryItems.append(
+                    URLQueryItem(name: "with_keywords", value: keywordIDs.map(String.init).joined(separator: "|")))
             }
 
             if !originCountryCodes.isEmpty {
@@ -142,7 +147,7 @@ public struct TMDBRequestBuilder: Sendable {
                 )
             }
         }
-        
+
         // MARK: - Chronological Upcoming Movies
 
         if case let .discoverUpcoming(_, _, releaseDateGTE) = endpoint {

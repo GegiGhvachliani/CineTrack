@@ -11,6 +11,6 @@ import UIKit
 public protocol OnboardingFactoryProtocol {
     func makeOnboardingViewController(didComplete: @escaping () -> Void) -> UIViewController
     func makeOnboardingCoordinator(navigationController: UINavigationController) -> OnboardingCoordinatorProtocol
-    
+
     func isOnboardingCompleted() -> Bool
 }

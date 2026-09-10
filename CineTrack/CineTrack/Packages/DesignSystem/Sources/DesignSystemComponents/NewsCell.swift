@@ -3,9 +3,15 @@ import DesignSystemTokens
 import SharedCore
 
 public struct NewsCell: View {
+
+    // MARK: - Properties
+
     private let news: News
     private let cellHeight: CGFloat
     private let onTap: () -> Void
+    private let imageHeight: CGFloat = 105
+
+    // MARK: - Initialization
 
     public init(
         news: News,
@@ -16,6 +22,8 @@ public struct NewsCell: View {
         self.cellHeight = cellHeight
         self.onTap = onTap
     }
+
+    // MARK: - Body
 
     public var body: some View {
         Button(action: onTap) {
@@ -37,8 +45,8 @@ public struct NewsCell: View {
 
     private var header: some View {
         HStack(spacing: 8) {
-            PosterImageView(photoURL: news.imageURL)
-                .frame(width: 75, height: 105)
+            NewsImageView(photoURL: news.imageURL, height: imageHeight)
+                .frame(width: 75)
                 .clipShape(RoundedRectangle(cornerRadius: 5))
 
             VStack(alignment: .leading) {
@@ -63,7 +71,7 @@ public struct NewsCell: View {
 
             Spacer()
         }
-        .frame(height: cellHeight / 2)
+        .frame(height: imageHeight)
         .padding(.horizontal, 10)
         .padding(.vertical, 10)
     }

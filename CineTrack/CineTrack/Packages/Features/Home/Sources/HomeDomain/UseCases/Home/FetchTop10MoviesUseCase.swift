@@ -5,9 +5,7 @@
 //  Created by Gegi Ghvachliani on 10/08/2026.
 //
 
-
 import Foundation
-import HomeDomain
 import SharedCore
 
 public protocol FetchTop10MoviesUseCaseProtocol: Sendable {
@@ -17,7 +15,11 @@ public protocol FetchTop10MoviesUseCaseProtocol: Sendable {
 
 public final class FetchTop10MoviesUseCase: FetchTop10MoviesUseCaseProtocol {
 
+    // MARK: - Properties
+
     private let repository: HomeRepositoryProtocol
+
+    // MARK: - Initialization
 
     public init(repository: HomeRepositoryProtocol) {
         self.repository = repository

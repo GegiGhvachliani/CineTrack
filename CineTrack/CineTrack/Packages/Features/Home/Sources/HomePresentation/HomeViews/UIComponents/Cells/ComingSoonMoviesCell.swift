@@ -6,11 +6,14 @@
 //
 
 import SwiftUI
+import LibraryDomain
 import SharedCore
 import DesignSystemTokens
 import DesignSystemComponents
 
 struct ComingSoonMoviesCell: View {
+
+    // MARK: - Properties
 
     let movie: Movie
     let isWatchlisted: Bool
@@ -19,12 +22,14 @@ struct ComingSoonMoviesCell: View {
     let onMovieTap: () -> Void
     let onWatchlistTap: () -> Void
 
+    // MARK: - Body
+
     var body: some View {
         Button(action: onMovieTap) {
             VStack(spacing: 0) {
-                
+
                 top
-                
+
                 MoviePoster(
                     isWatchlisted: isWatchlisted,
                     photoURL: movie.posterPath,
@@ -32,14 +37,14 @@ struct ComingSoonMoviesCell: View {
                     onWatchlistTap: onWatchlistTap
                 )
                 .frame(height: (cellHeight - 25) * 0.8)
-                
+
                 footer
                     .frame(height: (cellHeight - 25) * 0.2)
-                
+
                 Spacer()
             }
             .background(ColorTokens.Background.primary)
-            .frame(width:(cellHeight - 25) * (8.0 / 15.0), height: cellHeight)
+            .frame(width: (cellHeight - 25) * (8.0 / 15.0), height: cellHeight)
             .clipShape(
                 UnevenRoundedRectangle(
                     topLeadingRadius: 5,
@@ -48,7 +53,7 @@ struct ComingSoonMoviesCell: View {
                     topTrailingRadius: 5
                 )
             )
-            .shadow(radius: 3, x: 1, y: 3 )
+            .shadow(radius: 3, x: 1, y: 3)
         }
     }
 
@@ -88,9 +93,9 @@ struct ComingSoonMoviesCell: View {
                 .offset(y: -1)
                 .foregroundStyle(ColorTokens.Brand.primary)
 
-            Text(String(format: "%.1f",movie.voteAverage))
-            .font(Font.system(size: 15, weight: .none, design: .rounded))
-            .foregroundStyle(ColorTokens.Text.main)
+            Text(String(format: "%.1f", movie.voteAverage))
+                .font(Font.system(size: 15, weight: .none, design: .rounded))
+                .foregroundStyle(ColorTokens.Text.main)
 
             Spacer()
         }
@@ -108,14 +113,14 @@ struct ComingSoonMoviesCell: View {
                 .lineLimit(1)
 
             if let releaseDate = movie.releaseDate,
-               !releaseDate.isEmpty {
+                !releaseDate.isEmpty {
 
                 Text(String(releaseDate.prefix(4)))
-                .font(Font.system(size: 13, weight: .regular, design: .rounded))
-                .foregroundStyle(ColorTokens.Text.main)
-                .layoutPriority(0)
-                .foregroundStyle(.secondary)
-                .lineLimit(1)
+                    .font(Font.system(size: 13, weight: .regular, design: .rounded))
+                    .foregroundStyle(ColorTokens.Text.main)
+                    .layoutPriority(0)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
             }
 
             Spacer(minLength: 0)

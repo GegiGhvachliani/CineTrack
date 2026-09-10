@@ -35,6 +35,9 @@
 		63F86A492FE96EC000D43A5F /* SharedNetworking in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A482FE96EC000D43A5F /* SharedNetworking */; };
 		63F86A4B2FE96EC000D43A5F /* SharedStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 63F86A4A2FE96EC000D43A5F /* SharedStorage */; };
 		63FB42DD302A714400502D80 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 63FB42DC302A714400502D80 /* FirebaseFirestore */; };
+		CDB000000000000000000000 /* TMDBData in Frameworks */ = {isa = PBXBuildFile; productRef = CDA000000000000000000000 /* TMDBData */; };
+		CDB000000000000000000001 /* NewsData in Frameworks */ = {isa = PBXBuildFile; productRef = CDA000000000000000000001 /* NewsData */; };
+		CDB000000000000000000002 /* SharedAuth in Frameworks */ = {isa = PBXBuildFile; productRef = CDA000000000000000000002 /* SharedAuth */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -110,6 +113,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDB000000000000000000002 /* SharedAuth in Frameworks */,
+				CDB000000000000000000001 /* NewsData in Frameworks */,
+				CDB000000000000000000000 /* TMDBData in Frameworks */,
 				63F86A452FE96EC000D43A5F /* SearchAssembly in Frameworks */,
 				63F86A4B2FE96EC000D43A5F /* SharedStorage in Frameworks */,
 				631C12EF304B3A93007A6450 /* SeeAllAssembly in Frameworks */,
@@ -207,6 +213,9 @@
 			);
 			name = CineTrack;
 			packageProductDependencies = (
+				CDA000000000000000000002 /* SharedAuth */,
+				CDA000000000000000000001 /* NewsData */,
+				CDA000000000000000000000 /* TMDBData */,
 				63827DBE2FD3530600DE3E16 /* FirebaseAuth */,
 				63F40D8C2FD5F1BB00189862 /* Kingfisher */,
 				63F86A382FE96EC000D43A5F /* DesignSystemComponents */,
@@ -858,6 +867,18 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 63827DBD2FD3530600DE3E16 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
+		};
+		CDA000000000000000000000 /* TMDBData */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TMDBData;
+		};
+		CDA000000000000000000001 /* NewsData */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = NewsData;
+		};
+		CDA000000000000000000002 /* SharedAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SharedAuth;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

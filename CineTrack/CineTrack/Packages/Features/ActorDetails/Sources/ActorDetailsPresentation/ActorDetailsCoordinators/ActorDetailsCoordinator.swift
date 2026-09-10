@@ -12,12 +12,17 @@ import ActorDetailsPresentationAPI
 import SharedCore
 
 public final class ActorDetailsCoordinator: ActorDetailsCoordinatorProtocol {
+
+    // MARK: - Properties
+
     public var childCoordinators: [Coordinator] = []
 
     private let actorID: Int
     private let navigationController: UINavigationController
     private let factory: ActorDetailsFactoryProtocol
     private weak var router: ActorDetailsRoutingProtocol?
+
+    // MARK: - Initialization
 
     public init(
         actorID: Int,

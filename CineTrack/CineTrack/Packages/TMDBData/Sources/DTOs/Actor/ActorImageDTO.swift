@@ -9,6 +9,8 @@ import Foundation
 
 public struct ActorImageDTO: Decodable, Sendable {
 
+    // MARK: - Properties
+
     public let aspectRatio: Double
     public let filePath: String
     public let height: Int
@@ -16,6 +18,8 @@ public struct ActorImageDTO: Decodable, Sendable {
     public let voteAverage: Double
     public let voteCount: Int
     public let width: Int
+
+    // MARK: - Initialization
 
     public init(
         aspectRatio: Double,

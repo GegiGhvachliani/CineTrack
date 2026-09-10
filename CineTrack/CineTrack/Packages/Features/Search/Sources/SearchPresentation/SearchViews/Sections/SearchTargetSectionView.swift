@@ -10,7 +10,12 @@ import SearchDomain
 
 struct SearchTargetSectionView: View {
 
-    @Binding var selectedTarget: SearchTarget
+    // MARK: - Properties
+
+    @Binding
+    var selectedTarget: SearchTarget
+
+    // MARK: - Body
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -19,12 +24,17 @@ struct SearchTargetSectionView: View {
                     Button {
                         selectedTarget = target
                     } label: {
-                        Text(target.rawValue)
+                        Text(target.title)
                             .font(.system(size: 14, weight: .semibold, design: .rounded))
-                            .foregroundStyle(selectedTarget == target ? ColorTokens.Text.inverse : ColorTokens.Text.main)
+                            .foregroundStyle(
+                                selectedTarget == target ? ColorTokens.Text.inverse : ColorTokens.Text.main
+                            )
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 5)
-                            .background(selectedTarget == target ? ColorTokens.Brand.primary : Color.clear, in: RoundedRectangle(cornerRadius: 14))
+                            .background(
+                                selectedTarget == target ? ColorTokens.Brand.primary : Color.clear,
+                                in: RoundedRectangle(cornerRadius: 14)
+                            )
                             .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)

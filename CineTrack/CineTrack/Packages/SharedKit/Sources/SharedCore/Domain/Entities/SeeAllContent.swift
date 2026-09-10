@@ -1,7 +1,6 @@
 import Foundation
-import Observation
 
-public enum SeeAllPayload {
+public enum SeeAllPayload: Sendable {
     case movies([Movie])
     case actors([Actor])
     case news([News])
@@ -22,9 +21,14 @@ public enum SeeAllLibraryItem: Identifiable, Sendable {
 }
 
 public struct GalleryImage: Identifiable, Sendable, Equatable {
+
+    // MARK: - Properties
+
     public let id: String
     public let url: URL
     public let aspectRatio: Double
+
+    // MARK: - Initialization
 
     public init(id: String, url: URL, aspectRatio: Double) {
         self.id = id
@@ -34,30 +38,29 @@ public struct GalleryImage: Identifiable, Sendable, Equatable {
 }
 
 @MainActor
-@Observable
-public final class SeeAllContent {
+public struct SeeAllContent {
+
+    // MARK: - Content
+
     public let title: String
-    public private(set) var payload: SeeAllPayload
-    public private(set) var isLoadingMore = false
-    public private(set) var error: Error?
+    public let payload: SeeAllPayload
 
-    private let hasMore: () -> Bool
-    private let loadMore: (() async -> SeeAllPayload?)?
+    // MARK: - Pagination Source
 
-    public init(title: String, payload: SeeAllPayload, hasMore: @escaping () -> Bool = { false }, loadMore: (() async -> SeeAllPayload?)? = nil) {
+    public let hasMore: () -> Bool
+    public let loadMore: (() async -> SeeAllPayload?)?
+
+    // MARK: - Initialization
+
+    public init(
+        title: String,
+        payload: SeeAllPayload,
+        hasMore: @escaping () -> Bool = { false },
+        loadMore: (() async -> SeeAllPayload?)? = nil
+    ) {
         self.title = title
         self.payload = payload
         self.hasMore = hasMore
         self.loadMore = loadMore
-    }
-
-    public var canLoadMore: Bool { hasMore() }
-
-    public func loadNextPage() async {
-        guard canLoadMore, !isLoadingMore, let loadMore else { return }
-        isLoadingMore = true
-        error = nil
-        defer { isLoadingMore = false }
-        payload = await loadMore() ?? payload
     }
 }

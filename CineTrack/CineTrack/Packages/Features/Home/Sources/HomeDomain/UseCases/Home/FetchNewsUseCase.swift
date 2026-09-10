@@ -15,7 +15,11 @@ public protocol FetchNewsUseCaseProtocol: Sendable {
 
 public final class FetchNewsUseCase: FetchNewsUseCaseProtocol {
 
-    private let repository:HomeRepositoryProtocol
+    // MARK: - Properties
+
+    private let repository: HomeRepositoryProtocol
+
+    // MARK: - Initialization
 
     public init(repository: HomeRepositoryProtocol) {
         self.repository = repository

@@ -38,7 +38,7 @@ public struct ActorCredit: Identifiable, Equatable, Sendable {
     public let job: String?
     public let order: Int?
 
-    // MARK: - Init
+    // MARK: - Initialization
 
     public init(
         id: Int,

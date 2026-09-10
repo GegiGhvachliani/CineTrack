@@ -5,10 +5,11 @@
 //  Created by Gegi Ghvachliani on 10/08/2026.
 //
 
-
 import Foundation
 
 public struct News: Identifiable, Sendable, Equatable {
+
+    // MARK: - Properties
 
     public let id: String
     public let imageURL: String?
@@ -17,6 +18,8 @@ public struct News: Identifiable, Sendable, Equatable {
     public let description: String?
     public let articleURL: String
     public let publishedAt: Date
+
+    // MARK: - Initialization
 
     public init(
         id: String,

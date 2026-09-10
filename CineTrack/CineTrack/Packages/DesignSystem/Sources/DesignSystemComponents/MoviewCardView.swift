@@ -1,7 +1,0 @@
-//
-//  MoviewCardView.swift
-//  DesignSystem
-//
-//  Created by Gegi Ghvachliani on 27/06/2026.
-//
-

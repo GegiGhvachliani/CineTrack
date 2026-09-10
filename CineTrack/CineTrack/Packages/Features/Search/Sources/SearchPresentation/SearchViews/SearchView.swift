@@ -4,26 +4,29 @@
 //
 
 import SwiftUI
+import LibraryDomain
 
 import DesignSystemTokens
 import SearchDomain
 
-public struct SearchView: View {
+public struct SearchView<ViewModel: SearchViewModelProtocol>: View {
 
     // MARK: - ViewModel
 
-    @State private var viewModel: SearchViewModel
+    @State
+    private var viewModel: ViewModel
 
     // MARK: - Initialization
 
-    public init(viewModel: SearchViewModel) {
+    public init(viewModel: ViewModel) {
         self.viewModel = viewModel
     }
 
     // MARK: - Body
 
     public var body: some View {
-        @Bindable var viewModel = viewModel
+        @Bindable
+        var viewModel = viewModel
 
         ZStack {
             Color.black.ignoresSafeArea()
@@ -51,16 +54,11 @@ public struct SearchView: View {
         .task {
             await viewModel.loadPersonalization()
         }
-        .onAppear {
-            Task {
-                await viewModel.loadPersonalization()
-            }
-        }
     }
 
     // MARK: - Header
 
-    private func searchHeader(viewModel: SearchViewModel) -> some View {
+    private func searchHeader(viewModel: ViewModel) -> some View {
         SearchHeaderSectionView(
             searchQuery: Binding(
                 get: { viewModel.searchQuery },
@@ -73,7 +71,7 @@ public struct SearchView: View {
 
     // MARK: - Switchers
 
-    private func modeSwitcher(viewModel: SearchViewModel) -> some View {
+    private func modeSwitcher(viewModel: ViewModel) -> some View {
         SearchModeSectionView(
             selectedMode: Binding(
                 get: { viewModel.selectedMode },
@@ -82,7 +80,7 @@ public struct SearchView: View {
         )
     }
 
-    private func targetSwitcher(viewModel: SearchViewModel) -> some View {
+    private func targetSwitcher(viewModel: ViewModel) -> some View {
         SearchTargetSectionView(
             selectedTarget: Binding(
                 get: { viewModel.selectedTarget },
@@ -93,7 +91,7 @@ public struct SearchView: View {
 
     // MARK: - Advanced filters
 
-    private func advancedFilters(viewModel: SearchViewModel) -> some View {
+    private func advancedFilters(viewModel: ViewModel) -> some View {
         AdvancedSearchFiltersSectionView(
             filters: Binding(
                 get: { viewModel.advancedFilters },
@@ -109,7 +107,7 @@ public struct SearchView: View {
                 await viewModel.searchAdvancedMovies()
             }
         } label: {
-            Text("See Results")
+            Text(SearchStrings.Content.seeResults)
                 .font(.system(size: 17, weight: .bold, design: .rounded))
                 .foregroundStyle(ColorTokens.Text.inverse)
                 .frame(maxWidth: .infinity)
@@ -123,7 +121,7 @@ public struct SearchView: View {
 
     // MARK: - Results
 
-    private func searchResults(viewModel: SearchViewModel) -> some View {
+    private func searchResults(viewModel: ViewModel) -> some View {
         SearchResultsSectionView(
             movies: viewModel.movies,
             actors: viewModel.actors,

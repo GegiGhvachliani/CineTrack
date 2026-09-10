@@ -9,6 +9,8 @@ import Foundation
 
 public struct ActorCreditDTO: Decodable, Sendable {
 
+    // MARK: - Properties
+
     public let id: Int
     public let backdropPath: String?
     public let character: String?
@@ -27,6 +29,8 @@ public struct ActorCreditDTO: Decodable, Sendable {
     public let voteAverage: Double
     public let voteCount: Int
     public let order: Int?
+
+    // MARK: - Initialization
 
     public init(
         id: Int,

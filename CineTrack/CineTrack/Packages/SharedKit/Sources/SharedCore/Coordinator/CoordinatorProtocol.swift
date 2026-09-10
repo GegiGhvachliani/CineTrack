@@ -16,12 +16,12 @@ public extension Coordinator {
         childCoordinators.append(coordinator)
         print(" [Coordinator] Added child: \(type(of: coordinator))")
     }
-    
+
     func removeChild(_ coordinator: Coordinator) {
         childCoordinators.removeAll { $0 === coordinator }
         print(" [Coordinator] Removed child: \(type(of: coordinator))")
     }
-    
+
     func removeAllChildren() {
         childCoordinators.removeAll()
         print(" [Coordinator] Removed all children")

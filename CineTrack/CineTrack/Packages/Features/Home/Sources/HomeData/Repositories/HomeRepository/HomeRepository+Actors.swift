@@ -5,7 +5,6 @@
 //  Created by Gegi Ghvachliani on 12/08/2026.
 //
 
-
 import Foundation
 import HomeDomain
 import SharedCore
@@ -52,7 +51,8 @@ extension HomeRepository {
 
     // MARK: - Private
 
-    private func fetchPopularPeoplePages(from firstPage: Int, to lastPage: Int) async throws -> [PopularPeopleResponseDTO] {
+    private func fetchPopularPeoplePages(from firstPage: Int, to lastPage: Int) async throws
+        -> [PopularPeopleResponseDTO] {
 
         try await withThrowingTaskGroup(of: PopularPeopleResponseDTO.self) { group in
 
@@ -102,7 +102,7 @@ extension HomeRepository {
                         let details: PersonDTO = try await apiClient.sendRequest(request)
 
                         guard let actor = personMapper.map(details),
-                              let birthday = actor.birthday
+                            let birthday = actor.birthday
                         else {
                             return nil
                         }

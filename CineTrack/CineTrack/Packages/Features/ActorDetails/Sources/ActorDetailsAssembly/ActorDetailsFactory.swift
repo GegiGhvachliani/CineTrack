@@ -5,7 +5,6 @@
 //  Created by Gegi Ghvachliani on 05/09/2026.
 //
 
-
 import UIKit
 import SwiftUI
 
@@ -23,12 +22,35 @@ import ActorMediaData
 import ActorMediaDomain
 import ActorVideosData
 import ActorVideosDomain
-import HomeData
-import HomeDomain
+import LibraryData
+import LibraryDomain
 
 @MainActor
 public struct ActorDetailsFactory: ActorDetailsFactoryProtocol {
-    public init() {}
+
+    // MARK: - Dependencies
+
+    private let apiClient: APIClient
+    private let tmdbConfiguration: TMDBConfiguration
+    private let newsConfiguration: NewsConfiguration
+    private let firestore: RemoteDocumentStore
+    private let userSession: UserSession
+
+    // MARK: - Initialization
+
+    public init(
+        apiClient: APIClient,
+        tmdbConfiguration: TMDBConfiguration,
+        newsConfiguration: NewsConfiguration,
+        firestore: RemoteDocumentStore,
+        userSession: UserSession
+    ) {
+        self.apiClient = apiClient
+        self.tmdbConfiguration = tmdbConfiguration
+        self.newsConfiguration = newsConfiguration
+        self.firestore = firestore
+        self.userSession = userSession
+    }
 
     public func makeActorDetailsCoordinator(
         actorID: Int,
@@ -51,34 +73,26 @@ public struct ActorDetailsFactory: ActorDetailsFactoryProtocol {
         onShowSeeAll: @escaping (SeeAllContent) -> Void,
         onShowVideos: @escaping (VideoPlaylistContext) -> Void
     ) -> UIViewController {
-        let apiClient = URLSessionAPIClient()
-        let tmdbConfiguration = TMDBConfiguration(
-            baseURL: URL(string: "https://api.themoviedb.org")!,
-            accessToken: "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4NWEyZmRkNjQyY2FmOTMzYTVjMzk5N2VkY2VjYTRjNSIsIm5iZiI6MTc2Mzk4OTQxNS42MDA5OTk4LCJzdWIiOiI2OTI0NTdhN2EwYzRiMWIxMzIxODc1ZGIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.ZfESC0ZJHYqzbSE2xCYRjfOSwiacjs7sYl-_qvgDbc4"
-        )
-        let newsConfiguration = NewsConfiguration(
-            baseURL: URL(string: "https://newsapi.org")!,
-            apiKey: Bundle.main.object(forInfoDictionaryKey: "NEWS_API_KEY") as? String ?? ""
-        )
         let repository = ActorDetailsRepository(
             apiClient: apiClient,
             configuration: tmdbConfiguration,
             newsConfiguration: newsConfiguration
         )
-        let favouriteRepository = FavouriteActorRepository(
-            firestore: FirestoreClient(),
-            userSession: FirebaseUserSession()
+        let favouriteRepository = FavouriteRepository(
+            firestore: firestore,
+            userSession: userSession
         )
-        let watchlistRepository = ActorDetailsData.WatchlistRepository(
-            firestore: FirestoreClient(),
-            userSession: FirebaseUserSession()
+        let watchlistRepository = LibraryData.WatchlistRepository(
+            firestore: firestore,
+            userSession: userSession
         )
         let recentlyViewedRepository = RecentlyViewedRepository(
-            firestore: FirestoreClient(),
-            userSession: FirebaseUserSession()
+            firestore: firestore,
+            userSession: userSession
         )
         let viewModel = ActorDetailsViewModel(
             actorID: actorID,
+            addRecentlyViewedActorUseCase: AddRecentlyViewedActorUseCase(repository: recentlyViewedRepository),
             fetchActorDetailsUseCase: FetchActorDetailsUseCase(repository: repository),
             fetchActorCreditsUseCase: FetchActorCreditsUseCase(repository: repository),
             fetchActorMediaUseCase: FetchActorMediaUseCase(
@@ -104,21 +118,6 @@ public struct ActorDetailsFactory: ActorDetailsFactoryProtocol {
         viewModel.onShowMiniBiography = onShowMiniBiography
         viewModel.onShowSeeAll = onShowSeeAll
         viewModel.onShowVideos = onShowVideos
-        viewModel.onActorViewed = { (actor: ActorDetails) in
-            Task {
-                let recentlyViewedActor = RecentlyViewedActor(
-                    id: actor.id,
-                    name: actor.name,
-                    birthday: actor.birthday,
-                    profilePath: actor.profileURL?.absoluteString ?? actor.profilePath,
-                    viewedAt: .now
-                )
-
-                try? await recentlyViewedRepository.addRecentlyViewedActor(
-                    recentlyViewedActor
-                )
-            }
-        }
         viewModel.onOpenURL = { url in
             UIApplication.shared.open(url)
         }

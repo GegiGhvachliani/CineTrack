@@ -18,13 +18,35 @@ import MovieDetailsData
 import MovieDetailsDomain
 import MovieDetailsPresentation
 import MovieDetailsPresentationAPI
-import HomeData
-import HomeDomain
+import LibraryData
+import LibraryDomain
 
 @MainActor
 public struct MovieDetailsFactory: MovieDetailsFactoryProtocol {
 
-    public init() {}
+    // MARK: - Dependencies
+
+    private let apiClient: APIClient
+    private let tmdbConfiguration: TMDBConfiguration
+    private let newsConfiguration: NewsConfiguration
+    private let firestore: RemoteDocumentStore
+    private let userSession: UserSession
+
+    // MARK: - Initialization
+
+    public init(
+        apiClient: APIClient,
+        tmdbConfiguration: TMDBConfiguration,
+        newsConfiguration: NewsConfiguration,
+        firestore: RemoteDocumentStore,
+        userSession: UserSession
+    ) {
+        self.apiClient = apiClient
+        self.tmdbConfiguration = tmdbConfiguration
+        self.newsConfiguration = newsConfiguration
+        self.firestore = firestore
+        self.userSession = userSession
+    }
 
     public func makeMovieDetailsCoordinator(
         movie: Movie,
@@ -47,22 +69,6 @@ public struct MovieDetailsFactory: MovieDetailsFactoryProtocol {
         onShowSeeAll: @escaping (SeeAllContent) -> Void,
         onShowVideos: @escaping (VideoPlaylistContext) -> Void
     ) -> UIViewController {
-        // MARK: - API client
-
-        let apiClient = URLSessionAPIClient()
-
-        // MARK: - Configuration
-
-        let tmdbConfiguration = TMDBConfiguration(
-            baseURL: URL(string: "https://api.themoviedb.org")!,
-            accessToken: "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4NWEyZmRkNjQyY2FmOTMzYTVjMzk5N2VkY2VjYTRjNSIsIm5iZiI6MTc2Mzk4OTQxNS42MDA5OTk4LCJzdWIiOiI2OTI0NTdhN2EwYzRiMWIxMzIxODc1ZGIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.ZfESC0ZJHYqzbSE2xCYRjfOSwiacjs7sYl-_qvgDbc4"
-        )
-        let newsConfiguration = NewsConfiguration(
-            baseURL: URL(string: "https://newsapi.org")!,
-            apiKey: Bundle.main.object(
-                forInfoDictionaryKey: "NEWS_API_KEY"
-            ) as? String ?? ""
-        )
 
         // MARK: - Repositories
 
@@ -71,19 +77,20 @@ public struct MovieDetailsFactory: MovieDetailsFactoryProtocol {
             configuration: tmdbConfiguration,
             newsConfiguration: newsConfiguration
         )
-        let watchlistRepository = MovieDetailsData.WatchlistRepository(
-            firestore: FirestoreClient(),
-            userSession: FirebaseUserSession()
+        let watchlistRepository = LibraryData.WatchlistRepository(
+            firestore: firestore,
+            userSession: userSession
         )
         let recentlyViewedRepository = RecentlyViewedRepository(
-            firestore: FirestoreClient(),
-            userSession: FirebaseUserSession()
+            firestore: firestore,
+            userSession: userSession
         )
 
         // MARK: - View model
 
         let viewModel = MovieDetailsViewModel(
             movie: movie,
+            addRecentlyViewedMovieUseCase: AddRecentlyViewedMovieUseCase(repository: recentlyViewedRepository),
             fetchMovieDetailsUseCase: FetchMovieDetailsUseCase(
                 repository: repository
             ),
@@ -120,22 +127,6 @@ public struct MovieDetailsFactory: MovieDetailsFactoryProtocol {
         viewModel.onNewsDetails = onNewsDetails
         viewModel.onShowSeeAll = onShowSeeAll
         viewModel.onShowVideos = onShowVideos
-        viewModel.onMovieViewed = { (movie: Movie) in
-            Task {
-                let recentlyViewedMovie = RecentlyViewedMovie(
-                    id: movie.id,
-                    title: movie.title,
-                    posterPath: movie.posterPath,
-                    releaseDate: movie.releaseDate,
-                    voteAverage: movie.voteAverage,
-                    viewedAt: .now
-                )
-
-                try? await recentlyViewedRepository.addRecentlyViewedMovie(
-                    recentlyViewedMovie
-                )
-            }
-        }
 
         let view = MovieDetailsView(viewModel: viewModel)
 

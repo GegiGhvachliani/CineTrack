@@ -10,8 +10,8 @@ import SearchData
 import SearchDomain
 import SearchPresentation
 import SearchPresentationAPI
-import HomeData
-import HomeDomain
+import LibraryData
+import LibraryDomain
 import SharedAuth
 import SharedNetworking
 import SharedStorage
@@ -20,20 +20,28 @@ import TMDBData
 @MainActor
 public struct SearchFactory: SearchFactoryProtocol {
 
-    public init() {}
+    // MARK: - Dependencies
+
+    private let apiClient: APIClient
+    private let configuration: TMDBConfiguration
+    private let firestore: RemoteDocumentStore
+    private let userSession: UserSession
+
+    // MARK: - Initialization
+
+    public init(
+        apiClient: APIClient,
+        configuration: TMDBConfiguration,
+        firestore: RemoteDocumentStore,
+        userSession: UserSession
+    ) {
+        self.apiClient = apiClient
+        self.configuration = configuration
+        self.firestore = firestore
+        self.userSession = userSession
+    }
 
     public func makeSearchViewController(coordinator: SearchCoordinatorProtocol) -> UIViewController {
-
-        // MARK: - API Client
-
-        let apiClient = URLSessionAPIClient()
-
-        // MARK: - TMDB Configuration
-
-        let configuration = TMDBConfiguration(
-            baseURL: URL(string: "https://api.themoviedb.org")!,
-            accessToken: "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4NWEyZmRkNjQyY2FmOTMzYTVjMzk5N2VkY2VjYTRjNSIsIm5iZiI6MTc2Mzk4OTQxNS42MDA5OTk4LCJzdWIiOiI2OTI0NTdhN2EwYzRiMWIxMzIxODc1ZGIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.ZfESC0ZJHYqzbSE2xCYRjfOSwiacjs7sYl-_qvgDbc4"
-        )
 
         // MARK: - Repository
 
@@ -42,12 +50,12 @@ public struct SearchFactory: SearchFactoryProtocol {
             configuration: configuration
         )
         let watchlistRepository = WatchlistRepository(
-            firestore: FirestoreClient(),
-            userSession: FirebaseUserSession()
+            firestore: firestore,
+            userSession: userSession
         )
         let favouriteRepository = FavouriteRepository(
-            firestore: FirestoreClient(),
-            userSession: FirebaseUserSession()
+            firestore: firestore,
+            userSession: userSession
         )
 
         // MARK: - Use Cases

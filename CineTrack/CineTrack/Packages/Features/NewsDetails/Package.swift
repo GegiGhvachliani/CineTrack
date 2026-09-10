@@ -19,8 +19,7 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../../SharedKit"),
-        .package(path: "../../DesignSystem"),
-        .package(path: "../../TMDBData")
+        .package(path: "../../DesignSystem")
     ],
     targets: [
         .target(
@@ -42,14 +41,6 @@ let package = Package(
                 .product(
                     name: "SharedCore",
                     package: "SharedKit"
-                ),
-                .product(
-                    name: "SharedNetworking",
-                    package: "SharedKit"
-                ),
-                .product(
-                    name: "TMDBData",
-                    package: "TMDBData"
                 )
             ],
             path: "Sources/NewsDetailsData"
@@ -91,6 +82,7 @@ let package = Package(
         .target(
             name: "NewsDetailsAssembly",
             dependencies: [
+                .product(name: "SharedCore", package: "SharedKit"),
                 "NewsDetailsDomain",
                 "NewsDetailsData",
                 "NewsDetailsPresentation",

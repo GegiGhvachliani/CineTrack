@@ -42,6 +42,7 @@ let package = Package(
         .target(
             name: "HomeDomain",
             dependencies: [
+                .product(name: "LibraryDomain", package: "SharedKit"),
                 .product(
                     name: "SharedCore",
                     package: "SharedKit"
@@ -52,49 +53,52 @@ let package = Package(
 
         // MARK: - Data
 
-            .target(
-                name: "HomeData",
-                dependencies: [
-                    "HomeDomain",
+        .target(
+            name: "HomeData",
+            dependencies: [
+                .product(name: "LibraryDomain", package: "SharedKit"),
+                "HomeDomain",
 
-                    .product(
-                        name: "SharedCore",
-                        package: "SharedKit"
-                    ),
+                .product(
+                    name: "SharedCore",
+                    package: "SharedKit"
+                ),
 
-                    .product(
-                        name: "SharedNetworking",
-                        package: "SharedKit"
-                    ),
+                .product(
+                    name: "SharedNetworking",
+                    package: "SharedKit"
+                ),
 
-                    .product(
-                        name: "SharedStorage",
-                        package: "SharedKit"
-                    ),
+                .product(
+                    name: "SharedStorage",
+                    package: "SharedKit"
+                ),
 
-                    .product(
-                        name: "SharedAuth",
-                        package: "SharedKit"
-                    ),
+                .product(
+                    name: "SharedAuth",
+                    package: "SharedKit"
+                ),
 
-                    .product(
-                        name: "TMDBData",
-                        package: "TMDBData"
-                    ),
+                .product(
+                    name: "TMDBData",
+                    package: "TMDBData"
+                ),
 
-                    .product(
-                        name: "NewsData",
-                        package: "NewsData"
-                    )
-                ],
-                path: "Sources/HomeData"
-            ),
+                .product(
+                    name: "NewsData",
+                    package: "NewsData"
+                )
+            ],
+            path: "Sources/HomeData"
+        ),
 
         // MARK: - Presentation
 
         .target(
             name: "HomePresentation",
             dependencies: [
+                .product(name: "DesignSystemTokens", package: "DesignSystem"),
+                .product(name: "LibraryDomain", package: "SharedKit"),
                 "HomeDomain",
                 "HomePresentationAPI",
 
@@ -133,6 +137,10 @@ let package = Package(
         .target(
             name: "HomeAssembly",
             dependencies: [
+                .product(name: "SharedStorage", package: "SharedKit"),
+                .product(name: "SharedAuth", package: "SharedKit"),
+                .product(name: "LibraryData", package: "SharedKit"),
+                .product(name: "LibraryDomain", package: "SharedKit"),
                 "HomeDomain",
                 "HomeData",
                 "HomePresentation",

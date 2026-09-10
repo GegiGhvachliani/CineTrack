@@ -10,6 +10,8 @@ import SharedCore
 
 public struct MoviePage {
 
+    // MARK: - Properties
+
     public let movies: [Movie]
     public let page: Int
     public let totalPages: Int
@@ -17,6 +19,8 @@ public struct MoviePage {
     public var hasNextPage: Bool {
         page < totalPages
     }
+
+    // MARK: - Initialization
 
     public init(
         movies: [Movie],

@@ -23,13 +23,13 @@ let package = Package(
         .package(path: "../ActorMedia"),
         .package(path: "../ActorVideos"),
         .package(path: "../../TMDBData"),
-        .package(path: "../../NewsData"),
-        .package(path: "../Home")
+        .package(path: "../../NewsData")
     ],
     targets: [
         .target(
             name: "ActorDetailsDomain",
             dependencies: [
+                .product(name: "LibraryDomain", package: "SharedKit"),
                 .product(
                     name: "SharedCore",
                     package: "SharedKit"
@@ -74,6 +74,8 @@ let package = Package(
         .target(
             name: "ActorDetailsPresentation",
             dependencies: [
+                .product(name: "DesignSystemTokens", package: "DesignSystem"),
+                .product(name: "LibraryDomain", package: "SharedKit"),
                 "ActorDetailsDomain",
                 "ActorDetailsPresentationAPI",
 
@@ -92,7 +94,7 @@ let package = Package(
                 .product(
                     name: "ActorVideosDomain",
                     package: "ActorVideos"
-                ),
+                )
             ],
             path: "Sources/ActorDetailsPresentation"
         ),
@@ -112,6 +114,9 @@ let package = Package(
         .target(
             name: "ActorDetailsAssembly",
             dependencies: [
+                .product(name: "SharedCore", package: "SharedKit"),
+                .product(name: "LibraryData", package: "SharedKit"),
+                .product(name: "LibraryDomain", package: "SharedKit"),
                 "ActorDetailsDomain",
                 "ActorDetailsData",
                 "ActorDetailsPresentation",
@@ -152,14 +157,6 @@ let package = Package(
                 .product(
                     name: "ActorVideosDomain",
                     package: "ActorVideos"
-                ),
-                .product(
-                    name: "HomeData",
-                    package: "Home"
-                ),
-                .product(
-                    name: "HomeDomain",
-                    package: "Home"
                 )
             ],
             path: "Sources/ActorDetailsAssembly"

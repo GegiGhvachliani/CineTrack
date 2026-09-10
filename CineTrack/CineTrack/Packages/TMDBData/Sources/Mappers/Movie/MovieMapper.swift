@@ -17,7 +17,7 @@ import SharedCore
 
 /*
  ვთქვათ MovieDTO არის:
- 
+
  MovieDTO(
      id: 123,
      title: "Inception",
@@ -49,7 +49,11 @@ import SharedCore
  */
 public struct MovieMapper: Sendable {
 
+    // MARK: - Properties
+
     private let imageBaseURL = "https://image.tmdb.org/t/p/w500"
+
+    // MARK: - Initialization
 
     public init() {}
 
@@ -66,7 +70,7 @@ public struct MovieMapper: Sendable {
             voteCount: dto.voteCount
         )
     }
-    
+
     // [MovieDTO, MovieDTO, MovieDTO] -> ზედა ფუნქციის გამოყენებით -> [Movie, Movie, Movie]
     public func map(_ response: MovieListResponseDTO) -> [Movie] {
         response.results.map(map)

@@ -17,13 +17,13 @@ let package = Package(
         .package(path: "../../SharedKit"),
         .package(path: "../../DesignSystem"),
         .package(path: "../../TMDBData"),
-        .package(path: "../../NewsData"),
-        .package(path: "../Home"),
+        .package(path: "../../NewsData")
     ],
     targets: [
         .target(
             name: "MovieDetailsDomain",
             dependencies: [
+                .product(name: "LibraryDomain", package: "SharedKit"),
                 .product(name: "SharedCore", package: "SharedKit")
             ],
             path: "Sources/MovieDetailsDomain"
@@ -38,7 +38,7 @@ let package = Package(
                 .product(name: "SharedAuth", package: "SharedKit"),
                 .product(name: "SharedCore", package: "SharedKit"),
                 .product(name: "TMDBData", package: "TMDBData"),
-                .product(name: "NewsData", package: "NewsData"),
+                .product(name: "NewsData", package: "NewsData")
             ],
             path: "Sources/MovieDetailsData"
         ),
@@ -46,6 +46,7 @@ let package = Package(
         .target(
             name: "MovieDetailsPresentation",
             dependencies: [
+                .product(name: "LibraryDomain", package: "SharedKit"),
                 "MovieDetailsDomain",
                 "MovieDetailsPresentationAPI",
                 .product(name: "SharedCore", package: "SharedKit"),
@@ -56,7 +57,7 @@ let package = Package(
                 .product(
                     name: "DesignSystemTokens",
                     package: "DesignSystem"
-                ),
+                )
             ],
             path: "Sources/MovieDetailsPresentation"
         ),
@@ -72,6 +73,8 @@ let package = Package(
         .target(
             name: "MovieDetailsAssembly",
             dependencies: [
+                .product(name: "LibraryData", package: "SharedKit"),
+                .product(name: "LibraryDomain", package: "SharedKit"),
                 "MovieDetailsDomain",
                 "MovieDetailsData",
                 "MovieDetailsPresentation",
@@ -81,9 +84,7 @@ let package = Package(
                 .product(name: "SharedStorage", package: "SharedKit"),
                 .product(name: "SharedAuth", package: "SharedKit"),
                 .product(name: "TMDBData", package: "TMDBData"),
-                .product(name: "NewsData", package: "NewsData"),
-                .product(name: "HomeData", package: "Home"),
-                .product(name: "HomeDomain", package: "Home")
+                .product(name: "NewsData", package: "NewsData")
             ],
             path: "Sources/MovieDetailsAssembly"
         ),
@@ -97,7 +98,7 @@ let package = Package(
                 "MovieDetailsPresentationAPI"
             ],
             path: "Tests"
-        ),
+        )
     ],
     swiftLanguageModes: [.v6]
 )

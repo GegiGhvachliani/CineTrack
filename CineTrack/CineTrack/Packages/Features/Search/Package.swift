@@ -13,14 +13,14 @@ let package = Package(
     dependencies: [
         .package(path: "../../SharedKit"),
         .package(path: "../../DesignSystem"),
-        .package(path: "../../TMDBData"),
-        .package(path: "../../Home"),
+        .package(path: "../../TMDBData")
     ],
     targets: [
 
         .target(
             name: "SearchDomain",
             dependencies: [
+                .product(name: "LibraryDomain", package: "SharedKit"),
                 .product(name: "SharedCore", package: "SharedKit")
             ],
             path: "Sources/SearchDomain"
@@ -33,7 +33,7 @@ let package = Package(
                 .product(name: "SharedNetworking", package: "SharedKit"),
                 .product(name: "SharedStorage", package: "SharedKit"),
                 .product(name: "SharedCore", package: "SharedKit"),
-                .product(name: "TMDBData", package: "TMDBData"),
+                .product(name: "TMDBData", package: "TMDBData")
             ],
             path: "Sources/SearchData"
         ),
@@ -41,21 +41,15 @@ let package = Package(
         .target(
             name: "SearchPresentation",
             dependencies: [
+                .product(name: "DesignSystemTokens", package: "DesignSystem"),
+                .product(name: "LibraryDomain", package: "SharedKit"),
                 "SearchDomain",
                 "SearchPresentationAPI",
                 .product(name: "SharedCore", package: "SharedKit"),
                 .product(
                     name: "DesignSystemComponents",
                     package: "DesignSystem"
-                ),
-                .product(
-                    name: "HomePresentation",
-                    package: "Home"
-                ),
-                .product(
-                    name: "HomeDomain",
-                    package: "Home"
-                ),
+                )
             ],
             path: "Sources/SearchPresentation"
         ),
@@ -71,6 +65,8 @@ let package = Package(
         .target(
             name: "SearchAssembly",
             dependencies: [
+                .product(name: "LibraryData", package: "SharedKit"),
+                .product(name: "LibraryDomain", package: "SharedKit"),
                 "SearchDomain",
                 "SearchData",
                 "SearchPresentation",
@@ -78,9 +74,7 @@ let package = Package(
                 .product(name: "SharedNetworking", package: "SharedKit"),
                 .product(name: "TMDBData", package: "TMDBData"),
                 .product(name: "SharedAuth", package: "SharedKit"),
-                .product(name: "SharedStorage", package: "SharedKit"),
-                .product(name: "HomeData", package: "Home"),
-                .product(name: "HomeDomain", package: "Home")
+                .product(name: "SharedStorage", package: "SharedKit")
             ],
             path: "Sources/SearchAssembly"
         ),
@@ -90,10 +84,10 @@ let package = Package(
             dependencies: [
                 "SearchDomain",
                 "SearchData",
-                "SearchPresentation",
+                "SearchPresentation"
             ],
             path: "Tests"
-        ),
+        )
     ],
     swiftLanguageModes: [.v6]
 )

@@ -1,6 +1,9 @@
 import Foundation
 
 public struct MovieCastMember: Identifiable, Equatable, Sendable {
+
+    // MARK: - Properties
+
     public let id: Int
     public let creditID: String?
     public let name: String
@@ -8,6 +11,8 @@ public struct MovieCastMember: Identifiable, Equatable, Sendable {
     public let profilePath: String?
     public let profileURL: URL?
     public let order: Int?
+
+    // MARK: - Initialization
 
     public init(
         id: Int,

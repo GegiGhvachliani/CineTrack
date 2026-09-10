@@ -12,12 +12,14 @@ public final class FirestoreClient:
     RemoteDocumentStore,
     @unchecked Sendable {
 
-    private let db: Firestore
+    private let database: Firestore
+
+    // MARK: - Initialization
 
     public init(
-        db: Firestore = Firestore.firestore()
+        database: Firestore = Firestore.firestore()
     ) {
-        self.db = db
+        self.database = database
     }
 
     public func set<T: Encodable & Sendable>(
@@ -26,13 +28,12 @@ public final class FirestoreClient:
         documentID: String
     ) async throws {
 
-        try await db
+        let data = try Firestore.Encoder().encode(value)
+
+        try await database
             .collection(collection)
             .document(documentID)
-            .setData(
-                from: value,
-                merge: true
-            )
+            .setData(data, merge: true)
     }
 
     public func get<T: Decodable & Sendable>(
@@ -42,10 +43,10 @@ public final class FirestoreClient:
     ) async throws -> T? {
 
         let snapshot =
-            try await db
-                .collection(collection)
-                .document(documentID)
-                .getDocument()
+            try await database
+            .collection(collection)
+            .document(documentID)
+            .getDocument()
 
         guard snapshot.exists else {
             return nil
@@ -61,7 +62,7 @@ public final class FirestoreClient:
         documentID: String
     ) async throws {
 
-        try await db
+        try await database
             .collection(collection)
             .document(documentID)
             .delete()
@@ -73,9 +74,9 @@ public final class FirestoreClient:
     ) async throws -> [T] {
 
         let snapshot =
-            try await db
-                .collection(collection)
-                .getDocuments()
+            try await database
+            .collection(collection)
+            .getDocuments()
 
         return try snapshot.documents.map {
             try $0.data(as: T.self)

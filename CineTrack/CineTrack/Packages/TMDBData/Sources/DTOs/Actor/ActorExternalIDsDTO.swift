@@ -9,6 +9,8 @@ import Foundation
 
 public struct ActorExternalIDsDTO: Decodable, Sendable {
 
+    // MARK: - Properties
+
     public let id: Int
     public let facebookID: String?
     public let instagramID: String?
@@ -17,6 +19,8 @@ public struct ActorExternalIDsDTO: Decodable, Sendable {
     public let youtubeID: String?
     public let imdbID: String?
     public let wikidataID: String?
+
+    // MARK: - Initialization
 
     public init(
         id: Int,

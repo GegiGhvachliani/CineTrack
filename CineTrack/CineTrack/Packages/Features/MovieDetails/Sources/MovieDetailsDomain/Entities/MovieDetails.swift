@@ -2,6 +2,9 @@ import Foundation
 import SharedCore
 
 public struct MovieDetails: Identifiable, Equatable, Sendable {
+
+    // MARK: - Properties
+
     public let id: Int
     public let title: String
     public let overview: String
@@ -15,6 +18,8 @@ public struct MovieDetails: Identifiable, Equatable, Sendable {
     public let tagline: String?
     public let voteAverage: Double
     public let voteCount: Int
+
+    // MARK: - Initialization
 
     public init(
         id: Int,

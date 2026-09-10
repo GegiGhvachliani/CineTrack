@@ -12,7 +12,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(path: "../../SharedKit")
+        .package(path: "../SharedKit")
     ],
     targets: [
         .target(

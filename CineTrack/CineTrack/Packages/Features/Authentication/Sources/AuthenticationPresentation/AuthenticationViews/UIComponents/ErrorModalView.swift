@@ -9,12 +9,17 @@ import SwiftUI
 import DesignSystemTokens
 
 struct ErrorModalView: View {
+
+    // MARK: - Properties
+
     let message: String
     let onDismiss: () -> Void
 
+    // MARK: - Body
+
     var body: some View {
         VStack(spacing: 15) {
-            
+
             Image(systemName: "exclamationmark.triangle.fill")
                 .font(.system(size: 32))
                 .foregroundStyle(.red)
@@ -24,7 +29,7 @@ struct ErrorModalView: View {
                 .foregroundStyle(ColorTokens.Text.primary)
                 .multilineTextAlignment(.center)
 
-            ButtonView(title: "OK") {
+            ButtonView(title: AuthenticationStrings.Content.okay) {
                 onDismiss()
             }
         }
@@ -38,7 +43,11 @@ struct ErrorModalView: View {
 }
 
 private struct ErrorModalModifier: ViewModifier {
-    @Binding var errorMessage: String?
+
+    // MARK: - Properties
+
+    @Binding
+    var errorMessage: String?
 
     func body(content: Content) -> some View {
         ZStack {
@@ -56,7 +65,7 @@ private struct ErrorModalModifier: ViewModifier {
 
                 VStack {
                     Spacer()
-                    
+
                     ErrorModalView(message: message) {
                         withAnimation(.easeOut(duration: 0.25)) {
                             errorMessage = nil
@@ -79,8 +88,15 @@ extension View {
 }
 
 // MARK: - Preview
+
 private struct ErrorModalPreviewContainer: View {
-    @State private var errorMessage: String? = "This email address is not registered in our system."
+
+    // MARK: - Properties
+
+    @State
+    private var errorMessage: String? = AuthenticationStrings.Errors.userNotFound
+
+    // MARK: - Body
 
     var body: some View {
         Color.gray.opacity(0.2)

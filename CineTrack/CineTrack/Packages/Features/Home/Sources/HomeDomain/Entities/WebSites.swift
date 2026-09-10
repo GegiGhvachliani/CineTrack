@@ -17,7 +17,7 @@ public enum Websites {
     case xxx
     case youtube
     case facebook
-    
+
     public var linkString: String {
         switch self {
         case .netflix:
@@ -40,7 +40,7 @@ public enum Websites {
             return "https://www.facebook.com/imdb/"
         }
     }
-    
+
     public var url: URL? {
         return URL(string: self.linkString)
     }

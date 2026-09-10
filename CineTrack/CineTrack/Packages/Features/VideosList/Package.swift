@@ -58,6 +58,7 @@ let package = Package(
         .target(
             name: "VideosListPresentation",
             dependencies: [
+                .product(name: "DesignSystemTokens", package: "DesignSystem"),
                 "VideosListDomain",
                 "VideosListPresentationAPI",
 
@@ -87,6 +88,7 @@ let package = Package(
         .target(
             name: "VideosListAssembly",
             dependencies: [
+                .product(name: "SharedCore", package: "SharedKit"),
                 "VideosListDomain",
                 "VideosListData",
                 "VideosListPresentation",

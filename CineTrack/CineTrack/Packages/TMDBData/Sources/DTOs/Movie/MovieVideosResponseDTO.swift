@@ -8,7 +8,9 @@
 import Foundation
 
 public struct MovieVideosResponseDTO: Decodable {
-    
+
+    // MARK: - Properties
+
     public let id: Int
     public let results: [MovieVideoDTO]
 }

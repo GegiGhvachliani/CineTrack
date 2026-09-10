@@ -11,9 +11,14 @@ import TMDBData
 import VideosListDomain
 
 public final class VideosListRepository: VideosListRepositoryProtocol, @unchecked Sendable {
+
+    // MARK: - Properties
+
     private let apiClient: APIClient
     private let requestBuilder: TMDBRequestBuilder
     private let videoMapper: MovieVideoMapper
+
+    // MARK: - Initialization
 
     public init(
         apiClient: APIClient,

@@ -10,6 +10,9 @@ import HomeDomain
 import DesignSystemTokens
 
 struct MovieWebButtonsView: View {
+
+    // MARK: - Properties
+
     var body: some View {
         HStack(spacing: 15) {
             makeButton(with: "primeVideo", for: .primeVideo)
@@ -23,7 +26,7 @@ struct MovieWebButtonsView: View {
         .padding(.leading, 20)
         .background(ColorTokens.Background.secondary)
     }
-    
+
     @ViewBuilder
     private func makeButton(with imageName: String, for website: Websites) -> some View {
         if let url = website.url {

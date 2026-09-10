@@ -1,6 +1,9 @@
 import Foundation
 
 public struct MovieDetailsDTO: Decodable {
+
+    // MARK: - Properties
+
     public let id: Int
     public let title: String
     public let overview: String?
@@ -33,6 +36,9 @@ public struct MovieDetailsDTO: Decodable {
 }
 
 public struct MovieGenreDTO: Decodable {
+
+    // MARK: - Properties
+
     public let id: Int
     public let name: String
 }

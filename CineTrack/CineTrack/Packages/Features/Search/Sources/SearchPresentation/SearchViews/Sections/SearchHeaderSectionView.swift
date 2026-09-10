@@ -10,19 +10,27 @@ import SearchDomain
 
 struct SearchHeaderSectionView: View {
 
-    @Binding var searchQuery: String
+    // MARK: - Properties
+
+    @Binding
+    var searchQuery: String
 
     let selectedMode: SearchMode
     let selectedTarget: SearchTarget
+
+    // MARK: - Body
 
     var body: some View {
         HStack(spacing: 10) {
             Image(systemName: "magnifyingglass")
                 .foregroundStyle(ColorTokens.Brand.primary)
 
-            TextField(selectedTarget == .movies ? "Search movies" : "Search actors", text: $searchQuery)
-                .submitLabel(.search)
-                .autocorrectionDisabled()
+            TextField(
+                selectedTarget == .movies ? SearchStrings.Content.searchMovies : SearchStrings.Content.searchActors,
+                text: $searchQuery
+            )
+            .submitLabel(.search)
+            .autocorrectionDisabled()
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)

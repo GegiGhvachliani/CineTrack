@@ -84,11 +84,11 @@ public final class ActorDetailsRepository: ActorDetailsRepositoryProtocol {
     }
 
     public func fetchActorNews(actorName: String) async throws -> [News] {
-        
+
         let request = try newsRequestBuilder.build(for: .person(name: actorName, page: 1, pageSize: 10))
-        
+
         let response: NewsResponseDTO = try await apiClient.sendRequest(request)
-        
+
         return response.articles.compactMap(newsMapper.map)
     }
 }

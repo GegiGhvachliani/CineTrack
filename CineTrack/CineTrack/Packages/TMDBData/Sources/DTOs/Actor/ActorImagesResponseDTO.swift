@@ -9,8 +9,12 @@ import Foundation
 
 public struct ActorImagesResponseDTO: Decodable, Sendable {
 
+    // MARK: - Properties
+
     public let id: Int
     public let profiles: [ActorImageDTO]
+
+    // MARK: - Initialization
 
     public init(
         id: Int,

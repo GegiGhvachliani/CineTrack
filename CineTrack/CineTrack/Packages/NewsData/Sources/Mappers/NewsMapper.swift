@@ -10,6 +10,8 @@ import SharedCore
 
 public struct NewsMapper: Sendable {
 
+    // MARK: - Initialization
+
     public init() {}
 
     public func map(

@@ -16,19 +16,22 @@ struct SearchRangeSlider: View {
     let lowerTitle: (Int) -> String
     let upperTitle: (Int) -> String
 
-    @Binding var lowerValue: Int
-    @Binding var upperValue: Int
+    @Binding
+    var lowerValue: Int
+    @Binding
+    var upperValue: Int
 
-    @State private var activeThumb: Thumb?
+    @State
+    private var activeThumb: Thumb?
 
     // MARK: - Body
 
     var body: some View {
         VStack(spacing: 10) {
             HStack {
-                valueLabel(title: "From", value: lowerTitle(lowerValue))
+                valueLabel(title: SearchStrings.Content.from, value: lowerTitle(lowerValue))
                 Spacer()
-                valueLabel(title: "To", value: upperTitle(upperValue))
+                valueLabel(title: SearchStrings.Content.upperBound, value: upperTitle(upperValue))
             }
 
             GeometryReader { proxy in
@@ -71,7 +74,7 @@ struct SearchRangeSlider: View {
     }
 
     private func valueLabel(title: String, value: String) -> some View {
-        Text("\(title): \(value)")
+        Text(SearchStrings.Format.rangeValue(title: title, value: value))
             .font(.system(size: 13, weight: .semibold, design: .rounded))
             .foregroundStyle(ColorTokens.Text.main)
     }

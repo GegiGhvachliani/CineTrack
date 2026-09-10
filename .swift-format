@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "indentation": { "spaces": 4 },
+  "lineLength": 120,
+  "maximumBlankLines": 1,
+  "respectsExistingLineBreaks": true,
+  "lineBreakBetweenDeclarationAttributes": true,
+  "multiElementCollectionTrailingCommas": false,
+  "rules": {
+    "DoNotUseSemicolons": true,
+    "OrderedImports": false,
+    "UseEarlyExits": false,
+    "UseTripleSlashForDocumentationComments": false,
+    "NoAccessLevelOnExtensionDeclaration": false
+  }
+}

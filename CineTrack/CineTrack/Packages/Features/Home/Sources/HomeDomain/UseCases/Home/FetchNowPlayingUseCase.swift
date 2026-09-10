@@ -12,15 +12,19 @@ public protocol FetchNowPlayingUseCaseProtocol: Sendable {
 }
 
 public final class FetchNowPlayingUseCase: FetchNowPlayingUseCaseProtocol {
-    
+
+    // MARK: - Properties
+
     private let repository: HomeRepositoryProtocol
-    
+
+    // MARK: - Initialization
+
     public init(repository: HomeRepositoryProtocol) {
         self.repository = repository
     }
-    
+
     public func execute(page: Int) async throws -> MoviePage {
-        
+
         try await repository.fetchNowPlaying(page: page)
     }
 }

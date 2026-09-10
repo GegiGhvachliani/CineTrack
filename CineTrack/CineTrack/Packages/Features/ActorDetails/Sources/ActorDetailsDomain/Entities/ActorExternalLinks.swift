@@ -22,7 +22,7 @@ public struct ActorExternalLinks: Equatable, Sendable {
     public let imdbID: String?
     public let wikidataID: String?
 
-    // MARK: - Init
+    // MARK: - Initialization
 
     public init(
         facebookID: String?,

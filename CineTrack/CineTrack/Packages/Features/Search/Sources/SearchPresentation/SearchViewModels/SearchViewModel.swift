@@ -7,13 +7,13 @@ import Combine
 import Foundation
 import Observation
 
-import HomeDomain
+import LibraryDomain
 import SearchDomain
 import SharedCore
 
 @Observable
 @MainActor
-public final class SearchViewModel {
+public final class SearchViewModel: SearchViewModelProtocol {
 
     // MARK: - Navigation
 
@@ -28,6 +28,8 @@ public final class SearchViewModel {
 
             if selectedMode == .advanced {
                 searchQuery = ""
+            } else {
+                sendSearchRequest()
             }
         }
     }
@@ -59,26 +61,27 @@ public final class SearchViewModel {
 
     // MARK: - Dependencies
 
-    private let searchMoviesUseCase: SearchMoviesUseCaseProtocol
-    private let searchActorsUseCase: SearchActorsUseCaseProtocol
-    private let discoverMoviesUseCase: DiscoverMoviesUseCaseProtocol
-    private let fetchWatchlistedMoviesUseCase: FetchWatchlistedMoviesUseCaseProtocol
-    private let addWatchlistedMovieUseCase: AddWatchlistedMovieUseCaseProtocol
-    private let removeWatchlistedMovieUseCase: RemoveWatchlistedMovieUseCaseProtocol
-    private let fetchFavouritedActorsUseCase: FetchFavouritedActorsUseCaseProtocol
-    private let addFavouritedActorUseCase: AddFavouritedActorUseCaseProtocol
-    private let removeFavouritedActorUseCase: RemoveFavouritedActorUseCaseProtocol
+    internal let searchMoviesUseCase: SearchMoviesUseCaseProtocol
+    internal let searchActorsUseCase: SearchActorsUseCaseProtocol
+    internal let discoverMoviesUseCase: DiscoverMoviesUseCaseProtocol
+    internal let fetchWatchlistedMoviesUseCase: FetchWatchlistedMoviesUseCaseProtocol
+    internal let addWatchlistedMovieUseCase: AddWatchlistedMovieUseCaseProtocol
+    internal let removeWatchlistedMovieUseCase: RemoveWatchlistedMovieUseCaseProtocol
+    internal let fetchFavouritedActorsUseCase: FetchFavouritedActorsUseCaseProtocol
+    internal let addFavouritedActorUseCase: AddFavouritedActorUseCaseProtocol
+    internal let removeFavouritedActorUseCase: RemoveFavouritedActorUseCaseProtocol
 
-    private var pendingWatchlistIDs = Set<Int>()
-    private var pendingFavouriteIDs = Set<Int>()
+    internal var pendingWatchlistIDs = Set<Int>()
+    internal var pendingFavouriteIDs = Set<Int>()
 
     // MARK: - Combine
 
-    private let searchRequestSubject = PassthroughSubject<TextSearchRequest, Never>()
-    private var cancellables = Set<AnyCancellable>()
-    private var searchTask: Task<Void, Never>?
-    private var nextResultsPage = 2
-    private var activeSearchRequest: SearchRequest?
+    internal let searchRequestSubject = PassthroughSubject<TextSearchRequest, Never>()
+    internal var cancellables = Set<AnyCancellable>()
+    internal var searchTask: Task<Void, Never>?
+    internal var searchGeneration = UUID()
+    internal var nextResultsPage = 2
+    internal var activeSearchRequest: SearchRequest?
 
     // MARK: - Initialization
 
@@ -106,282 +109,9 @@ public final class SearchViewModel {
         bindSearchQuery()
     }
 
-    // MARK: - Actions
-
-    public func searchAdvancedMovies() async {
-        isLoading = true
-        errorMessage = nil
-        hasSearched = true
-
-        defer { isLoading = false }
-
-        do {
-            let filters = advancedFilters
-            let foundMovies = try await discoverMoviesUseCase.execute(filters: filters, page: 1)
-
-            replaceResults(
-                movies: foundMovies,
-                request: .advanced(filters)
-            )
-            actors = []
-        } catch {
-            print("❌ Advanced Search Error:", error)
-            errorMessage = "We couldn't load results. Please try again."
-        }
-    }
-
-    public func didTapMovie(_ movie: Movie) {
-        onMovieDetails?(movie)
-    }
-
-    public func didTapActor(_ actor: Actor) {
-        onActorDetails?(actor.id)
-    }
-
-    public func resetAdvancedOptions() {
-        advancedFilters = SearchFilters()
-        clearResults()
-    }
-
-    // MARK: - Personalization
-
-    public func loadPersonalization() async {
-        async let watchlistedMovies = fetchWatchlistedMoviesUseCase.execute()
-        async let favouritedActors = fetchFavouritedActorsUseCase.execute()
-
-        do {
-            watchlistedMovieIDs = Set(try await watchlistedMovies.map(\.id))
-            favouritedActorIDs = Set(try await favouritedActors.map(\.id))
-        } catch {
-            print("❌ Search Personalization Error:", error)
-        }
-    }
-
-    public func toggleWatchlist(for movie: Movie) async {
-        guard pendingWatchlistIDs.insert(movie.id).inserted else {
-            return
-        }
-
-        defer {
-            pendingWatchlistIDs.remove(movie.id)
-        }
-
-        let wasWatchlisted = watchlistedMovieIDs.contains(movie.id)
-
-        if wasWatchlisted {
-            watchlistedMovieIDs.remove(movie.id)
-        } else {
-            watchlistedMovieIDs.insert(movie.id)
-        }
-
-        do {
-            if wasWatchlisted {
-                try await removeWatchlistedMovieUseCase.execute(movie: movie)
-            } else {
-                try await addWatchlistedMovieUseCase.execute(movie: movie)
-            }
-        } catch {
-            if wasWatchlisted {
-                watchlistedMovieIDs.insert(movie.id)
-            } else {
-                watchlistedMovieIDs.remove(movie.id)
-            }
-
-            print("❌ Search Watchlist Error:", error)
-        }
-    }
-
-    public func toggleFavourite(for actor: Actor) async {
-        guard pendingFavouriteIDs.insert(actor.id).inserted else {
-            return
-        }
-
-        defer {
-            pendingFavouriteIDs.remove(actor.id)
-        }
-
-        let wasFavourited = favouritedActorIDs.contains(actor.id)
-
-        if wasFavourited {
-            favouritedActorIDs.remove(actor.id)
-        } else {
-            favouritedActorIDs.insert(actor.id)
-        }
-
-        do {
-            if wasFavourited {
-                try await removeFavouritedActorUseCase.execute(actor: actor)
-            } else {
-                try await addFavouritedActorUseCase.execute(actor: actor)
-            }
-        } catch {
-            if wasFavourited {
-                favouritedActorIDs.insert(actor.id)
-            } else {
-                favouritedActorIDs.remove(actor.id)
-            }
-
-            print("❌ Search Favourite Error:", error)
-        }
-    }
-
-    // MARK: - Pagination
-
-    public func loadNextResultsPage() async {
-        guard !isLoadingMore, hasMoreResults, let activeSearchRequest else {
-            return
-        }
-
-        isLoadingMore = true
-        defer { isLoadingMore = false }
-
-        do {
-            let page = nextResultsPage
-
-            switch activeSearchRequest {
-            case .movies(let query):
-                let nextMovies = try await searchMoviesUseCase.execute(query: query, page: page)
-
-                guard self.activeSearchRequest == activeSearchRequest else { return }
-
-                movies.append(contentsOf: nextMovies)
-                updatePagination(with: nextMovies.count)
-
-            case .actors(let query):
-                let nextActors = try await searchActorsUseCase.execute(query: query, page: page)
-
-                guard self.activeSearchRequest == activeSearchRequest else { return }
-
-                actors.append(contentsOf: nextActors)
-                updateActorPagination(with: nextActors.count)
-
-            case .advanced(let filters):
-                let nextMovies = try await discoverMoviesUseCase.execute(filters: filters, page: page)
-
-                guard self.activeSearchRequest == activeSearchRequest else { return }
-
-                movies.append(contentsOf: nextMovies)
-                updatePagination(with: nextMovies.count)
-            }
-        } catch {
-            print("❌ Search Pagination Error:", error)
-        }
-    }
-
     // MARK: - Private
 
-    private func bindSearchQuery() {
-        searchRequestSubject
-            .removeDuplicates()
-            .debounce(for: .milliseconds(350), scheduler: RunLoop.main)
-            .sink { [weak self] request in
-                guard let self else { return }
-
-                self.searchTask?.cancel()
-
-                self.searchTask = Task { @MainActor [weak self] in
-                    await self?.searchByName(
-                        query: request.query,
-                        target: request.target
-                    )
-                }
-            }
-            .store(in: &cancellables)
-    }
-
-    private func searchByName(query: String, target: SearchTarget) async {
-        guard selectedMode == .recent else { return }
-
-        guard !query.isEmpty else {
-            clearResults()
-            return
-        }
-
-        isLoading = true
-        errorMessage = nil
-        hasSearched = true
-
-        defer { isLoading = false }
-
-        do {
-            switch target {
-            case .movies:
-                let foundMovies = try await searchMoviesUseCase.execute(query: query, page: 1)
-
-                guard !Task.isCancelled, selectedTarget == target else { return }
-
-                replaceResults(movies: foundMovies, request: .movies(query))
-                actors = []
-
-            case .people:
-                let foundActors = try await searchActorsUseCase.execute(query: query, page: 1)
-
-                guard !Task.isCancelled, selectedTarget == target else { return }
-
-                replaceResults(actors: foundActors, request: .actors(query))
-                movies = []
-            }
-        } catch {
-            print("❌ Search Error:", error)
-            errorMessage = "We couldn't load results. Please try again."
-        }
-    }
-
-    private func clearResults() {
-        movies = []
-        actors = []
-        hasSearched = false
-        errorMessage = nil
-        hasMoreResults = false
-        nextResultsPage = 2
-        activeSearchRequest = nil
-    }
-
-    private func sendSearchRequest() {
-        searchRequestSubject.send(
-            TextSearchRequest(
-                query: searchQuery.trimmingCharacters(in: .whitespacesAndNewlines),
-                target: selectedTarget
-            )
-        )
-    }
-
-    private func replaceResults(movies: [Movie], request: SearchRequest) {
-        self.movies = movies
-        activeSearchRequest = request
-        nextResultsPage = 2
-        hasMoreResults = movies.count == Self.resultsPerPage
-    }
-
-    private func replaceResults(actors: [Actor], request: SearchRequest) {
-        self.actors = actors
-        activeSearchRequest = request
-        nextResultsPage = 2
-        hasMoreResults = !actors.isEmpty
-    }
-
-    private func updatePagination(with resultCount: Int) {
-        nextResultsPage += 1
-        hasMoreResults = resultCount == Self.resultsPerPage
-    }
-
-    private func updateActorPagination(with resultCount: Int) {
-        nextResultsPage += 1
-        hasMoreResults = resultCount > 0
-    }
-
-    private static let resultsPerPage = 20
+    internal static let resultsPerPage = 20
 }
 
 // MARK: - Text search request
-
-private struct TextSearchRequest: Equatable {
-    let query: String
-    let target: SearchTarget
-}
-
-private enum SearchRequest: Equatable {
-    case movies(String)
-    case actors(String)
-    case advanced(SearchFilters)
-}

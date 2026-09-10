@@ -6,11 +6,14 @@
 //
 
 import SwiftUI
+import LibraryDomain
 import SharedCore
 import DesignSystemComponents
 
 struct TrendingSectionView: View {
-    
+
+    // MARK: - Properties
+
     let movies: [Movie]
     let watchlistedMovies: [Movie]
 
@@ -18,9 +21,11 @@ struct TrendingSectionView: View {
     let onWatchlistTap: (Movie) -> Void
     let onSeeAllTap: () -> Void
     let onLoadMore: () -> Void
-    
+
+    // MARK: - Body
+
     var body: some View {
-        
+
         HorizontalScrollView(
             headerText: HomeStrings.Section.trending,
             seeAllTitle: HomeStrings.Action.seeAll,
@@ -28,7 +33,7 @@ struct TrendingSectionView: View {
             onSeeAllTap: onSeeAllTap,
             onLoadMore: onLoadMore
         ) { movie, _ in
-            
+
             MovieCell(
                 movie: movie,
                 isWatchlisted: watchlistedMovies.contains {
@@ -38,8 +43,8 @@ struct TrendingSectionView: View {
                 onMovieTap: { onMovieTap(movie) },
                 onWatchlistTap: { onWatchlistTap(movie) }
             )
-            
+
         }
     }
-    
+
 }

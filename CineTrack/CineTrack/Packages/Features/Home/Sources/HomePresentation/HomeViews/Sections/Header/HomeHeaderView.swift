@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import LibraryDomain
 import HomeDomain
 import SharedCore
 import DesignSystemTokens
@@ -85,6 +86,6 @@ struct HomeHeaderView: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
         .background(ColorTokens.Background.primary)
-        .accessibilityLabel("Search")
+        .accessibilityLabel(HomeStrings.Content.searchAction)
     }
 }

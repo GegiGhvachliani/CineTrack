@@ -5,7 +5,6 @@
 //  Created by Gegi Ghvachliani on 06/08/2026.
 //
 
-
 import Foundation
 
 import HomeDomain
@@ -26,42 +25,42 @@ extension HomeViewModel {
 
         let items = await withTaskGroup(of: (Int, FeaturedItem?).self) { group in
 
-                for (index,movie) in movies.enumerated() {
+            for (index, movie) in movies.enumerated() {
 
-                    group.addTask { [fetchMovieVideosUseCase] in
+                group.addTask { [fetchMovieVideosUseCase] in
 
-                        do {
+                    do {
 
-                            let videos = try await fetchMovieVideosUseCase.execute(movieID: movie.id)
+                        let videos = try await fetchMovieVideosUseCase.execute(movieID: movie.id)
 
-                            guard let video = await self.selectFeaturedVideo(from: videos)
-                                    
-                            else {
-                                return (index, nil)
-                            }
+                        guard let video = await self.selectFeaturedVideo(from: videos)
 
-                            let item = FeaturedItem(movie: movie, video: video)
-
-                            return (index, item)
-
-                        } catch {
-
+                        else {
                             return (index, nil)
                         }
+
+                        let item = FeaturedItem(movie: movie, video: video)
+
+                        return (index, item)
+
+                    } catch {
+
+                        return (index, nil)
                     }
                 }
-
-                var results: [(Int, FeaturedItem)] = []
-
-                for await (index, item) in group {
-
-                    if let item {
-                        results.append((index, item))
-                    }
-                }
-
-                return results.sorted { $0.0 < $1.0 }.map(\.1)
             }
+
+            var results: [(Int, FeaturedItem)] = []
+
+            for await (index, item) in group {
+
+                if let item {
+                    results.append((index, item))
+                }
+            }
+
+            return results.sorted { $0.0 < $1.0 }.map(\.1)
+        }
 
         featuredItems = items
     }
@@ -82,9 +81,7 @@ extension HomeViewModel {
             if let officialVideo =
                 videos.first(
                     where: {
-                        $0.type == type &&
-                        $0.site == .youtube &&
-                        $0.official
+                        $0.type == type && $0.site == .youtube && $0.official
                     }
                 ) {
                 return officialVideo
@@ -93,8 +90,7 @@ extension HomeViewModel {
             if let video =
                 videos.first(
                     where: {
-                        $0.type == type &&
-                        $0.site == .youtube
+                        $0.type == type && $0.site == .youtube
                     }
                 ) {
                 return video

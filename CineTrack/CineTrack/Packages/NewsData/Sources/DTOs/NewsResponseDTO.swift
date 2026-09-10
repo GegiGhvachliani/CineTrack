@@ -9,6 +9,8 @@ import Foundation
 
 public struct NewsResponseDTO: Decodable, Sendable {
 
+    // MARK: - Properties
+
     public let status: String
     public let totalResults: Int
     public let articles: [NewsArticleDTO]

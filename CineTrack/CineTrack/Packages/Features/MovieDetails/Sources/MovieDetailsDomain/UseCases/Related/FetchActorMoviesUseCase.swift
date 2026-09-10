@@ -5,7 +5,12 @@ public protocol FetchActorMoviesUseCaseProtocol: Sendable {
 }
 
 public struct FetchActorMoviesUseCase: FetchActorMoviesUseCaseProtocol {
+
+    // MARK: - Properties
+
     private let repository: MovieDetailsRepositoryProtocol
+
+    // MARK: - Initialization
 
     public init(repository: MovieDetailsRepositoryProtocol) {
         self.repository = repository

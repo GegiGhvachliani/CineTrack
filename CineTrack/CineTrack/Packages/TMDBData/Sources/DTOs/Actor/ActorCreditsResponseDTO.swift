@@ -9,9 +9,13 @@ import Foundation
 
 public struct ActorCreditsResponseDTO: Decodable, Sendable {
 
+    // MARK: - Properties
+
     public let id: Int
     public let cast: [ActorCreditDTO]
     public let crew: [ActorCreditDTO]
+
+    // MARK: - Initialization
 
     public init(
         id: Int,

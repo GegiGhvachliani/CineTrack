@@ -6,11 +6,14 @@
 //
 
 import SwiftUI
+import LibraryDomain
 import SharedCore
 import DesignSystemComponents
 
 struct ComingSoonSectionView: View {
-    
+
+    // MARK: - Properties
+
     let movies: [Movie]
     let watchlistedMovies: [Movie]
 
@@ -18,17 +21,19 @@ struct ComingSoonSectionView: View {
     let onWatchlistTap: (Movie) -> Void
     let onSeeAllTap: () -> Void
     let onLoadMore: () -> Void
-    
+
+    // MARK: - Body
+
     var body: some View {
-        
+
         HorizontalScrollView(
             headerText: HomeStrings.Section.upcoming,
             seeAllTitle: HomeStrings.Action.seeAll,
             items: movies,
             onSeeAllTap: onSeeAllTap,
-            onLoadMore: onLoadMore)
-        { movie, _ in
-            
+            onLoadMore: onLoadMore
+        ) { movie, _ in
+
             ComingSoonMoviesCell(
                 movie: movie,
                 isWatchlisted: watchlistedMovies.contains {
@@ -36,11 +41,12 @@ struct ComingSoonSectionView: View {
                 },
                 cellHeight: 265,
                 onMovieTap: { onMovieTap(movie) },
-                onWatchlistTap: { onWatchlistTap(movie)
+                onWatchlistTap: {
+                    onWatchlistTap(movie)
                 }
             )
-            
+
         }
     }
-    
+
 }
