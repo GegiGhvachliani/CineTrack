@@ -1,75 +1,180 @@
 // swift-tools-version: 6.3
-// The swift-tools-version declares the minimum version of Swift required to build this package.
-
-// let package = Package(
-//    name: "Home", // 1. იდენტიფიკატორი
-//    platforms: [.iOS(.v16)],
-//    products: [...],     // 2. რა გააქვს გარეთ (ვიტრინა)
-//    dependencies: [...], // 3. რას ითხოვს გარედან (მომწოდებლები)
-//    targets: [...]       // 4. შიდა სტრუქტურა (საამქრო)
-// )
 
 import PackageDescription
 
 let package = Package(
     name: "Home",
-    platforms: [.iOS(.v16)],
+    platforms: [
+        .iOS(.v17)
+    ],
     products: [
-        .library(name: "HomeAssembly", targets: ["HomeAssembly"])
+        .library(
+            name: "HomePresentation",
+            targets: ["HomePresentation"]
+        ),
+        .library(
+            name: "HomePresentationAPI",
+            targets: ["HomePresentationAPI"]
+        ),
+        .library(
+            name: "HomeAssembly",
+            targets: ["HomeAssembly"]
+        ),
+        .library(
+            name: "HomeDomain",
+            targets: ["HomeDomain"]
+        ),
+        .library(
+            name: "HomeData",
+            targets: ["HomeData"]
+        )
     ],
     dependencies: [
         .package(path: "../../SharedKit"),
         .package(path: "../../DesignSystem"),
+        .package(path: "../../TMDBData"),
+        .package(path: "../../NewsData")
     ],
     targets: [
+
+        // MARK: - Domain
 
         .target(
             name: "HomeDomain",
             dependencies: [
-                .product(name: "SharedCore", package: "SharedKit")
+                .product(name: "LibraryDomain", package: "SharedKit"),
+                .product(
+                    name: "SharedCore",
+                    package: "SharedKit"
+                )
             ],
             path: "Sources/HomeDomain"
         ),
 
+        // MARK: - Data
+
         .target(
             name: "HomeData",
             dependencies: [
+                .product(name: "LibraryDomain", package: "SharedKit"),
                 "HomeDomain",
-                .product(name: "SharedNetworking", package: "SharedKit"),
-                .product(name: "SharedStorage", package: "SharedKit"),
+
+                .product(
+                    name: "SharedCore",
+                    package: "SharedKit"
+                ),
+
+                .product(
+                    name: "SharedNetworking",
+                    package: "SharedKit"
+                ),
+
+                .product(
+                    name: "SharedStorage",
+                    package: "SharedKit"
+                ),
+
+                .product(
+                    name: "SharedAuth",
+                    package: "SharedKit"
+                ),
+
+                .product(
+                    name: "TMDBData",
+                    package: "TMDBData"
+                ),
+
+                .product(
+                    name: "NewsData",
+                    package: "NewsData"
+                )
             ],
             path: "Sources/HomeData"
         ),
 
+        // MARK: - Presentation
+
         .target(
             name: "HomePresentation",
             dependencies: [
+                .product(name: "DesignSystemTokens", package: "DesignSystem"),
+                .product(name: "LibraryDomain", package: "SharedKit"),
                 "HomeDomain",
-                .product(name: "SharedCore", package: "SharedKit"),
-                .product(name: "DesignSystemComponents", package: "DesignSystem"),
+                "HomePresentationAPI",
+
+                .product(
+                    name: "SharedCore",
+                    package: "SharedKit"
+                ),
+
+                .product(
+                    name: "DesignSystemComponents",
+                    package: "DesignSystem"
+                )
             ],
-            path: "Sources/HomePresentation"
+            path: "Sources/HomePresentation",
+            resources: [
+                .process("Resources")
+            ]
         ),
+
+        // MARK: - Presentation API
+
+        .target(
+            name: "HomePresentationAPI",
+            dependencies: [
+                "HomeDomain",
+                .product(
+                    name: "SharedCore",
+                    package: "SharedKit"
+                )
+            ],
+            path: "Sources/HomePresentationAPI"
+        ),
+
+        // MARK: - Assembly
 
         .target(
             name: "HomeAssembly",
             dependencies: [
+                .product(name: "SharedStorage", package: "SharedKit"),
+                .product(name: "SharedAuth", package: "SharedKit"),
+                .product(name: "LibraryData", package: "SharedKit"),
+                .product(name: "LibraryDomain", package: "SharedKit"),
                 "HomeDomain",
                 "HomeData",
                 "HomePresentation",
+                "HomePresentationAPI",
+
+                .product(
+                    name: "SharedNetworking",
+                    package: "SharedKit"
+                ),
+
+                .product(
+                    name: "TMDBData",
+                    package: "TMDBData"
+                ),
+
+                .product(
+                    name: "NewsData",
+                    package: "NewsData"
+                )
             ],
             path: "Sources/HomeAssembly"
         ),
+
+        // MARK: - Tests
 
         .testTarget(
             name: "HomeTests",
             dependencies: [
                 "HomeDomain",
                 "HomeData",
-                "HomePresentation",
+                "HomePresentation"
             ],
             path: "Tests"
-        ),
+        )
     ],
     swiftLanguageModes: [.v6]
 )

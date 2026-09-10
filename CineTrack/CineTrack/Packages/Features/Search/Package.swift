@@ -5,19 +5,22 @@ import PackageDescription
 
 let package = Package(
     name: "Search",
-    platforms: [.iOS(.v16)],
+    platforms: [.iOS(.v17)],
     products: [
+        .library(name: "SearchPresentationAPI", targets: ["SearchPresentationAPI"]),
         .library(name: "SearchAssembly", targets: ["SearchAssembly"])
     ],
     dependencies: [
         .package(path: "../../SharedKit"),
         .package(path: "../../DesignSystem"),
+        .package(path: "../../TMDBData")
     ],
     targets: [
 
         .target(
             name: "SearchDomain",
             dependencies: [
+                .product(name: "LibraryDomain", package: "SharedKit"),
                 .product(name: "SharedCore", package: "SharedKit")
             ],
             path: "Sources/SearchDomain"
@@ -29,6 +32,8 @@ let package = Package(
                 "SearchDomain",
                 .product(name: "SharedNetworking", package: "SharedKit"),
                 .product(name: "SharedStorage", package: "SharedKit"),
+                .product(name: "SharedCore", package: "SharedKit"),
+                .product(name: "TMDBData", package: "TMDBData")
             ],
             path: "Sources/SearchData"
         ),
@@ -36,19 +41,40 @@ let package = Package(
         .target(
             name: "SearchPresentation",
             dependencies: [
+                .product(name: "DesignSystemTokens", package: "DesignSystem"),
+                .product(name: "LibraryDomain", package: "SharedKit"),
                 "SearchDomain",
+                "SearchPresentationAPI",
                 .product(name: "SharedCore", package: "SharedKit"),
-                .product(name: "DesignSystemComponents", package: "DesignSystem"),
+                .product(
+                    name: "DesignSystemComponents",
+                    package: "DesignSystem"
+                )
             ],
             path: "Sources/SearchPresentation"
         ),
 
         .target(
+            name: "SearchPresentationAPI",
+            dependencies: [
+                .product(name: "SharedCore", package: "SharedKit")
+            ],
+            path: "Sources/SearchPresentationAPI"
+        ),
+
+        .target(
             name: "SearchAssembly",
             dependencies: [
+                .product(name: "LibraryData", package: "SharedKit"),
+                .product(name: "LibraryDomain", package: "SharedKit"),
                 "SearchDomain",
                 "SearchData",
                 "SearchPresentation",
+                "SearchPresentationAPI",
+                .product(name: "SharedNetworking", package: "SharedKit"),
+                .product(name: "TMDBData", package: "TMDBData"),
+                .product(name: "SharedAuth", package: "SharedKit"),
+                .product(name: "SharedStorage", package: "SharedKit")
             ],
             path: "Sources/SearchAssembly"
         ),
@@ -58,10 +84,10 @@ let package = Package(
             dependencies: [
                 "SearchDomain",
                 "SearchData",
-                "SearchPresentation",
+                "SearchPresentation"
             ],
             path: "Tests"
-        ),
+        )
     ],
     swiftLanguageModes: [.v6]
 )

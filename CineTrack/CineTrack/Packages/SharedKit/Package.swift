@@ -1,25 +1,69 @@
 // swift-tools-version: 6.3
-// The swift-tools-version declares the minimum version of Swift required to build this package.
 
-// swift-tools-version: 6.0
 import PackageDescription
 
 let package = Package(
     name: "SharedKit",
-    platforms: [.iOS(.v16)],
-    products: [
-        .library(name: "SharedCore", targets: ["SharedCore"]),
-        .library(name: "SharedNetworking", targets: ["SharedNetworking"]),
-        .library(name: "SharedStorage", targets: ["SharedStorage"])
+    platforms: [
+        .iOS(.v17)
     ],
-    dependencies: [],
+
+    products: [
+        .library(name: "LibraryDomain", targets: ["LibraryDomain"]),
+        .library(name: "LibraryData", targets: ["LibraryData"]),
+        .library(
+            name: "SharedCore",
+            targets: ["SharedCore"]
+        ),
+
+        .library(
+            name: "SharedNetworking",
+            targets: ["SharedNetworking"]
+        ),
+
+        .library(
+            name: "SharedStorage",
+            targets: ["SharedStorage"]
+        ),
+
+        .library(
+            name: "SharedAuth",
+            targets: ["SharedAuth"]
+        )
+    ],
+
+    dependencies: [
+        .package(
+            url: "https://github.com/firebase/firebase-ios-sdk.git",
+            from: "12.1.0"
+        )
+    ],
+
     targets: [
+
+        // MARK: - Library
+
+        .target(
+            name: "LibraryDomain",
+            dependencies: ["SharedCore"],
+            path: "Sources/LibraryDomain"
+        ),
+        .target(
+            name: "LibraryData",
+            dependencies: ["LibraryDomain", "SharedCore", "SharedAuth", "SharedStorage"],
+            path: "Sources/LibraryData"
+        ),
+
+        // MARK: - SharedCore
+
         .target(
             name: "SharedCore",
             dependencies: [],
             path: "Sources/SharedCore"
         ),
-        
+
+        // MARK: - SharedNetworking
+
         .target(
             name: "SharedNetworking",
             dependencies: [
@@ -27,21 +71,53 @@ let package = Package(
             ],
             path: "Sources/SharedNetworking"
         ),
-        
+
+        // MARK: - SharedStorage
+
         .target(
             name: "SharedStorage",
             dependencies: [
-                "SharedCore" 
+                "SharedCore",
+
+                .product(
+                    name: "FirebaseFirestore",
+                    package: "firebase-ios-sdk"
+                )
             ],
             path: "Sources/SharedStorage"
         ),
-        
-        // 4. TEST TARGET
+
+        // MARK: - SharedAuth
+
+        .target(
+            name: "SharedAuth",
+            dependencies: [
+                "SharedCore",
+                "SharedStorage",
+
+                .product(
+                    name: "FirebaseAuth",
+                    package: "firebase-ios-sdk"
+                )
+            ],
+            path: "Sources/SharedAuth"
+        ),
+
+        // MARK: - Tests
+
         .testTarget(
             name: "SharedKitTests",
-            dependencies: ["SharedCore", "SharedNetworking", "SharedStorage"],
+            dependencies: [
+                "SharedCore",
+                "SharedNetworking",
+                "SharedStorage",
+                "SharedAuth"
+            ],
             path: "Tests"
         )
     ],
-   swiftLanguageModes: [.v6]
+
+    swiftLanguageModes: [
+        .v6
+    ]
 )

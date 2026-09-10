@@ -1,0 +1,29 @@
+//
+//  FetchActorMoviesUseCase.swift
+//  Home
+//
+//  Created by Gegi Ghvachliani on 01/09/2026.
+//
+
+import SharedCore
+
+public protocol FetchActorMoviesUseCaseProtocol: Sendable {
+    func execute(actorID: Int) async throws -> [Movie]
+}
+
+public final class FetchActorMoviesUseCase: FetchActorMoviesUseCaseProtocol {
+
+    // MARK: - Properties
+
+    private let repository: HomeRepositoryProtocol
+
+    // MARK: - Initialization
+
+    public init(repository: HomeRepositoryProtocol) {
+        self.repository = repository
+    }
+
+    public func execute(actorID: Int) async throws -> [Movie] {
+        try await repository.fetchMovies(for: actorID)
+    }
+}

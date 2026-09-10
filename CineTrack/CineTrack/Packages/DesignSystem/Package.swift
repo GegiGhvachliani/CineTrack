@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "DesignSystem",
-    platforms: [.iOS(.v16)],
+    platforms: [.iOS(.v17)],
     products: [
         .library(name: "DesignSystemComponents", targets: ["DesignSystemComponents"]),
         .library(name: "DesignSystemTokens", targets: ["DesignSystemTokens"])
@@ -18,23 +18,30 @@ let package = Package(
         .target(
             name: "DesignSystemTokens",
             dependencies: [],
-            path: "Sources/DesignSystemTokens"
+            path: "Sources/DesignSystemTokens",
+            resources: [
+                .process("Resources/DesignSystemAssets.xcassets")
+            ]
         ),
-        
+
         .target(
             name: "DesignSystemComponents",
             dependencies: [
+                .product(name: "LibraryDomain", package: "SharedKit"),
                 "DesignSystemTokens",
                 .product(name: "SharedCore", package: "SharedKit")  // თუ Layout/UI Helpers გჭირდება SharedCore-დან
             ],
-            path: "Sources/DesignSystemComponents"
+            path: "Sources/DesignSystemComponents",
+            resources: [
+                .process("Resources")
+            ]
         ),
-        
+
         .testTarget(
             name: "DesignSystemTests",
             dependencies: ["DesignSystemComponents", "DesignSystemTokens"],
             path: "Tests"
-        ),
+        )
     ],
     swiftLanguageModes: [.v6]
 )

@@ -1,0 +1,268 @@
+//
+//  TMDBEndpoint.swift
+//  TMDBData
+//
+//  Created by Gegi Ghvachliani on 01/08/2026.
+//
+
+import Foundation
+import SharedNetworking
+
+public enum TMDBEndpoint {
+
+    // MARK: - Movies
+
+    case trending(
+        timeWindow: TrendingTimeWindow,
+        page: Int
+    )
+
+    case popular(page: Int)
+
+    case topRated(page: Int)
+
+    case discoverMovies(
+        page: Int,
+        sortBy: String,
+        voteCountGreaterThanOrEqual: Int
+    )
+
+    case nowPlaying(page: Int)
+
+    case upcoming(
+        page: Int,
+        region: String
+    )
+
+    case movieVideos(movieID: Int)
+
+    case movieDetails(movieID: Int)
+
+    case movieCredits(movieID: Int)
+
+    case movieImages(movieID: Int)
+
+    case similarMovies(movieID: Int, page: Int)
+
+    case searchMovies(query: String, page: Int)
+
+    case searchPeople(query: String, page: Int)
+
+    case searchKeywords(query: String, page: Int)
+
+    case advancedMovieSearch(
+        page: Int,
+        minimumRating: Int?,
+        minimumVoteCount: Int?,
+        genreIDs: [Int],
+        minimumReleaseYear: Int?,
+        maximumReleaseYear: Int?,
+        minimumRuntime: Int?,
+        maximumRuntime: Int?,
+        originCountryCodes: [String],
+        keywordIDs: [Int]
+    )
+
+    // MARK: - People
+
+    case popularPeople(page: Int)
+
+    case personDetails(personID: Int)
+
+    case personMovieCredits(personID: Int)
+
+    case personTVCredits(personID: Int)
+
+    case personCombinedCredits(personID: Int)
+
+    case personImages(personID: Int)
+
+    case personExternalIDs(personID: Int)
+
+    // MARK: - Discover
+
+    case discoverUpcoming(
+        page: Int,
+        region: String,
+        releaseDateGTE: String
+    )
+}
+
+// MARK: - Trending Time Window
+
+public enum TrendingTimeWindow: String {
+    case day
+    case week
+}
+
+// MARK: - TMDBEndpoint + Properties
+
+extension TMDBEndpoint {
+
+    // MARK: - Default Trending
+
+    public static var defaultTrending: TMDBEndpoint {
+        .trending(
+            timeWindow: .week,
+            page: 1
+        )
+    }
+
+    // MARK: - Path
+
+    public var path: String {
+        switch self {
+
+        // MARK: - Movies
+
+        case .trending(let timeWindow, _):
+            return "/3/trending/movie/\(timeWindow.rawValue)"
+
+        case .popular:
+            return "/3/movie/popular"
+
+        case .topRated:
+            return "/3/movie/top_rated"
+
+        case .discoverMovies:
+            return "/3/discover/movie"
+
+        case .nowPlaying:
+            return "/3/movie/now_playing"
+
+        case .upcoming:
+            return "/3/movie/upcoming"
+
+        case .movieVideos(let movieID):
+            return "/3/movie/\(movieID)/videos"
+
+        case .movieDetails(let movieID):
+            return "/3/movie/\(movieID)"
+
+        case .movieCredits(let movieID):
+            return "/3/movie/\(movieID)/credits"
+
+        case .movieImages(let movieID):
+            return "/3/movie/\(movieID)/images"
+
+        case .similarMovies(let movieID, _):
+            return "/3/movie/\(movieID)/similar"
+
+        case .searchMovies:
+            return "/3/search/movie"
+
+        case .searchPeople:
+            return "/3/search/person"
+
+        case .searchKeywords:
+            return "/3/search/keyword"
+
+        case .advancedMovieSearch:
+            return "/3/discover/movie"
+
+        // MARK: - People
+
+        case .popularPeople:
+            return "/3/person/popular"
+
+        case .personDetails(let personID):
+            return "/3/person/\(personID)"
+
+        case .personMovieCredits(let personID):
+            return "/3/person/\(personID)/movie_credits"
+
+        case .personTVCredits(let personID):
+            return "/3/person/\(personID)/tv_credits"
+
+        case .personCombinedCredits(let personID):
+            return "/3/person/\(personID)/combined_credits"
+
+        case .personImages(let personID):
+            return "/3/person/\(personID)/images"
+
+        case .personExternalIDs(let personID):
+            return "/3/person/\(personID)/external_ids"
+
+        // MARK: - Discover
+
+        case .discoverUpcoming:
+            return "/3/discover/movie"
+        }
+    }
+
+    // MARK: - Page
+
+    public var page: Int? {
+        switch self {
+
+        case .trending(_, let page):
+            return page
+
+        case .popular(let page):
+            return page
+
+        case .topRated(let page):
+            return page
+
+        case .discoverMovies(let page, _, _):
+            return page
+
+        case .nowPlaying(let page):
+            return page
+
+        case .upcoming(let page, _):
+            return page
+
+        case .movieVideos:
+            return nil
+
+        case .movieDetails:
+            return nil
+
+        case .movieCredits:
+            return nil
+
+        case .movieImages:
+            return nil
+
+        case .similarMovies(_, let page):
+            return page
+
+        case .searchMovies(_, let page), .searchPeople(_, let page), .searchKeywords(_, let page):
+            return page
+
+        case .advancedMovieSearch(let page, _, _, _, _, _, _, _, _, _):
+            return page
+
+        case .popularPeople(let page):
+            return page
+
+        case .personDetails:
+            return nil
+
+        case .personMovieCredits:
+            return nil
+
+        case .personTVCredits:
+            return nil
+
+        case .personCombinedCredits:
+            return nil
+
+        case .personImages:
+            return nil
+
+        case .personExternalIDs:
+            return nil
+
+        case .discoverUpcoming(let page, _, _):
+            return page
+        }
+    }
+
+    // MARK: - Method
+
+    public var method: HTTPMethod {
+        .get
+    }
+}

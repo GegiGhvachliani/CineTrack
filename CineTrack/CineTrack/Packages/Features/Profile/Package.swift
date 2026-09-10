@@ -5,19 +5,21 @@ import PackageDescription
 
 let package = Package(
     name: "Profile",
-    platforms: [.iOS(.v16)],
+    platforms: [.iOS(.v17)],
     products: [
+        .library(name: "ProfilePresentationAPI", targets: ["ProfilePresentationAPI"]),
         .library(name: "ProfileAssembly", targets: ["ProfileAssembly"])
     ],
     dependencies: [
         .package(path: "../../SharedKit"),
-        .package(path: "../../DesignSystem"),
+        .package(path: "../../DesignSystem")
     ],
     targets: [
 
         .target(
             name: "ProfileDomain",
             dependencies: [
+                .product(name: "LibraryDomain", package: "SharedKit"),
                 .product(name: "SharedCore", package: "SharedKit")
             ],
             path: "Sources/ProfileDomain"
@@ -27,8 +29,9 @@ let package = Package(
             name: "ProfileData",
             dependencies: [
                 "ProfileDomain",
+                .product(name: "SharedAuth", package: "SharedKit"),
                 .product(name: "SharedNetworking", package: "SharedKit"),
-                .product(name: "SharedStorage", package: "SharedKit"),
+                .product(name: "SharedStorage", package: "SharedKit")
             ],
             path: "Sources/ProfileData"
         ),
@@ -36,19 +39,39 @@ let package = Package(
         .target(
             name: "ProfilePresentation",
             dependencies: [
+                .product(name: "DesignSystemTokens", package: "DesignSystem"),
+                .product(name: "LibraryDomain", package: "SharedKit"),
                 "ProfileDomain",
+                "ProfilePresentationAPI",
                 .product(name: "SharedCore", package: "SharedKit"),
-                .product(name: "DesignSystemComponents", package: "DesignSystem"),
+                .product(
+                    name: "DesignSystemComponents",
+                    package: "DesignSystem"
+                )
             ],
             path: "Sources/ProfilePresentation"
         ),
 
         .target(
+            name: "ProfilePresentationAPI",
+            dependencies: [
+                .product(name: "SharedCore", package: "SharedKit")
+            ],
+            path: "Sources/ProfilePresentationAPI"
+        ),
+
+        .target(
             name: "ProfileAssembly",
             dependencies: [
+                .product(name: "LibraryData", package: "SharedKit"),
+                .product(name: "LibraryDomain", package: "SharedKit"),
                 "ProfileDomain",
                 "ProfileData",
                 "ProfilePresentation",
+                "ProfilePresentationAPI",
+                .product(name: "SharedAuth", package: "SharedKit"),
+                .product(name: "SharedStorage", package: "SharedKit"),
+                .product(name: "SharedCore", package: "SharedKit")
             ],
             path: "Sources/ProfileAssembly"
         ),
@@ -59,9 +82,11 @@ let package = Package(
                 "ProfileDomain",
                 "ProfileData",
                 "ProfilePresentation",
+                "ProfilePresentationAPI",
+                "ProfileAssembly"
             ],
             path: "Tests"
-        ),
+        )
     ],
     swiftLanguageModes: [.v6]
 )

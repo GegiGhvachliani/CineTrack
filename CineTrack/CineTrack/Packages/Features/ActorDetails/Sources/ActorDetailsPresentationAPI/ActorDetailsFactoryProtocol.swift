@@ -1,0 +1,31 @@
+//
+//  ActorDetailsFactoryProtocol.swift
+//  ActorDetails
+//
+//  Created by Gegi Ghvachliani on 04/09/2026.
+//
+
+import UIKit
+import SharedCore
+import ActorDetailsDomain
+
+@MainActor
+public protocol ActorDetailsFactoryProtocol {
+
+    func makeActorDetailsCoordinator(
+        actorID: Int,
+        navigationController: UINavigationController,
+        router: ActorDetailsRoutingProtocol
+    ) -> ActorDetailsCoordinatorProtocol
+
+    func makeActorDetailsViewController(
+        actorID: Int,
+        onMovieDetails: @escaping (Movie) -> Void,
+        onNewsDetails: @escaping (News) -> Void,
+        onShowMiniBiography: @escaping (ActorDetails) -> Void,
+        onShowSeeAll: @escaping (SeeAllContent) -> Void,
+        onShowVideos: @escaping (VideoPlaylistContext) -> Void
+    ) -> UIViewController
+
+    func makeMiniBiographyViewController(actor: ActorDetails) -> UIViewController
+}

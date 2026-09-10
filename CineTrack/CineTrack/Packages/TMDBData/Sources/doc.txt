@@ -1,0 +1,134 @@
+SharedNetworking
+        │
+        │ Generic HTTP
+        ↓
+    "როგორ გავაგზავნო?"
+        
+TMDBData
+        │
+        │ TMDB-specific knowledge
+        ↓
+    "რა უნდა გავაგზავნო?"
+
+
+
+
+TMDBEndpoint
+"What do I want?"
+       ↓
+TMDBRequestBuilder
+"How do I describe that request?"
+       ↓
+APIRequest
+"Here is the request description."
+       ↓
+APIClient
+"Send it."
+       ↓
+URLSessionAPIClient
+"I will send it using URLSession."
+
+
+
+
+ერთი მთლიანი მაგალითი:
+
+ვთქვათ HomeRepository-ს სურს:
+
+fetchPopular(page: 1)
+
+პირველ რიგში:
+
+TMDBEndpoint.popular(page: 1)
+
+ან შენი არსებული მოდელის მიხედვით:
+
+TMDBEndpoint.popular
+
+შემდეგ:
+
+requestBuilder.build(
+    for: endpoint
+)
+
+Builder ხედავს:
+
+Endpoint:
+popular
+
+Path:
+ /3/movie/popular
+
+Page:
+ 1
+
+Base URL:
+ https://api.themoviedb.org
+
+Token:
+ ABC123
+
+ქმნის:
+
+APIRequest
+│
+├── URL
+│   https://api.themoviedb.org/3/movie/popular?page=1
+│
+├── Method
+│   GET
+│
+├── Headers
+│   Authorization: Bearer ABC123
+│   Accept: application/json
+│
+└── Body
+    nil
+
+შემდეგ:
+
+let response: MovieListResponseDTO =
+    try await apiClient.sendRequest(request)
+
+და აქ TMDBData-დან გადავდივართ SharedNetworking-ში.
+
+TMDBData
+    │
+    │ APIRequest
+    ↓
+SharedNetworking
+    │
+    ↓
+URLSession
+    │
+    ↓
+TMDB
+
+
+
+
+
+TMDB-ს აქვს ორი მხარე, როგორ გავაგზავნოთ და როგორ მივიღოთ მონაცემები.
+
+                 TMDBData
+                    │
+        ┌───────────┴───────────┐
+        │                       │
+   Request Side            Response Side
+        │                       │
+        ↓                       ↓
+TMDBConfiguration          DTOs
+        │                       │
+        ↓                       ↓
+TMDBEndpoint              MovieDTO
+        │                  MovieListResponseDTO
+        ↓                       │
+TMDBRequestBuilder              ↓
+        │                   MovieMapper
+        ↓                       │
+APIRequest                      ↓
+        │                     Movie
+        ↓
+APIClient
+
+TMDBRequestBuilder- API რექუესთს რომ შექმნის, გადააწოდებს Networking-ში რომ ნეთვორქინგმა გაგზავნოს მზა request.
