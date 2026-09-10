@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import DesignSystemTokens
 
 public struct ImageGallerySectionView<Item: Identifiable>: View {
 
@@ -56,7 +57,7 @@ public struct ImageGallerySectionView<Item: Identifiable>: View {
             if case .success(let image) = phase {
                 image.resizable().scaledToFit()
             } else {
-                Rectangle().fill(.gray.opacity(0.3))
+                Rectangle().fill(ColorTokens.Media.placeholder)
             }
         }
         .frame(width: max(CGFloat(aspectRatio(item)), 0.1) * height, height: height)

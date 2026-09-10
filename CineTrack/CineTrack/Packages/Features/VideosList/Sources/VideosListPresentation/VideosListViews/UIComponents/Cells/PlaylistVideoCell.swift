@@ -35,7 +35,7 @@ struct PlaylistVideoCell: View {
 
                     Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill")
                         .font(.system(size: 34))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(ColorTokens.Text.primary)
                         .shadow(radius: 3)
                 }
                 .frame(width: 146, height: 88)
@@ -44,12 +44,12 @@ struct PlaylistVideoCell: View {
                 VStack(alignment: .leading, spacing: 5) {
                     Text(video.name)
                         .font(.system(size: 17, weight: .semibold, design: .rounded))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(ColorTokens.Text.primary)
                         .lineLimit(2)
 
                     Text(video.type.rawValue)
                         .font(.system(size: 15, design: .rounded))
-                        .foregroundStyle(.white.opacity(0.62))
+                        .foregroundStyle(ColorTokens.Text.secondary)
                 }
 
                 Spacer(minLength: 0)

@@ -41,7 +41,7 @@ public struct ProfileView<ViewModel: ProfileViewModelProtocol>: View {
             }
             .padding(.bottom, 32)
         }
-        .background(Color.black)
+        .background(ColorTokens.Background.main)
         .scrollIndicators(.hidden)
         .toolbar(.hidden, for: .navigationBar)
         .task { await viewModel.load() }

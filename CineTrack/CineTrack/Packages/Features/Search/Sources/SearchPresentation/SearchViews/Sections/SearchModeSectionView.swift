@@ -25,7 +25,7 @@ struct SearchModeSectionView: View {
                 } label: {
                     Text(mode.title)
                         .font(.system(size: 15, weight: .semibold, design: .rounded))
-                        .foregroundStyle(selectedMode == mode ? ColorTokens.Text.inverse : ColorTokens.Text.main)
+                        .foregroundStyle(selectedMode == mode ? ColorTokens.Text.onBrand : ColorTokens.Text.main)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 5)
                         .background(

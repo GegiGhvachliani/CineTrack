@@ -71,7 +71,7 @@ struct MovieHeaderView: View {
         .overlay {
             Image(systemName: "play.circle.fill")
                 .font(.system(size: 54))
-                .foregroundStyle(.white)
+                .foregroundStyle(ColorTokens.Text.onImage)
                 .shadow(radius: 4)
         }
         .clipped()

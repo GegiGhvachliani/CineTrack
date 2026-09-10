@@ -58,7 +58,7 @@ struct ProfileHeaderView: View {
                 let email = account?.email ?? ""
                 Text(email.isEmpty ? ProfileStrings.Content.yourAccount : email)
                     .font(.system(size: 23, weight: .bold, design: .rounded))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(ColorTokens.Text.primary)
                     .lineLimit(2)
                 if let date = account?.createdAt {
                     Label(

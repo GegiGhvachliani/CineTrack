@@ -29,7 +29,7 @@ public struct SearchView<ViewModel: SearchViewModelProtocol>: View {
         var viewModel = viewModel
 
         ZStack {
-            Color.black.ignoresSafeArea()
+            ColorTokens.Background.main.ignoresSafeArea()
 
             ScrollView {
                 VStack(spacing: 10) {
@@ -109,7 +109,7 @@ public struct SearchView<ViewModel: SearchViewModelProtocol>: View {
         } label: {
             Text(SearchStrings.Content.seeResults)
                 .font(.system(size: 17, weight: .bold, design: .rounded))
-                .foregroundStyle(ColorTokens.Text.inverse)
+                .foregroundStyle(ColorTokens.Text.onBrand)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 15)
                 .background(ColorTokens.Brand.primary)

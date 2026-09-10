@@ -76,7 +76,7 @@ struct MovieInfoSectionView: View {
                 Spacer()
             }
             .padding(.horizontal)
-            .foregroundStyle(isWatchlisted ? .black : ColorTokens.Brand.primary)
+            .foregroundStyle(isWatchlisted ? ColorTokens.Text.onBrand : ColorTokens.Brand.primary)
             .frame(maxWidth: .infinity)
             .frame(height: 35)
             .background {

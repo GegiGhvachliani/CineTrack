@@ -28,7 +28,7 @@ struct VideosListPlaylistSectionView: View {
         VStack(alignment: .leading, spacing: 14) {
             Text(VideosListStrings.Content.playlist)
                 .font(.system(size: 18, weight: .bold, design: .rounded))
-                .foregroundStyle(.white)
+                .foregroundStyle(ColorTokens.Text.primary)
 
             if isLoading {
                 ProgressView()
@@ -39,7 +39,7 @@ struct VideosListPlaylistSectionView: View {
                 if let errorMessage = errorMessage {
                     Text(errorMessage)
                         .font(.system(size: 14, design: .rounded))
-                        .foregroundStyle(.white.opacity(0.62))
+                        .foregroundStyle(ColorTokens.Text.secondary)
                 }
 
                 ForEach(videos) { video in

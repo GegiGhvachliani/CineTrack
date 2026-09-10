@@ -22,7 +22,7 @@ struct ErrorModalView: View {
 
             Image(systemName: "exclamationmark.triangle.fill")
                 .font(.system(size: 32))
-                .foregroundStyle(.red)
+                .foregroundStyle(ColorTokens.Status.error)
 
             Text(message)
                 .font(TypographyTokens.body)
@@ -54,7 +54,7 @@ private struct ErrorModalModifier: ViewModifier {
             content
 
             if let message = errorMessage {
-                Color.black
+                ColorTokens.Media.scrim
                     .opacity(0.35)
                     .ignoresSafeArea()
                     .onTapGesture {
@@ -99,7 +99,7 @@ private struct ErrorModalPreviewContainer: View {
     // MARK: - Body
 
     var body: some View {
-        Color.gray.opacity(0.2)
+        ColorTokens.Media.placeholder
             .ignoresSafeArea()
             .errorModal(message: $errorMessage)
     }

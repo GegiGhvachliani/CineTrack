@@ -70,7 +70,7 @@ struct SearchRangeSlider: View {
         Circle()
             .fill(ColorTokens.Brand.primary)
             .frame(width: Self.thumbDiameter, height: Self.thumbDiameter)
-            .shadow(color: .black.opacity(0.25), radius: 2, y: 1)
+            .shadow(color: ColorTokens.Media.scrim.opacity(0.25), radius: 2, y: 1)
     }
 
     private func valueLabel(title: String, value: String) -> some View {

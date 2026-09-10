@@ -26,7 +26,7 @@ struct VideoCell: View {
                 AsyncImage(url: thumbnailURL) { phase in
                     switch phase {
                     case .success(let image): image.resizable().scaledToFill()
-                    default: Rectangle().fill(.gray.opacity(0.3)).overlay { Image(systemName: "video") }
+                    default: Rectangle().fill(ColorTokens.Media.placeholder).overlay { Image(systemName: "video") }
                     }
                 }
                 .frame(maxWidth: width == nil ? .infinity : nil)
@@ -34,7 +34,7 @@ struct VideoCell: View {
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .overlay {
                     Image(systemName: "play.circle.fill").font(.system(size: width == nil ? 48 : 28)).foregroundStyle(
-                        .white
+                        ColorTokens.Text.onImage
                     ).shadow(radius: 4)
                 }
 

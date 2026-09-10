@@ -41,12 +41,12 @@ struct SignInActionsSectionView: View {
                     if isGoogleLoading {
                         ProgressView()
                             .progressViewStyle(
-                                CircularProgressViewStyle(tint: DesignSystemTokens.ColorTokens.Text.inverse)
+                                CircularProgressViewStyle(tint: DesignSystemTokens.ColorTokens.Text.onBrand)
                             )
                     } else {
                         Text(AuthenticationStrings.SignIn.googleButton)
                             .font(TypographyTokens.body)
-                            .foregroundStyle(DesignSystemTokens.ColorTokens.Text.inverse)
+                            .foregroundStyle(DesignSystemTokens.ColorTokens.Text.onBrand)
                         Image(AuthenticationStrings.SignIn.googleButtonIcon, bundle: .module)
                             .resizable()
                             .frame(width: 20, height: 20)

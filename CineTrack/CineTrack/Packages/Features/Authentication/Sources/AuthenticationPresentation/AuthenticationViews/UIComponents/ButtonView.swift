@@ -34,7 +34,7 @@ public struct ButtonView: View {
                 if isLoading {
                     ProgressView()
                         .progressViewStyle(
-                            CircularProgressViewStyle(tint: DesignSystemTokens.ColorTokens.Text.inverse)
+                            CircularProgressViewStyle(tint: DesignSystemTokens.ColorTokens.Text.onBrand)
                         )
                 } else {
                     Text(title)
@@ -44,7 +44,7 @@ public struct ButtonView: View {
             .frame(height: 55)
             .frame(maxWidth: .infinity)
             .background(DesignSystemTokens.ColorTokens.Brand.primary)
-            .foregroundStyle(DesignSystemTokens.ColorTokens.Text.inverse)
+            .foregroundStyle(DesignSystemTokens.ColorTokens.Text.onBrand)
             .cornerRadius(15)
         }
         .disabled(isLoading)

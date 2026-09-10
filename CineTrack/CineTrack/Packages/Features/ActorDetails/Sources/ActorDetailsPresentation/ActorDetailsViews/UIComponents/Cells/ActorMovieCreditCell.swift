@@ -44,7 +44,7 @@ public struct ActorMovieCreditCell: View {
                 switch phase {
                 case .empty:
                     Rectangle()
-                        .fill(.gray.opacity(0.25))
+                        .fill(ColorTokens.Media.placeholder)
                         .overlay {
                             ProgressView()
                         }
@@ -56,7 +56,7 @@ public struct ActorMovieCreditCell: View {
 
                 case .failure:
                     Rectangle()
-                        .fill(.gray.opacity(0.25))
+                        .fill(ColorTokens.Media.placeholder)
                         .overlay {
                             Image(systemName: "film")
                                 .font(.largeTitle)
@@ -69,8 +69,8 @@ public struct ActorMovieCreditCell: View {
             }
 
             LinearGradient(
-                colors: [.clear, ColorTokens.Background.secondary],
-                startPoint: .center,
+                colors: [ColorTokens.Media.scrim.opacity(0.65), .clear, ColorTokens.Media.scrim.opacity(0.65)],
+                startPoint: .top,
                 endPoint: .bottom
             )
         }
@@ -80,21 +80,21 @@ public struct ActorMovieCreditCell: View {
         VStack(alignment: .leading, spacing: 4) {
             Text(credit.title)
                 .font(TypographyTokens.body)
-                .foregroundStyle(.white)
-                .shadow(color: .black, radius: 2, x: 1, y: 1)
+                .foregroundStyle(ColorTokens.Text.onImage)
+                .shadow(color: ColorTokens.Media.scrim, radius: 2, x: 1, y: 1)
 
             if let year = releaseYear {
                 Text(year)
                     .font(TypographyTokens.caption)
-                    .foregroundStyle(.white.opacity(0.8))
-                    .shadow(color: .gray, radius: 1, x: 1, y: 1)
+                    .foregroundStyle(ColorTokens.Text.onImage.opacity(0.8))
+                    .shadow(color: ColorTokens.Media.scrim, radius: 1, x: 1, y: 1)
             }
 
             if let role = credit.character ?? credit.job {
                 Text(role)
                     .font(.footnote)
-                    .foregroundStyle(.white.opacity(0.8))
-                    .shadow(color: .gray, radius: 1, x: 1, y: 1)
+                    .foregroundStyle(ColorTokens.Text.onImage.opacity(0.8))
+                    .shadow(color: ColorTokens.Media.scrim, radius: 1, x: 1, y: 1)
             }
         }
         .padding(.top, 10)

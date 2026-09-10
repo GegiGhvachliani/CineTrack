@@ -43,7 +43,7 @@ struct VideosListPlayerSectionView: View {
                 VStack(spacing: 10) {
                     Text(playbackError)
                         .font(.footnote)
-                        .foregroundStyle(.white.opacity(0.7))
+                        .foregroundStyle(ColorTokens.Text.secondary)
                     if let url = URL(string: "https://www.youtube.com/watch?v=\(video.key)") {
                         Link(VideosListStrings.Content.watchOnYouTube, destination: url)
                             .foregroundStyle(ColorTokens.Brand.primary)
@@ -63,7 +63,7 @@ struct VideosListPlayerSectionView: View {
             Button(action: onClose) {
                 Image(systemName: "xmark")
                     .font(.system(size: 21, weight: .medium))
-                    .foregroundStyle(Color.white)
+                    .foregroundStyle(ColorTokens.Text.primary)
                     .frame(width: 32, height: 32)
                     .contentShape(Rectangle())
             }
@@ -72,12 +72,12 @@ struct VideosListPlayerSectionView: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(movie.title)
                     .font(.system(size: 16, weight: .bold, design: .rounded))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(ColorTokens.Text.primary)
                     .lineLimit(1)
 
                 Text(video.type.rawValue)
                     .font(.system(size: 14, design: .rounded))
-                    .foregroundStyle(.white.opacity(0.7))
+                    .foregroundStyle(ColorTokens.Text.secondary)
             }
 
             Spacer()

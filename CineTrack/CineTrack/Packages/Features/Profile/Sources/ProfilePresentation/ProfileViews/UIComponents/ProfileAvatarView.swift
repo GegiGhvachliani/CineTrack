@@ -25,13 +25,15 @@ struct ProfileAvatarView: View {
             .overlay(alignment: .bottomTrailing) {
                 Image(systemName: "camera.fill")
                     .font(.system(size: 13))
-                    .foregroundStyle(.black)
+                    .foregroundStyle(ColorTokens.Text.onBrand)
                     .padding(8)
                     .background(ColorTokens.Brand.primary, in: Circle())
             }
             .overlay {
                 if isLoading {
-                    ProgressView().tint(.white)
+                    ProgressView().tint(ColorTokens.Text.onImage)
+                        .padding(8)
+                        .background(ColorTokens.Media.scrim.opacity(0.6), in: Circle())
                 }
             }
     }

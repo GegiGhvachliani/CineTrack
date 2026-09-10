@@ -38,7 +38,7 @@ struct MovieWebButtonsView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 20))
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)
-                            .stroke(Color.yellow, lineWidth: 3)
+                            .stroke(ColorTokens.Brand.primary, lineWidth: 3)
                     )
             }
         }

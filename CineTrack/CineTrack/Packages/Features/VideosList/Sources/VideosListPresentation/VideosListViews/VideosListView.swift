@@ -35,7 +35,7 @@ public struct VideosListView<ViewModel: VideosListViewModelProtocol>: View {
 
     public var body: some View {
         ZStack {
-            Color.black.ignoresSafeArea()
+            ColorTokens.Background.main.ignoresSafeArea()
 
             ScrollView {
                 VStack(spacing: 0) {

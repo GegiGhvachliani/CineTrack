@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import DesignSystemTokens
 import ActorDetailsDomain
 
 struct ImagesCell: View {
@@ -35,7 +36,7 @@ struct ImagesCell: View {
                     .resizable()
                     .scaledToFit()
             default:
-                Rectangle().fill(.gray.opacity(0.3))
+                Rectangle().fill(ColorTokens.Media.placeholder)
             }
         }
         .frame(width: max(CGFloat(image.aspectRatio), 0.1) * height, height: height)

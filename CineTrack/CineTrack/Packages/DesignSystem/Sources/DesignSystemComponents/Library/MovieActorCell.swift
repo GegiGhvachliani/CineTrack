@@ -53,7 +53,7 @@ public struct MovieActorCell: View {
             width: cellHeight * (8.0 / 15.0),
             height: cellHeight
         )
-        .foregroundStyle(.white)
+        .foregroundStyle(ColorTokens.Text.primary)
         .clipShape(
             UnevenRoundedRectangle(
                 topLeadingRadius: 5,
@@ -88,7 +88,7 @@ public struct MovieActorCell: View {
 
                 Text(String(age))
                     .font(DesignSystemTokens.TypographyTokens.caption)
-                    .foregroundStyle(.gray)
+                    .foregroundStyle(ColorTokens.Text.secondary)
             }
         }
         .padding(.horizontal, 10)

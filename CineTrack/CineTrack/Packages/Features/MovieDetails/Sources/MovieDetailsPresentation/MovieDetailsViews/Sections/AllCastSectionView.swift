@@ -38,7 +38,7 @@ struct AllCastSectionView: View {
                         if case .success(let image) = phase {
                             image.resizable().scaledToFill()
                         } else {
-                            Rectangle().fill(.gray.opacity(0.3))
+                            Rectangle().fill(ColorTokens.Media.placeholder)
                                 .overlay { Image(systemName: "person.fill") }
                         }
                     }

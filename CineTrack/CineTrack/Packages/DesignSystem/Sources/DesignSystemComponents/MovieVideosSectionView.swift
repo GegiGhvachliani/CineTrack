@@ -29,7 +29,7 @@ public struct MovieVideosSectionView: View {
     // MARK: - Body
 
     public var body: some View {
-        if let featuredVideo = videos.first {
+        if let featuredVideo {
             VStack(spacing: 6) {
                 sectionHeader
                 VideoCell(video: featuredVideo, width: nil, height: 200) {
@@ -37,10 +37,10 @@ public struct MovieVideosSectionView: View {
                 }
                 .padding(.horizontal, 16)
 
-                if videos.count > 1 {
+                if !additionalVideos.isEmpty {
                     ScrollView(.horizontal, showsIndicators: false) {
                         LazyHStack(spacing: 10) {
-                            ForEach(videos.dropFirst()) { video in
+                            ForEach(additionalVideos) { video in
                                 VideoCell(video: video, width: 120, height: 75) {
                                     onVideoTap(video)
                                 }
@@ -56,6 +56,20 @@ public struct MovieVideosSectionView: View {
             .background(ColorTokens.Background.secondary)
 
         }
+    }
+
+    // MARK: - Content
+
+    private var featuredVideo: MovieVideo? {
+        videos.first { $0.type != .trailer }
+    }
+
+    private var additionalVideos: [MovieVideo] {
+        guard let featuredVideo else {
+            return []
+        }
+
+        return videos.filter { $0.id != featuredVideo.id }
     }
 
     private var sectionHeader: some View {

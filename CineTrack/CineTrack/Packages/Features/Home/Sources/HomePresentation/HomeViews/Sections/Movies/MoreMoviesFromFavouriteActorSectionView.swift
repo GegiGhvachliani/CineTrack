@@ -139,7 +139,7 @@ struct MoreMoviesFromFavouriteActorSectionView: View {
             }
         }
         .frame(width: 33, height: 33)
-        .background(Color.gray.opacity(0.2))
+        .background(ColorTokens.Media.placeholder)
         .clipShape(Circle())
     }
 }

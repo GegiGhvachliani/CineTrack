@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import DesignSystemTokens
 
 public struct PosterImageView: View {
 
@@ -26,7 +27,7 @@ public struct PosterImageView: View {
             switch phase {
             case .empty:
                 Rectangle()
-                    .fill(Color.gray.opacity(0.3))
+                    .fill(ColorTokens.Media.placeholder)
                     .overlay { ProgressView() }
             case .success(let image):
                 image
@@ -34,10 +35,10 @@ public struct PosterImageView: View {
                     .scaledToFill()
             case .failure:
                 Rectangle()
-                    .fill(Color.gray.opacity(0.3))
+                    .fill(ColorTokens.Media.placeholder)
                     .overlay {
                         Image(systemName: "photo")
-                            .foregroundStyle(.gray)
+                            .foregroundStyle(ColorTokens.Text.secondary)
                     }
             @unknown default:
                 EmptyView()

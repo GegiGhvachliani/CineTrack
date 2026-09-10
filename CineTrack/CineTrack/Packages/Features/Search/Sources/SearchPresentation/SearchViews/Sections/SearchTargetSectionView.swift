@@ -27,7 +27,7 @@ struct SearchTargetSectionView: View {
                         Text(target.title)
                             .font(.system(size: 14, weight: .semibold, design: .rounded))
                             .foregroundStyle(
-                                selectedTarget == target ? ColorTokens.Text.inverse : ColorTokens.Text.main
+                                selectedTarget == target ? ColorTokens.Text.onBrand : ColorTokens.Text.main
                             )
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 5)

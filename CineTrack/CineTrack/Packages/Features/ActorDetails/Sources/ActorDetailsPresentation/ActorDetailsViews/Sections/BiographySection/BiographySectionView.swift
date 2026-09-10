@@ -76,7 +76,7 @@ public struct BiographySectionView: View {
             switch phase {
             case .empty:
                 Rectangle()
-                    .fill(.gray.opacity(0.25))
+                    .fill(ColorTokens.Media.placeholder)
                     .overlay {
                         ProgressView()
                     }
@@ -87,7 +87,7 @@ public struct BiographySectionView: View {
 
             case .failure:
                 Rectangle()
-                    .fill(.gray.opacity(0.25))
+                    .fill(ColorTokens.Media.placeholder)
                     .overlay {
                         Image(systemName: "person")
                             .font(.largeTitle)
@@ -111,7 +111,7 @@ public struct BiographySectionView: View {
                 HStack(spacing: 5) {
                     Text(actor.biography ?? ActorDetailsStrings.Format.biographyNotFound(name: actor.name))
                         .font(TypographyTokens.bodySmallSmall)
-                        .foregroundStyle(.white.opacity(0.7))
+                        .foregroundStyle(ColorTokens.Text.secondary)
                         .multilineTextAlignment(.leading)
                         .lineLimit(6)
 
@@ -121,7 +121,7 @@ public struct BiographySectionView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 10)
-                        .foregroundStyle(.gray)
+                        .foregroundStyle(ColorTokens.Text.secondary)
                 }
             }
 
@@ -159,7 +159,7 @@ public struct BiographySectionView: View {
                 Spacer()
             }
             .padding(.horizontal)
-            .foregroundStyle(isFavourite ? .black : ColorTokens.Brand.primary)
+            .foregroundStyle(isFavourite ? ColorTokens.Text.onBrand : ColorTokens.Brand.primary)
             .frame(maxWidth: .infinity)
             .frame(height: 35)
             .background(

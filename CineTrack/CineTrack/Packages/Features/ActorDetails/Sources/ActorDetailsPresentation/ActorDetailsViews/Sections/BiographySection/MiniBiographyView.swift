@@ -27,7 +27,7 @@ public struct MiniBiographyView: View {
         ScrollView {
             Text(actor.biography ?? ActorDetailsStrings.Format.noBiography(name: actor.name))
                 .font(TypographyTokens.bodySmall)
-                .foregroundStyle(.white.opacity(0.9))
+                .foregroundStyle(ColorTokens.Text.secondary)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
         }

@@ -25,7 +25,7 @@ struct VideosListNowPlayingSectionView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text(VideosListStrings.Content.nowPlaying)
                 .font(.system(size: 18, weight: .bold, design: .rounded))
-                .foregroundStyle(.white)
+                .foregroundStyle(ColorTokens.Text.primary)
 
             Button(action: onMovieDetails) {
                 HStack(spacing: 12) {
@@ -36,17 +36,17 @@ struct VideosListNowPlayingSectionView: View {
                     VStack(alignment: .leading, spacing: 5) {
                         Text(video.name)
                             .font(.system(size: 18, weight: .semibold, design: .rounded))
-                            .foregroundStyle(.white)
+                            .foregroundStyle(ColorTokens.Text.primary)
                             .lineLimit(1)
 
                         Text(movie.overview)
                             .font(.system(size: 14, design: .rounded))
-                            .foregroundStyle(.white.opacity(0.62))
+                            .foregroundStyle(ColorTokens.Text.secondary)
                             .lineLimit(2)
 
                         Text(movie.title)
                             .font(.system(size: 16, weight: .medium, design: .rounded))
-                            .foregroundStyle(.white.opacity(0.9))
+                            .foregroundStyle(ColorTokens.Text.secondary)
                     }
 
                     Spacer(minLength: 0)

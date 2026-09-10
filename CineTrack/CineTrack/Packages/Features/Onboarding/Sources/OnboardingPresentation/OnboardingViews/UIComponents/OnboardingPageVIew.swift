@@ -92,7 +92,7 @@ public struct OnboardingPageView: View {
         Button(action: action) {
             Text(page.buttonText)
                 .font(TypographyTokens.headline)
-                .foregroundStyle(ColorTokens.Background.primary)
+                .foregroundStyle(ColorTokens.Text.onBrand)
                 .frame(maxWidth: .infinity)
                 .frame(height: 50)
                 .background(ColorTokens.Brand.primary)

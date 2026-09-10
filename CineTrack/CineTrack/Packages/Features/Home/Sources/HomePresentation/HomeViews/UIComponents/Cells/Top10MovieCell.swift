@@ -76,7 +76,7 @@ struct Top10MovieCell: View {
 
             Text(String(ratingNumber))
                 .font(TypographyTokens.title3)
-                .foregroundStyle(.gray)
+                .foregroundStyle(ColorTokens.Text.secondary)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             HStack(spacing: 4) {
@@ -113,7 +113,7 @@ struct Top10MovieCell: View {
                 Text(String(releaseDate.prefix(4)))
                     .font(Font.system(size: 13, weight: .regular, design: .rounded))
                     .layoutPriority(0)
-                    .foregroundStyle(.gray)
+                    .foregroundStyle(ColorTokens.Text.secondary)
                     .lineLimit(1)
             }
 

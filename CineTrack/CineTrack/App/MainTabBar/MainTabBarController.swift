@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import SwiftUI
+import DesignSystemTokens
 
 final class MainTabBarController: UITabBarController {
 
@@ -19,23 +21,23 @@ final class MainTabBarController: UITabBarController {
         let appearance = UITabBarAppearance()
         appearance.configureWithDefaultBackground()
 
-        appearance.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.95)
+        appearance.backgroundColor = UIColor(ColorTokens.Background.primary).withAlphaComponent(0.95)
         appearance.shadowColor = .clear
 
-        appearance.stackedLayoutAppearance.normal.iconColor = .secondaryLabel
+        appearance.stackedLayoutAppearance.normal.iconColor = UIColor(ColorTokens.Text.secondary)
         appearance.stackedLayoutAppearance.normal.titleTextAttributes = [
-            .foregroundColor: UIColor.secondaryLabel
+            .foregroundColor: UIColor(ColorTokens.Text.secondary)
         ]
 
-        appearance.stackedLayoutAppearance.selected.iconColor = .systemBlue
+        appearance.stackedLayoutAppearance.selected.iconColor = UIColor(ColorTokens.Brand.primary)
         appearance.stackedLayoutAppearance.selected.titleTextAttributes = [
-            .foregroundColor: UIColor.systemBlue
+            .foregroundColor: UIColor(ColorTokens.Brand.primary)
         ]
 
         tabBar.standardAppearance = appearance
         tabBar.scrollEdgeAppearance = appearance
 
-        tabBar.tintColor = .systemBlue
+        tabBar.tintColor = UIColor(ColorTokens.Brand.primary)
         tabBar.isTranslucent = true
     }
 }

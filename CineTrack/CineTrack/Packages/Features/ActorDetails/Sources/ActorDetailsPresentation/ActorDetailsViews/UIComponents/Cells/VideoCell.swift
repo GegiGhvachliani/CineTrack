@@ -33,7 +33,7 @@ struct VideoCell: View {
 
                     Image(systemName: "play.circle.fill")
                         .font(.system(size: width == nil ? 48 : 28))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(ColorTokens.Text.onImage)
                         .shadow(radius: 4)
                 }
                 .frame(maxWidth: width == nil ? .infinity : nil)
@@ -71,7 +71,7 @@ struct VideoThumbnailView: View {
             switch phase {
             case .empty:
                 Rectangle()
-                    .fill(Color.gray.opacity(0.3))
+                    .fill(ColorTokens.Media.placeholder)
                     .overlay { ProgressView() }
             case .success(let image):
                 image
@@ -79,10 +79,10 @@ struct VideoThumbnailView: View {
                     .scaledToFill()
             case .failure:
                 Rectangle()
-                    .fill(Color.gray.opacity(0.3))
+                    .fill(ColorTokens.Media.placeholder)
                     .overlay {
                         Image(systemName: "video")
-                            .foregroundStyle(.gray)
+                            .foregroundStyle(ColorTokens.Text.secondary)
                     }
             @unknown default:
                 EmptyView()

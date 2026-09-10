@@ -66,7 +66,7 @@ public struct PosterWithVideoView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 50)
-                    .foregroundStyle(.white)
+                    .foregroundStyle(ColorTokens.Text.onImage)
             }
         }
         .buttonStyle(.plain)
@@ -85,7 +85,7 @@ public struct PosterWithVideoView: View {
             case .empty:
 
                 Rectangle()
-                    .fill(Color.gray.opacity(0.3))
+                    .fill(ColorTokens.Media.placeholder)
                     .overlay {
                         ProgressView()
                     }
@@ -99,10 +99,10 @@ public struct PosterWithVideoView: View {
             case .failure:
 
                 Rectangle()
-                    .fill(Color.gray.opacity(0.3))
+                    .fill(ColorTokens.Media.placeholder)
                     .overlay {
                         Image(systemName: "photo")
-                            .foregroundStyle(.gray)
+                            .foregroundStyle(ColorTokens.Text.secondary)
                     }
 
             @unknown default:
@@ -128,9 +128,6 @@ public struct PosterWithVideoView: View {
                 )
 
             Text(featuredItem.video.name)
-                .foregroundColor(
-                    ColorTokens.Text.primary
-                )
                 .font(
                     .system(
                         size: 13,
@@ -138,7 +135,7 @@ public struct PosterWithVideoView: View {
                     )
                 )
                 .foregroundStyle(
-                    .black.opacity(0.8)
+                    ColorTokens.Text.primary
                 )
                 .lineLimit(2)
                 .multilineTextAlignment(.leading)
@@ -170,7 +167,7 @@ public struct PosterWithVideoView: View {
 
                         Rectangle()
                             .fill(
-                                Color.gray.opacity(0.3)
+                                ColorTokens.Media.placeholder
                             )
                             .overlay {
                                 ProgressView()
@@ -186,13 +183,13 @@ public struct PosterWithVideoView: View {
 
                         Rectangle()
                             .fill(
-                                Color.gray.opacity(0.3)
+                                ColorTokens.Media.placeholder
                             )
                             .overlay {
                                 Image(
                                     systemName: "photo"
                                 )
-                                .foregroundStyle(.gray)
+                                .foregroundStyle(ColorTokens.Text.secondary)
                             }
 
                     @unknown default:
@@ -205,7 +202,7 @@ public struct PosterWithVideoView: View {
 
             LinearGradient(
                 colors: [
-                    .black.opacity(0.6),
+                    ColorTokens.Media.scrim.opacity(0.6),
                     .clear
                 ],
                 startPoint: .top,

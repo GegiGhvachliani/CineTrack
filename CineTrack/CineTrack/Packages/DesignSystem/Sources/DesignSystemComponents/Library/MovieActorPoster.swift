@@ -90,7 +90,7 @@ struct MovieActorPoster: View {
         Button(action: onFavouriteTap) {
             Circle()
                 .frame(height: 25)
-                .foregroundStyle(.black.opacity(0.5))
+                .foregroundStyle(ColorTokens.Media.scrim.opacity(0.5))
                 .overlay {
                     Image(
                         systemName:
@@ -104,7 +104,7 @@ struct MovieActorPoster: View {
                     .foregroundStyle(
                         isFavourited
                             ? ColorTokens.Brand.primary
-                            : .white
+                            : ColorTokens.Text.onImage
                     )
                 }
                 .padding(.leading, 5)
