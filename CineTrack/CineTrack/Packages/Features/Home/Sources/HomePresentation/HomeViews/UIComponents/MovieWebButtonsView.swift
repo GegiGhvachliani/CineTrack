@@ -44,6 +44,3 @@ struct MovieWebButtonsView: View {
         }
     }
 }
-#Preview {
-    MovieWebButtonsView()
-}

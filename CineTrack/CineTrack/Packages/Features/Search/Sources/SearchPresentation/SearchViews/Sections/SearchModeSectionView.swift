@@ -43,9 +43,3 @@ struct SearchModeSectionView: View {
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }
-
-#Preview {
-    SearchModeSectionView(selectedMode: .constant(.recent))
-        .padding()
-        .background(ColorTokens.Background.main)
-}

@@ -118,25 +118,3 @@ struct SearchResultsSectionView: View {
         onLoadMore()
     }
 }
-
-#Preview {
-    SearchResultsSectionView(
-        movies: SearchPreviewData.movies,
-        actors: [],
-        isLoading: false,
-        isLoadingMore: false,
-        hasMoreResults: true,
-        errorMessage: nil,
-        hasSearched: true,
-        selectedMode: .recent,
-        watchlistedMovieIDs: [],
-        favouritedActorIDs: [],
-        onLoadMore: {},
-        onMovieTap: { _ in },
-        onActorTap: { _ in },
-        onWatchlistTap: { _ in },
-        onFavouriteTap: { _ in }
-    )
-    .padding()
-    .background(ColorTokens.Background.main)
-}

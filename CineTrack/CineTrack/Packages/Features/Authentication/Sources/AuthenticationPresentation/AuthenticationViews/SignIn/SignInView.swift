@@ -80,7 +80,3 @@ public struct SignInView<ViewModel: SignInViewModelProtocol>: View {
         )
     }
 }
-
-#Preview {
-    SignInView(viewModel: MockSignInViewModel())
-}

@@ -48,9 +48,3 @@ struct SearchTargetSectionView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
-
-#Preview {
-    SearchTargetSectionView(selectedTarget: .constant(.movies))
-        .padding()
-        .background(.black)
-}

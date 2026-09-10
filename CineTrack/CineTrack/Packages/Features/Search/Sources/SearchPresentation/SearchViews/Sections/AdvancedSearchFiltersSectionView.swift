@@ -297,12 +297,3 @@ private extension AdvancedSearchFiltersSectionView {
         Region(code: "PH", name: SearchStrings.Content.philippines)
     ]
 }
-
-#Preview {
-    AdvancedSearchFiltersSectionView(
-        filters: .constant(SearchFilters(genreIDs: [28, 878])),
-        onReset: {}
-    )
-    .padding()
-    .background(ColorTokens.Background.main)
-}

@@ -95,15 +95,3 @@ struct ProfileHeaderView: View {
         } catch { onPhotoError(error.localizedDescription) }
     }
 }
-
-#Preview {
-    ProfileHeaderView(
-        account: ProfileAccount(email: "gegi@example.com", createdAt: .now, photoURL: nil),
-        isUpdatingPhoto: false,
-        isSigningOut: false,
-        onPhotoSelected: { _ in },
-        onPhotoError: { _ in },
-        onSignOut: {}
-    )
-    .preferredColorScheme(.dark)
-}

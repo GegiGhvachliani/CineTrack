@@ -102,8 +102,3 @@ public struct OnboardingPageView: View {
         }
     }
 }
-
-#Preview {
-    var action = { print(5) }
-    OnboardingPageView(page: .preferences, action: action)
-}

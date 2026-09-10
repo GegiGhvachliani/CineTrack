@@ -102,7 +102,3 @@ struct PasswordFieldViewPreviewContainer: View {
             .background(ColorTokens.Background.main)
     }
 }
-
-#Preview {
-    PasswordFieldViewPreviewContainer()
-}

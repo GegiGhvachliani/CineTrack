@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import SearchDomain
 
 enum SearchRequest: Equatable {
     case movies(String)

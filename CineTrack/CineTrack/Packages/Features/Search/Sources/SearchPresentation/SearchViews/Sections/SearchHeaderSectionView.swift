@@ -40,13 +40,3 @@ struct SearchHeaderSectionView: View {
         .allowsHitTesting(selectedMode == .recent)
     }
 }
-
-#Preview {
-    SearchHeaderSectionView(
-        searchQuery: .constant(""),
-        selectedMode: .recent,
-        selectedTarget: .movies
-    )
-    .padding()
-    .background(ColorTokens.Background.main)
-}

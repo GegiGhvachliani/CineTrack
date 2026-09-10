@@ -104,7 +104,3 @@ private struct ErrorModalPreviewContainer: View {
             .errorModal(message: $errorMessage)
     }
 }
-
-#Preview {
-    ErrorModalPreviewContainer()
-}

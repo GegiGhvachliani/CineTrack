@@ -121,14 +121,3 @@ struct Top10MovieCell: View {
         }
     }
 }
-
-#Preview {
-    let movie: Movie = Movie(
-        id: 3, title: "SpiderMan: No Way Home", overview: "",
-        posterPath: "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg", backdropPath: nil,
-        releaseDate: "2004-07-04", voteAverage: 8.9, voteCount: 12)
-
-    Top10MovieCell(
-        movie: movie, isWatchlisted: false,
-        cellHeight: 265, ratingNumber: 3, onMovieTap: {}, onWatchlistTap: {})
-}

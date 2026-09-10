@@ -90,6 +90,3 @@ struct TextFieldViewPreviewContainer: View {
     }
 }
 
-#Preview {
-    TextFieldViewPreviewContainer()
-}

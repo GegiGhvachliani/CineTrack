@@ -39,12 +39,3 @@ struct ProfileEmptySectionView: View {
         .background(ColorTokens.Background.secondary)
     }
 }
-
-#Preview {
-    ProfileEmptySectionView(
-        title: "Favourited",
-        message: "Your favourite people will appear here.",
-        detail: "Tap the heart on a person's card to add them to your favourites."
-    )
-    .preferredColorScheme(.dark)
-}

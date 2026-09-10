@@ -134,16 +134,3 @@ struct SearchRangeSlider: View {
         case upper
     }
 }
-
-#Preview {
-    SearchRangeSlider(
-        bounds: 1900...2026,
-        step: 1,
-        lowerTitle: String.init,
-        upperTitle: String.init,
-        lowerValue: .constant(1980),
-        upperValue: .constant(2020)
-    )
-    .padding()
-    .background(Color.black)
-}

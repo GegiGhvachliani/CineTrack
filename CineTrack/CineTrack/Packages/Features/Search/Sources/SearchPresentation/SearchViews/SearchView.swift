@@ -149,7 +149,3 @@ public struct SearchView<ViewModel: SearchViewModelProtocol>: View {
         )
     }
 }
-
-#Preview {
-    SearchView(viewModel: SearchPreviewData.makeViewModel())
-}

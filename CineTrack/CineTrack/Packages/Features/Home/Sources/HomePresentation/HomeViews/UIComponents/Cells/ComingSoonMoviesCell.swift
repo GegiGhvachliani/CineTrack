@@ -172,25 +172,3 @@ struct ComingSoonMoviesCell: View {
         return formatter
     }()
 }
-
-#Preview {
-
-    let movie = Movie(
-        id: 1397809,
-        title: "Georgia",
-        overview: "",
-        posterPath: nil,
-        backdropPath: nil,
-        releaseDate: "2026-10-20",
-        voteAverage: 0,
-        voteCount: 0
-    )
-
-    ComingSoonMoviesCell(
-        movie: movie,
-        isWatchlisted: false,
-        cellHeight: 265,
-        onMovieTap: {},
-        onWatchlistTap: {}
-    )
-}

@@ -74,7 +74,3 @@ public struct SignUpView<ViewModel: SignUpViewModelProtocol>: View {
         )
     }
 }
-
-#Preview {
-    SignUpView(viewModel: MockSignUpViewModel())
-}

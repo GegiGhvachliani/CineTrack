@@ -30,12 +30,3 @@ struct SearchFilterChip: View {
         .buttonStyle(.plain)
     }
 }
-
-#Preview {
-    HStack {
-        SearchFilterChip(title: "9+", isSelected: true, action: {})
-        SearchFilterChip(title: "8+", isSelected: false, action: {})
-    }
-    .padding()
-    .background(ColorTokens.Background.main)
-}

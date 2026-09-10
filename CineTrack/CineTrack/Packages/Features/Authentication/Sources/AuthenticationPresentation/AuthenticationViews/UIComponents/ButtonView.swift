@@ -50,11 +50,3 @@ public struct ButtonView: View {
         .disabled(isLoading)
     }
 }
-
-#Preview {
-    VStack(spacing: 16) {
-        ButtonView(title: "Sign In", action: {})
-        ButtonView(title: "Sign In", isLoading: true, action: {})
-    }
-    .padding()
-}
