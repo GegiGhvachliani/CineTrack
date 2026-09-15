@@ -7,7 +7,6 @@
 
 import UIKit
 import SharedCore
-import HomeDomain
 
 public protocol HomeCoordinatorProtocol: Coordinator {
 

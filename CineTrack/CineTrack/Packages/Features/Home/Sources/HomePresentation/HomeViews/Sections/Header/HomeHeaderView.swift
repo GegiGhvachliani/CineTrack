@@ -78,7 +78,7 @@ struct HomeHeaderView: View {
             .padding(.horizontal, 5)
             .frame(height: 30)
             .frame(maxWidth: .infinity)
-            .background(ColorTokens.Background.secondary)
+            .background(Color(.darkGray))
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .contentShape(Rectangle())
         }

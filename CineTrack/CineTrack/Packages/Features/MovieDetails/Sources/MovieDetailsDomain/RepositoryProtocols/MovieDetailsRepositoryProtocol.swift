@@ -12,7 +12,7 @@ public protocol MovieDetailsRepositoryProtocol: Sendable {
     func fetchCast(movieID: Int) async throws -> [MovieCastMember]
     func fetchVideos(movieID: Int) async throws -> [MovieVideo]
     func fetchImages(movieID: Int) async throws -> [MovieImage]
-    func fetchSimilarMovies(movieID: Int, page: Int) async throws -> [Movie]
+    func fetchSimilarMovies(movieID: Int, page: Int) async throws -> SimilarMoviesPage
     func fetchMovies(for actorID: Int) async throws -> [Movie]
-    func fetchNews(movieTitle: String) async throws -> [News]
+    func fetchNews(movieTitle: String, page: Int) async throws -> NewsPage
 }

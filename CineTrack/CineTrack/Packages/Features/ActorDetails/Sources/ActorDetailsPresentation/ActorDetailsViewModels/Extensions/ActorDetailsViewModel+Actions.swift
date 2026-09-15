@@ -87,16 +87,51 @@ extension ActorDetailsViewModel {
         let images = mediaImages.map {
             GalleryImage(id: $0.id, url: $0.url, aspectRatio: $0.aspectRatio)
         }
-        onShowSeeAll?(SeeAllContent(title: ActorDetailsStrings.Content.images, payload: .images(images)))
+        onShowSeeAll?(
+            pagedContent(
+                title: ActorDetailsStrings.Content.images,
+                payload: .images(images),
+                hasMore: { [weak self] in self?.hasMoreMedia ?? false },
+                loadMore: { [weak self] in
+                    await self?.loadNextMediaPage()
+                    return self.map { viewModel in
+                        .images(
+                            viewModel.mediaImages.map {
+                                GalleryImage(id: $0.id, url: $0.url, aspectRatio: $0.aspectRatio)
+                            }
+                        )
+                    }
+                }
+            )
+        )
     }
 
     public func didTapSeeAllNews() {
-        onShowSeeAll?(SeeAllContent(title: ActorDetailsStrings.Content.relatedNews, payload: .news(news)))
+        onShowSeeAll?(
+            pagedContent(
+                title: ActorDetailsStrings.Content.relatedNews,
+                payload: .news(news),
+                hasMore: { [weak self] in self?.hasMoreNews ?? false },
+                loadMore: { [weak self] in
+                    await self?.loadNextNewsPage()
+                    return self.map { .news($0.news) }
+                }
+            )
+        )
     }
 
     public func didTapExternalURL(
         _ url: URL
     ) {
         onOpenURL?(url)
+    }
+
+    private func pagedContent(
+        title: String,
+        payload: SeeAllPayload,
+        hasMore: @escaping () -> Bool,
+        loadMore: @escaping () async -> SeeAllPayload?
+    ) -> SeeAllContent {
+        SeeAllContent(title: title, payload: payload, hasMore: hasMore, loadMore: loadMore)
     }
 }

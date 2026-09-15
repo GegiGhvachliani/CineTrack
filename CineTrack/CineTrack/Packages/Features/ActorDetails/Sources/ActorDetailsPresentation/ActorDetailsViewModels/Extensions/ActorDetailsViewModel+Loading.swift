@@ -87,6 +87,8 @@ extension ActorDetailsViewModel {
         actorVideos = []
         externalLinks = nil
         news = []
+        newsPage = 1
+        hasMoreNews = true
         mediaContinuation = nil
         hasMoreMedia = true
     }
@@ -214,6 +216,26 @@ extension ActorDetailsViewModel {
     }
 
     private func loadNews(actorName: String) async {
+        news = []
+        newsPage = 1
+        hasMoreNews = true
+
+        await loadNextNewsPage(actorName: actorName)
+    }
+
+    public func loadNextNewsPage() async {
+        guard let actor else {
+            return
+        }
+
+        await loadNextNewsPage(actorName: actor.name)
+    }
+
+    private func loadNextNewsPage(actorName: String) async {
+        guard !isNewsLoading, hasMoreNews else {
+            return
+        }
+
         isNewsLoading = true
 
         defer {
@@ -221,9 +243,14 @@ extension ActorDetailsViewModel {
         }
 
         do {
-            news = try await fetchActorNewsUseCase.execute(
-                actorName: actorName
+            let page = try await fetchActorNewsUseCase.execute(
+                actorName: actorName,
+                page: newsPage
             )
+            var existingIDs = Set(news.map(\.id))
+            news.append(contentsOf: page.news.filter { existingIDs.insert($0.id).inserted })
+            newsPage = page.page + 1
+            hasMoreNews = news.count < page.totalResults && !page.news.isEmpty
         } catch {
             sectionErrors[.news] = error
         }

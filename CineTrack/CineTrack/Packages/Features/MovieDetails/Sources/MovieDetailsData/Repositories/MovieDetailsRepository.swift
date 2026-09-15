@@ -70,13 +70,17 @@ public final class MovieDetailsRepository: MovieDetailsRepositoryProtocol, @unch
 
     // MARK: - Related content
 
-    public func fetchSimilarMovies(movieID: Int, page: Int) async throws -> [Movie] {
+    public func fetchSimilarMovies(movieID: Int, page: Int) async throws -> SimilarMoviesPage {
         let request = try requestBuilder.build(
             for: .similarMovies(movieID: movieID, page: page)
         )
         let response: MovieListResponseDTO = try await apiClient.sendRequest(request)
 
-        return movieMapper.map(response)
+        return SimilarMoviesPage(
+            movies: movieMapper.map(response),
+            page: response.page,
+            totalPages: response.totalPages
+        )
     }
 
     public func fetchMovies(for actorID: Int) async throws -> [Movie] {
@@ -91,12 +95,16 @@ public final class MovieDetailsRepository: MovieDetailsRepositoryProtocol, @unch
             .sorted { ($0.releaseDate ?? "") > ($1.releaseDate ?? "") }
     }
 
-    public func fetchNews(movieTitle: String) async throws -> [News] {
+    public func fetchNews(movieTitle: String, page: Int) async throws -> NewsPage {
         let request = try newsRequestBuilder.build(
-            for: .person(name: movieTitle, page: 1, pageSize: 10)
+            for: .person(name: movieTitle, page: page, pageSize: 10)
         )
         let response: NewsResponseDTO = try await apiClient.sendRequest(request)
 
-        return response.articles.compactMap(newsMapper.map)
+        return NewsPage(
+            news: response.articles.compactMap(newsMapper.map),
+            page: page,
+            totalResults: response.totalResults
+        )
     }
 }

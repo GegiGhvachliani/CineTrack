@@ -142,6 +142,18 @@ extension MovieDetailsViewModel {
     }
 
     private func loadSimilarMovies() async {
+        similarMovies = []
+        similarMoviesPage = 1
+        hasMoreSimilarMovies = true
+
+        await loadNextSimilarMoviesPage()
+    }
+
+    public func loadNextSimilarMoviesPage() async {
+        guard !isSimilarMoviesLoading, hasMoreSimilarMovies else {
+            return
+        }
+
         isSimilarMoviesLoading = true
 
         defer {
@@ -149,10 +161,14 @@ extension MovieDetailsViewModel {
         }
 
         do {
-            similarMovies = try await fetchSimilarMoviesUseCase.execute(
+            let page = try await fetchSimilarMoviesUseCase.execute(
                 movieID: movie.id,
-                page: 1
+                page: similarMoviesPage
             )
+            var existingIDs = Set(similarMovies.map(\.id))
+            similarMovies.append(contentsOf: page.movies.filter { existingIDs.insert($0.id).inserted })
+            similarMoviesPage = page.page + 1
+            hasMoreSimilarMovies = page.hasNextPage
         } catch {
             sectionErrors[.similarMovies] = error
         }
@@ -174,6 +190,18 @@ extension MovieDetailsViewModel {
     }
 
     private func loadNews() async {
+        news = []
+        newsPage = 1
+        hasMoreNews = true
+
+        await loadNextNewsPage()
+    }
+
+    public func loadNextNewsPage() async {
+        guard !isNewsLoading, hasMoreNews else {
+            return
+        }
+
         isNewsLoading = true
 
         defer {
@@ -181,7 +209,14 @@ extension MovieDetailsViewModel {
         }
 
         do {
-            news = try await fetchMovieNewsUseCase.execute(movieTitle: movie.title)
+            let page = try await fetchMovieNewsUseCase.execute(
+                movieTitle: movie.title,
+                page: newsPage
+            )
+            var existingIDs = Set(news.map(\.id))
+            news.append(contentsOf: page.news.filter { existingIDs.insert($0.id).inserted })
+            newsPage = page.page + 1
+            hasMoreNews = news.count < page.totalResults && !page.news.isEmpty
         } catch {
             sectionErrors[.news] = error
         }

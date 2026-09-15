@@ -28,6 +28,11 @@ public final class MovieDetailsViewModel: MovieDetailsViewModelProtocol {
     public internal(set) var selectedActorMovies: [Movie] = []
     public internal(set) var news: [News] = []
 
+    internal var similarMoviesPage = 1
+    public internal(set) var hasMoreSimilarMovies = true
+    internal var newsPage = 1
+    public internal(set) var hasMoreNews = true
+
     public var videosSectionFeaturedVideo: MovieVideo? {
         videos
             .filter { $0.type != .trailer }

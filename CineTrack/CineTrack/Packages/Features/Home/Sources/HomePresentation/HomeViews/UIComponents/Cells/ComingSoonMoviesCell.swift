@@ -67,7 +67,7 @@ struct ComingSoonMoviesCell: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 6)
             .padding(.bottom, 5)
-            .background(ColorTokens.Background.secondary)
+            .background(Color.black)
     }
 
     // MARK: - Footer

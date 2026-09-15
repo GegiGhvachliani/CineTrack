@@ -28,6 +28,8 @@ public final class ActorDetailsViewModel: ActorDetailsViewModelProtocol {
     var mediaContinuation: String?
     public internal(set) var externalLinks: ActorExternalLinks?
     public internal(set) var news: [News] = []
+    internal var newsPage = 1
+    public internal(set) var hasMoreNews = true
     public internal(set) var favouritedActorIDs = Set<Int>()
     public internal(set) var watchlistedMovieIDs = Set<Int>()
 

@@ -22,5 +22,5 @@ public protocol ActorDetailsRepositoryProtocol: Sendable {
         actorID: Int
     ) async throws -> ActorExternalLinks
 
-    func fetchActorNews(actorName: String) async throws -> [News]
+    func fetchActorNews(actorName: String, page: Int) async throws -> NewsPage
 }

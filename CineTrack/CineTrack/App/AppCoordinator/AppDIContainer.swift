@@ -44,15 +44,20 @@ final class AppDIContainer: AppDIContainerProtocol {
         firestore: firestore,
         userSession: userSession
     )
+    
     lazy var profileFactory: ProfileFactoryProtocol = ProfileFactory(firestore: firestore, session: userSession)
+    
     lazy var searchFactory: SearchFactoryProtocol = SearchFactory(
         apiClient: apiClient,
         configuration: configuration.tmdb,
         firestore: firestore,
         userSession: userSession
     )
+    
     lazy var onboardingFactory: OnboardingFactoryProtocol = OnboardingFactory()
+    
     lazy var authenticationFactory: AuthenticationFactoryProtocol = AuthenticationFactory()
+    
     lazy var actorDetailsFactory: ActorDetailsFactoryProtocol = ActorDetailsFactory(
         apiClient: apiClient,
         tmdbConfiguration: configuration.tmdb,
@@ -60,6 +65,7 @@ final class AppDIContainer: AppDIContainerProtocol {
         firestore: firestore,
         userSession: userSession
     )
+    
     lazy var movieDetailsFactory: MovieDetailsFactoryProtocol = MovieDetailsFactory(
         apiClient: apiClient,
         tmdbConfiguration: configuration.tmdb,
@@ -67,8 +73,11 @@ final class AppDIContainer: AppDIContainerProtocol {
         firestore: firestore,
         userSession: userSession
     )
+    
     lazy var newsDetailsFactory: NewsDetailsFactoryProtocol = NewsDetailsFactory()
+    
     lazy var seeAllFactory: SeeAllFactoryProtocol = SeeAllFactory()
+    
     lazy var videosListFactory: VideosListFactoryProtocol = VideosListFactory(
         apiClient: apiClient,
         configuration: configuration.tmdb

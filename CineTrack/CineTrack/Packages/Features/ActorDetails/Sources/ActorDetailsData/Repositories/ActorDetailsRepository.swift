@@ -83,12 +83,16 @@ public final class ActorDetailsRepository: ActorDetailsRepositoryProtocol {
         return actorExternalLinksMapper.map(response)
     }
 
-    public func fetchActorNews(actorName: String) async throws -> [News] {
+    public func fetchActorNews(actorName: String, page: Int) async throws -> NewsPage {
 
-        let request = try newsRequestBuilder.build(for: .person(name: actorName, page: 1, pageSize: 10))
+        let request = try newsRequestBuilder.build(for: .person(name: actorName, page: page, pageSize: 10))
 
         let response: NewsResponseDTO = try await apiClient.sendRequest(request)
 
-        return response.articles.compactMap(newsMapper.map)
+        return NewsPage(
+            news: response.articles.compactMap(newsMapper.map),
+            page: page,
+            totalResults: response.totalResults
+        )
     }
 }

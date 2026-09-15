@@ -9,7 +9,7 @@ import Foundation
 import SharedCore
 
 public protocol FetchActorNewsUseCaseProtocol: Sendable {
-    func execute(actorName: String) async throws -> [News]
+    func execute(actorName: String, page: Int) async throws -> NewsPage
 }
 
 public struct FetchActorNewsUseCase: FetchActorNewsUseCaseProtocol {
@@ -24,7 +24,7 @@ public struct FetchActorNewsUseCase: FetchActorNewsUseCaseProtocol {
         self.repository = repository
     }
 
-    public func execute(actorName: String) async throws -> [News] {
-        try await repository.fetchActorNews(actorName: actorName)
+    public func execute(actorName: String, page: Int) async throws -> NewsPage {
+        try await repository.fetchActorNews(actorName: actorName, page: page)
     }
 }

@@ -50,7 +50,17 @@ extension MovieDetailsViewModel {
     }
 
     public func didTapSeeAllSimilarMovies() {
-        onShowSeeAll?(SeeAllContent(title: MovieDetailsStrings.Content.moreLikeThis, payload: .movies(similarMovies)))
+        onShowSeeAll?(
+            pagedContent(
+                title: MovieDetailsStrings.Content.moreLikeThis,
+                payload: .movies(similarMovies),
+                hasMore: { [weak self] in self?.hasMoreSimilarMovies ?? false },
+                loadMore: { [weak self] in
+                    await self?.loadNextSimilarMoviesPage()
+                    return self.map { .movies($0.similarMovies) }
+                }
+            )
+        )
     }
 
     public func didTapSeeAllActorMovies() {
@@ -67,6 +77,25 @@ extension MovieDetailsViewModel {
     }
 
     public func didTapSeeAllNews() {
-        onShowSeeAll?(SeeAllContent(title: MovieDetailsStrings.Content.relatedNews, payload: .news(news)))
+        onShowSeeAll?(
+            pagedContent(
+                title: MovieDetailsStrings.Content.relatedNews,
+                payload: .news(news),
+                hasMore: { [weak self] in self?.hasMoreNews ?? false },
+                loadMore: { [weak self] in
+                    await self?.loadNextNewsPage()
+                    return self.map { .news($0.news) }
+                }
+            )
+        )
+    }
+
+    private func pagedContent(
+        title: String,
+        payload: SeeAllPayload,
+        hasMore: @escaping () -> Bool,
+        loadMore: @escaping () async -> SeeAllPayload?
+    ) -> SeeAllContent {
+        SeeAllContent(title: title, payload: payload, hasMore: hasMore, loadMore: loadMore)
     }
 }
