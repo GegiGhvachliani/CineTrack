@@ -93,24 +93,29 @@ ruby Scripts/check_architecture.rb
 
 - macOS with Xcode 26 or newer
 - iOS 17.0 deployment target
-- A TMDB read access token
-- A NewsAPI key
-- A Firebase project configured for Authentication, Firestore, and Google Sign-In
+- An internet connection
 
 ### Configuration
 
 1. Clone the repository and open `CineTrack/CineTrack.xcodeproj` in Xcode.
-2. Copy the secrets template:
+2. Resolve Swift packages when prompted, select the `CineTrack` scheme, and run on an iOS 17+ simulator or device.
+
+The repository includes shared demo configuration for TMDB, NewsAPI, and Firebase, so movie and actor browsing works after cloning. The credentials are provided only for evaluating this portfolio project.
+
+### Use your own services
+
+To run a separate instance with your own services:
+
+1. Copy the secrets template:
 
    ```bash
    cp Config/Secrets.example.plist CineTrack/CineTrack/App/Config/Secrets.plist
    ```
 
-3. Set `TMDB_ACCESS_TOKEN` and `NEWS_API_KEY` in `Secrets.plist`.
-4. Replace `CineTrack/CineTrack/App/Config/GoogleService-Info.plist` with the configuration file for your Firebase project, then enable the required authentication providers and create Firestore rules suitable for your environment.
-5. Resolve Swift packages when prompted, select the `CineTrack` scheme, and run on an iOS 17+ simulator or device.
+2. Set `TMDB_ACCESS_TOKEN` and `NEWS_API_KEY` in `Secrets.plist`.
+3. Replace `CineTrack/CineTrack/App/Config/GoogleService-Info.plist` with the configuration file for your Firebase project, then enable the required authentication providers and create Firestore rules suitable for your environment.
 
-`Secrets.plist` is excluded from version control. Never commit live API keys.
+`Secrets.plist` is excluded from version control. Use it for local overrides and do not commit production credentials.
 
 ## Development checks
 
