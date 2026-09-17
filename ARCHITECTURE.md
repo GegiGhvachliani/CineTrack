@@ -1,525 +1,277 @@
-# CineTrack — არქიტექტურა და რეფაქტორინგის სრული მიმოხილვა
+# CineTrack Architecture / CineTrack-ის არქიტექტურა
 
-განახლებულია: 2026-09-10.
+This document describes CineTrack as an application: how its features are separated, how dependencies are composed, and how data reaches the UI.
 
-ეს დოკუმენტი აერთიანებს წინა რეფაქტორინგს, News-ის ფოტოს შესწორებასა და Actor ფექიჯების გაერთიანებას: რა შეიცვალა, რატომ, რა დარჩა უცვლელი და რა შეზღუდვები აქვს მიმდინარე გადაწყვეტას. საწყისი შედარების წერტილია Git commit `0d0a1fc`; ცვლილებები სამუშაო ხეშია და ახალი commit არ შემიქმნია.
+ეს დოკუმენტი აღწერს CineTrack-ის არქიტექტურას აპლიკაციის ჭრილში: როგორ არის დაყოფილი ფუნქციები, როგორ ეწყობა დამოკიდებულებები და როგორ აღწევს მონაცემი UI-მდე.
 
-## 1. მთავარი შედეგი
+---
 
-Home გამოყენებულია ორგანიზებისა და წერის სტილის საფუძვლად. მისი პასუხისმგებლობების განაწილება გავავრცელე სხვა ეკრანებზე, თუმცა Home-შიც შევასწორე დუბლირება და აღმოჩენილი პრობლემები.
+## English
 
-ძირითადი გამოძახების ჯაჭვია:
+### Overview
 
-```text
-View
-  → ViewModelProtocol
-    → UseCaseProtocol
-      → RepositoryProtocol
-        → პროვაიდერის პროტოკოლი
-```
+CineTrack is a modular iOS application for discovering movies and actors, reading entertainment news, watching trailers, and maintaining a personal library. It combines UIKit navigation with SwiftUI feature screens and uses a feature-first, Clean Architecture-inspired design.
 
-ეს არის გამოძახების ჯაჭვი და არა მოდულების import-ების მიმართულება: Repository-ის კონტრაქტს Domain განსაზღვრავს, ხოლო Data ამ კონტრაქტს ასრულებს. ViewModel-ს Data-ის იმპლემენტაციის ცოდნა არ სჭირდება.
+The aim is practical separation of responsibility:
 
-რაც შეიცვალა:
+- UI code renders state and forwards user actions.
+- View models own screen state, presentation decisions, and user intent.
+- Use cases express application operations.
+- Repositories isolate business logic from API, Firebase, and persistence details.
+- Coordinators own navigation.
+- Factories and the app dependency container create concrete objects.
 
-- ViewModel-ებს დაემატა/შეუვსო საკუთარი პროტოკოლები; მთავარი Views მუშაობს generic ViewModel-ით, რომელიც ამ პროტოკოლს აკმაყოფილებს.
-- Profile-ის ViewModel აღარ იღებს repository-ებს და აღარ ქმნის UseCase-ებს საკუთარ მეთოდებში.
-- საერთო Watchlist/Favourites/RecentlyViewed კოდი გადავიდა LibraryDomain/LibraryData-ში.
-- Coordinator/Factory/DI კონტრაქტები და დამოკიდებულებების აწყობა მოწესრიგდა.
-- View-ების სექციები, ViewModel-ის extensions, Strings, MARK-ები და ფორმატირება გაერთიანდა.
-- SeeAll დარჩა საერთო სიებისა და გალერეის ეკრანად.
-- გასწორდა ძიების პარალელური მოთხოვნების მდგომარეობა, Firestore-ის ჩაწერის მოლოდინი და ნავიგაციის რამდენიმე პრობლემა.
-- News-ის სურათები ახლა საბოლოო, ფიქსირებული სიმაღლის კონტეინერში იჭრება.
-
-ყველა შეცვლილი ფაილი ახალ ლოგიკას არ შეიცავს: ცვლილებების დიდი ნაწილი ფოლდერების გადანაწილება, ფაილის გადარქმევა, imports, MARK-ები და ფორმატირებაა.
-
-## 2. თითოეული შრის მოვალეობა
-
-| შრე | რა ეკუთვნის | რა არ უნდა აკეთებდეს |
-| --- | --- | --- |
-| Domain | მოდელები, RepositoryProtocol, UseCaseProtocol და UseCase-ები | არ უნდა აგებდეს View-ს, URLSession-ს, Firestore-ს ან UIKit ნავიგაციას |
-| Data | Repository-ის იმპლემენტაცია, DTO, Mapper, პროვაიდერთან ადაპტაცია | არ უნდა მართავდეს ეკრანის layout-ს ან ნავიგაციას |
-| Presentation | ViewModel, View, სექციები, ეკრანის ტექსტები, Coordinator | ViewModel-მა არ უნდა გამოიძახოს Repository/API უშუალოდ |
-| PresentationAPI | Factory/Coordinator/Routing კონტრაქტები | არ უნდა აწყობდეს კონკრეტულ Data იმპლემენტაციებს |
-| Assembly | Repository-ების, UseCase-ების, ViewModel-ისა და View-ს აწყობა | არ უნდა იქცეს ბიზნესლოგიკის საცავად |
-| AppDIContainer | საერთო კლიენტების, კონფიგურაციის, storage/session-ის დაკავშირება | Feature-ის ViewModel-ში არ უნდა გადავიდეს ობიექტების შექმნის ეს პასუხისმგებლობა |
-
-Factory/Assembly-ში კონკრეტული კლასის შექმნა ნორმალურია. მაგალითად, `ProfileFactory` ქმნის `ProfileRepository`-ს, მაგრამ UseCase მას `ProfileRepositoryProtocol`-ით იღებს.
-
-ყველა value type-ს არ დამატებია ხელოვნური პროტოკოლი. მონაცემის მოდელს, DTO-ს, enum-ს ან SwiftUI-ის პატარა ვიზუალურ კომპონენტს მხოლოდ არსებობის გამო ცალკე პროტოკოლი არ სჭირდება.
-
-## 3. რა არის LibraryDomain / LibraryData
-
-### ეს ჩვენი კოდია, არა მესამე მხარის ბიბლიოთეკა
-
-ორივე არის ადგილობრივი Swift მოდული, რომელიც [SharedKit-ის Package.swift-ში](/Users/gegighvachliani/Desktop/CineTrack/CineTrack/CineTrack/Packages/SharedKit/Package.swift) არის განსაზღვრული.
-
-ტერმინების განსხვავება:
-
-- **Package:** SharedKit — აქვს თავისი Package.swift და რამდენიმე target.
-- **Target / Module:** LibraryDomain და LibraryData — ცალ-ცალკე კომპილირებადი კოდის ნაწილები. `import LibraryDomain` შესაბამის მოდულს ხდის ხელმისაწვდომს.
-- **Library product:** ამ target-ების სხვა ფექიჯებისთვის გამოტანის ფორმა, აღწერილი `.library(...)`-ით.
-
-ეს არ არის ჩამოტვირთული Apple framework ან ცალკე გარე SDK. ასევე, ამჟამად არ არსებობს ცალკე `Library/Package.swift`: ეს ორი მოდული SharedKit-ის შიგნითაა. სიტყვა Library აქ ნიშნავს მომხმარებლის პირად კოლექციას და არა ზოგადი დანიშნულების ყველა დამხმარე ფუნქციას.
-
-### კონკრეტული მოვალეობები
-
-| მოდული | შიგთავსი |
-| --- | --- |
-| LibraryDomain | Watchlist-ის, საყვარელი მსახიობებისა და ნახვის ისტორიის RepositoryProtocol-ები და UseCase-ები; RecentlyViewedMovie/Actor/Item მოდელები |
-| LibraryData | WatchlistRepository, FavouriteRepository, RecentlyViewedRepository და შესანახ მონაცემთან შესაბამისი DTO-ები |
-
-ამჟამინდელი ფუნქციური საზღვარი:
-
-- Watchlist — შენახული ფილმები.
-- Favourites — საყვარელი მსახიობები.
-- Recently Viewed — ნანახი ფილმებისა და მსახიობების ისტორია.
-
-Library არ მართავს ფილმების კატალოგს, ძიებას, სიახლეების API-ს, ვიდეოპლეერს ან ეკრანებს.
-
-### რატომ გახდა საჭირო
-
-ადრე ეს ფუნქციონალი Home-ის შიგნით იყო, თუმცა მას Search, Profile, ActorDetails და MovieDetails-იც იყენებდა. ActorDetails/MovieDetails-ში მსგავსი repository/usecase/DTO კოდის ასლებიც იყო.
-
-ამის გამო:
-
-1. Profile-ის მსგავს ფექიჯს საერთო კოლექციის გამოსაყენებლად Home-ის მოდულზე დამოკიდებულება სჭირდებოდა.
-2. ერთი ფუნქციის რამდენიმე ასლის სინქრონულად შეცვლა იყო საჭირო.
-3. Home ფექიჯი ფაქტობრივად სხვა ფექიჯების საერთო ინფრასტრუქტურის მფლობელი ხდებოდა.
-
-გადატანის შემდეგ ფუნქციას ერთი საერთო იმპლემენტაცია აქვს. მონაცემის შენახვის არსებული collection-ების სახელები ამ გადატანის გამო არ შეცვლილა.
-
-### ვინ რას იმპორტირებს
-
-- Home/Search/Profile/ActorDetails/MovieDetails-ის ViewModel-ები იღებს LibraryDomain-ის UseCase პროტოკოლებს.
-- მათი Assembly-ები იმპორტირებს LibraryData-ს, რადგან repository-ებს სწორედ ისინი ქმნის.
-- ამ ფექიჯების Presentation-ში `import LibraryData` არ არის.
-- DesignSystem-ის საერთო ისტორიის კომპონენტებს შეიძლება სჭირდებოდეს LibraryDomain-ის მოდელები, მაგრამ არა LibraryData.
-
-მაგალითად:
+### System map
 
 ```text
-ProfileView
-  → ProfileViewModel.toggleWatchlist(...)
-    → AddWatchlistedMovieUseCaseProtocol.execute(...)
-      → WatchlistRepositoryProtocol.addWatchlistedMovie(...)
-        → RemoteDocumentStore.set(...)
+App
+├── AppCoordinator
+├── MainTabBarCoordinator
+├── AppDIContainer
+├── Features
+│   ├── Home, Search, Profile
+│   ├── Authentication, Onboarding
+│   ├── MovieDetails, ActorDetails, NewsDetails
+│   └── SeeAll, VideosList
+├── SharedKit
+│   ├── SharedCore, SharedNetworking
+│   ├── SharedStorage, SharedAuth
+│   └── LibraryDomain, LibraryData
+├── TMDBData and NewsData
+└── DesignSystem
 ```
 
-ViewModel-მა არ იცის, `RemoteDocumentStore` რეალურად Firestore-ით მუშაობს თუ სხვა იმპლემენტაციით.
+`AppCoordinator` starts one of three flows: onboarding, authentication, or the main application. `MainTabBarCoordinator` creates the Home, Search, and Profile navigation stacks, then routes into details, playlists, and full-list screens.
 
-მნიშვნელოვანი ნიუანსი: რამდენიმე FeatureFactory-ს კვლავ შეუძლია ცალ-ცალკე repository ობიექტის შექმნა. გაერთიანებულია მათი კოდი და საერთო storage/session დამოკიდებულებები; არ შემიქმნია ყველა ეკრანის state-ის სინქრონიზაციის ახალი გლობალური cache ან event bus.
+### Feature modules
 
-## 4. ActorMedia / ActorVideos / ActorDetails — გაერთიანებული ფექიჯი
+Features are local Swift packages. Where relevant, each feature is separated into these targets:
 
-მომხმარებლის მოთხოვნით, სამივე გაერთიანდა ერთ **ActorDetails** ფექიჯში. ActorMedia და ActorVideos აღარ არის ცალკე Swift Package ან ცალკე Domain/Data მოდული.
-
-მანამდე სამივე ფექიჯი არსებობდა, მაგრამ ActorMedia-სა და ActorVideos-ს მხოლოდ ActorDetails იყენებდა. ამიტომ ცალკე manifests და imports დამატებით სირთულეს ქმნიდა დამოუკიდებელი გამოყენების სარგებლის გარეშე.
-
-### შესრულებული გადანაწილება
-
-| ძველი შრე | ახალი მდებარეობა ActorDetails-ის შიგნით |
+| Target | Responsibility |
 | --- | --- |
-| ActorMediaDomain-ის მოდელები | ActorDetailsDomain/Entities/Media |
-| ActorMediaDomain-ის კონტრაქტები და UseCase | ActorDetailsDomain/RepositoryProtocols/Media და UseCases/Media |
-| ActorMediaData-ის Repository და DTO | ActorDetailsData/Repositories/Media და DTOs/Media |
-| ActorVideosDomain-ის მოდელები | ActorDetailsDomain/Entities/Videos |
-| ActorVideosDomain-ის კონტრაქტები და UseCase | ActorDetailsDomain/RepositoryProtocols/Videos და UseCases/Videos |
-| ActorVideosData-ის Repository | ActorDetailsData/Repositories/Videos |
+| `FeatureDomain` | Entities, repository contracts, use-case contracts, and use cases. |
+| `FeatureData` | Repository implementations, DTOs, mappers, and provider-specific adaptation. |
+| `FeaturePresentation` | SwiftUI views, view models, screen resources, and feature coordinators. |
+| `FeaturePresentationAPI` | Public factory, coordinator, and routing contracts exposed to the app or other features. |
+| `FeatureAssembly` | Construction of repositories, use cases, view models, views, and coordinators. |
 
-რეალური სტრუქტურა:
+This keeps a feature self-contained without forcing every small type to have a protocol. Contracts are introduced at meaningful replacement boundaries: view models, use cases, repositories, factories, coordinators, and external services.
+
+### Data and dependency flow
 
 ```text
-ActorDetails
-  ActorDetailsDomain
-    Entities
-      არსებული Actor ტიპები
-      Media
-      Videos
-    RepositoryProtocols
-      ActorDetailsRepositoryProtocol.swift
-      Media
-      Videos
-    UseCases
-      Actor
-      Media
-      Videos
-  ActorDetailsData
-    Repositories
-      ActorDetailsRepository.swift
-      Media
-      Videos
-    DTOs
-      Media
-    Mappers
-  ActorDetailsPresentation
-  ActorDetailsPresentationAPI
-  ActorDetailsAssembly
+User action
+  → SwiftUI View
+    → ViewModel protocol
+      → Use-case protocol
+        → Repository protocol
+          → API client / Firestore / Firebase Auth
 ```
 
-### რა შენარჩუნდა და რა მოიშალა
+The call flow is not the same as implementation ownership. The Domain layer declares a repository protocol; the Data layer conforms to it. A view model can therefore fetch or save something without knowing whether the data comes from TMDB, NewsAPI, Firestore, or a future replacement.
 
-- გადატანილია 10 Swift source ფაილი; მათში არსებული ტიპების სახელები და ოპერაციების კონტრაქტები შენარჩუნებულია.
-- ActorMediaRepositoryProtocol და ActorVideosRepositoryProtocol კვლავ არსებობს — უბრალოდ ActorDetailsDomain-ში.
-- FetchActorMediaUseCase/FetchActorVideosUseCase კვლავ დამოუკიდებელი UseCase-ებია.
-- WikimediaActorMediaRepository/ActorVideosRepository კვლავ ცალკე იმპლემენტაციებია ActorDetailsData-ში.
-- ViewModel კვლავ იღებს მხოლოდ UseCase პროტოკოლებს; მას networking/storage არ დამატებია.
-- სურათების pagination და ვიდეოების მიღება/გაერთიანება არ გადაკეთებულა.
-- imports შეიცვალა ActorDetailsDomain/ActorDetailsData-ით.
-- ActorDetails-ის manifest-იდან ამოღებულია ორი local package dependency და ძველი ოთხი მოდულის product references.
-- წაშლილია ActorMedia/ActorVideos-ის ცალკე Package.swift ფაილები.
-- ActorDetails-ის არსებული PresentationAPI/Assembly პროდუქტები და ხუთი ძირითადი შრე შენარჩუნებულია.
-- ტესტები არ დამატებულა და არ შეცვლილა.
-
-გაერთიანების შემდეგ iOS build და არქიტექტურული შემოწმება წარმატებით დასრულდა. ძველი მოდულების imports/product dependencies აღარ დარჩა. ძველი ფექიჯების მხოლოდ ლოკალური Xcode metadata სარეზერვოდ ინახება `/private/tmp/cinetrack-actor-package-metadata.uyoIgW`-ში; იმპლემენტაციის ფაილები ActorDetails-შია და არ დაკარგულა.
-
-ერთ ფექიჯში გაერთიანება არ ნიშნავს ერთ დიდ Repository-ს ან ViewModel-ს: გაერთიანდა განთავსება და build-ის საზღვარი, არა ყველა პასუხისმგებლობა. ცალკე API პროვაიდერი თავისთავად ცალკე Package-ს არ მოითხოვს.
-
-თუ მომავალში სურათები/ვიდეოები სხვა დამოუკიდებელ Feature-საც დასჭირდება, მათი ხელახლა გამოყოფა შესაძლებელი იქნება შენარჩუნებული კონტრაქტების წყალობით.
-
-## 5. ViewModel-ების შენს ოთხ წესთან შესაბამისობა
-
-შემოწმდა 63 ViewModel/Protocol/Extension ფაილი, Preview mock-ების გარეშე. ეკრანების ViewModel-ებია: Home, Search, Profile, ActorDetails, MovieDetails, VideosList, SeeAll, NewsDetails, Onboarding, SignIn და SignUp.
-
-| მოთხოვნა | კოდში ნანახი მდგომარეობა |
-| --- | --- |
-| ViewModel არ იცნობს UIView/UIViewController/UILabel/Color/View-ს | ამ ტიპების გამოყენება და UIKit/SwiftUI import არ აღმოჩნდა |
-| არ წყვეტს რომელი UIViewController უნდა შეიქმნას | გადასვლას ითხოვს action closure-ით; კონტროლერს Factory/Coordinator ქმნის |
-| არ იცნობს Repository/API-client/Data source-ს | დამოკიდებულებები UseCase პროტოკოლებია; უშუალო Repository/URLSession/Firestore წვდომა არ აღმოჩნდა |
-| არ იცნობს AutoLayout/Storyboard/SwiftUI layout-ს | layout კოდი Views/UIComponents-შია და არა ViewModel-ში |
-
-### რა იცის ViewModel-მა და ეს რატომ არის ნორმალური
-
-ViewModel-ს შეუძლია იცოდეს:
-
-- რომელი ელემენტია არჩეული;
-- მიმდინარეობს თუ არა ჩატვირთვა;
-- რომელი შეცდომა ან ტექსტი უნდა გამოჩნდეს;
-- უნდა გამოითხოვოს თუ არა შემდეგი გვერდი;
-- რომ მომხმარებელმა ფილმის დეტალების ან SeeAll-ის გახსნა მოითხოვა.
-
-მაგალითად, `onMovieDetails?(movie)` ნავიგაციის განზრახვაა. `UIHostingController(rootView: ...)` ან `navigationController.pushViewController(...)` კი კონკრეტული UI ნავიგაციაა და ViewModel-ში არ გვხვდება.
-
-`SeeAllContent` და `VideoPlaylistContext` მონაცემის/მარშრუტის payload-ებია; UIViewController-ს არ შეიცავს. შესაბამისად, ViewModel ნავიგაციისგან აბსოლუტურად მოწყვეტილი არ არის — იცის განზრახვა, მაგრამ არა ეკრანის შექმნის ტექნოლოგია.
-
-### Observation-ისა და module-level საზღვრის ნიუანსი
-
-ViewModel-ები იყენებს `Observation`-ს და `@Observable`-ს; Search ასევე იყენებს Combine-ს debounce-ისთვის. Observation layout framework არ არის. მისი გამოყენება არ ნიშნავს, რომ ViewModel-მა SwiftUI View იცის.
-
-ამიტომ ზუსტი ფორმულირებაა: ViewModel იყენებს Foundation/Observation/საჭიროებისამებრ Combine-ს და Domain-ის ტიპებს/კონტრაქტებს — არა მხოლოდ Foundation-ს.
-
-ასევე, ViewModel-ის ფაილი და `FeaturePresentation` target ერთი და იგივე საზღვარი არ არის. ამ target-ში Views და Coordinators-იც შედის, ამიტომ target-ის დამოკიდებულებებში UI მოდულები კანონიერად არსებობს. ViewModel-ის ფაილებში მათი გამოყენება არ ჩანს, მაგრამ იმავე target-ში მომავალში ვინმეს UIKit import-ის დამატებას კომპილატორი თავისთავად არ აკრძალავს.
-
-სრული compile-time აკრძალვისთვის ViewModel-ები ცალკე, UI-ზე დამოკიდებულების არმქონე target-ში უნდა გადავიდეს. ეს დამატებითი დაყოფა არ გამიკეთებია: Home-ის არსებული Presentation სტრუქტურა შენარჩუნებულია.
-
-## 6. ცვლილებები ფექიჯების მიხედვით
-
-### Home
-
-- შეივსო HomeViewModelProtocol რეალურად გამოყენებული state-ითა და მოქმედებებით.
-- HomeView გახდა generic ViewModel-ის პროტოკოლზე.
-- Watchlist/Favourites/RecentlyViewed კოდი გადაიტანა საერთო Library შრემ.
-- გაზიარებული ბარათები/სექციები გადავიდა DesignSystem-ში.
-- HomeSection გადავიდა HomePresentation-ში, რადგან Home-ის ეკრანის აღწერაა.
-- Home-დან დეტალებში გადასვლისას მოცილდა ისტორიის დამატებითი ჩაწერა; MovieDetails/ActorDetails წარმატებული ჩატვირთვისას შესაბამის UseCase-ს იძახებს.
-- ისტორიის SeeAll payload-ში ფილმებთან ერთად მსახიობებიც შედის.
-- თარიღის დამხმარე მნიშვნელობა აღარ არის მთელი გაშვების განმავლობაში ერთხელ გამოთვლილი სტატიკური თარიღი.
-- შეივსო HomeStrings, გასწორდა რამდენიმე ფაილის სახელი და მოძველებული alias-ები.
-
-მიზანი: Home დარჩეს Feature და არქიტექტურული მაგალითი, მაგრამ არ იყოს სხვა Feature-ების საერთო მონაცემების საცავი.
-
-### Profile
-
-ადრე ViewModel ინახავდა repository პროტოკოლებს, UseCase-ის კონკრეტულ კლასებს ქმნიდა init-ში და დამატებით UseCase-ებს ქმნიდა მეთოდების გამოძახებისას.
-
-ახლა:
-
-- იღებს Profile-ისა და Library-ის UseCase პროტოკოლებს გარედან.
-- აქვს ProfileViewModelProtocol და დაყოფილი Loading/Account/Watchlist/Favourites/History/Actions extensions.
-- დაემატა FetchProfile, UpdateProfilePhoto და SignOut UseCase კონტრაქტები.
-- ProfileRepository იღებს AccountSession, RemoteDocumentStore და ProfilePhotoProcessorProtocol დამოკიდებულებებს.
-- ფოტოს მომზადება გადავიდა ImageIOProfilePhotoProcessor-ში: thumbnail-ის შექმნა და JPEG-ში შეკუმშვა ViewModel-ის პასუხისმგებლობა არ არის.
-- View არჩევს PhotosPicker-ის ელემენტს და კითხულობს მის Data-ს; იმიჯის შენახვისთვის გარდაქმნა Data შრეშია.
-- ViewModel ფოტოს წარმატებით შენახვის შემდეგ იყენებს იმავე დამუშავებულ Data-ს, რომელიც შეინახა, არა დაუმუშავებელ ორიგინალს.
-- დამატებულია მიმდინარე ოპერაციების/გასვლის guard-ები.
-- Header, Avatar, Favourites და Watchlist ცალკე ვიზუალური კომპონენტებია.
-
-მიზანი: UI state, ანგარიშის ოპერაციები, სურათის დამუშავება და storage ერთმანეთისგან გაიმიჯნოს.
-
-### Search
-
-- დაემატა SearchViewModelProtocol და generic SearchView.
-- personalization უკვე LibraryDomain-ის UseCase-ებზე მუშაობს და Home-ის იმპლემენტაცია აღარ სჭირდება.
-- მოთხოვნის generation ID ამოწმებს, შედეგი ჯერ კიდევ მიმდინარე ძიებას ეკუთვნის თუ არა.
-- query/mode/target-ის შეცვლა ძველ მოთხოვნას აუქმებს/აუქმებს მის აქტუალურობას.
-- ძველი პასუხი აღარ უნდა წერდეს ახალ შედეგებს ან ახალი მოთხოვნის loading state-ს.
-- pagination-ში შედეგები ID-ებით ერთიანდება.
-- SearchMode/SearchTarget-ის საჩვენებელი სათაურები Presentation-ის Strings-შია; სერვისისთვის საჭირო კოდები UI ტექსტად არ გადაიქცა.
-- ლოგიკა დაიყო Search/Actions/Pagination/Personalization extensions-ად.
-
-მიზანი: სწრაფი აკრეფის, რეჟიმის შეცვლისა და პარალელური პასუხების დროს ეკრანის state თანმიმდევრული დარჩეს.
-
-### MovieDetails და ActorDetails
-
-- დაემატა/შეივსო ViewModel-ის საკუთარი კონტრაქტები და Views მათზე მუშაობს.
-- დუბლირებული Watchlist/Favourites იმპლემენტაციები ჩანაცვლდა LibraryDomain/LibraryData-ით.
-- ნახვის ისტორია იტვირთება/იწერება შესაბამისი UseCase-ებით, არა Factory-ში დამალული repository გამოძახებებით.
-- ბიზნესოპერაციები და მოქმედებები გადანაწილდა extensions-ში.
-- გამოეყო დამატებითი sections, error components და scroll preference key ფაილები.
-- SeeAll/ვიდეო/დეტალების ნავიგაცია გადის Coordinator-ის მოქმედებებზე.
-- ActorMedia/ActorVideos-ის შესაძლებლობები შენარჩუნდა და მათი კოდი ActorDetailsDomain/ActorDetailsData-ის Media/Videos ფოლდერებში გაერთიანდა.
-
-მიზანი: დეტალების ViewModel მხოლოდ ეკრანის state-სა და UseCase-ების გამოძახებას მართავდეს, ხოლო საერთო კოლექციის კოდი არ დუბლირდებოდეს.
-
-### VideosList
-
-ზუსტი საწყისი მდგომარეობა: Git-ის საწყის ვერსიაში VideosListViewModel უკვე იღებდა FetchPlaylistVideosUseCaseProtocol-ს. ამიტომ ამ ფექიჯში ცვლილება არ ყოფილა „პირდაპირი URLSession მთლიანად ამოვიღე ViewModel-იდან“.
-
-რეალური ცვლილებები:
-
-- დაემატა ViewModel/Coordinator/Factory/Routing კონტრაქტები.
-- playlist-ის მომზადება ViewModel-იდან გადავიდა FetchPlaylistVideosUseCase-ში.
-- UseCase იღებს VideoPlaylistContext-ს, ამატებს არჩეულ ვიდეოს საჭიროებისას და დუბლირებულ ID-ებს გამორიცხავს.
-- ViewModel-ში დარჩა არჩეული ვიდეო, loading/error და წინა/შემდეგი ელემენტის UI state.
-- Player, NowPlaying, Playlist და PlaylistVideoCell ცალკე კომპონენტებია.
-- დაემატა VideosListStrings და ცალკე Coordinator.
-- შენარჩუნდა ვიდეოდან იმ ფილმზე დაბრუნების/გადასვლის source context.
-
-მიზანი: playlist-ის წესები UseCase-ში იყოს, ხოლო პლეერის ეკრანის მდგომარეობა — ViewModel-ში.
-
-### Authentication
-
-- FirebaseAuth/GoogleSignIn-ის კონკრეტული გამოძახებები გადავიდა FirebaseAuthenticationService-ში.
-- AuthenticationRepository მუშაობს AuthenticationServiceProtocol-ით.
-- AuthenticationError და Data-ის error mapper გამოყოფს პროვაიდერის შეცდომებს ეკრანის ტექსტებისგან.
-- SignIn/SignUp გადავიდა Home-ის მსგავს @Observable/@MainActor მოდელზე და საკუთარ პროტოკოლებზე.
-- signup validation-ს აქვს UseCase კონტრაქტი.
-- დაემატა authentication status-ის შემოწმების UseCase.
-- ViewModel აღარ ინახავს კონკრეტულ Coordinator-ს; Factory აკავშირებს მოქმედებებს weak-captured closures-ით.
-- პაროლის აღდგენა წარმატების შედეგს აბრუნებს; sheet არ იკეტება შეცდომისას წარმატების მსგავსად.
-- SignIn/SignUp-ის Header/Form/Actions დაიყო სექციებად.
-- navigation/factory კონტრაქტები განთავსდა PresentationAPI-ში.
-- Authentication-ის დაწყება აყენებს შესაბამის root ეკრანს, დასრულებული onboarding-ის უკან დატოვების გარეშე.
-
-მიზანი: vendor SDK, ფორმის მდგომარეობა, validation, UI და ნავიგაცია სხვადასხვა პასუხისმგებლობად დარჩეს.
-
-Google Sign-In-ის SDK-სთვის UI presentation-ის პოვნა კვლავ კონკრეტული service adapter-ის მხარესაა. ეს პასუხისმგებლობა ViewModel-ში არ გადასულა.
-
-### Onboarding
-
-- OnboardingRepository იღებს OnboardingStorageProtocol-ს.
-- UserDefaults-ის კონკრეტული გამოყენება UserDefaultsOnboardingStorage-შია.
-- ViewModel გახდა Observable და საკუთარი პროტოკოლით მუშაობს.
-- next/finish მოქმედებები გამოყოფილია extension-ში.
-- გასწორდა ზოგი ფაილის სახელი და Package.swift-ის local dependency paths.
-
-მიზანი: ViewModel არ იცნობდეს UserDefaults-ს, ხოლო repository არ იყოს პირდაპირ მიბმული მის ერთ იმპლემენტაციაზე.
-
-### SeeAll
-
-- შენარჩუნდა ფექიჯი, რადგან საერთო სრული სიები და გალერეა რამდენიმე Feature-ს სჭირდება.
-- დაემატა SeeAllViewModelProtocol/ViewModel და coordinator/factory/routing კონტრაქტები.
-- pagination-ის state გადავიდა ViewModel-ში; მონაცემის მიღება გადის FetchSeeAllPageUseCaseProtocol-სა და SeeAllRepositoryProtocol-ზე.
-- SeeAllContent გახდა უცვლელი route input და არა გაზიარებული observable loading state.
-- Movies/Actors/News/Library/Gallery, Header, EmptyState და პატარა cells ცალკე ფაილებშია.
-- sheet-ის დახურვა და შემდეგ დეტალზე გადასვლა Coordinator-ის მიერ იმართება.
-- DesignSystem-ის private fallback gallery/video screens მოცილდა; კომპონენტები ნავიგაციის მოქმედებას გარეთ გადასცემს.
-
-სექციის მოკლე ჰორიზონტალური preview კვლავ თავის Feature-შია. საერთო სრული სია SeeAll-ს ეკუთვნის — ეს ორი View ერთმანეთის დუბლიკატი არ არის.
-
-ნიუანსი: SeeAllRepository ამჟამად route-ით გადაცემული pagination callback-ის ადაპტერია. ის არ ქმნის მეორე API მოთხოვნის სისტემას; ზოგიერთ სიაში შემდეგი გვერდის წყარო კვლავ გამხსნელი Feature-ის callback-ია.
-
-### NewsDetails
-
-- დაემატა ViewModel, UseCase/Repository კონტრაქტები და Coordinator.
-- სტატია გადაეცემა route-ით; დამატებითი network request არ შექმნილა.
-- metadata-ის ფორმატირება და source URL-ის შემოწმება ViewModel-შია.
-- წყაროს გახსნა დაშვებულია HTTP/HTTPS მისამართებისთვის.
-- Header/Description/Source ცალკე sections-ია.
-
-აქ route-backed UseCase/Repository მსუბუქი შრეებია. მათი არსებობა შენს ერთიანი Clean შაბლონის მოთხოვნას მიჰყვება; ეს არ ნიშნავს, რომ სტატიის საჩვენებლად აუცილებელი ახალი backend ოპერაცია გაჩნდა.
-
-## 7. News-ის ფოტოს ბოლო შესწორება
-
-პრობლემა: `scaledToFill` სურათის პროპორციას ინარჩუნებს და ჩარჩოს შესავსებად შეიძლება ზედმეტად გაზარდოს. თუ clipping საბოლოო ზომის შეზღუდვამდე ხდება, პორტრეტულ სურათს ვიზუალურად ტექსტის ზონაში გასვლის შესაძლებლობა რჩება.
-
-დაემატა [NewsImageView](/Users/gegighvachliani/Desktop/CineTrack/CineTrack/CineTrack/Packages/DesignSystem/Sources/DesignSystemComponents/NewsImageView.swift):
-
-```swift
-Color.clear
-    .frame(height: height)
-    .overlay {
-        PosterImageView(photoURL: photoURL)
-    }
-    .clipped()
-```
-
-სიმაღლეს განსაზღვრავს გარე კონტეინერი. სურათი overlay-ში იხატება და ამ კონტეინერის layout-ის სიმაღლეს ვეღარ ზრდის. clipping საბოლოო საზღვარზე ხდება.
-
-გამოყენების ადგილები:
-
-| ადგილი | ფიქსირებული სიმაღლე |
-| --- | --- |
-| საერთო NewsCell, რომელსაც Home/ActorDetails/MovieDetails იყენებს | 105 pt |
-| SeeAll-ის CompactNewsCell | 54 pt |
-| NewsDetails-ის მთავარი სურათი | 225 pt |
-
-ყველა სტატია ერთსა და იმავე კომპონენტში ერთსა და იმავე სიმაღლეს იკავებს. სხვადასხვა ეკრანულ კონტექსტს თავისი ზომა დარჩა. პორტრეტული ფოტო საჭიროებისამებრ იჭრება; არ იწელება და პროპორციას არ კარგავს. ფოტოს loading/error მდგომარეობაც იმავე სივრცეს იკავებს.
-
-NewsCell-ის header-ის სიმაღლეც 105 pt-ს გაუტოლდა, რათა thumbnail-სა და ტექსტის ნაწილს თანმიმდევრული ზედა ზონა ჰქონდეს.
-
-ეს შესწორება მხოლოდ News-ის გამოყენებებს შეეხო. ყველა ფილმის/მსახიობის PosterImageView-ის ქცევა გლობალურად არ შემიცვლია.
-
-## 8. App, DI და კონფიგურაცია
-
-- დაემატა/შეივსო AppCoordinatorProtocol, MainTabBarCoordinatorProtocol და AppDIContainerProtocol-ის გამოყენება.
-- AppDIContainer-ში გაერთიანდა საერთო APIClient, RemoteDocumentStore, AccountSession და AppConfigurationProtocol.
-- FeatureFactory-ები იღებს საჭირო საერთო დამოკიდებულებებს; ViewModel მათ შექმნაში არ მონაწილეობს.
-- დეტალების Coordinator-ების სიცოცხლის ციკლს მთავარი Coordinator ინახავს და navigation stack-იდან გასვლისას ასუფთავებს.
-- SeeAll Coordinator ინახება sheet-ის დასრულებამდე.
-- API კონფიგურაცია მოცილდა HomeFactory-ში ჩაშენებულ მნიშვნელობას და გადავიდა AppConfiguration-ში.
-- გასწორდა local package paths TMDBData-სა და Onboarding-ში და საჭირო product/target dependencies.
-- Xcode პროექტს დაემატა App-ისთვის საჭირო პირდაპირი shared/configuration პროდუქტების კავშირები.
-
-### კონფიგურაციის ფაილები
-
-შაბლონია [Secrets.example.plist](/Users/gegighvachliani/Desktop/CineTrack/Config/Secrets.example.plist).
-
-ლოკალური სამუშაო ფაილია `CineTrack/CineTrack/App/Config/Secrets.plist` პროექტის root-თან მიმართებით. არსებული TMDB მნიშვნელობა მასში შენარჩუნდა; ფაილი Git-ის ignore-შია. AppConfiguration ასევე კითხულობს შესაბამის Info.plist პარამეტრებს.
-
-მნიშვნელოვანი უსაფრთხოების შენიშვნა: Git ignore იცავს შემთხვევითი commit-ისგან, მაგრამ აპის bundle-ში მოთავსებულ გასაღებს მომხმარებლისთვის საიდუმლოდ არ აქცევს. ეს ცვლილება server-side secret management არ არის და ძველი Git ისტორიის გასუფთავებასაც არ ნიშნავს.
-
-## 9. მონაცემის შენახვის ცვლილება
-
-[FirestoreClient](/Users/gegighvachliani/Desktop/CineTrack/CineTrack/CineTrack/Packages/SharedKit/Sources/SharedStorage/Remote/Firestore/FirestoreClient.swift)-ში Codable-ის `setData(from:merge:)` overload სინქრონულად ახდენდა encode-ს და write-ს იწყებდა; მის წინ `await` ჩაწერის სერვერულ დასრულებას არ ელოდებოდა.
-
-ახლა:
-
-1. მოდელი ცალკე encode-დება.
-2. გამოიყენება dictionary-ის async `setData`.
-3. რეალური write-ის შედეგი/error ბრუნდება გამომძახებელთან.
-
-მიზანი: UI-მ ოპერაცია წარმატებულად არ ჩათვალოს მანამდე, სანამ ამ async კონტრაქტის შესრულების შედეგი არ აქვს.
-
-Tradeoff: Firestore-ის offline queued write-ს სერვერის დადასტურებამდე შეიძლება მოცდა დასჭირდეს. ახალი timeout/offline UX ამ რეფაქტორინგში არ დამატებულა.
-
-Data-ის API-ზე დამოკიდებულების ზუსტი საზღვარიც მნიშვნელოვანია: networking repository-ები APIClient პროტოკოლით ურთიერთობს კლიენტთან, მაგრამ ზოგიერთ მათგანს კვლავ აქვს TMDB request builder/DTO/mapper-ის ცოდნა. ეს Home-ის Data შრის მოდელს მიჰყვება. კონკრეტული კლიენტის იმპლემენტაციისგან დამოუკიდებლობა არ უდრის API-ის სქემისგან სრულ დამოუკიდებლობას. მეორე მოთხოვნას დამატებითი provider-specific DataSource საზღვარი დასჭირდებოდა.
-
-## 10. რა გადატანილია, რა დაემატა, რა წაიშალა
-
-### გადატანილი და გაერთიანებული
-
-- Home-ის Watchlist/Favourites/RecentlyViewed domain კოდი → LibraryDomain.
-- შესაბამისი repositories/DTO-ები → LibraryData.
-- Home-ის გაზიარებული library cards/sections → DesignSystemComponents.
-- ViewModel-ის თემატური მეთოდები → შესაბამისი FeatureViewModels/Extensions.
-- Authentication-ის navigation/factory კონტრაქტები → PresentationAPI.
-- HomeSection → HomePresentation.
-- ActorMedia/ActorVideos-ის ტიპები → ActorDetailsDomain/ActorDetailsData-ის Entities/RepositoryProtocols/UseCases/DTOs/Repositories ფოლდერების Media/Videos ქვედანაყოფები.
-
-### დამატებული ძირითადი ნაწილები
-
-- ViewModel/Coordinator/Factory/Routing კონტრაქტები, სადაც აკლდა.
-- Profile-ის UseCase კონტრაქტები და photo processor.
-- Authentication service protocol/adapter/error mapping/validation UseCase.
-- AccountSession და ანგარიშის ნეიტრალური მონაცემის ტიპი.
-- OnboardingStorageProtocol და UserDefaults adapter.
-- SeeAll/NewsDetails-ის ViewModel-ები და მათი მსუბუქი Domain/Data შრეები.
-- FeatureStrings და საჭირო formatted text ფუნქციები.
-- AppConfigurationProtocol/AppConfiguration და Secrets-ის შაბლონი.
-- NewsImageView.
-- ფორმატირებისა და არქიტექტურული შემოწმების ინსტრუმენტები.
-
-### წაშლილი ან ჩანაცვლებული
-
-- ActorDetails/MovieDetails-ში დუბლირებული Watchlist/Favourites კოდი.
-- ცარიელი placeholder ფაილები, მათ შორის 1.swift/Untitled.swift-ის მსგავსი ჩანაცვლებული ფაილები.
-- გამოუყენებელი BaseViewModel/BaseCoordinator/HomeAction ტიპები.
-- მოძველებული Home-ის MovieCell/HomeFooterView alias-ები.
-- DesignSystem-ის კერძო fallback gallery/video ეკრანები.
-- ძველი, გამოუყენებელი ზედა დონის App ასლი.
-- რეალური App-ის ძველი TMDBConfig; მის ნაცვლად გამოიყენება AppConfiguration.
-
-ზედა დონის App ასლი არ მონაწილეობდა მიმდინარე Xcode target-ში. რეალური აპი რჩება [CineTrack/CineTrack/App](/Users/gegighvachliani/Desktop/CineTrack/CineTrack/CineTrack/App)-ში. წაშლილი tracked ფაილები აღდგენადია Git-იდან; repository-ის ისტორია არ წაშლილა.
-
-ფაილის გადარქმევა ან გადატანა Git-ში unstaged/untracked მდგომარეობაში ხშირად ჩანს ძველი ფაილის წაშლად და ახლის დამატებად. ეს ავტომატურად ფუნქციონალის წაშლას არ ნიშნავს.
-
-## 11. Home-ის სტილი, Strings და დეკომპოზიცია
-
-Presentation-ის საერთო მიმართულებაა:
+For example, saving a movie follows this shape:
 
 ```text
-FeaturePresentation
-  FeatureViewModels
-    FeatureViewModel.swift
-    FeatureViewModelProtocol.swift
-    Extensions
-  FeatureViews
-    FeatureView.swift
-    Sections
-    UIComponents
-  FeatureCoordinators
-  FeatureResources
-    FeatureStrings.swift
+MovieDetailsView
+  → MovieDetailsViewModel
+    → AddWatchlistedMovieUseCase
+      → WatchlistRepository
+        → RemoteDocumentStore (Firestore)
 ```
 
-სტილის წესები:
+### Shared capabilities
 
-- ოთხი space;
-- ლოგიკურ ჯგუფებს შორის ცარიელი ხაზი;
-- `// MARK: - ...`, გამოყოფილი ცარიელი ხაზებით;
-- state/dependencies/init ძირითად ViewModel ფაილში;
-- თემატური ოპერაციები შესაბამის extensions-ში;
-- დიდი UI ნაწილები ცალკე View-ებად, მნიშვნელობებითა და callbacks-ით;
-- ეკრანის ფიქსირებული ტექსტების თავმოყრა მის Strings enum-ში;
-- სიმბოლოები, URL-ები, API კოდები და ტექნიკური identifiers ავტომატურად UI Strings არ არის.
+`SharedKit` contains cross-feature capabilities rather than allowing one feature to become a dependency for every other feature.
 
-Strings enum-ები ამ ეტაპზე ცენტრალიზაციაა და არა დასრულებული მრავალენოვანი ლოკალიზაცია. .xcstrings/თარგმანების სისტემა ამ რეფაქტორინგში არ დამატებულა.
+| Module | Purpose |
+| --- | --- |
+| `SharedCore` | Shared entities, constants, and coordinator abstractions. |
+| `SharedNetworking` | API request and API-client abstractions, with a URLSession implementation. |
+| `SharedStorage` | Remote document-store abstraction and Firestore implementation. |
+| `SharedAuth` | Account-session abstraction and Firebase-backed session. |
+| `LibraryDomain` | Contracts and use cases for watchlist, favourite actors, and recently viewed content. |
+| `LibraryData` | Firestore-backed implementations and DTOs for the personal library. |
 
-ფორმატირება ერთგვაროვანია, მაგრამ ყველა Feature-ის ფაილების რაოდენობა ერთნაირი არ არის: პატარა ეკრანს იმდენივე სექცია არ სჭირდება, რამდენიც Home-ს.
+The personal library is intentionally shared. Home, Search, Profile, MovieDetails, and ActorDetails can use the same watchlist, favourites, and history logic without importing one another or duplicating repositories.
 
-## 12. შემოწმება და დარჩენილი შეზღუდვები
+### Design and presentation
 
-News-ის ბოლო ცვლილების შემდეგ:
+`DesignSystem` centralises semantic colours, spacing, typography, image handling, and reusable UI components. Feature-specific strings and complex screen sections remain inside their respective feature packages. This preserves a consistent visual language while keeping a feature in control of its own content and layout.
 
-- iOS device build წარმატებით დასრულდა, `CODE_SIGNING_ALLOWED=NO`-ით.
-- ViewModel-ის ოთხი მოთხოვნა შემოწმდა imports/ტიპების/დამოკიდებულებების კოდური აუდიტით.
-- არქიტექტურული checker ამოწმებს შრეების imports-ს, ViewModel-ში repository/usecase construction-ს, კონტრაქტებსა და local package paths-ს.
-- Git diff-ის whitespace შემოწმება გავლილია.
-- build-ის SwiftLint ანგარიშში დარჩა 20 გაფრთხილება და 0 serious violation.
+Views use generic view-model protocols rather than concrete view-model classes. View models use `Observation` for state, and Search uses Combine where input debouncing is needed. View models do not call repositories, URLSession, Firestore, or navigation controllers directly.
 
-ეს არ არის მტკიცება, რომ ყველა runtime სცენარი შემოწმებულია. ამ ცვლილებისას News-ის პორტრეტული ფოტო რეალურ ეკრანზე screenshot-ით არ შემიმოწმებია; შესწორება ეფუძნება layout-ის კოდურ მიზეზს და კომპილაციას.
+### Composition and navigation
 
-შენი მითითების შესაბამისად, დამატებული ტესტები წინა ეტაპზე ამოღებულია. მიმდინარე ცვლილებებში არსებული ტესტები უცვლელია; ამ ეტაპზე ახალი ტესტები არ დამიწერია და ტესტები არ გამიშვია.
+`AppDIContainer` owns shared concrete infrastructure:
 
-ხელით გადამოწმებისთვის მნიშვნელოვანი სცენარებია:
+```text
+AppConfiguration
+URLSessionAPIClient
+FirestoreClient
+FirebaseUserSession
+```
 
-- News-ის ვერტიკალური, ჰორიზონტალური და კვადრატული ფოტო Home/Details/SeeAll-ში;
-- ფოტოს ჩატვირთვისა და შეცდომის placeholder-ის ზომა;
-- სწრაფი ძიება და recent/advanced რეჟიმების გადართვა;
-- Watchlist/Favourites/History სხვადასხვა ეკრანიდან;
-- Profile-ის ფოტო, sign out და ქსელის შეცდომები;
-- SeeAll-ის გახსნა/დახურვა და იქიდან დეტალზე გადასვლა.
+It passes only the required dependencies to feature factories. A feature factory assembles its repository, use cases, view model, SwiftUI view, and coordinator. Concrete types are known at this composition boundary; feature presentation code depends on protocols instead.
 
-### დამხმარე ინსტრუმენტები
+Coordinators receive navigation intent from a feature and create or present the next screen. This prevents view models from knowing about `UINavigationController`, `UIHostingController`, tab selection, or presentation mechanics.
 
-[Scripts/check_architecture.rb](/Users/gegighvachliani/Desktop/CineTrack/Scripts/check_architecture.rb) — სტატიკური კოდური წესების შემოწმებაა, არა unit/UI ტესტი და არა სრული Swift type-system ანალიზი.
+### Important application decisions
 
-[Scripts/format.rb](/Users/gegighvachliani/Desktop/CineTrack/Scripts/format.rb) — იყენებს swift-format-სა და პროექტის SwiftLint brace/comment წესებს. გამორიცხავს tests-სა და dependency checkouts-ს.
+- **Search consistency:** Debouncing, request-generation checks, cancellation, and ID-based pagination merging prevent stale responses from overwriting newer results.
+- **Personalisation:** Watchlist, favourites, and history use a single shared domain/data implementation instead of copies inside Home or detail features.
+- **Authentication isolation:** Firebase Auth and Google Sign-In are accessed through service and repository adapters, not from presentation code.
+- **Media flows:** Movie and actor details can route to video playlists while retaining the originating context for correct back navigation.
+- **Adaptive UI:** Semantic design tokens support light and dark appearance without scattering fixed colours through feature views.
 
-ორივე ბრძანება ეშვება პროექტის root-იდან:
+### Architecture rules
 
-```sh
+- Domain code must not import UI, networking, storage, authentication, or data modules.
+- Presentation code must not import data, storage, networking, Firebase, or authentication implementations.
+- View models receive use-case protocols; they do not construct use cases or access repositories/providers directly.
+- Repositories conform to Domain contracts and hide third-party/provider details.
+- Factories and `AppDIContainer` are the permitted composition roots for concrete dependencies.
+
+The rules are checked with:
+
+```bash
 ruby Scripts/check_architecture.rb
-ruby Scripts/format.rb
 ```
 
-## 13. რომელი დამატებითი ცვლილებები არ შესრულებულა
+This is a focused static guard, not a replacement for unit tests, UI tests, or manual testing.
 
-- ViewModel-ები ცალკე PresentationModel target-ებში არ გადატანილა.
-- არ დამატებულა საერთო გლობალური cache/event bus.
-- არ შეცვლილა აპის backend/provider-ები ან მონაცემების მიგრაცია.
-- არ დამატებულა სრული localization სისტემა.
-- არ გასუფთავებულა ძველი Git ისტორია და არ შექმნილა commit.
+---
 
-ამიტომ მიმდინარე შედეგი არის არსებული Clean + MVVM + Coordinator + Protocols სტრუქტურის მოწესრიგება და კონკრეტული პრობლემების შესწორება — არა სრულიად ახალი არქიტექტურის დანერგვა.
+## ქართული
+
+### მიმოხილვა
+
+CineTrack არის მოდულური iOS აპლიკაცია ფილმებისა და მსახიობების აღმოსაჩენად, გასართობი სიახლეების სანახავად, ტრეილერების საყურებლად და პირადი კინობიბლიოთეკის სამართავად. იგი აერთიანებს UIKit-ზე დაფუძნებულ ნავიგაციასა და SwiftUI-ის feature ეკრანებს; არქიტექტურა feature-first და Clean Architecture-inspired მიდგომას მიჰყვება.
+
+მიზანია პასუხისმგებლობების პრაქტიკული გამიჯვნა:
+
+- UI აჩვენებს state-ს და გადასცემს მომხმარებლის მოქმედებებს.
+- ViewModel მართავს ეკრანის state-ს, პრეზენტაციის გადაწყვეტილებებსა და მომხმარებლის განზრახვას.
+- UseCase აღწერს აპლიკაციის კონკრეტულ ოპერაციას.
+- Repository ბიზნესლოგიკას აშორებს API, Firebase და persistence დეტალებს.
+- Coordinator მართავს ნავიგაციას.
+- Factory და აპის dependency container ქმნის კონკრეტულ ობიექტებს.
+
+### სისტემის რუკა
+
+```text
+App
+├── AppCoordinator
+├── MainTabBarCoordinator
+├── AppDIContainer
+├── Features
+│   ├── Home, Search, Profile
+│   ├── Authentication, Onboarding
+│   ├── MovieDetails, ActorDetails, NewsDetails
+│   └── SeeAll, VideosList
+├── SharedKit
+│   ├── SharedCore, SharedNetworking
+│   ├── SharedStorage, SharedAuth
+│   └── LibraryDomain, LibraryData
+├── TMDBData და NewsData
+└── DesignSystem
+```
+
+`AppCoordinator` იწყებს onboarding, authentication ან მთავარ flow-ს. `MainTabBarCoordinator` ქმნის Home, Search და Profile ჩანართების დამოუკიდებელ navigation stack-ებს, შემდეგ კი მართავს დეტალების, playlist-ისა და სრული სიების ეკრანებზე გადასვლას.
+
+### Feature მოდულები
+
+Feature-ები ადგილობრივი Swift Package-ებია. საჭიროებისამებრ, თითოეული Feature იყოფა შემდეგ target-ებად:
+
+| Target | პასუხისმგებლობა |
+| --- | --- |
+| `FeatureDomain` | Entities, repository კონტრაქტები, use-case კონტრაქტები და use case-ები. |
+| `FeatureData` | Repository-ის იმპლემენტაციები, DTO-ები, mapper-ები და provider-ის ადაპტაცია. |
+| `FeaturePresentation` | SwiftUI View-ები, ViewModel-ები, ეკრანის რესურსები და feature coordinator-ები. |
+| `FeaturePresentationAPI` | აპისა და სხვა Feature-ებისთვის გამოტანილი factory/coordinator/routing კონტრაქტები. |
+| `FeatureAssembly` | Repository, UseCase, ViewModel, View და Coordinator ობიექტების აწყობა. |
+
+ასეთი დაყოფა Feature-ს დამოუკიდებელს ტოვებს, მაგრამ ყველა მცირე ტიპისთვის ხელოვნურად პროტოკოლს არ ქმნის. კონტრაქტი იქმნება მხოლოდ რეალურ შესაცვლელ საზღვარზე: ViewModel, UseCase, Repository, Factory, Coordinator და გარე სერვისი.
+
+### მონაცემისა და დამოკიდებულებების ნაკადი
+
+```text
+მომხმარებლის მოქმედება
+  → SwiftUI View
+    → ViewModel protocol
+      → Use-case protocol
+        → Repository protocol
+          → API client / Firestore / Firebase Auth
+```
+
+ეს არის გამოძახების ნაკადი და არა იმპლემენტაციის მფლობელობის მიმართულება. Repository-ის პროტოკოლს Domain layer აცხადებს, Data layer კი მას ახორციელებს. ამიტომ ViewModel-ს შეუძლია მოითხოვოს მონაცემის მიღება ან შენახვა ისე, რომ არ იცოდეს, მონაცემი TMDB-დან, NewsAPI-დან, Firestore-დან თუ სხვა მომავალი წყაროდან მოდის.
+
+მაგალითად, ფილმის watchlist-ში დამატება ასე მიედინება:
+
+```text
+MovieDetailsView
+  → MovieDetailsViewModel
+    → AddWatchlistedMovieUseCase
+      → WatchlistRepository
+        → RemoteDocumentStore (Firestore)
+```
+
+### საერთო შესაძლებლობები
+
+`SharedKit` ინახავს იმ შესაძლებლობებს, რომლებიც რამდენიმე Feature-ს სჭირდება, რათა ერთი Feature სხვა Feature-ების საერთო დამოკიდებულებად არ იქცეს.
+
+| მოდული | დანიშნულება |
+| --- | --- |
+| `SharedCore` | საერთო entities, კონსტანტები და coordinator აბსტრაქციები. |
+| `SharedNetworking` | API request/API-client აბსტრაქციები და URLSession იმპლემენტაცია. |
+| `SharedStorage` | Remote document store აბსტრაქცია და Firestore იმპლემენტაცია. |
+| `SharedAuth` | Account session აბსტრაქცია და Firebase-ზე დაფუძნებული session. |
+| `LibraryDomain` | Watchlist, საყვარელი მსახიობებისა და ნახვის ისტორიის კონტრაქტები და use case-ები. |
+| `LibraryData` | პირადი ბიბლიოთეკის Firestore-ზე დაფუძნებული იმპლემენტაციები და DTO-ები. |
+
+პირადი ბიბლიოთეკა განზრახ არის საერთო. Home, Search, Profile, MovieDetails და ActorDetails ერთსა და იმავე Watchlist/Favourites/History ლოგიკას იყენებს, ერთმანეთის იმპორტისა და repository-ების დუბლირების გარეშე.
+
+### დიზაინი და პრეზენტაცია
+
+`DesignSystem` აერთიანებს semantic ფერებს, spacing-ს, typography-ს, გამოსახულებების მართვასა და განმეორებით UI კომპონენტებს. Feature-ის სპეციფიკური ტექსტები და რთული სექციები კი საკუთარ პაკეტში რჩება. შედეგად, აპს თანმიმდევრული ვიზუალური ენა აქვს, ხოლო Feature საკუთარ კონტენტსა და layout-ს თავად მართავს.
+
+View-ები concrete ViewModel კლასის ნაცვლად generic ViewModel protocol-ზე მუშაობენ. State-ისთვის ViewModel იყენებს `Observation`-ს, ხოლო Search იყენებს Combine-ს, როცა ტექსტის debounce საჭიროა. ViewModel პირდაპირ არ იძახებს Repository-ს, URLSession-ს, Firestore-ს ან navigation controller-ს.
+
+### Composition და ნავიგაცია
+
+`AppDIContainer` ფლობს საერთო კონკრეტულ ინფრასტრუქტურას:
+
+```text
+AppConfiguration
+URLSessionAPIClient
+FirestoreClient
+FirebaseUserSession
+```
+
+იგი feature factory-ს მხოლოდ საჭირო დამოკიდებულებებს გადასცემს. Factory აწყობს Repository-ს, UseCase-ებს, ViewModel-ს, SwiftUI View-სა და Coordinator-ს. კონკრეტული ტიპები ცნობილია ამ composition საზღვარზე, ხოლო Feature-ის პრეზენტაცია პროტოკოლებზეა დამოკიდებული.
+
+Coordinator იღებს Feature-იდან ნავიგაციის განზრახვას და ქმნის ან აჩვენებს შემდეგ ეკრანს. ამიტომ ViewModel-ს არ სჭირდება `UINavigationController`-ის, `UIHostingController`-ის, tab selection-ის ან presentation მექანიკის ცოდნა.
+
+### მნიშვნელოვანი გადაწყვეტილებები ამ აპისთვის
+
+- **Search-ის თანმიმდევრულობა:** Debounce, request generation, cancellation და ID-ებით pagination merge ხელს უშლის ძველი პასუხის ახალი შედეგების გადაწერას.
+- **Personalisation:** Watchlist, Favourites და History-ს აქვს ერთი საერთო Domain/Data იმპლემენტაცია Home-სა და detail feature-ებში ასლების ნაცვლად.
+- **Authentication-ის იზოლირება:** Firebase Auth და Google Sign-In ხელმისაწვდომია service/repository adapter-ებით და არა presentation კოდიდან.
+- **Media flow:** Movie/Actor details ეკრანები ვიდეოების playlist-ზე გადადის საწყისი კონტექსტის შენარჩუნებით, რაც სწორი back navigation-ისთვის საჭიროა.
+- **Adaptive UI:** Semantic design token-ები უზრუნველყოფს light/dark appearance-ს ისე, რომ Feature View-ებში ფიქსირებული ფერები არ გაიფანტოს.
+
+### არქიტექტურული წესები
+
+- Domain კოდმა არ უნდა დააიმპორტოს UI, networking, storage, authentication ან Data module.
+- Presentation კოდმა არ უნდა დააიმპორტოს Data, storage, networking, Firebase ან authentication იმპლემენტაციები.
+- ViewModel იღებს UseCase protocol-ებს; ის თავად არ ქმნის UseCase-ს და Repository/provider-ს პირდაპირ არ იყენებს.
+- Repository ასრულებს Domain კონტრაქტს და მალავს provider/third-party დეტალებს.
+- Factory და `AppDIContainer` არის concrete dependency-ების ასაწყობად განკუთვნილი composition root.
+
+წესები მოწმდება ამ ბრძანებით:
+
+```bash
+ruby Scripts/check_architecture.rb
+```
+
+ეს არის კონკრეტულ არქიტექტურულ წესებზე ორიენტირებული static check და არა unit/UI ტესტების ან ხელით შემოწმების ჩანაცვლება.
